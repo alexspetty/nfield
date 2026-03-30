@@ -2,6 +2,14 @@ patents/
 notes/
 .idea/
 
+# Build artifacts
+*.o
+*.a
+nfield
+test/test_nfield
+verify/verify_papers1_8
+verify/verify_papers9_16
+
 # Unpublished papers (remove as they go to arXiv)
 publication/the_collision_spectrum.*
 publication/partial_character_sums_and_the_collision_transform.*
