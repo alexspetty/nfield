@@ -1,0 +1,12 @@
+patents/
+notes/
+.idea/
+
+# Unpublished papers (remove as they go to arXiv)
+publication/the_collision_spectrum.*
+publication/partial_character_sums_and_the_collision_transform.*
+research/*
+!research/bin_derangements.tex
+!research/bin_derangements.pdf
+blog/
+paper/
