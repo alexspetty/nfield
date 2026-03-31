@@ -20,6 +20,7 @@ values.
 
 - **The Collision Invariant** (2026)
 - **The Collision Transform** (2026)
+- **The Collision Spectrum** (2026)
 
 ## Software
 
