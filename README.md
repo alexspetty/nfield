@@ -3,7 +3,7 @@
 The collision invariant of the digit function floor(br/p) encodes
 L-function special values through a three-line identity: the collision
 transform equals the sum of squared partial character sums over the
-digit function's bins. This program proves it and computes with it.
+digit function's bins. The papers prove it. The engine computes with it.
 
 ## Publications
 
