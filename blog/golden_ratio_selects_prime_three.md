@@ -97,6 +97,14 @@ What I did not expect was for the connection to be algebraic and exact. Not phi 
 
 But this is where it starts. With one formula, one ratio, and one prime that the algebra picks out on its own.
 
+## A note on this series
+
+I have been studying the internal structure of integers for a long time. Between 2010 and 2011 I wrote up what I had found to that point: [Foundational Tables of Multiplication](https://alexpetty.com/foundational-tables-of-multiplication/), [The Golden Ratio](https://alexpetty.com/the-golden-ratio/), [Geometries Hidden in the Number System](https://alexpetty.com/geometries-hidden-in-the-number-system/), [The Effect of Base on Numeric Fields](https://alexpetty.com/the-effect-of-base-on-numeric-fields/), and [Long Division and Euclid's Lemma](https://alexpetty.com/long-division-and-euclids-lemma-2/). After that, I continued working but stopped publishing. The results accumulated in isolation.
+
+This post was first written in January 2020. I am releasing it now, in 2026, as part of a series of companion posts covering the research done in the intervening years. Several publication-ready papers have been submitted to arXiv. The rest I am releasing here as research notes, in the order the results were found.
+
+The digit function $\lfloor br/p \rfloor$ that appears in this first result turns out to be a deeper object than I expected. The series follows it from repeating decimals to Ramanujan sums, L-functions, and the edge of the critical strip. If this post reads like a small observation about the golden ratio, that is what I thought it was too, in 2020.
+
 ## Try it yourself
 
 Build nfield (requires a C compiler and make):
@@ -145,7 +153,7 @@ Paper: [Why the Golden Ratio Selects the Prime Three](https://github.com/alexspe
 ---
 
 *Alexander S. Petty*
-January 2020
+January 2020 (updated March 2026)
 .:.
 
 ---

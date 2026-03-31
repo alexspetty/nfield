@@ -15,8 +15,10 @@ verify/verify_papers9_16
 publication/partial_character_sums_and_the_collision_transform.*
 research/*
 !research/golden_ratio_selects_prime_three.pdf
+!research/digit_partition_primes.pdf
 blog/*
 !blog/README.md
 !blog/golden_ratio_selects_prime_three.md
+!blog/digit_partition_primes.md
 paper/
 GUIDE.md
