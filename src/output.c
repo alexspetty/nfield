@@ -17,6 +17,25 @@
 
 /* ── field display ───────────────────────────────────────── */
 
+static void print_digits(const int *d, int len, int base)
+{
+    if (base <= 10) {
+        for (int j = 0; j < len; j++) printf("%d", d[j]);
+    } else {
+        for (int j = 0; j < len; j++) {
+            if (j > 0) printf(".");
+            printf("%d", d[j]);
+        }
+    }
+}
+
+static const char *rep_type(const Repetend *r)
+{
+    if (r->cycle_len == 0) return "open";
+    if (r->cycle_start == 0) return "closed";
+    return "mixed";
+}
+
 void field_print(const Field *f)
 {
     printf("n = %d, base = %d, cycle_length = %d\n\n",
@@ -24,36 +43,29 @@ void field_print(const Field *f)
 
     for (int i = 0; i < f->num_rows; i++) {
         const Row *r = &f->rows[i];
+        const Repetend *rep = &r->rep;
 
-        printf("  k=%3d  ", r->k);
-        if (r->rep.cycle_len == 0) {
-            /* terminating: show the digits */
-            printf("term=");
-            if (r->rep.len == 0) {
+        printf("  %d/%d => 0.", r->k, f->n);
+
+        if (rep->cycle_len == 0) {
+            /* terminating (open) */
+            if (rep->len == 0) {
                 printf("0");
-            } else if (f->base <= 10) {
-                for (int j = 0; j < r->rep.len; j++)
-                    printf("%d", r->rep.digits[j]);
             } else {
-                for (int j = 0; j < r->rep.len; j++) {
-                    if (j > 0) printf(".");
-                    printf("%d", r->rep.digits[j]);
-                }
+                print_digits(rep->digits, rep->len, f->base);
             }
         } else {
-            printf("cycle=");
-            const int *c = r->rep.digits + r->rep.cycle_start;
-            int L = r->rep.cycle_len;
-            if (f->base <= 10) {
-                for (int j = 0; j < L; j++) printf("%d", c[j]);
-            } else {
-                for (int j = 0; j < L; j++) {
-                    if (j > 0) printf(".");
-                    printf("%d", c[j]);
-                }
-            }
+            /* non-repeating prefix */
+            if (rep->cycle_start > 0)
+                print_digits(rep->digits, rep->cycle_start, f->base);
+            /* repeating block in pipes */
+            printf("|");
+            print_digits(rep->digits + rep->cycle_start,
+                         rep->cycle_len, f->base);
+            printf("|");
         }
-        printf("  rot=%3d  align=%.4f\n", r->rot_index, r->alignment);
+
+        printf(" (%s)\n", rep_type(rep));
     }
 }
 

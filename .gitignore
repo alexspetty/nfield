@@ -13,7 +13,10 @@ verify/verify_papers9_16
 # Unpublished papers (remove as they go to arXiv)
 # publication/the_collision_spectrum.*
 publication/partial_character_sums_and_the_collision_transform.*
-research/
-blog/
+research/*
+!research/golden_ratio_selects_prime_three.pdf
+blog/*
+!blog/README.md
+!blog/golden_ratio_selects_prime_three.md
 paper/
 GUIDE.md

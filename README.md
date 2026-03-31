@@ -18,15 +18,33 @@ digit function's bins. The papers prove it. The engine computes with it.
 
 ## Software
 
-The `nfield` engine is written in C (MIT license).
+The `nfield` engine is written in C (MIT license). Requires a C compiler and make.
+
+**Linux / macOS:**
 
 ```
-make
-./build.sh code          # build and run 116 unit tests
-./nfield 7               # analyze n=7 in base 10
+git clone https://github.com/alexspetty/nfield.git
+cd nfield && make
+```
+
+**Windows (via WSL):**
+
+Install [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) (Windows 11), then from a WSL terminal:
+
+```
+sudo apt update && sudo apt install gcc make
+git clone https://github.com/alexspetty/nfield.git
+cd nfield && make
+```
+
+**Usage:**
+
+```
+./nfield field 7         # the fractional field of 7
 ./nfield align 12        # alignment of n=12
 ./nfield spectral 13     # spectral power at p=13
 ./nfield decompose 21    # coherence decomposition
+./build.sh code          # build and run 116 unit tests
 ```
 
 ## Experiments
