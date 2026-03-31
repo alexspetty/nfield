@@ -1,44 +1,41 @@
 # nfield
 
-Computational engine for a research program studying the digit
-function floor(br/p) and its collision structure. Twenty-three
-research papers and three condensed publication drafts.
-
-## The research program
-
-The collision invariant measures bin coincidences under
-multiplication in the digit function floor(br/p). This program
-studies its algebraic, spectral, and analytic properties across
-all primes and bases.
-
-The central result is the **decomposition theorem**: the
-collision spectrum factors exactly into generalized Bernoulli
-numbers and diagonal character sums, encoding L-function special
-values.
+The collision invariant of the digit function floor(br/p) encodes
+L-function special values through a three-line identity: the collision
+transform equals the sum of squared partial character sums over the
+digit function's bins. This program proves it and computes with it.
 
 ## Publications
 
 - [**The Collision Invariant**](publication/the_collision_invariant.pdf) (2026)
+  Gate width theorem, finite determination, reflection identity, half-group theorem.
+
 - [**The Collision Transform**](publication/the_collision_transform.pdf) (2026)
+  Antisymmetry, centered convergence at s=1, conditional penetration, neutrality.
+
 - [**The Collision Spectrum**](publication/the_collision_spectrum.pdf) (2026)
+  Decomposition theorem, L-encoding, Parseval moment identity, correlation decay.
 
 ## Software
 
-The `nfield` engine is written in C (MIT license). It verifies
-every computational claim in the papers.
+The `nfield` engine is written in C (MIT license).
 
 ```
 make
-./nfield 10 7       # base 10, prime 7
-./nfield 10 --all   # all primes in base 10
+./build.sh code          # build and run 116 unit tests
+./nfield 7               # analyze n=7 in base 10
+./nfield align 12        # alignment of n=12
+./nfield spectral 13     # spectral power at p=13
+./nfield decompose 21    # coherence decomposition
 ```
 
 ## Experiments
 
-The `experiments/` directory contains 121 C and Python programs
-used to discover and verify the results.
+156 C and Python programs in `experiments/` reproduce
+every computational result in the papers.
 
 ## Author
 
 Alexander S. Petty
 alexander.petty@gmail.com
+https://alexpetty.com
