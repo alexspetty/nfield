@@ -18,9 +18,9 @@ values.
 
 ## Publications
 
-- **The Collision Invariant** (2026)
-- **The Collision Transform** (2026)
-- **The Collision Spectrum** (2026)
+- [**The Collision Invariant**](publication/the_collision_invariant.pdf) (2026)
+- [**The Collision Transform**](publication/the_collision_transform.pdf) (2026)
+- [**The Collision Spectrum**](publication/the_collision_spectrum.pdf) (2026)
 
 ## Software
 
