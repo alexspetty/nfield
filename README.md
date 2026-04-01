@@ -57,9 +57,7 @@ cd nfield && make
 
 ## Research Notes
 
-26 research notes (2020-2026) support the publications.
-Notes are added to [research/](research/) as they are
-reviewed and confirmed.
+26 research notes (2020-2026) in [research/](research/).
 
 ## Author
 
