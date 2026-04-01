@@ -57,9 +57,8 @@ cd nfield && make
 
 ## Research
 
-26 research notes (2020-2026) and 190+ experiments
-support the publications. These are maintained locally
-and not included in the public repository.
+Research notes supporting the publications are
+maintained locally.
 
 ## Author
 

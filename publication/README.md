@@ -1,7 +1,7 @@
 # The Collision Program
 
-Four self-contained papers from a six-year research
-program (2020-2025) studying the digit function
+Five self-contained papers from a six-year research
+program (2020-2026) studying the digit function
 floor(br/p) and its collision structure.
 
 ## Papers
@@ -33,7 +33,7 @@ moment identity gives an exact weighted second moment of
 |L(1,chi)|^2. Conditional cross-moment in the critical strip.
 Correlation decay. Class number connection at base 5.
 
-### D. Partial Character Sums and the Collision Transform (April 2026)
+### D. Partial Character Sums and the Collision Transform (April 2026, in preparation)
 
 The bin character sum identity: the collision transform at any
 modulus equals the sum of squared partial character sums over
@@ -42,7 +42,7 @@ to the classical theory of Polya-Vinogradov and Burgess. Ghost
 collision dominance at composites. The factoring wall. The
 interleaving rank structure.
 
-### E. The Collision Prime Number Theorem (March 2026, in preparation)
+### E. The Collision Prime Number Theorem (April 2026, in preparation)
 
 The centered collision deviations cancel across primes at
 the PNT rate, with an effective constant (no Siegel zero
