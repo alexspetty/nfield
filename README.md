@@ -55,10 +55,11 @@ cd nfield && make
 ./build.sh code          # build and run 116 unit tests
 ```
 
-## Research
+## Research Notes
 
-Research notes supporting the publications are
-maintained locally.
+26 research notes (2020-2026) support the publications.
+Notes are added to [research/](research/) as they are
+reviewed and confirmed.
 
 ## Author
 
