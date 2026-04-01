@@ -16,7 +16,11 @@ digit function's bins. The papers prove it. The engine computes with it.
 - [**The Collision Spectrum**](publication/the_collision_spectrum.pdf) (2026)
   Decomposition theorem, L-encoding, Parseval moment identity, correlation decay.
 
-- **The Collision Prime Number Theorem** (2026, in preparation)
+- **Partial Character Sums and the Collision Transform** (April 2026, in preparation)
+  Bin character sum identity, Polya-Vinogradov and Burgess connections,
+  ghost collision dominance at composites, the factoring wall.
+
+- **The Collision Prime Number Theorem** (April 2026, in preparation)
   Collision PNT with Siegel immunity. Collision periodic table.
   L-value extraction from 40 integers. Antisymmetry S(a)+S(-a)=-1.
 
