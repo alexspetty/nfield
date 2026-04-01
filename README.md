@@ -61,6 +61,6 @@ cd nfield && make
 
 ## Author
 
-Alexander S. Petty  
-alexander.petty@gmail.com  
-https://alexpetty.com
+**Alexander S. Petty**
+
+alexander.petty@gmail.com | https://alexpetty.com
