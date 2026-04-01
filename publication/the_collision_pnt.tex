@@ -58,11 +58,13 @@ O(x \exp(-c\sqrt{\log x}))$,
 with an effective constant $c > 0$ for all $b \ge 3$
 (no Siegel zero caveat). Second, the \emph{collision
 variance}: $\sum |S^{\circ}(p)|^2 \sim \sigma^2 x / \log x$
-for an explicit constant $\sigma^2$. Third, the periodic
-table encodes the values $L(1, \chi)$ for all primitive odd
-characters modulo~$b^2$ through the universal formula
-$|\widehat{c}(\chi)| =
-|B_1(\overline{\chi})| \cdot |L(1,\chi)| / (4\pi)$.
+for an explicit constant $\sigma^2$. Third, the periodic table encodes the values
+$L(1, \chi)$ for all primitive odd characters
+modulo~$b^2$: the classical formula
+$|B_1(\overline{\chi})| = (b/\pi) |L(1,\chi)|$
+converts the table's Fourier coefficients to $L$-values.
+For composite bases, the extraction has a single constant
+$1/(\pi \varphi(b))$.
 \end{abstract}
 \maketitle
 
@@ -263,8 +265,10 @@ where $\sigma^2 = \sum_{\chi} |\widehat{c}(\chi)|^2$.
 \end{theorem}
 
 \begin{proof}
-Since $S^{\circ}(p)$ depends only on $p \bmod b^2$
-(Theorem~\ref{thm:fingerprint}), the sum decomposes
+The finitely many primes $p \le b^2$ contribute $O(1)$
+and are absorbed into the error term. For $p > b^2$:
+$S^{\circ}(p)$ depends only on $p \bmod b^2$
+(Theorem~\ref{thm:fingerprint}), so the sum decomposes
 over residue classes:
 \[
 \sum_{p \le x} |S^{\circ}(p)|^2 =
@@ -282,7 +286,10 @@ O(x / \log^2 x)$ uniformly in~$a$. Summing:
 \sum_a |S^{\circ}(a)|^2 +
 O\!\left(\frac{x}{\log^2 x}\right).
 \]
-By Parseval on $(\mathbb{Z}/b^2\mathbb{Z})^{*}$:
+By Parseval on $(\mathbb{Z}/b^2\mathbb{Z})^{*}$ (with
+the normalization $\widehat{c}(\chi) =
+\frac{1}{\varphi(b^2)} \sum_a S^{\circ}(a)\,
+\overline{\chi(a)}$ from~\cite{paperB}):
 $\frac{1}{\varphi(b^2)} \sum_a |S^{\circ}(a)|^2 =
 \sum_{\chi} |\widehat{c}(\chi)|^2 = \sigma^2$.
 \end{proof}
@@ -325,8 +332,8 @@ verification at each step.
 For composite bases, the extraction admits a single
 proportionality constant:
 
-\begin{corollary}\label{cor:composite}
-For composite bases $b \in \{6, 10, 12, \ldots\}$:
+\begin{remark}[Composite bases]\label{rem:composite}
+Computation in bases $b \in \{6, 10, 12\}$ shows
 $|S_G(\chi)| = |B_1(\overline{\chi})|$ for all
 primitive odd~$\chi$, giving
 \[
@@ -336,8 +343,10 @@ primitive odd~$\chi$, giving
 \]
 In base~$10$: the constant is $1/(4\pi) = 0.07958$,
 verified for all $8$ primitive odd characters
-modulo~$100$.
-\end{corollary}
+modulo~$100$ (Table~\ref{tab:lvalues}). The identity
+$|S_G| = |B_1|$ for composite bases is observed, not
+proved.
+\end{remark}
 
 For prime bases $b$ with $\varphi(b) \le 4$
 (i.e., $b \in \{3, 5\}$), the ratio
@@ -374,12 +383,12 @@ for all $8$ primitive odd characters modulo~$100$.}
 % ============================================================
 \section{Remarks}
 
-\subsection*{The collision oracle}
+\subsection*{Collision count from the table}
 
-The periodic table provides $C(b \bmod p)$ in $O(1)$:
-look up $\mathcal{T}(p \bmod b^2)$ and add
-$\lfloor(p{-}1)/b\rfloor$. The table replaces an $O(p)$
-computation with a table read.
+The periodic table determines $C(b \bmod p)$ directly:
+$C = \lfloor(p{-}1)/b\rfloor + \mathcal{T}(p \bmod b^2)$.
+The table replaces an $O(p)$ computation with a lookup
+in a fixed table of $\varphi(b^2)$ integers.
 
 \subsection*{Universality across bases}
 

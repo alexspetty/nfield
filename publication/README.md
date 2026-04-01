@@ -42,6 +42,15 @@ to the classical theory of Polya-Vinogradov and Burgess. Ghost
 collision dominance at composites. The factoring wall. The
 interleaving rank structure.
 
+### E. The Collision Prime Number Theorem (March 2026, in preparation)
+
+The centered collision deviations cancel across primes at
+the PNT rate, with an effective constant (no Siegel zero
+caveat for b >= 3). The collision periodic table: 40
+integers encoding the collision fingerprint of every prime
+via its last two digits. Antisymmetry S(a)+S(-a)=-1, proved.
+L-value extraction from the table, universal for all bases.
+
 ## Author
 
 Alexander S. Petty

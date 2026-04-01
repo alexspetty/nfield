@@ -16,6 +16,10 @@ digit function's bins. The papers prove it. The engine computes with it.
 - [**The Collision Spectrum**](publication/the_collision_spectrum.pdf) (2026)
   Decomposition theorem, L-encoding, Parseval moment identity, correlation decay.
 
+- **The Collision Prime Number Theorem** (2026, in preparation)
+  Collision PNT with Siegel immunity. Collision periodic table.
+  L-value extraction from 40 integers. Antisymmetry S(a)+S(-a)=-1.
+
 ## Software
 
 The `nfield` engine is written in C (MIT license). Requires a C compiler and make.
@@ -47,10 +51,11 @@ cd nfield && make
 ./build.sh code          # build and run 116 unit tests
 ```
 
-## Experiments
+## Research
 
-156 C and Python programs in `experiments/` reproduce
-every computational result in the papers.
+26 research notes (2020-2026) and 190+ experiments
+support the publications. These are maintained locally
+and not included in the public repository.
 
 ## Author
 
