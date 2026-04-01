@@ -53,5 +53,4 @@ L-value extraction from the table, universal for all bases.
 
 ## Author
 
-**Alexander S. Petty**
-alexander.petty@gmail.com
+**Alexander S. Petty** | alexander.petty@gmail.com
