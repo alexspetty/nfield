@@ -1,0 +1,5 @@
+# Build artifacts
+*.o
+*.a
+nfield
+test/test_nfield
