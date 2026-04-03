@@ -421,6 +421,192 @@ static int verify_mean_half(void)
     return all_ok;
 }
 
+/* ── Slice Palindrome (Paper G) ───────────────────────── */
+
+static int verify_palindrome(void)
+{
+    printf("Slice Palindrome (Paper G)\n");
+    printf("  Claim: d_{m-1-n}(a) = d_n(a) for 0 < n < m-1, gcd(a,b)=1\n\n");
+
+    int bases[] = {3, 5, 7};
+    int nb = 3;
+    int all_ok = 1;
+
+    for (int bi = 0; bi < nb; bi++) {
+        int b = bases[bi];
+        int pass = 1;
+        int tested = 0;
+
+        for (int lag = 2; lag <= 4; lag++) {
+            int m = 1;
+            for (int i = 0; i <= lag; i++) m *= b;
+            for (int a = 1; a < m; a++) {
+                int ga = a, ha = b;
+                while (ha) { int t = ha; ha = ga % ha; ga = t; }
+                if (ga != 1) continue;
+
+                for (int n = 1; n < m - 1; n++) {
+                    int tn = m - 1 - n;
+                    int dn = (int)(((long long)(n+1)*a)/m
+                           - ((long long)n*a)/m);
+                    int dtn = (int)(((long long)(tn+1)*a)/m
+                            - ((long long)tn*a)/m);
+                    if (dn != dtn) { pass = 0; break; }
+                    tested++;
+                }
+                if (!pass) break;
+            }
+            if (!pass) break;
+        }
+        printf("  base %2d: %d checks  %s\n", b, tested,
+               pass ? "PASS" : "FAIL");
+        if (!pass) all_ok = 0;
+    }
+    return all_ok;
+}
+
+/* ── Full-Range Imbalance (Paper G) ──────────────────── */
+
+static int verify_full_range(void)
+{
+    printf("Full-Range Imbalance (Paper G)\n");
+    printf("  Claim: f_full(a) = 1 for all coprime a at base 3\n\n");
+
+    int b = 3;
+    int all_ok = 1;
+
+    for (int lag = 2; lag <= 5; lag++) {
+        int m = 1;
+        for (int i = 0; i <= lag; i++) m *= b;
+        int pass = 1;
+        int tested = 0;
+
+        for (int a = 1; a < m; a++) {
+            if (a % b == 0) continue;
+            tested++;
+
+            int N0 = 0, N2 = 0;
+            for (int n = 0; n < m; n++) {
+                int dn = (int)(((long long)(n+1)*a)/m
+                       - ((long long)n*a)/m);
+                if (!dn) continue;
+                int d0 = n % 3;
+                if (d0 == 0) N0++;
+                if (d0 == 2) N2++;
+            }
+            if (N2 - N0 != 1) {
+                printf("  FAIL: lag %d, a=%d: f=%d\n",
+                       lag, a, N2 - N0);
+                pass = 0;
+            }
+        }
+        printf("  lag %d (m=%d): %d classes  %s\n",
+               lag, m, tested, pass ? "PASS" : "FAIL");
+        if (!pass) all_ok = 0;
+    }
+    return all_ok;
+}
+
+/* ── Middle Block Balance (Paper G) ──────────────────── */
+
+static int verify_middle_balance(void)
+{
+    printf("Middle Block Balance (Paper G)\n");
+    printf("  Claim: f^{B_1}(a) = 0 for all coprime a at base 3\n\n");
+
+    int b = 3;
+    int all_ok = 1;
+
+    for (int lag = 2; lag <= 5; lag++) {
+        int m = 1;
+        for (int i = 0; i <= lag; i++) m *= b;
+        int bl = m / b;
+        int pass = 1;
+        int tested = 0;
+
+        for (int a = 1; a < m; a++) {
+            if (a % b == 0) continue;
+            tested++;
+
+            int N0 = 0, N2 = 0;
+            for (int n = bl; n < 2 * bl; n++) {
+                int dn = (int)(((long long)(n+1)*a)/m
+                       - ((long long)n*a)/m);
+                if (!dn) continue;
+                int d0 = n % 3;
+                if (d0 == 0) N0++;
+                if (d0 == 2) N2++;
+            }
+            if (N2 - N0 != 0) {
+                printf("  FAIL: lag %d, a=%d: f=%d\n",
+                       lag, a, N2 - N0);
+                pass = 0;
+            }
+        }
+        printf("  lag %d (m=%d): %d classes  %s\n",
+               lag, m, tested, pass ? "PASS" : "FAIL");
+        if (!pass) all_ok = 0;
+    }
+    return all_ok;
+}
+
+/* ── Inversion Invariance (Paper G) ──────────────────── */
+
+static int verify_inversion(void)
+{
+    printf("Inversion Invariance (Paper G)\n");
+    printf("  Claim: f_j(a) = f_j(a^{-1}) at base 3\n\n");
+
+    int b = 3;
+    int all_ok = 1;
+
+    for (int lag = 2; lag <= 5; lag++) {
+        int m = 1;
+        for (int i = 0; i <= lag; i++) m *= b;
+        int bl = m / b;
+        int ndigits = lag;
+        int pass = 1;
+        int tested = 0;
+
+        for (int a = 1; a < m; a++) {
+            if (a % b == 0) continue;
+            int ainv = mod_inverse(a, m);
+            if (ainv % b == 0) continue;
+
+            for (int j = 0; j < ndigits; j++) {
+                int N0a = 0, N2a = 0, N0i = 0, N2i = 0;
+                for (int n = 0; n < bl; n++) {
+                    int dj = n;
+                    for (int jj = 0; jj < j; jj++) dj /= b;
+                    dj %= b;
+
+                    int dna = (int)(((long long)(n+1)*a)/m
+                            - ((long long)n*a)/m);
+                    int dni = (int)(((long long)(n+1)*ainv)/m
+                            - ((long long)n*ainv)/m);
+
+                    if (dj == 0) { N0a += dna; N0i += dni; }
+                    if (dj == 2) { N2a += dna; N2i += dni; }
+                }
+                int fa = N2a - N0a;
+                int fi = N2i - N0i;
+                if (fa != fi) {
+                    printf("  FAIL: lag %d, a=%d, j=%d: "
+                           "f(a)=%d f(a^-1)=%d\n",
+                           lag, a, j, fa, fi);
+                    pass = 0;
+                }
+                tested++;
+            }
+        }
+        printf("  lag %d (m=%d): %d checks  %s\n",
+               lag, m, tested, pass ? "PASS" : "FAIL");
+        if (!pass) all_ok = 0;
+    }
+    return all_ok;
+}
+
+
 /* ── Centered Antisymmetry (Paper B) ─────────────────── */
 
 static int verify_centered_antisym(void)
@@ -792,6 +978,10 @@ static void usage(void)
         "  finite-det       S depends only on p mod b^2 (Paper A)\n"
         "  antisymmetry     S(a) + S(b^2-a) = -1 (Papers A, E)\n"
         "  mean-half        Mean of S over units = -1/2 (Papers A, E)\n"
+        "  palindrome       d_{m-1-n}(a) = d_n(a) for interior n (Paper G)\n"
+        "  full-range       f_full(a) = 1 for all coprime a (Paper G)\n"
+        "  middle-balance   f^{B_1}(a) = 0 (Paper G)\n"
+        "  inversion        f_j(a) = f_j(a^{-1}) (Paper G)\n"
         "  centered-antisym S_c(a)+S_c(m-a)=0 (Paper B)\n"
         "  even-killed      S_c_hat(chi)=0 for even chi (Paper B)\n"
         "  decomposition    Parseval moment identity (Paper C)\n"
@@ -813,6 +1003,10 @@ int verify_dispatch(const char *name)
         {"finite-det",    verify_finite_det},
         {"antisymmetry",  verify_antisymmetry},
         {"mean-half",     verify_mean_half},
+        {"palindrome",    verify_palindrome},
+        {"full-range",    verify_full_range},
+        {"middle-balance",verify_middle_balance},
+        {"inversion",     verify_inversion},
         {"centered-antisym", verify_centered_antisym},
         {"even-killed",   verify_even_killed},
         {"decomposition", verify_decomposition},

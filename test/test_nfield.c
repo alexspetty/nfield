@@ -541,6 +541,107 @@ static void test_polar(void)
     printf("\n");
 }
 
+/* -- Paper G: digit function structural tests ------------ */
+
+static int gcd_test(int a, int b) {
+    while (b) { int t = b; b = a % b; a = t; }
+    return a;
+}
+
+static int modinv_test(int a, int m) {
+    int g = m, x = 0, y = 1, a0 = a;
+    while (a0) { int q = g/a0; int t = g-q*a0; g=a0; a0=t; t=x-q*y; x=y; y=t; }
+    return ((x % m) + m) % m;
+}
+
+static void test_paper_g(void)
+{
+    printf("Paper G structural identities:\n\n");
+
+
+    int b = 3;
+
+    /* Test palindrome at m=27 */
+    {
+        int m = 27;
+        int ok = 1;
+        for (int a = 1; a < m; a++) {
+            if (a % b == 0) continue;
+            for (int n = 1; n < m - 1; n++) {
+                int tn = m - 1 - n;
+                int dn = (int)(((long long)(n+1)*a)/m - ((long long)n*a)/m);
+                int dtn = (int)(((long long)(tn+1)*a)/m - ((long long)tn*a)/m);
+                if (dn != dtn) { ok = 0; break; }
+            }
+            if (!ok) break;
+        }
+        ASSERT(ok, "palindrome d_{m-1-n}(a) = d_n(a) at m=27");
+    }
+
+    /* Test f_full = 1 at m=27 */
+    {
+        int m = 27;
+        int ok = 1;
+        for (int a = 1; a < m; a++) {
+            if (a % b == 0) continue;
+            int N0 = 0, N2 = 0;
+            for (int n = 0; n < m; n++) {
+                int dn = (int)(((long long)(n+1)*a)/m - ((long long)n*a)/m);
+                if (!dn) continue;
+                if (n % 3 == 0) N0++;
+                if (n % 3 == 2) N2++;
+            }
+            if (N2 - N0 != 1) { ok = 0; break; }
+        }
+        ASSERT(ok, "f_full(a) = 1 at m=27");
+    }
+
+    /* Test middle balance at m=27 */
+    {
+        int m = 27, bl = 9;
+        int ok = 1;
+        for (int a = 1; a < m; a++) {
+            if (a % b == 0) continue;
+            int N0 = 0, N2 = 0;
+            for (int n = bl; n < 2*bl; n++) {
+                int dn = (int)(((long long)(n+1)*a)/m - ((long long)n*a)/m);
+                if (!dn) continue;
+                if (n % 3 == 0) N0++;
+                if (n % 3 == 2) N2++;
+            }
+            if (N2 - N0 != 0) { ok = 0; break; }
+        }
+        ASSERT(ok, "f^{B_1}(a) = 0 at m=27");
+    }
+
+    /* Test inversion invariance at m=27 */
+    {
+        int m = 27, bl = 9;
+        int ok = 1;
+        for (int a = 1; a < m; a++) {
+            if (a % b == 0) continue;
+            int ainv = modinv_test(a, m);
+            if (ainv % b == 0) continue;
+            for (int j = 0; j < 2; j++) {
+                int N0a=0, N2a=0, N0i=0, N2i=0;
+                for (int n = 0; n < bl; n++) {
+                    int dj = n;
+                    for (int jj = 0; jj < j; jj++) dj /= b;
+                    dj %= b;
+                    int dna = (int)(((long long)(n+1)*a)/m - ((long long)n*a)/m);
+                    int dni = (int)(((long long)(n+1)*ainv)/m - ((long long)n*ainv)/m);
+                    if (dj==0) { N0a+=dna; N0i+=dni; }
+                    if (dj==2) { N2a+=dna; N2i+=dni; }
+                }
+                if ((N2a-N0a) != (N2i-N0i)) { ok = 0; break; }
+            }
+            if (!ok) break;
+        }
+        ASSERT(ok, "f_j(a) = f_j(a^{-1}) at m=27");
+    }
+
+    printf("\n");
+}
 
 int main(void)
 {
@@ -557,6 +658,7 @@ int main(void)
     test_golden_threshold();
     test_bases();
     test_polar();
+    test_paper_g();
 
     printf("==================================================\n");
     printf("%d tests: %d passed, %d failed\n",
