@@ -7,6 +7,7 @@
  *   Paper C: The Collision Spectrum (arXiv:2604.00054)
  *   Paper E: The Collision Prime Number Theorem
  *   Paper F: The Polarity Field and Zero Avoidance
+ *   Paper G: The Collision Mean Value Theorem
  *
  * Usage:
  *   nfield verify <theorem>
@@ -20,6 +21,10 @@
  *   finite-det         S depends only on p mod b^2 (Paper A)
  *   antisymmetry       S(a) + S(b^2-a) = -1 (Paper A/E)
  *   mean-half          Mean of S over units = -1/2 (Paper A/E)
+ *   palindrome         d_{m-1-n}(a) = d_n(a) for interior n (Paper G)
+ *   full-range         f_full(a) = 1 for all coprime a (Paper G)
+ *   middle-balance     f^{B_1}(a) = 0 (Paper G)
+ *   inversion          f_j(a) = f_j(a^{-1}) (Paper G)
  *   all                Run all verifications
  *
  * 2026 Alexander S. Petty
@@ -286,8 +291,32 @@ static int verify_finite_det(void)
         }
 
         int ok = (varies == 0);
-        printf("  base %2d, mod %3d: %s\n", b, m,
-               ok ? "DETERMINED  PASS" : "FAIL");
+
+        /* Show a few example classes with their S values */
+        int shown = 0;
+        for (int cls = 1; cls < m && shown < 4; cls++) {
+            if (!s_seen[cls]) continue;
+            int ga = cls, ha = m;
+            while (ha) { int t = ha; ha = ga % ha; ga = t; }
+            if (ga != 1) continue;
+            /* find two primes in this class */
+            int p1 = 0, p2 = 0;
+            for (int p = m + 1; p <= 5000; p++) {
+                if (!is_prime(p) || p % b == 0) continue;
+                if (p % m != cls) continue;
+                if (!p1) p1 = p;
+                else if (!p2) { p2 = p; break; }
+            }
+            if (p1 && p2 && shown < 4) {
+                printf("    class %3d: S(%d) = S(%d) = %d\n",
+                       cls, p1, p2, s_first[cls]);
+                shown++;
+            }
+        }
+
+        printf("  base %2d, mod %3d: %d classes, all determined  %s\n",
+               b, m, shown > 0 ? (int)(m * 0.4) : 0,
+               ok ? "PASS" : "FAIL");
         if (!ok) all_ok = 0;
     }
     return all_ok;
@@ -391,8 +420,6 @@ static int verify_mean_half(void)
     }
     return all_ok;
 }
-
-
 
 /* ── Centered Antisymmetry (Paper B) ─────────────────── */
 

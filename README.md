@@ -20,11 +20,11 @@ digit function's bins. The papers prove it. The engine computes with it.
   Bin character sum identity, Polya-Vinogradov and Burgess connections,
   ghost collision dominance at composites, the factoring wall.
 
-- **The Collision Prime Number Theorem** (April 2026, in preparation)
+- **The Collision Periodic Table** (April 2026, in preparation)
   Collision PNT with Siegel immunity. Collision periodic table.
   L-value extraction from 40 integers. Antisymmetry S(a)+S(-a)=-1.
 
-- **The Collision Mean Value Theorem** (April 2026, in preparation)
+- **Symmetries of the Collision Digit Function** (April 2026, in preparation)
   V_rms^2 = O(b^l) proved from floor(br/p). Flow conservation,
   source uniformity, polarity cancellation. No L-function theory.
 
