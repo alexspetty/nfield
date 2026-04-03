@@ -541,7 +541,6 @@ static void test_polar(void)
     printf("\n");
 }
 
-/* ── main ───────────────────────────────────────────────── */
 
 int main(void)
 {
