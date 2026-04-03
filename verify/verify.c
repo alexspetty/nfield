@@ -2,29 +2,23 @@
  * verify.c: Verification of published theorems.
  *
  * Verifies the computational claims in:
- *   Paper A: The Collision Invariant (arXiv:2604.00045)
- *   Paper B: The Collision Transform (arXiv:2604.00047)
- *   Paper C: The Collision Spectrum (arXiv:2604.00054)
- *   Paper E: The Collision Prime Number Theorem
- *   Paper F: The Polarity Field and Zero Avoidance
- *   Paper G: The Collision Mean Value Theorem
  *
  * Usage:
  *   nfield verify <theorem>
  *   nfield verify all
  *
  * Theorem names:
- *   gate-width         Exactly b-1 deranging multipliers (Paper A)
- *   mobius-family       Deranging set = {-u/(b-u) mod p} (Paper A)
- *   sum-rule           Sum of C(g) = S(p,b) (Paper A)
- *   mean-formula       Mean collision count over constructive g (Paper A)
- *   finite-det         S depends only on p mod b^2 (Paper A)
- *   antisymmetry       S(a) + S(b^2-a) = -1 (Paper A/E)
- *   mean-half          Mean of S over units = -1/2 (Paper A/E)
- *   palindrome         d_{m-1-n}(a) = d_n(a) for interior n (Paper G)
- *   full-range         f_full(a) = 1 for all coprime a (Paper G)
- *   middle-balance     f^{B_1}(a) = 0 (Paper G)
- *   inversion          f_j(a) = f_j(a^{-1}) (Paper G)
+ *   gate-width         Exactly b-1 deranging multipliers
+ *   mobius-family       Deranging set = {-u/(b-u) mod p}
+ *   sum-rule           Sum of C(g) = S(p,b)
+ *   mean-formula       Mean collision count over constructive g
+ *   finite-det         S depends only on p mod b^2
+ *   antisymmetry       S(a) + S(b^2-a) = -1
+ *   mean-half          Mean of S over units = -1/2
+ *   palindrome         d_{m-1-n}(a) = d_n(a) for interior n
+ *   full-range         f_full(a) = 1 for all coprime a
+ *   middle-balance     f^{B_1}(a) = 0
+ *   inversion          f_j(a) = f_j(a^{-1})
  *   all                Run all verifications
  *
  * 2026 Alexander S. Petty
@@ -85,7 +79,7 @@ static int power_mod(int base, int exp, int mod) {
 
 static int verify_gate_width(void)
 {
-    printf("Gate Width Theorem (Paper A)\n");
+    printf("Gate Width Theorem\n");
     printf("  Claim: exactly b-1 deranging multipliers for every prime p > b\n\n");
 
     int primes[] = {7, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47,
@@ -126,7 +120,7 @@ static int verify_gate_width(void)
 
 static int verify_mobius_family(void)
 {
-    printf("Mobius Family (Paper A)\n");
+    printf("Mobius Family\n");
     printf("  Claim: deranging set = {-u/(b-u) mod p : u=1..b-1}\n\n");
 
     int primes[] = {13, 17, 29, 37, 41, 53, 61, 73, 89, 97};
@@ -182,7 +176,7 @@ static int verify_mobius_family(void)
 
 static int verify_sum_rule(void)
 {
-    printf("Sum Rule (Paper A)\n");
+    printf("Sum Rule\n");
     printf("  Claim: sum_{g=1}^{p-1} C(g) = S(p,b) = sum n_d^2\n\n");
 
     int primes[] = {13, 17, 29, 37, 41, 53, 61, 73, 89, 97};
@@ -219,7 +213,7 @@ static int verify_sum_rule(void)
 
 static int verify_mean_formula(void)
 {
-    printf("Mean Collision Count (Paper A)\n");
+    printf("Mean Collision Count\n");
     printf("  Claim: mean C(g) over constructive g = Q(b(Q-1)+2R)/(b(Q-1)+R)\n\n");
 
     int primes[] = {17, 29, 37, 53, 61, 97, 131, 179, 193};
@@ -259,7 +253,7 @@ static int verify_mean_formula(void)
 
 static int verify_finite_det(void)
 {
-    printf("Finite Determination (Paper A)\n");
+    printf("Finite Determination\n");
     printf("  Claim: S(p) depends only on p mod b^2\n\n");
 
     int bases[] = {3, 5, 7, 10};
@@ -326,7 +320,7 @@ static int verify_finite_det(void)
 
 static int verify_antisymmetry(void)
 {
-    printf("Antisymmetry (Papers A, E)\n");
+    printf("Antisymmetry\n");
     printf("  Claim: S(a) + S(b^2 - a) = -1 for all coprime a\n\n");
 
     int bases[] = {3, 5, 7, 10};
@@ -377,7 +371,7 @@ static int verify_antisymmetry(void)
 
 static int verify_mean_half(void)
 {
-    printf("Mean = -1/2 (Papers A, E)\n");
+    printf("Mean = -1/2\n");
     printf("  Claim: average of S over coprime classes = -1/2\n\n");
 
     int bases[] = {3, 5, 7, 10};
@@ -421,11 +415,11 @@ static int verify_mean_half(void)
     return all_ok;
 }
 
-/* ── Slice Palindrome (Paper G) ───────────────────────── */
+/* ── Slice Palindrome ───────────────────────── */
 
 static int verify_palindrome(void)
 {
-    printf("Slice Palindrome (Paper G)\n");
+    printf("Slice Palindrome\n");
     printf("  Claim: d_{m-1-n}(a) = d_n(a) for 0 < n < m-1, gcd(a,b)=1\n\n");
 
     int bases[] = {3, 5, 7};
@@ -465,11 +459,11 @@ static int verify_palindrome(void)
     return all_ok;
 }
 
-/* ── Full-Range Imbalance (Paper G) ──────────────────── */
+/* ── Full-Range Imbalance ──────────────────── */
 
 static int verify_full_range(void)
 {
-    printf("Full-Range Imbalance (Paper G)\n");
+    printf("Full-Range Imbalance\n");
     printf("  Claim: f_full(a) = 1 for all coprime a at base 3\n\n");
 
     int b = 3;
@@ -507,11 +501,11 @@ static int verify_full_range(void)
     return all_ok;
 }
 
-/* ── Middle Block Balance (Paper G) ──────────────────── */
+/* ── Middle Block Balance ──────────────────── */
 
 static int verify_middle_balance(void)
 {
-    printf("Middle Block Balance (Paper G)\n");
+    printf("Middle Block Balance\n");
     printf("  Claim: f^{B_1}(a) = 0 for all coprime a at base 3\n\n");
 
     int b = 3;
@@ -550,11 +544,11 @@ static int verify_middle_balance(void)
     return all_ok;
 }
 
-/* ── Inversion Invariance (Paper G) ──────────────────── */
+/* ── Inversion Invariance ──────────────────── */
 
 static int verify_inversion(void)
 {
-    printf("Inversion Invariance (Paper G)\n");
+    printf("Inversion Invariance\n");
     printf("  Claim: f_j(a) = f_j(a^{-1}) at base 3\n\n");
 
     int b = 3;
@@ -607,11 +601,11 @@ static int verify_inversion(void)
 }
 
 
-/* ── Centered Antisymmetry (Paper B) ─────────────────── */
+/* ── Centered Antisymmetry ─────────────────── */
 
 static int verify_centered_antisym(void)
 {
-    printf("Centered Antisymmetry (Paper B)\n");
+    printf("Centered Antisymmetry\n");
     printf("  Claim: S_c(a) + S_c(m-a) = 0 for all coprime a\n\n");
 
     int bases[] = {3, 5, 7, 10};
@@ -665,11 +659,11 @@ static int verify_centered_antisym(void)
     return all_ok;
 }
 
-/* ── Even Characters Killed (Paper B) ────────────────── */
+/* ── Even Characters Killed ────────────────── */
 
 static int verify_even_killed(void)
 {
-    printf("Even Characters Killed (Paper B)\n");
+    printf("Even Characters Killed\n");
     printf("  Claim: S_c_hat(chi) = 0 for all even chi\n\n");
 
     int bases[] = {3, 7, 10};
@@ -770,11 +764,11 @@ static int verify_even_killed(void)
     return all_ok;
 }
 
-/* ── Decomposition Theorem (Paper C) ─────────────────── */
+/* ── Decomposition Theorem ─────────────────── */
 
 static int verify_decomposition(void)
 {
-    printf("Decomposition Theorem (Paper C)\n");
+    printf("Decomposition Theorem\n");
     printf("  Claim: S_hat(chi) = -B_1(chi_bar) * D(chi) for primitive odd chi\n");
     printf("  (Verified as |S_hat|^2 = |B_1|^2 * |D|^2)\n\n");
 
@@ -822,11 +816,11 @@ static int verify_decomposition(void)
     return 1;
 }
 
-/* ── General Lag Finite Determination (Paper D) ──────── */
+/* ── General Lag Finite Determination ──────── */
 
 static int verify_general_lag_det(void)
 {
-    printf("General Lag Finite Determination (Paper D)\n");
+    printf("General Lag Finite Determination\n");
     printf("  Claim: S_ell depends only on p mod b^{ell+1}\n\n");
 
     int b = 3;
@@ -865,11 +859,11 @@ static int verify_general_lag_det(void)
     return all_ok;
 }
 
-/* ── Chiral Symmetry (Paper F) ───────────────────────── */
+/* ── Chiral Symmetry ───────────────────────── */
 
 static int verify_chiral(void)
 {
-    printf("Chiral Spectral Symmetry (Paper F)\n");
+    printf("Chiral Spectral Symmetry\n");
     printf("  Claim: eigenvalues of H pair as (lambda, -lambda)\n\n");
 
     /* Build the polarity Hamiltonian H = -Delta + V on (Z/mZ)*
@@ -971,21 +965,21 @@ static void usage(void)
         "nfield verify: verify published theorems\n\n"
         "Usage: nfield verify <theorem>\n\n"
         "Theorems:\n"
-        "  gate-width      Exactly b-1 deranging multipliers (Paper A)\n"
-        "  mobius-family    Deranging set = {-u/(b-u) mod p} (Paper A)\n"
-        "  sum-rule         Sum of C(g) = S(p,b) (Paper A)\n"
-        "  mean-formula     Mean collision count formula (Paper A)\n"
-        "  finite-det       S depends only on p mod b^2 (Paper A)\n"
-        "  antisymmetry     S(a) + S(b^2-a) = -1 (Papers A, E)\n"
-        "  mean-half        Mean of S over units = -1/2 (Papers A, E)\n"
-        "  palindrome       d_{m-1-n}(a) = d_n(a) for interior n (Paper G)\n"
-        "  full-range       f_full(a) = 1 for all coprime a (Paper G)\n"
-        "  middle-balance   f^{B_1}(a) = 0 (Paper G)\n"
-        "  inversion        f_j(a) = f_j(a^{-1}) (Paper G)\n"
-        "  centered-antisym S_c(a)+S_c(m-a)=0 (Paper B)\n"
-        "  even-killed      S_c_hat(chi)=0 for even chi (Paper B)\n"
-        "  decomposition    Parseval moment identity (Paper C)\n"
-        "  general-lag-det  S_ell depends on p mod b^{ell+1} (Paper D)\n"
+        "  gate-width      Exactly b-1 deranging multipliers\n"
+        "  mobius-family    Deranging set = {-u/(b-u) mod p}\n"
+        "  sum-rule         Sum of C(g) = S(p,b)\n"
+        "  mean-formula     Mean collision count formula\n"
+        "  finite-det       S depends only on p mod b^2\n"
+        "  antisymmetry     S(a) + S(b^2-a) = -1\n"
+        "  mean-half        Mean of S over units = -1/2\n"
+        "  palindrome       d_{m-1-n}(a) = d_n(a) for interior n\n"
+        "  full-range       f_full(a) = 1 for all coprime a\n"
+        "  middle-balance   f^{B_1}(a) = 0\n"
+        "  inversion        f_j(a) = f_j(a^{-1})\n"
+        "  centered-antisym S_c(a)+S_c(m-a)=0\n"
+        "  even-killed      S_c_hat(chi)=0 for even chi\n"
+        "  decomposition    Parseval moment identity\n"
+        "  general-lag-det  S_ell depends on p mod b^{ell+1}\n"
         "  all              Run all verifications\n"
     );
 }
