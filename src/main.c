@@ -32,6 +32,7 @@ static void usage(void)
         "  nfield table1                             Reproduce paper Table 1\n"
         "  nfield decompose <n> [--base <b>]         Show alpha, sigma, F\n"
         "  nfield spectral <p> [--base <b>]          Show Phi(k) spectrum\n"
+        "  nfield table [--base <b>]                  Collision periodic table\n"
         "  nfield verify [<theorem>]                 Verify published theorems\n"
         "  nfield div <n> [--base <b>]               Division table for all k/n\n"
         "  nfield equations                          Show invariant definitions\n"
@@ -195,6 +196,62 @@ int main(int argc, char **argv)
             }
             printf("\n");
         }
+
+    } else if (strcmp(cmd, "table") == 0) {
+        int base = parse_base(argc, argv, 2);
+        int m = base * base;
+
+        /* Compute collision invariant for each coprime class */
+        int S[1024];
+        int seen[1024];
+        memset(seen, 0, sizeof(seen));
+
+        for (int p = m + 1; p <= 5000; p++) {
+            /* is_prime inline */
+            int ip = 1;
+            if (p < 2) ip = 0;
+            else if (p < 4) ip = 1;
+            else if (p % 2 == 0 || p % 3 == 0) ip = 0;
+            else { for (int i = 5; i * i <= p; i += 6)
+                if (p % i == 0 || p % (i+2) == 0) { ip = 0; break; } }
+            if (!ip) continue;
+            if (p % base == 0) continue;
+            int cls = p % m;
+            if (seen[cls]) continue;
+
+            /* collision count for g = b mod p */
+            int g = base % p;
+            int C = 0;
+            for (int r = 1; r < p; r++) {
+                int gr = (int)(((long long)g * r) % p);
+                if (gr == 0) continue;
+                if ((base * r) / p == (base * gr) / p) C++;
+            }
+            S[cls] = C - (p - 1) / base;
+            seen[cls] = 1;
+        }
+
+        printf("Collision periodic table, base %d (mod %d)\n\n", base, m);
+        printf("    ");
+        for (int c = 0; c < base; c++) printf(" %3d", c);
+        printf("\n");
+
+        for (int r = 0; r < base; r++) {
+            printf(" %d: ", r);
+            for (int c = 0; c < base; c++) {
+                int cls = r * base + c;
+                /* check gcd(cls, m) == 1 */
+                int a = cls, b2 = m;
+                while (b2) { int t = b2; b2 = a % b2; a = t; }
+                if (a != 1 || !seen[cls]) {
+                    printf("   .");
+                } else {
+                    printf(" %+3d", S[cls]);
+                }
+            }
+            printf("\n");
+        }
+        printf("\nMean = -1/2. Complement pairs: S(a) + S(%d - a) = -1.\n", m);
 
     } else if (strcmp(cmd, "verify") == 0) {
         const char *theorem = (argc >= 3) ? argv[2] : "all";

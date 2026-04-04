@@ -302,7 +302,7 @@ static int verify_finite_det(void)
                 else if (!p2) { p2 = p; break; }
             }
             if (p1 && p2 && shown < 4) {
-                printf("    class %3d: S(%d) = S(%d) = %d\n",
+                printf("    class %02d: S(%d) = S(%d) = %d\n",
                        cls, p1, p2, s_first[cls]);
                 shown++;
             }
