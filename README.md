@@ -59,45 +59,8 @@ cd nfield && make
 ./build.sh code          # build and run 116 unit tests
 ```
 
-## Reproducing the MVT Computations
-
-The experiments supporting the collision mean value theorem are in `experiments/`.
-Requires GCC with OpenMP. GPU experiments require CUDA (nvcc).
-
-**Per-bin flow bound (lag 2, all 400 classes):**
-```
-gcc -O3 -fopenmp -o verify_perbin experiments/verify_perbin.cu -lm
-./verify_perbin 10 2
-```
-
-**Per-radial flow analysis (lag 2-3):**
-```
-gcc -O3 -fopenmp -o verify_radial experiments/verify_radial.c -lm
-./verify_radial 10 3
-```
-
-**Vortex flow decomposition (radial vs transverse):**
-```
-gcc -O3 -fopenmp -o vortex_structure experiments/vortex_structure.c -lm
-./vortex_structure 10 3
-```
-
-**GPU-accelerated F(d,d') at arbitrary lag (requires CUDA):**
-```
-nvcc -O3 -allow-unsupported-compiler -Xcompiler -fopenmp \
-     -o verify_perbin_gpu experiments/verify_perbin_gpu.cu -lm
-./verify_perbin_gpu 10 4
-```
-
-**Multi-base verification (bases 3, 7, 10, 12):**
-```
-for b in 3 7 10 12; do ./verify_radial $b 3; done
-```
-
-## Research Notes
-
-26 research notes (2020-2026) in [research/](research/).
-
 ## Author
 
-**Alexander S. Petty** | alexander.petty@gmail.com
+**Alexander S. Petty** | [alexander.petty@gmail.com](mailto:alexander.petty@gmail.com) | [alexpetty.com](https://alexpetty.com)
+
+.:.
