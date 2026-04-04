@@ -20,11 +20,16 @@ digit function's bins. The papers prove it. The engine computes with it.
   Bin character sum identity, Polya-Vinogradov and Burgess connections,
   ghost collision dominance at composites, the factoring wall.
 
-- **The Collision Periodic Table** (April 2026, in preparation)
-  Collision PNT with Siegel immunity. Collision periodic table.
-  L-value extraction from 40 integers. Antisymmetry S(a)+S(-a)=-1.
+- [**The Collision Periodic Table**](publication/the_collision_periodic_table.pdf) (April 2026)
+  Effective cancellation of centered collision values across primes
+  at the PNT rate. L-value extraction from the periodic table.
+  Base constant kappa(b) = 1/(pi*phi(b)). Antisymmetry S(a)+S(b^2-a)=-1.
 
-- **Symmetries of the Collision Digit Function** (April 2026, in preparation)
+- [**Convergence of Collision Fluctuation Sums**](publication/convergence_of_collision_fluctuation_sums.pdf) (April 2026)
+  Polarity field F(s) convergence under GRH; avoidance deficit
+  anti-correlation; reduction to a single inequality in Q(sqrt(5)).
+
+- [**Symmetries of the Collision Digit Function**](publication/drafts/symmetries_of_the_collision_digit_function.pdf) (April 2026, draft)
   V_rms^2 = O(b^l) proved from floor(br/p). Flow conservation,
   source uniformity, polarity cancellation. No L-function theory.
 
@@ -61,6 +66,4 @@ cd nfield && make
 
 ## Author
 
-**Alexander S. Petty** | [alexander.petty@gmail.com](mailto:alexander.petty@gmail.com) | [alexpetty.com](https://alexpetty.com)
-
-.:.
+**Alexander S. Petty** | [alexander.petty@gmail.com](mailto:alexander.petty@gmail.com) | [alexpetty.com](https://alexpetty.com) | .:.
