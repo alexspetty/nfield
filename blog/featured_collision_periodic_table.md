@@ -150,7 +150,7 @@ $ ./nfield verify decomposition     # Parseval moment identity
 The theorems are finite, deterministic, and checkable. Every one passes at every base.
 
 Code: [github.com/alexspetty/nfield](https://github.com/alexspetty/nfield)
-Paper: [The Collision Periodic Table](https://github.com/alexspetty/nfield/blob/main/publication/the_collision_periodic_table.pdf)
+Paper: [The Collision Periodic Table](https://github.com/alexspetty/nfield/blob/main/research/collision_periodic_table.pdf)
 
 *Alexander S. Petty*
 April 2026
