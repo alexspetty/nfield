@@ -19,6 +19,8 @@
  *   full-range         f_full(a) = 1 for all coprime a
  *   middle-balance     f^{B_1}(a) = 0
  *   inversion          f_j(a) = f_j(a^{-1})
+ *   boundary-q3-state-image     q=3 finite boundary alphabet
+ *   boundary-q3-primitive-frac  q=3 boundary primitive fractions
  *   all                Run all verifications
  *
  * 2026 Alexander S. Petty
@@ -957,6 +959,151 @@ static int verify_chiral(void)
     return all_ok;
 }
 
+/* ── q=3 Boundary Alphabet ────────────────────────────── */
+
+static long count_ap_interval(long A, long B, long mod, long res)
+{
+    if (A >= B) return 0;
+    long first;
+    long rem = A % mod;
+    if (rem < 0) rem += mod;
+    if (rem <= res) first = A + (res - rem);
+    else first = A + (mod - (rem - res));
+    if (first >= B) return 0;
+    return 1 + (B - 1 - first) / mod;
+}
+
+static long inv_mod_general(long a, long m)
+{
+    long t = 0, newt = 1;
+    long r = m, newr = a;
+    while (newr != 0) {
+        long q = r / newr;
+        long tmp = newt; newt = t - q * newt; t = tmp;
+        tmp = newr; newr = r - q * newr; r = tmp;
+    }
+    if (r > 1) return -1;
+    if (t < 0) t += m;
+    return t;
+}
+
+static void q3_symbol_from_state(int r, int m18, int eps, int *x, int *y, int *z)
+{
+    static const int cycle[6] = {1, 2, 4, 8, 7, 5};
+    long m = m18;
+    long mprev = (m + 1) / 2;
+    long mnext = 2 * m - eps;
+    long inv = inv_mod_general(r, 9);
+    long Delta[6];
+
+    for (int j = 0; j < 6; j++) {
+        int prev = (j + 5) % 6;
+        long t1 = (cycle[j] * inv) % 9;
+        long t0 = (cycle[prev] * inv) % 9;
+        Delta[j] =
+            count_ap_interval(m, mnext, 9, t1) -
+            count_ap_interval(mprev, m, 9, t0);
+    }
+
+    *x = (int)(Delta[0] - Delta[3]);
+    *y = (int)(Delta[1] - Delta[4]);
+    *z = (int)(Delta[2] - Delta[5]);
+}
+
+static void q3_enumerate_state_image(int seen[3][3][3], int *states)
+{
+    int residues[6] = {1, 2, 4, 5, 7, 8};
+    memset(seen, 0, 27 * sizeof(int));
+    *states = 0;
+
+    for (int ri = 0; ri < 6; ri++) {
+        int r = residues[ri];
+        for (int m = 0; m < 18; m++) {
+            for (int eps = 0; eps <= 1; eps++) {
+                int x, y, z;
+                q3_symbol_from_state(r, m, eps, &x, &y, &z);
+                if (x < -1 || x > 1 || y < -1 || y > 1 || z < -1 || z > 1)
+                    continue;
+                seen[x+1][y+1][z+1] = 1;
+                (*states)++;
+            }
+        }
+    }
+}
+
+static int verify_boundary_q3_state_image(void)
+{
+    printf("q=3 Boundary Alphabet: finite state image\n");
+    printf("  Claim: 216 carry/phase states yield 18 nonzero symbols plus zero,\n");
+    printf("         excluding the two pure-null symbols (1,-1,1), (-1,1,-1)\n\n");
+
+    int seen[3][3][3];
+    int states = 0;
+    q3_enumerate_state_image(seen, &states);
+
+    int count = 0, nonzero = 0;
+    for (int x = -1; x <= 1; x++)
+        for (int y = -1; y <= 1; y++)
+            for (int z = -1; z <= 1; z++)
+                if (seen[x+1][y+1][z+1]) {
+                    count++;
+                    if (!(x == 0 && y == 0 && z == 0)) nonzero++;
+                }
+
+    int missing_pos_null = !seen[1+1][-1+1][1+1];
+    int missing_neg_null = !seen[-1+1][1+1][-1+1];
+    int ok = (states == 216 && count == 19 && nonzero == 18 &&
+              missing_pos_null && missing_neg_null);
+
+    printf("  states checked: %d  %s\n", states, states == 216 ? "PASS" : "FAIL");
+    printf("  total symbols:  %d  %s\n", count, count == 19 ? "PASS" : "FAIL");
+    printf("  nonzero symbols:%d  %s\n", nonzero, nonzero == 18 ? "PASS" : "FAIL");
+    printf("  pure-null symbols absent: %s\n", (missing_pos_null && missing_neg_null) ? "PASS" : "FAIL");
+
+    return ok;
+}
+
+static int verify_boundary_q3_primitive_fractions(void)
+{
+    printf("q=3 Boundary Alphabet: primitive fractions\n");
+    printf("  Claim: every nonzero local letter has primitive fraction 2/3, 8/9, or 1\n\n");
+
+    int seen[3][3][3];
+    int states = 0;
+    q3_enumerate_state_image(seen, &states);
+
+    int n23 = 0, n89 = 0, n1 = 0, bad = 0;
+    for (int x = -1; x <= 1; x++) {
+        for (int y = -1; y <= 1; y++) {
+            for (int z = -1; z <= 1; z++) {
+                if (!seen[x+1][y+1][z+1]) continue;
+                if (x == 0 && y == 0 && z == 0) continue;
+
+                int norm2 = x*x + y*y + z*z;
+                int s = x - y + z;
+                int num = 3 * norm2 - s * s;
+                int den = 3 * norm2;
+
+                if (num * 3 == den * 2) n23++;
+                else if (num * 9 == den * 8) n89++;
+                else if (num == den) n1++;
+                else {
+                    bad++;
+                    printf("  FAIL: (%d,%d,%d) has primitive fraction %d/%d\n",
+                           x, y, z, num, den);
+                }
+            }
+        }
+    }
+
+    int ok = (states == 216 && bad == 0 && n23 + n89 + n1 == 18);
+    printf("  fraction 2/3: %d symbols\n", n23);
+    printf("  fraction 8/9: %d symbols\n", n89);
+    printf("  fraction 1:   %d symbols\n", n1);
+    printf("  invalid fractions: %d  %s\n", bad, bad == 0 ? "PASS" : "FAIL");
+    return ok;
+}
+
 /* ── Dispatch ─────────────────────────────────────────── */
 
 static void usage(void)
@@ -980,6 +1127,8 @@ static void usage(void)
         "  even-killed      S_c_hat(chi)=0 for even chi\n"
         "  decomposition    Parseval moment identity\n"
         "  general-lag-det  S_ell depends on p mod b^{ell+1}\n"
+        "  boundary-q3-state-image       q=3 finite boundary alphabet\n"
+        "  boundary-q3-primitive-frac    q=3 boundary primitive fractions\n"
         "  all              Run all verifications\n"
     );
 }
@@ -1005,6 +1154,8 @@ int verify_dispatch(const char *name)
         {"even-killed",   verify_even_killed},
         {"decomposition", verify_decomposition},
         {"general-lag-det", verify_general_lag_det},
+        {"boundary-q3-state-image", verify_boundary_q3_state_image},
+        {"boundary-q3-primitive-frac", verify_boundary_q3_primitive_fractions},
     };
     int n = sizeof(tests) / sizeof(tests[0]);
 
