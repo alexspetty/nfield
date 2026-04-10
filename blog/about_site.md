@@ -17,8 +17,6 @@ All results are supported by [nfield](https://github.com/alexspetty/nfield), an 
 - [The Collision Invariant](https://arxiv.org/abs/2604.00045) (2026). Gate width theorem, finite determination, reflection identity, half-group theorem.
 - [The Collision Transform](https://arxiv.org/abs/2604.00047) (2026). Antisymmetry, centered convergence at s=1, conditional penetration, neutrality.
 - [The Collision Spectrum](https://arxiv.org/abs/2604.00054) (2026). Decomposition theorem, L-encoding, Parseval moment identity, correlation decay.
-- [A Diagonal--Bernoulli Identity for Collision Weights](https://github.com/alexspetty/nfield/blob/main/publication/a_diagonal_bernoulli_identity.pdf) (2026, preprint). The collision table with antisymmetry, the diagonal--Bernoulli identity at bases 6, 10, and 12, fourth-moment relation, Q(√5) structure of base-10 weights.
-- [Convergence of Collision Fluctuation Sums](https://github.com/alexspetty/nfield/blob/main/publication/convergence_of_collision_fluctuation_sums.pdf) (2026, preprint). Conditional convergence in Re(s) > 1/2 under GRH, avoidance deficit, Q(√5) reduction.
 
 ## About the Author
 ![Alexander S. Petty](https://alexpetty.com/content/images/2026/03/asp1.jpg)

@@ -1,58 +1,136 @@
 # The Collision Spectrum
 
-The [previous paper](https://arxiv.org/abs/2604.00047) decomposed the collision invariant into its natural frequencies: Dirichlet characters. The antisymmetry theorem silenced the even half. What remained were the odd characters, each carrying a Fourier coefficient.
+Here is a sentence I would not have believed five years ago. Take the [collision periodic table](https://alexpetty.com/the-collision-periodic-table/) in base 10. Forty integers, computed from long division. Square each one, add the squares up, multiply by a constant involving $\pi$. The number that comes out is a weighted sum of L-function values, exactly.
 
-A coefficient is a number. It tells you how loud that frequency is. This paper opens those coefficients and looks inside. What I found is the center of this research program.
+Forty integers from long division on one side. L-function values from the analytic theory of primes on the other. The two have nothing visible to do with each other. They are equal anyway.
 
-## The factorization
+That equality is the main result of this paper, and it is what the rest of this post is about. By the time the post is done, the example will be sharper. At base 5, the same identity becomes a *fourth* moment of L-function values, written exactly as a sum of squared integers from a finite table. And inside the Fourier coefficients themselves, when the character is quadratic, sit the class numbers of imaginary quadratic fields.
 
-Each coefficient factors. Exactly. Into two pieces that have no business being together.
+None of this should be possible. Long division should not reach this far. It does anyway.
 
-The first piece knows about primes. It is a generalized Bernoulli number $B_{1,\overline{\chi}}$, a finite sum that has been studied since the 19th century. What makes it relevant here is a classical identity: the size of this Bernoulli number equals the size of an L-function at $s = 1$, up to a known constant. An L-function is an infinite series, built from a Dirichlet character, that encodes information about primes. At $s = 1$ it reaches a special value that controls how primes distribute across arithmetic progressions. Dirichlet discovered this in 1837. The Bernoulli number is a finite, computable stand-in for the same information.
+## The setup
 
-The second piece knows about digits. It is a finite-difference sum $S_G(\chi)$ anchored at a specific set of residue classes. The anchor set consists of the classes whose two base-$b$ digits are equal; in base 10, these are 00, 11, 22, ..., 99 modulo 100. I call this the *diagonal set*. The sum $S_G$ records the jumps in $\overline{\chi}$ as you step past each diagonal class, $\overline{\chi}(n+1) - \overline{\chi}(n)$ for each $n$ in the set. It encodes the bin geometry of the digit function, and it depends only on the base, not on any prime.
+The collision invariant is the signed integer attached to every prime by long division. The previous post explained where it comes from and why it depends only on the prime's last two digits in any base. In base $b$, the invariants arrange themselves into a finite table modulo $b^2$. In base 10, the table has forty entries.
 
-One piece from number theory. One piece from the geometry of long division. Nobody had put them together before. I proved that their product is the Fourier coefficient:
+A finite table is a signal. Signals can be decomposed into frequencies. The natural frequencies for a table modulo $b^2$ are Dirichlet characters, and the decomposition is a Fourier transform. The [previous paper](https://arxiv.org/abs/2604.00047) proved an antisymmetry theorem that silenced the even half of the spectrum. What remains is the odd half. Each odd character carries one Fourier coefficient, a number that says how loudly the table plays that frequency.
 
+This paper opens those coefficients and looks inside.
+
+## What is in a coefficient
+
+Each coefficient comes apart, exactly, into two pieces. The two pieces have no business being together.
+
+**The first piece knows about primes.** It is a generalized Bernoulli number, written $B_{1,\overline{\chi}}$. The name sounds technical but the object is finite and hand-computable; you can write one down on paper. The reason it matters here is a classical identity Dirichlet discovered in 1837. There is an analytic object called an L-function, an infinite series built from a Dirichlet character. At the value $s = 1$ that series reaches a special number, $L(1, \chi)$, which controls how primes distribute across residue classes. Dirichlet's identity says the generalized Bernoulli number is the same size as $L(1, \chi)$, up to a factor of $b/\pi$:
+
+<div>
+$$|B_{1,\overline{\chi}}| = \frac{b}{\pi}\,|L(1,\chi)|$$
+</div>
+
+The Bernoulli number is the finite, computable stand-in for the analytic special value. So the first piece of the factorization is, in effect, an L-value at $s = 1$. It is a quantity that knows the primes.
+
+**The second piece knows about digits.** In base 10, look at the residues 00, 11, 22, ..., 99 modulo 100. These are the residues whose two base-10 digits are equal. I call this the *diagonal set*. The second piece, written $S_G(\chi)$, is a sum over the diagonal set: at each $n$ in the set it records the small jump $\overline{\chi}(n+1) - \overline{\chi}(n)$. It encodes the bin geometry of the digit function, and it depends only on the base, not on any prime.
+
+A separate lemma in the paper, the *diagonal reduction*, simplifies $S_G(\chi)$ to twice a short partial character sum:
+
+<div>
+$$|S_G(\chi)| = 2\,\Bigl|\sum_{k=1}^{b-1} \overline{\chi}(k)\Bigr|$$
+</div>
+
+The right-hand side is the most classical object in the subject of character sums. The diagonal reduction says the collision invariant's bin geometry is the same thing, in disguise.
+
+One piece from the analytic theory of primes. One piece from the bin geometry of long division. Nobody had put them together before. I proved that their product is the Fourier coefficient:
+
+<div>
 $$\hat{S}(\chi) = -\frac{B_{1,\overline{\chi}} \cdot \overline{S_G(\chi)}}{\phi(b^2)}$$
+</div>
 
-I call this the *decomposition theorem*. The Bernoulli numbers are classical. The diagonal sums are new. The factorization itself, the fact that these two quantities multiply to give the collision spectrum, is the main result of this paper.
+I call this the *decomposition theorem*. The Bernoulli numbers are classical. The diagonal sums are new. The factorization itself, the fact that these two unrelated quantities multiply to give the collision spectrum, is the main result of this paper.
 
-The proof assembles three known ingredients in a new way: a formula for the collision invariant in terms of floor-function slices, the Bernoulli identity for character sums over fractional parts, and the vanishing of primitive character sums over cosets.
+The proof assembles three known ingredients in a new way. A formula for the collision invariant in terms of floor-function slices. The classical Bernoulli identity for character sums over fractional parts. The vanishing of primitive character sums over cosets. Each ingredient is in the literature. Their combination was not.
+
+## Base 5: a sharper version of the surprise
+
+Base 10 is convenient because it has 40 entries and $\pi$ comes out clean. Base 5 is where the identity becomes the most striking.
+
+At base 5, the diagonal reduction has an unexpected payoff: the partial character sum on the right-hand side is *itself* proportional to a Bernoulli number, with the proportionality constant $\sqrt{5}/2$. Working it through:
+
+<div>
+$$|S_G(\chi)| = \frac{5\sqrt{5}}{\pi}\,|L(1,\chi)|$$
+</div>
+
+Now plug both pieces of the factorization back in. The first piece, $|B_{1,\overline{\chi}}|$, is proportional to $|L(1,\chi)|$. The second piece, $|S_G(\chi)|$, is *also* proportional to $|L(1,\chi)|$. Their product is therefore proportional to $|L(1,\chi)|^2$:
+
+<div>
+$$|\hat{S}(\chi)| \propto |L(1,\chi)|^2 \quad (\text{at base } 5)$$
+</div>
+
+At base 5, the eight Fourier coefficients of the collision invariant are not just *related* to L-function values. They are squared L-function values, up to a single scaling constant that depends on the base alone.
+
+Consequence. When Parseval takes those Fourier coefficients, squares them, and adds them up, it produces a *fourth* moment of L-function values:
+
+<div>
+$$\sum_\chi |L(1,\chi)|^4 = c_5 \sum_a |S(a)|^2$$
+</div>
+
+On the left: the fourth moment of an L-function family, an object the analytic theory has been measuring for decades by deep methods. On the right: an integer arithmetic computation that finishes before lunch on a small piece of paper. Six classes modulo 25, eight characters, one constant. The fourth moment of L-function values at $s = 1$ falls out, exactly, from a finite table built by long division.
+
+I would not have believed this either. Then I checked it.
+
+## The class numbers
+
+Inside some of those Fourier coefficients, when you peel them open, sit numbers that have been studied since Gauss.
+
+For a quadratic odd primitive Dirichlet character $\chi_D$ with imaginary discriminant $D < -4$, there is a classical identity:
+
+<div>
+$$|L(1,\chi_D)| = \frac{\pi\,h(D)}{\sqrt{|D|}}$$
+</div>
+
+The number $h(D)$ is the *class number* of the imaginary quadratic field $\mathbb{Q}(\sqrt{D})$. Class numbers are finicky integers that measure how badly unique factorization fails inside that field. Gauss tabulated them in the 1800s. Their behavior is famously irregular and famously deep.
+
+When the modulus $b^2$ admits primitive odd quadratic characters, the decomposition theorem rewrites the corresponding collision Fourier coefficients in terms of class numbers. Long division at base $b$, applied to a particular residue class, computes a quantity proportional to $h(D)/\sqrt{|D|}$. The same class numbers Gauss compiled by hand emerge from the bin geometry of digit arithmetic.
+
+Once you see this, it is hard to keep treating long division as the elementary topic the textbooks present it as.
 
 ## The moment identity
 
+The base-5 result is one face of a more general identity, and the general identity is worth seeing in its own right.
+
 There is a conservation law in Fourier analysis. If you measure the total energy of a signal by squaring its values and adding them up, you get the same answer whether you measure in the original domain or in the frequency domain. This is Parseval's theorem. Physicists use it every day. It is not deep. It is bookkeeping.
 
-But watch what happens when you apply it here.
+But watch what happens when bookkeeping is applied here.
 
-On one side of Parseval: the collision invariant. Forty integers in base 10. Square them, add them up. You can do this with pencil and paper.
+On one side of Parseval: the collision invariant. Forty integers in base 10. Square them, add them up. You can do this with a pencil.
 
-On the other side: the Fourier coefficients. But the decomposition theorem just told us what those coefficients are made of. Each one carries an L-function value as a factor. So when Parseval squares them and adds them up, it assembles a weighted sum of squared L-values:
+On the other side: the Fourier coefficients. The decomposition theorem has just spelled out what those coefficients are made of. Each one carries an L-function value as a factor. So when Parseval squares the coefficients and adds them up, it assembles a weighted sum of squared L-values:
 
 <div>
-$$\sum_{\chi} |L(1, \chi)|^2 \cdot |S_G(\chi)|^2 = \frac{\pi^2 \phi(b^2)}{b^2} \sum_{a} |S(a)|^2$$
+$$\sum_{\chi} |L(1,\chi)|^2 \cdot |S_G(\chi)|^2 = \frac{\pi^2 \phi(b^2)}{b^2}\,\sum_{a} |S(a)|^2$$
 </div>
 
-The left side involves L-functions, the objects that govern how primes distribute. The right side is a sum of squared integers from a finite table. They are equal.
+The left side involves L-functions, the objects that govern how primes distribute. The right side is a sum of squared integers from a finite table. They are equal. Not in the limit. Not approximately. Equal.
 
-In base 3 you can check this by hand. There are 6 coprime classes modulo 9, each carrying a collision value. Square them, add them up, multiply by the constant. You get a weighted second moment of L-function values, computed exactly, from integer data.
+In base 3 you can verify it by hand. Six coprime classes modulo 9. Each carries a small collision value: $0, 1, 0, -1, -2, -1$ (the entries are $0, +1, +0, -1, -2, -1$ across the table). Square them, add them up, multiply by the constant. The number you get is a weighted second moment of L-function values, computed exactly, from integer data.
 
-No complex analysis entered the computation. The $\pi$ comes from the Bernoulli identity, not from analytic continuation.
+No complex analysis enters the calculation. No contour integral. No analytic continuation. The $\pi$ on the right side is the $\pi$ Dirichlet put into the Bernoulli identity in 1837. Long division produces a number that the analytic theory of primes also produces. Two roads. One number.
 
-I did not expect this. The collision invariant counts how many remainders land in the same bin during long division. There is no reason, from its definition, to expect it to know the values of L-functions. But the decomposition theorem plants an L-value inside each Fourier coefficient, and Parseval collects them into a moment identity. The digit function, without knowing it, computes something about the distribution of primes.
+I did not expect this. The collision invariant counts how remainders fall into bins during long division. Nothing in its definition suggests it should know the values of L-functions. But the decomposition theorem plants an L-value inside each Fourier coefficient, and Parseval collects them into a moment identity. The digit function, without knowing it, computes something about the distribution of primes.
 
 ## The bridge
 
-Number theory has two countries. One is discrete: integers, divisibility, finite tables, things you can count. The other is continuous: functions of a complex variable, infinite series, zeros drifting in the critical strip. The great results in the subject are bridges between them. Euler built one in 1737 when he showed the prime counting function is governed by the zeta function. Dirichlet built another in 1837 when he proved primes in arithmetic progressions are controlled by L-functions. Each bridge connects something you can count to something you can analyze.
+Number theory has two countries.
 
-This paper builds a small bridge of the same kind.
+One is discrete: integers, divisibility, finite tables, things you can count on your fingers. The other is continuous: functions of a complex variable, infinite series, zeros drifting in the critical strip. The great results in the subject are bridges between them. Euler built the first one in 1737, when he showed the prime counting function is governed by the Riemann zeta function. Dirichlet built another in 1837, when he proved primes in arithmetic progressions are controlled by L-functions. Each bridge takes something you can count and connects it to something you can analyze.
 
-On one side: the collision invariant. A finite table of signed integers, one per residue class, computable from long division. On the other: L-function special values at $s = 1$, the analytic machinery that controls the primes.
+This paper builds a bridge of the same kind, in miniature.
 
-The decomposition theorem says these are the same information. Not approximately. Not in the limit. The collision weight at each frequency is the product of an L-value and a geometric factor, and the factorization is exact. The finite table and the L-function landscape are two descriptions of a single object, written in different languages.
+On one side: the collision invariant. A finite table of signed integers, one per residue class, computable from long division. On the other side: L-function special values at $s = 1$, the analytic machinery that controls the primes, and through them the class numbers Gauss tabulated by hand. The decomposition theorem says these are the same information. Not approximately. Not in the limit. The collision weight at each frequency is the product of an L-value and a geometric factor, and the factorization is exact. The finite table and the L-function landscape are two descriptions of a single object, written in different languages. The decomposition theorem is the dictionary.
 
-Every bridge in number theory starts somewhere specific. Euler started with $\sum 1/p$. Dirichlet started with character sums. This one starts with $\lfloor br/p \rfloor$. A floor function. The operation a child performs when doing long division. It should not reach this far into the theory of primes. But here we are.
+There is a small extra observation worth making. An L-function does its main work along the critical strip, far from $s = 1$. The collision invariant only knows about $s = 1$, the boundary. So how can the boundary value say anything about the strip? The paper makes the connection precise. Near a zero of $L(s,\chi)$ deep in the strip, the singular contribution is multiplied by a coefficient that involves $L(1,\chi)$ through the Bernoulli number. The behavior at the edge weights the behavior at depth. The collision invariant lives on the edge, but the edge is not isolated.
+
+## Where this sits
+
+Every bridge in number theory starts somewhere specific. Euler started with $\sum 1/p$. Dirichlet started with character sums. This one starts with $\lfloor br/p \rfloor$. A floor function. The operation a child performs when doing long division. It should not reach this far into the theory of primes. It does anyway.
 
 Code: [github.com/alexspetty/nfield](https://github.com/alexspetty/nfield)
 Paper: [The Collision Spectrum](https://arxiv.org/abs/2604.00054)
@@ -60,4 +138,3 @@ Paper: [The Collision Spectrum](https://arxiv.org/abs/2604.00054)
 *Alexander S. Petty*
 March 2026
 .:.
-

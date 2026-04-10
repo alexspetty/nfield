@@ -66,7 +66,7 @@ That is what digit-partitioning means. The digit function partitions the remaind
 
 Now think about what this means for 142857. Multiply it by 2 and you get 285714. Multiply by 3: 428571. By 4: 571428. The same six digits, rearranged, every time. It has appeared in recreational mathematics books for over a century, usually without an explanation.
 
-Here is the explanation. Each multiplication corresponds to a different fraction of 7. Each fraction's repetend is a rotation of the same string. And the rotations never collide because the digit function is injective: there are more digit values than remainders. The cyclic property of 142857 is not a coincidence. It is forced by the fact that $7 \leq 10 + 1$. If we worked in base 6, where 7 would have more remainders than digits, the clean separation would break. But the magic would not disappear. It would reappear at a different prime, one small enough for base 6 to accommodate. The structure is not a property of any particular number. It is a relationship between a prime and a base, and beneath both, the arithmetic substrate that our numeral systems approximate but do not own.
+Here is the explanation. Each multiplication corresponds to a different fraction of 7. Each fraction's repetend is a rotation of the same string. And the rotations never collide because the digit function is injective: there are more digit values than remainders. The cyclic property of 142857 is not a coincidence. It is forced by the fact that $7 \leq 10 + 1$. In base 5, where 7 would have more remainders than digits, the clean separation breaks. But the magic does not disappear. It reappears at a different prime, one small enough for base 5 to accommodate. The structure is not a property of any particular number. It is a relationship between a prime and a base, and beneath both, the arithmetic substrate that the numeral systems approximate but do not own.
 
 Now 11. A third mechanism, completely unlike the other two:
 
@@ -135,6 +135,24 @@ So there is something underneath all of this that does not depend on the base. S
 
 What is that quantity? What does the prime look like when you stop choosing bases and look at it directly? That question is what kept me going.
 
+---
+
+## A note from 2026
+
+*April 2026*
+
+The closing question of this post, what does the prime look like when you stop choosing bases and look at it directly, was answered by the collision invariant program. The answer is a base-relative finite signed table attached to every base, encoding exactly the collision structure this post hints at. The recent papers walk through it: the [collision invariant](https://alexpetty.com/the-collision-invariant/) builds the table from the digit function $\delta(r) = \lfloor br/p \rfloor$, the [collision periodic table](https://alexpetty.com/the-collision-periodic-table/) names its antisymmetry and its mean of exactly $-1/2$, the [collision transform](https://alexpetty.com/the-collision-transform/) shows that its centered sum over primes cancels at the boundary where the prime number theorem lives, and the [collision spectrum](https://alexpetty.com/the-collision-spectrum/) shows that its Fourier transform factors through L-function special values at $s = 1$.
+
+The condition $p \le b + 1$ identified in this post separates two regimes. Inside the regime, the digit function is injective and the three-mechanism story plays out cleanly. Outside the regime, the digit function has bin sizes greater than one, and remainders are forced to share. The recent work focuses on the second regime. The collision count $C(g)$ measures exactly how many remainders end up sharing a bin with their image under multiplication by $g$, and the signed deviation $S(p) = C(b \bmod p) - \lfloor (p-1)/b \rfloor$ became the central object of the program. The "Where collisions begin" section of this post is the seed of the collision invariant.
+
+The "three completely different structures, and yet the same property holds in all three" observation prefigured a deeper unification. The complement-pair structure visible at the boundary prime $p = b + 1$ (digit pairs summing to $b - 1$ in any base) is a special case of a more general antisymmetry: $S(a) + S(b^2 - a) = -1$ on the entire collision invariant table at conductor $b^2$, for every coprime $a$. The pairing on digits is the local instance. The pairing on residue classes is the global generalization. Both come from the same involution $a \mapsto b^2 - a$.
+
+The digit-partitioning prime $p = 3$, the smallest of the three in base 10, plays a structurally privileged role in the recent work. The boundary alphabet at conductor 3 admits a closed-form null cocycle that does not exist at other primes in the same family. The selection of $p = 3$ by the golden ratio in the [companion paper](https://alexpetty.com/why-the-golden-ratio-selects-the-prime-three/) prefigured this privileged role: the prime that the golden ratio identifies is also the one whose collision boundary admits an exact, hand-computable structural formula.
+
+.:.
+
+---
+
 ## Try it yourself
 
 The three digit-partitioning primes in base 10, and the first collision:
@@ -170,6 +188,6 @@ Paper: [Digit-Partitioning Primes and the Alignment Formula](https://github.com/
 ---
 
 *Alexander S. Petty*
-March 2020 (updated March 2026)
+March 2020 (updated April 2026)
 .:.
 

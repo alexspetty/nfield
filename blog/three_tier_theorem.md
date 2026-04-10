@@ -94,6 +94,24 @@ The integers are not random from the inside. They are tiered. The tiers are cont
 
 I did not set out to find this. I was measuring alignment because I wanted to understand repeating decimals. The classification emerged from the measurements, and the golden ratio was already there, waiting at the boundary, because it had been selecting the prime 3 from the beginning.
 
+---
+
+## A note from 2026
+
+*April 2026*
+
+The three-tier classification proved here completed the alignment program. The two earlier alignment papers had shown the formula and the limit; this one closed the gap by ruling out every integer above the line except the smooth numbers and the golden family. The proof's central tool, the nines complement bound on non-terminating fractions, foreshadowed the structural antisymmetry that runs through the recent work.
+
+In the recent collision invariant program, the same nines complement appears as the [collision periodic table's](https://alexpetty.com/the-collision-periodic-table/) reflection identity: $S(a) + S(b^2 - a) = -1$ for every coprime $a$. The pairing of digits at the alignment level (each pair sums to $b - 1$, so at most one matches per position) is the local instance. The pairing of residue classes mod $b^2$ at the collision level is the global generalization. Both come from the same involution $a \mapsto m - a$, and both produce the mean of exactly $-1/2$ that runs through the entire program.
+
+The "rough part" framing of this paper, splitting every integer into its smooth and rough components, prefigured the conductor structure of the recent work. The boundary alphabet at conductor $b^2$ classifies primes by their last two base-$b$ digits, exactly the slicing that the rough part defines for general integers. The "tier" of an integer in this paper is determined by its rough part; the cell of a prime in the recent [collision invariant](https://alexpetty.com/the-collision-invariant/) is determined by the same kind of arithmetic.
+
+The closing image of this post, the line at $1/\varphi$ that emerges from the arithmetic of every $n$ and connects them all at the same height, is the same line the recent work has been climbing toward in different language. The collision invariant's centered sum cancels at the boundary $s = 1$ of the prime number theorem; the [collision spectrum](https://alexpetty.com/the-collision-spectrum/) factors through L-function values at $s = 1$. The line is in different coordinates, but it is the same line.
+
+.:.
+
+---
+
 ## Try it yourself
 
 ```
@@ -115,6 +133,6 @@ Paper: [The Three-Tier Theorem](https://github.com/alexspetty/nfield/blob/main/r
 ---
 
 *Alexander S. Petty*
-February 2022 (updated March 2026)
+February 2022 (updated April 2026)
 .:.
 

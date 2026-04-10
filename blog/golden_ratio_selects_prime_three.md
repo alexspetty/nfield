@@ -45,7 +45,7 @@ For multiples of 3, the answer has a formula:
 
 $$\alpha(3m) = \frac{2m - 1}{3m - 1}$$
 
-where $m$ is built entirely from the factors of 10 (powers of 2 and 5, nothing else). As $m$ grows, $\alpha$ approaches $2/3$. Two thirds of the fractional field aligns. The prime 3 imposes order on decimal arithmetic, and the amount of order it imposes is exactly $2/3$.
+where $m$ is a product of 2's and 5's, the prime factors of the base 10, and nothing else. As $m$ grows, $\alpha$ approaches $2/3$. Two thirds of the fractional field aligns. The prime 3 imposes order on decimal arithmetic, and the amount of order it imposes is exactly $2/3$.
 
 I found the formula computationally. The proof came after. What came after the proof was stranger.
 
@@ -93,7 +93,7 @@ At $p = 5$, the threshold is $1/\varphi^2$. Both thresholds live in the golden r
 
 Three primes, three tiers. $p = 3$ is governed by the golden ratio itself. $p = 5$ is governed by its square. Every prime beyond 5 escapes the golden field entirely.
 
-Picture it: a golden spiral, luminous and precise, emerging from a field of primes scattered in darkness. The spiral passes through exactly one point that burns brighter than the rest. Other primes are present but untouched, dimmer, receding. The spiral is not decorative. It is a selection mechanism. The geometry feels inevitable, like a key fitting a lock.
+Picture it. A golden spiral emerging from a field of primes in darkness. The spiral passes through exactly one of them, and that one burns. The others sit nearby, untouched. The spiral is not decorative. It is a selection mechanism. The geometry feels inevitable, like a key fitting a lock.
 
 ## What I was looking at
 
@@ -107,11 +107,23 @@ What I did not expect was for the connection to be algebraic and exact. Not phi 
 
 But this is where it starts. With one formula, one ratio, and one prime that the algebra picks out on its own.
 
-## Background
+---
 
-Between 2010 and 2011 I wrote up early observations on the internal structure of integers: [Foundational Tables of Multiplication](https://alexpetty.com/foundational-tables-of-multiplication/), [The Golden Ratio](https://alexpetty.com/the-golden-ratio/), [Geometries Hidden in the Number System](https://alexpetty.com/geometries-hidden-in-the-number-system/), [The Effect of Base on Numeric Fields](https://alexpetty.com/the-effect-of-base-on-numeric-fields/), and [Long Division and Euclid's Lemma](https://alexpetty.com/long-division-and-euclids-lemma-2/).
+## A note from 2026
 
-This post was first written in January 2020. The digit function $\lfloor br/p \rfloor$ that appears here turns out to connect to Dirichlet characters and L-function special values through a factorization identity. Several papers developing that connection are available on [arXiv](https://arxiv.org/search/?query=petty+collision+invariant&searchtype=all) and [GitHub](https://github.com/alexspetty/nfield).
+*April 2026*
+
+The digit function $\delta(r) = \lfloor br/p \rfloor$ defined in this post became the engine of a research program that has run to the present. In the [collision invariant](https://alexpetty.com/the-collision-invariant/), the orbits of $\delta$ build a finite signed table indexed by the prime's last two base-$b$ digits. The [collision periodic table](https://alexpetty.com/the-collision-periodic-table/) shows the table's antisymmetry and its mean of exactly $-1/2$. The [collision transform](https://alexpetty.com/the-collision-transform/) shows that the centered sum over primes cancels at the same boundary where the prime number theorem lives. The [collision spectrum](https://alexpetty.com/the-collision-spectrum/) shows that the Fourier transform of the table factors through L-function special values at $s = 1$. None of this was visible from the 2020 alignment formula, but the digit function was already the right object to be looking at.
+
+The selection of the prime 3 by the golden threshold turned out to be more than a poetic hint. The prime 3 plays a structurally privileged role in the later work: at conductor 3, the boundary alphabet of the digit function admits a closed-form null cocycle, an explicit formula that does not exist at other primes in the same family. The three-tier hierarchy of this post, $p = 3$, $p = 5$, and $p \geq 7$, prefigured a more general phenomenon: results that survive specifically at primes $\equiv 3 \pmod 4$, where the Legendre character is odd.
+
+The line in this post that "what I did not expect was for the connection to be algebraic and exact" turned out to be the rule, not the exception. Every subsequent result in the program has had the same shape: an exact identity, hidden inside an elementary procedure, falling out of the algebra without approximation.
+
+The earlier notebook posts that this 2020 work was built on remain online as the original record: [Foundational Tables of Multiplication](https://alexpetty.com/foundational-tables-of-multiplication/), [The Golden Ratio](https://alexpetty.com/the-golden-ratio/), [Geometries Hidden in the Number System](https://alexpetty.com/geometries-hidden-in-the-number-system/), [The Effect of Base on Numeric Fields](https://alexpetty.com/the-effect-of-base-on-numeric-fields/), and [Long Division and Euclid's Lemma](https://alexpetty.com/long-division-and-euclids-lemma-2/), all from 2010 and 2011. The recent papers developing the digit function's connection to L-function special values are available on [arXiv](https://arxiv.org/search/?query=petty+collision+invariant&searchtype=all) and [GitHub](https://github.com/alexspetty/nfield).
+
+.:.
+
+---
 
 ## Try it yourself
 

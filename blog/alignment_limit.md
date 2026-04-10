@@ -60,6 +60,24 @@ The remainders fall like light through a prism, separating into bins. Each bin c
 
 The quantity $S = \sum n_d^2$ that governs all of this is the starting point for the [collision invariant](https://arxiv.org/abs/2604.00045), which connects the digit function to Dirichlet characters and L-function special values.
 
+---
+
+## A note from 2026
+
+*April 2026*
+
+The bin sum $S(p, b) = \sum_d n_d^2$ that governs the alignment of primes beyond the digit-partitioning boundary became the central object of the collision invariant program. In the [collision invariant](https://alexpetty.com/the-collision-invariant/), the same quantity appears as the diagonal of the digit function's collision count: the number of remainders that share a bin with their image under multiplication by the base. The post's "digit-partitioning primes" are exactly the primes for which the multiplier $g = b$ produces zero collisions; the bin sum $S$ is the obstruction to that. The recent paper proves the gate width theorem (exactly $b - 1$ multipliers always derange the bins) and the finite determination theorem (the collision count's deviation from average is determined entirely by the prime's last two base-$b$ digits). The same digit function this post studies is the engine.
+
+The coset structure that splits the alignment limit into multiple subsequential values for $p = 53$ in base 10 was the first hint of a deeper phenomenon. The boundary alphabet of the digit function at conductor $b^2$, developed in the [collision periodic table](https://alexpetty.com/the-collision-periodic-table/), assigns to every prime $p$ a signed integer determined entirely by $p \bmod b^2$. The coset dependence of the alignment limit becomes, in the recent work, the cell structure of the periodic table. Each prime is one cell. The four cosets at $p = 53$ correspond to four different ways the prime can sit inside the alphabet.
+
+The unconditional golden bound proved in this post for every prime $p \ge 5$ extends in the recent work to a global structural constraint. The same arithmetic that prevents alignment from exceeding the golden threshold prevents the boundary alphabet from drifting away from its mean of exactly $-1/2$. The local bound of this paper and the global antisymmetry of the [collision transform](https://alexpetty.com/the-collision-transform/) are two faces of the same complement involution $a \mapsto m - a$. The post's "coset structure changes the exact value but not the bound" remark prefigured this: the involution survives all the local complications.
+
+The closing question of the digit-partitioning post, what does the prime look like when you stop choosing bases, is answered partially here (by the coset analysis) and completely in the [collision spectrum](https://alexpetty.com/the-collision-spectrum/), where the Fourier transform of the boundary alphabet factors through L-function special values at $s = 1$. The bin sum $S$ this post computes turns out to be one component of a much larger object. The other components are L-values.
+
+.:.
+
+---
+
 ## Try it yourself
 
 Look at the collisions at $p = 23$. The bins are more crowded:
@@ -100,5 +118,5 @@ Paper: [The Alignment Limit for All Primes](https://github.com/alexspetty/nfield
 ---
 
 *Alexander S. Petty*
-August 2021 (updated March 2026)
+August 2021 (updated April 2026)
 .:.

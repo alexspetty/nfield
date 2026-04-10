@@ -1,93 +1,149 @@
 # The Collision Invariant
 
-The digit function $\delta(r) = \lfloor br/p \rfloor$ sorts remainders into bins. Multiply every remainder by some fixed number $g$, and some of them change bins. Others stay put. The ones that stay are collisions: multiplication shuffled the room, but these didn't move.
+Take a prime, any prime. Do long division by it in some base. The remainders fall into $b$ bins, one bin per leading digit. This is the digit function $\delta(r) = \lfloor br/p \rfloor$, the elementary-school operation that turns a fraction into a decimal.
 
-At small primes, the bins are wide enough that every multiplier clears the room. No collisions, no matter what $g$ you choose. At larger primes, the bins crowd. Remainders start sharing. Most multipliers leave a few behind. But some multipliers still clear the room completely.
+Now do something simple. Pick a multiplier $g$ from the units mod $p$. Multiply every remainder by $g$ and re-sort. Most remainders change bins. Some do not. The ones that do not are *collisions*; multiplication has shuffled the room, but these stayed put.
 
-I wrote software to compute the collision count $C(g)$ for every multiplier at every prime, at any base. What I found surprised me.
+Count the collisions:
 
-## The gate width theorem
+<div>
+$$C(g) = \#\{r \in \{1, \ldots, p-1\} : \delta(r) = \delta(gr \bmod p)\}$$
+</div>
 
-At every prime, in every base, exactly $b - 1$ multipliers produce zero collisions. I proved this, and the proof gives the exact list of which multipliers they are. Here is the computational verification at a few bases (the theorem covers all of them):
+That is the collision count. It depends on the prime, the base, and the multiplier. It is a function on the multiplicative group mod $p$, defined by an utterly elementary procedure. Nothing about it suggests it should have structure beyond what its definition imposes.
+
+This paper proves four things about the collision count that should not be true.
+
+**One.** The number of multipliers that produce zero collisions is always exactly $b - 1$. Not approximately. Not on average. Exactly $b - 1$, at every prime, in every base. The count depends on the base alone, not on the prime, not on its size, not on its location among the primes.
+
+**Two.** The collision count's deviation from the average value is determined by the prime's last two base-$b$ digits. The infinity of primes collapses onto a finite table, one entry per coprime residue class modulo $b^2$.
+
+**Three.** The entries of that finite table satisfy an exact reflection: complementary pairs sum to $-1$, with no exceptions.
+
+**Four.** Every "wrapping set" attached to the construction has exactly half the size of the unit group. Every one. Always.
+
+Each of the four theorems is proved by the same single move applied four ways. That move is what the paper hangs on, so I will explain it before any of the theorems.
+
+## The single move
+
+The digit bins look like geometric objects. They are contiguous intervals on the integer line; the first bin is the residues from $1$ to $\lfloor (p-1)/b \rfloor$, the second is the next stretch, and so on. Geometric problems on integer intervals are hard to handle algebraically. The intervals do not respect multiplication; the boundaries between them depend on the prime; nothing about them suggests an algebraic identity.
+
+There is one operation that converts the geometry into algebra. Multiply every residue by the base $b$, then reduce modulo $p$.
+
+After this single operation the bins are no longer contiguous intervals. They are *residue classes modulo $b$*. The bin that used to be "the residues whose leading base-$b$ digit is 0" is now "the residues that are congruent to 0 modulo $b$." The bin that used to be the second interval is now the residues that are 1 mod $b$. And so on.
+
+Geometry has become algebra. The question "which residues lie in the same digit interval?" has become "which residues are congruent modulo $b$?" The first question is hard. The second question is undergraduate.
+
+I call this the *linearization*. After it, every theorem in the paper is a short algebraic argument. Without it, the same theorems would be hard counting problems on intervals. The linearization is what makes the architecture visible.
+
+## One: the gate width is always $b - 1$
+
+Apply the linearization to the question "which multipliers $g$ produce zero collisions?"
+
+After linearization, the no-collision condition translates into a congruence on a small auxiliary integer $c$. Working through the algebra, the deranging multipliers turn out to form an explicit family of rational numbers, reduced modulo the prime:
+
+<div>
+$$g = -\frac{u}{b - u} \bmod p, \qquad u = 1, 2, \ldots, b - 1$$
+</div>
+
+There are exactly $b - 1$ of them. Always. The count is independent of the prime. The rational family $\{-u/(b-u) : u = 1, \ldots, b-1\}$ sits above the primes; only its reduction mod $p$ depends on which prime you chose.
+
+I call this the *gate width theorem*. Across every base and every prime tested, the count comes out to $b - 1$:
 
 ```
 $ ./nfield verify gate-width
 
-  base  3: 21 primes tested, gate width = 2  PASS
-  base  7: 20 primes tested, gate width = 6  PASS
-  base 10: 20 primes tested, gate width = 9  PASS
+  base  3: 21 primes tested, gate width = 2   PASS
+  base  7: 20 primes tested, gate width = 6   PASS
+  base 10: 20 primes tested, gate width = 9   PASS
   base 12: 20 primes tested, gate width = 11  PASS
   base 16: 19 primes tested, gate width = 15  PASS
 ```
 
-Nine multipliers clear the room in base 10. Six in base 7. Fifteen in base 16. The count depends on the base and nothing else. Not the prime. Not the size of the prime. Not where it sits among the other primes. Just the base.
+Nine deranging multipliers in base 10. Six in base 7. Fifteen in base 16. Always, forever, $b - 1$.
 
-It comes from one observation: multiplying every remainder by the base itself ($r \mapsto br \bmod p$) transforms the digit bins from contiguous intervals into residue classes modulo $b$. The geometry linearizes. In the new coordinates, the collision condition becomes a congruence, and a squeezing argument pins down exactly which multipliers satisfy it.
+No primitive-root hypothesis. No algebraic constraint on the prime. Just $b - 1$ deranging multipliers, sitting in their rational family, every time.
 
-They form an explicit family:
+The family pairs naturally under $u \mapsto b - u$. When $b$ is even, the involution has a fixed point at $u = b/2$, and the deranging multiplier $-1$ (the complement) is always one of them. Even bases always carry the complement among their deranging multipliers.
 
-$$g = -u/(b-u) \bmod p \quad \text{for } u = 1, \ldots, b-1$$
+## Two: only the last two digits matter
 
-Rational numbers, reduced modulo the prime. They pair naturally under $u \mapsto b - u$. For even bases, $g = -1$ (the complement multiplier) is always one of them.
+Now fix the multiplier at $g = b$ itself, the base. The collision count $C(b \bmod p)$ has a specific deviation from the bin-size average. Define:
 
-```
-$ ./nfield verify mobius-family
+<div>
+$$S(p) = C(b \bmod p) - \left\lfloor \frac{p-1}{b} \right\rfloor$$
+</div>
 
-  base  7: formula matches observed  PASS
-  base 10: formula matches observed  PASS
-  base 12: formula matches observed  PASS
-```
+I call this signed integer the *collision invariant*. It can be positive or negative. It measures how much the prime $p$'s digit structure deviates from the average prediction.
 
-The formula is proved for all primes and all bases. The verification confirms it computationally.
-
-## The collision invariant
-
-Fix the multiplier at $g = b$ and let the prime vary. Each prime gets a collision count. Subtract the expected count:
-
-$$S(p) = C(b \bmod p) - \lfloor(p-1)/b\rfloor$$
-
-I call this signed number the collision invariant. It measures how much a prime's digit structure deviates from average, and it is the central object of this paper and the series that follows.
-
-I computed $S(p)$ for thousands of primes. The values jumped around, positive and negative, with no obvious pattern. Then I sorted by the last two digits:
+I computed $S(p)$ for thousands of primes. The values jumped around with no obvious pattern. Then I sorted the primes by their last two digits in base 10:
 
 ```
-$ ./nfield verify finite-det
-
-  base 10, mod 100: 40 classes, all determined  PASS
-    class  01: S(101) = S(401) = 0
-    class  03: S(103) = S(503) = 2
-    class  09: S(109) = S(409) = 8
-    class  07: S(107) = S(307) = 0
+class 01:  S(101) = 0    S(401) = 0    S(701) = 0
+class 03:  S(103) = 2    S(503) = 2    S(1303) = 2
+class 09:  S(109) = 8    S(409) = 8    S(1009) = 8
+class 91:  S(191) = -9   S(491) = -9   S(1091) = -9
 ```
 
-Every prime ending in 01 gives $S = 0$. Every prime ending in 09 gives $S = 8$. It does not matter how large the prime is. Two digits determine the collision invariant completely.
+Every prime ending in 01 gives $S = 0$. Every prime ending in 09 gives $S = 8$. Every prime ending in 91 gives $S = -9$. The size of the prime does not enter. Two digits determine the collision invariant completely.
 
-This is the *finite determination theorem*: the collision invariant depends only on $p \bmod b^2$. The infinity of primes collapses onto a finite, deterministic structure. This fact has become the center of my research program.
+I call this the *finite determination theorem*. The collision invariant depends only on $p \bmod b^2$. The infinity of primes collapses onto a finite, deterministic table.
 
-## The periodic table
+The proof is the linearization once more. After multiplying by $b$, the collision count becomes a sum of contributions from a specific set of "slices" indexed by an integer in a finite range. The slice contributions depend only on $p \bmod b^2$, so the whole sum depends only on $p \bmod b^2$, so the collision invariant depends only on $p \bmod b^2$.
 
-At every base, the collision invariant fills a finite table. In base 10 it has 40 entries. In base 3 it has 6. In base 7 it has 42. One signed integer per coprime class. Every prime maps to exactly one entry.
+The number of entries in the table depends on the base. Six in base 3. Forty-two in base 7. Forty in base 10. Each entry corresponds to a residue class coprime to $b$, and every prime larger than $b^2$ maps to exactly one entry.
 
-The tables are not random. At every base, the entries pair under the complement map $a \mapsto b^2 - a$:
+This is the architecture the [next post](https://alexpetty.com/the-collision-periodic-table/) is built on. The collision invariant is a finite, signed table. A *periodic table for primes*, attached to every base.
 
+## Three: complement pairs sum to $-1$
+
+Look at the table. Every entry has a partner: the complement, $b^2 - a$. In base 10, the partner of class 09 is class 91. The partner of class 03 is class 97.
+
+Compute $S(a)$ and $S(b^2 - a)$ for any pair. They sum to $-1$. Every time.
+
+```
+class 09 + class 91:   +8 + (-9) = -1
+class 03 + class 97:   +2 + (-3) = -1
+class 17 + class 83:   +1 + (-2) = -1
+```
+
+I call this the *reflection identity*:
+
+<div>
 $$S(a) + S(b^2 - a) = -1$$
+</div>
 
-In base 10: the class ending in 09 and the class ending in 91 sum to $-1$. The class ending in 03 and the class ending in 97 sum to $-1$. In base 3: every pair sums to $-1$. In base 7: every pair sums to $-1$. The architecture is universal.
+It is exact, and it has no exceptions, at every base. The proof is the linearization once more. Under the involution $a \mapsto m - a$ (where $m = b^2$), the slice contributions of $a$ and $m - a$ swap their wrapping behavior: where one slice wraps for $a$, the same slice does not wrap for $m - a$. The bookkeeping works out so every complement pair lands on $-1$.
 
-```
-$ ./nfield verify antisymmetry
+A clean corollary: the average of the table over all units is exactly $-1/2$. The involution $a \mapsto m - a$ pairs up all the units, every pair averages to $-1/2$, so the overall average is $-1/2$. This is the $-1/2$ that runs through the whole research program. It comes from here.
 
-  base  3: S(a)+S(m-a) = -1  PASS
-  base  5: S(a)+S(m-a) = -1  PASS
-  base  7: S(a)+S(m-a) = -1  PASS
-  base 10: S(a)+S(m-a) = -1  PASS
-```
+## Four: every wrapping set is exactly half
 
-The mean across every table is exactly $-1/2$. Positive on one side, negative on the other, organized by a single involution. This structure is *the same at every base*.
+The slice formula in the proof of finite determination expresses $S(a)$ as a sum over a specific finite set of slices. Each slice contributes $0$ or $1$, depending on whether a particular multiplication "wraps past zero" modulo $b^2$.
 
-I had started with a counting question about long division. I now had a finite, signed, structured table attached to every base, encoding the collision behavior of every prime. The digit function $\lfloor br/p \rfloor$, which is taught in elementary school and then mostly forgotten, had produced a periodic table of the primes.
+The set of units $a$ for which slice $n$ wraps is called the *wrapping set* $W_n$. It is a subset of the unit group. The natural question is how big it is.
 
-The collision invariant's Fourier transform carries L-function special values, and its centered sum over primes cancels at the boundary where the prime number theorem lives. Those results are in the [companion papers](https://arxiv.org/search/?query=petty+collision&searchtype=all). This paper proves the foundation: the architecture exists.
+The answer is: exactly half. For every non-trivial slice, exactly $\phi(b^2)/2$ units wrap and exactly $\phi(b^2)/2$ units do not. Without exception.
+
+I call this the *half-group theorem*. The proof, once again, is the linearization-driven involution. The map $a \mapsto m - a$ sends "wraps" to "does not wrap" and vice versa, and it is a bijection on the unit group. So the wrapping set and its complement have equal size, and that size is exactly half.
+
+The same complement involution that organizes the global structure of $S$ also organizes the local structure of every individual slice. One symmetry, four consequences.
+
+## Four theorems, one observation
+
+The gate width theorem says exactly $b - 1$ multipliers always derange the bins.
+
+The finite determination theorem says the collision invariant is a finite table indexed by the prime's last two base-$b$ digits.
+
+The reflection identity says the entries of the table pair under complementation and sum to $-1$.
+
+The half-group theorem says every wrapping set is exactly half the unit group.
+
+All four come from one observation: multiplying every remainder by the base flattens the digit bins into residue classes. After that single move, the geometric structure of long division becomes the algebraic structure of a finite group, and every theorem is a short calculation in that group.
+
+The digit function $\lfloor br/p \rfloor$, the operation taught in third grade and then mostly forgotten, has produced a finite signed table attached to every base, organized by a complement involution, with gate counts and wrapping counts that depend on the base and nothing else. That table is the collision invariant.
+
+The Fourier transform of the table carries L-function special values. Its centered sum over primes cancels at the boundary where the prime number theorem lives. Those results are in the [companion papers](https://arxiv.org/search/?query=petty+collision&searchtype=all). This paper proves the foundation: the architecture exists.
 
 Code: [github.com/alexspetty/nfield](https://github.com/alexspetty/nfield)
 Paper: [The Collision Invariant](https://arxiv.org/abs/2604.00045)
@@ -95,4 +151,3 @@ Paper: [The Collision Invariant](https://arxiv.org/abs/2604.00045)
 *Alexander S. Petty*
 March 2026
 .:.
-
