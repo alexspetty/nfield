@@ -16,12 +16,19 @@ digit function's bins. The papers prove it. The engine computes with it.
 - [**The Collision Spectrum**](publication/the_collision_spectrum.pdf) (2026)
   Decomposition theorem, L-encoding, Parseval moment identity, correlation decay.
 
-- [**The Collision Periodic Table**](publication/the_collision_periodic_table.pdf) (April 2026)
+## Research
+
+- [**The Collision Periodic Table**](research/collision_periodic_table.pdf) (April 2026)
   Effective cancellation of centered collision values across primes
   at the PNT rate. L-value extraction from the periodic table.
-  Base constant kappa(b) = 1/(pi*phi(b)). Antisymmetry S(a)+S(b^2-a)=-1.
 
-- [**Convergence of Collision Fluctuation Sums**](publication/convergence_of_collision_fluctuation_sums.pdf) (April 2026)
+- [**The Polarity Field**](research/the_polarity_field.pdf) (April 2026)
+  Three involutions, avoidance deficit, L-encoding through Bernoulli
+  factorization, fourth-moment identity at base 10.
+
+## Drafts
+
+- [**Convergence of Collision Fluctuation Sums**](publication/drafts/convergence_of_collision_fluctuation_sums.pdf) (April 2026)
   Polarity field F(s) convergence under GRH; avoidance deficit
   anti-correlation; reduction to a single inequality in Q(sqrt(5)).
 
