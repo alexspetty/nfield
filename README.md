@@ -22,9 +22,6 @@ digit function's bins. The papers prove it. The engine computes with it.
   Effective cancellation of centered collision values across primes
   at the PNT rate. L-value extraction from the periodic table.
 
-- [**The Polarity Field**](research/the_polarity_field.pdf) (preprint)
-  Three involutions, avoidance deficit, L-encoding through Bernoulli
-  factorization, fourth-moment identity at base 10.
 
 ## Drafts
 
