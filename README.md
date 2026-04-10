@@ -7,7 +7,7 @@ digit function's bins. The papers prove it. The engine computes with it.
 
 ## Publications
 
-- [**The Collision Invariant**](publication/the_collision_invariant.pdf) (2026)
+- [**The Collision Invariant**](publication/the_collision_invariant.pdf) (2026, submitted to Experimental Mathematics April 4, 2026)
   Gate width theorem, finite determination, reflection identity, half-group theorem.
 
 - [**The Collision Transform**](publication/the_collision_transform.pdf) (2026)
