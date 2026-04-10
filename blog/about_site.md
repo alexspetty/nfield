@@ -1,4 +1,4 @@
-# Draft: alexpetty.com about text
+# About
 
 **The Collision Program** is a body of number-theory research Alex discovered and has developed across several papers and preprints, documented on this site.
 
