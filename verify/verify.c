@@ -990,7 +990,10 @@ static long inv_mod_general(long a, long m)
 static void q3_symbol_from_state(int r, int m18, int eps, int *x, int *y, int *z)
 {
     static const int cycle[6] = {1, 2, 4, 8, 7, 5};
-    long m = m18;
+    /* Use a positive representative of the phase class.  The complement-paired
+       differences are periodic in m mod 18, but m=0 itself is not a valid
+       endpoint representative when eps=1. */
+    long m = m18 + 18;
     long mprev = (m + 1) / 2;
     long mnext = 2 * m - eps;
     long inv = inv_mod_general(r, 9);
