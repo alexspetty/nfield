@@ -1,6 +1,6 @@
 # The Collision Invariant
 
-Take a prime, any prime. Do long division by it in some base. The remainders fall into $b$ bins, one bin per leading digit. This is the digit function $\delta(r) = \lfloor br/p \rfloor$, the long-division step that turns each remainder into the next digit of the expansion.
+Take a prime, any prime. Do long division by it in some base. The remainders fall into b bins, one bin per leading digit. This is the digit function, the floor of br/p, the long-division step that turns each remainder into the next digit of the expansion.
 
 Now do something simple. Pick a multiplier $g$ from the units mod $p$. Multiply every remainder by $g$ and re-sort. Most remainders change bins. Some do not. The ones that do not are *collisions*; multiplication has shuffled the room, but these stayed put.
 

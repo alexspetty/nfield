@@ -1,8 +1,8 @@
 # The General Neutrality Theorem
 
-[The neutrality theorem](https://alexpetty.com/the-neutrality-theorem/) proved that the prime $3$ controls the cancellation below $s = 1$. The reflection fixes one residue class mod $3$, that class is neutral, and the Mertens divergence cancels algebraically.
+[The Neutrality Theorem](https://alexpetty.com/the-neutrality-theorem/) proved that the prime 3 controls the cancellation below $s = 1$. The reflection fixes one class mod 3, that class is neutral, and the divergence cancels. The question that would not leave me alone: is 3 special, or does this happen at every prime?
 
-The natural question was whether $3$ is special. I generalized the argument to every odd prime in an afternoon. The proof is identical. Replace $3$ with any odd prime $q$, check that $2$ is invertible mod $q$ (it always is, because $q$ is odd), and the fixed class exists and is unique. One neutral class, $(q-1)/2$ swapped pairs, means summing to $-1$. The same theorem, at every prime scale, from the same reflection identity.
+I generalized the argument in an afternoon. The proof is identical. Replace $3$ with any odd prime $q$, check that $2$ is invertible mod $q$ (it always is, because $q$ is odd), and the fixed class exists and is unique. One neutral class, $(q-1)/2$ swapped pairs, means summing to $-1$. The same theorem, at every prime scale, from the same reflection identity.
 
 That generalization was easy. What I found *inside* the generalization was not.
 
@@ -36,7 +36,7 @@ and Mertens' theorem drives that product to zero. As you include more primes, fe
 
 A random function on the units would satisfy none of this. The collision invariant satisfies all of it.
 
-But here is the thing. The generalization told me the collision invariant is pinned at every prime. It did not tell me what those pins *do* to the convergence. For that, I had to look at the character decomposition more carefully. And what I found there made me rethink the entire program.
+The generalization told me the collision invariant is pinned at every prime. It did not tell me what those pins *do* to the convergence. For that, I had to look at the character decomposition more carefully.
 
 ## The assumption I never checked
 
@@ -85,15 +85,17 @@ base    odd chars    correlation
  37       666           -0.27
 ```
 
+![Simultaneous neutrality at every tested prime](https://alexpetty.com/content/images/2026/04/post19_neutrality_grid-1.png)
+
 Negative. At every base. From three characters to six hundred and sixty-six. The correlation never crosses zero.
 
-Characters with large collision coefficients have small prime sums. Characters with large prime sums have small collision coefficients. The collision invariant and the prime distribution are avoiding each other in character space.
+Characters with large collision coefficients have small prime sums. Characters with large prime sums have small collision coefficients. In the tested data, the collision invariant and the prime distribution appear to avoid each other in character space.
 
 Now think about what the prime character sum $|P(s, \chi)|$ actually measures. Through the relation $P = \log L - H$, it is a proxy for how sensitive that character is to the zeros of its $L$-function. Characters with large $|P|$ are the ones most affected by nearby zeros. They are the tremor-sensitive instruments in the array.
 
-And the collision invariant puts its smallest weights on exactly those characters. It puts its largest weights on the characters that barely feel the zeros at all.
+And the collision invariant puts its smallest weights on exactly those characters. It puts its largest weights on characters that, in the tested data, seem to feel the zeros less strongly.
 
-In the tested bases, the digit function $\lfloor br/p \rfloor$ produces a spectral profile that is transverse to the zero-sensitive directions in character space. The data suggests the instrument is not looking directly at the zeros. It is looking past them. If that holds up, the sum converges not because the zeros are absent, but because the instrument is pointed somewhere else.
+In the tested bases, the digit function $\lfloor br/p \rfloor$ produces a spectral profile that is transverse to the zero-sensitive directions in character space. The data suggests the instrument is not looking directly at the zeros. It may be looking past them. If that picture holds up, the sum would converge not because the zeros are absent, but because the weighting is pointed somewhere else.
 
 ## The scramble
 
@@ -117,24 +119,25 @@ base    actual net    scrambled mean    scrambled std    z-score
 
 The scrambled average lands near zero. Every time. The actual net, the one produced by the collision invariant's natural assignment, sits two to three standard deviations above, alone at the top. Ten thousand random shuffles, and none of them come close to what the digit function does on its own.
 
+![The scramble test](https://alexpetty.com/content/images/2026/04/post19_scramble.png)
+
 In the tested bases, the convergence is not just a property of the ingredients. It is a property of the arrangement. The collision invariant does not just have the right coefficients and the right characters. It has the right coefficients paired with the right characters. Shuffle the pairing and the positive net collapses to noise. The music was in the orchestration.
 
-## What came through the door
+## The general case
 
 I started this program because a digit function had a structural constant that matched the golden ratio. I followed the collisions to a periodic table, the periodic table to a transform, the transform to a convergence at $s = 1$, the convergence to a door into the critical strip. At every step I told myself the destination was the Riemann Hypothesis, and at every step I wanted that to be true more than I was willing to admit. That was the mountain everyone was climbing. I thought the collision transform was a new route up the same face.
 
 It is not.
 
-The collision transform does not test each $L$-function individually. The signs are mixed. In the data, the instrument looks past the zeros. The orchestration, not just the notes, is what makes the net positive. If $F^\circ$ converges at $s = 1/2$, the statement is not that every odd $L$-function modulo $m$ has its zeros on the critical line. The statement is that the zeros, wherever they sit, are arranged so that their effects cancel under the collision weighting. Not a statement about the emptiness of the zero set. A statement about its geometry.
+The collision transform does not test each $L$-function individually by any simple positivity route. The signs are mixed. In the data, the instrument appears to look past the zeros. The orchestration, not just the notes, is what makes the net positive. If $F^\circ$ converges at $s = 1/2$, the statement need not be that every odd $L$-function modulo $m$ has its zeros on the critical line. A plausible interpretation is that the zeros, wherever they sit, are arranged so that their effects cancel under the collision weighting. Not a statement about the emptiness of the zero set. A statement about its geometry.
 
 I had been climbing a mountain and discovered it was a different mountain.
 
-That is not a disappointment. A collective constraint on the joint zero distribution of a family of $L$-functions is not a lesser result than GRH. It is a different kind of result, one that the classical tools are not designed to see, because the classical tools work one $L$-function at a time. The collision transform works on all of them at once, weighted by the digit geometry, and what it sees is the shape of their arrangement.
+A collective constraint on the joint zero distribution of a family of $L$-functions is a different kind of result from GRH, one that the classical tools are not designed to see, because the classical tools work one $L$-function at a time. The collision transform works on all of them at once, weighted by the digit geometry, and what it sees is the shape of their arrangement.
 
 I do not yet have a proof that the anti-correlation is structural. I do not know why the digit function $\lfloor br/p \rfloor$ produces Fourier coefficients that are transverse to the zero-sensitive directions. The scramble test says the orientation is real in the data. The computation leaves very little room for coincidence. But the proof says nothing yet about why.
 
-That is where this paper leaves the story. The door is open. What came through was not what I expected. It may be more interesting.
-
+That is where this paper leaves the story.
 ## A note from 2026
 
 *April 2026*

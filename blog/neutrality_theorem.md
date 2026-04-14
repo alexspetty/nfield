@@ -1,8 +1,8 @@
 # The Neutrality Theorem
 
-[The collision transform and the critical strip](https://alexpetty.com/the-collision-transform-and-the-critical-strip/) ended with a discovery I could not let go. The centered collision sum converges at $s = 1$. That is a theorem. It also appears to converge below $s = 1$, reaching into the critical strip where the zeros of $L$-functions live. That is an observation. And when I removed the mod-$3$ structure from the collision coefficients, the penetration died. The sum still converged at $s = 1$, but below it the numbers ran away. The mod-$3$ structure was holding the sum together, and I had no idea why.
+[The collision transform and the critical strip](https://alexpetty.com/the-collision-transform-and-the-critical-strip/) ended with a discovery I could not let go. The centered collision sum converges at $s = 1$. That is a theorem. It also appears to converge below $s = 1$, reaching into the critical strip where the zeros of $L$-functions live. That is an observation. And when I removed the mod-$3$ structure from the collision coefficients, the penetration disappeared in the computations. The sum still converged at $s = 1$, but below it the numbers ran away. The mod-$3$ structure appeared to be load-bearing, and I had no idea why.
 
-This paper is my attempt to find out.
+This paper investigates.
 
 ## Two pieces, both divergent
 
@@ -71,8 +71,6 @@ $$\mathcal{M}(s) = c_0 \sum_p \frac{1}{p^s} + c_1 \sum_p \frac{\chi_3(p)}{p^s}$$
 
 Now look at what each piece does. The first sum adds up $1/p^s$ over every prime, weighting them all equally. That is the prime harmonic series, and it diverges. It grows like $\log \log x$, the same Mertens drift from [the collision fluctuation sum](https://alexpetty.com/the-collision-fluctuation-sum/). The second sum flips sign depending on the prime's class, adding $+1/p^s$ for one and $-1/p^s$ for the other. The positives and negatives wash each other out, and the sum converges. Dirichlet proved this in the 1830s. So the entire divergence of $\mathcal{M}$ lives in the first piece, the trivial character, the one that treats every prime the same.
 
-Here is where it clicks.
-
 The full centered sum $F^\circ$ also has a character decomposition, via the collision transform. But the antisymmetry theorem from [the centered collision sum](https://alexpetty.com/the-centered-collision-sum/) kills every even character, and the trivial character is even. It is gone. $F^\circ$ contains no trivial character at all. No $\sum 1/p^s$. No Mertens term. No divergence.
 
 That is the whole proof. The mod-$3$ component $\mathcal{M}$ carries a Mertens divergence. The doubly centered sum $F^{\circ\circ}$ carries the same divergence with opposite sign. In their sum $F^\circ$, the two cancel exactly, because $F^\circ$ was never allowed to have a Mertens term in the first place. The antisymmetry killed it at birth.
@@ -117,6 +115,8 @@ base    phi(b^2)     c_0        F°(0.5)     |F°°(0.5)|    type
  13       156      -0.80         +3.53          369       strong
 ```
 
+![The three neutrality regimes](https://alexpetty.com/content/images/2026/04/post18_three_regimes.png)
+
 Three regimes. When $3$ divides the base (bases $3$, $6$, $9$, $12$), the mod-$3$ bias vanishes entirely. There is no class $0$ among the units, the splitting does not arise, and $F^\circ = F^{\circ\circ}$. The doubly centered sum *is* the centered sum, no cancellation needed.
 
 When $3$ does not divide the base and $|c_0|$ is large (bases $7$, $10$, $13$), the Mertens term dominates early. The fitted $\alpha$ approaches $1$ quickly. These are the strong-bias bases, and the convergence is visible at modest prime counts.
@@ -124,8 +124,6 @@ When $3$ does not divide the base and $|c_0|$ is large (bases $7$, $10$, $13$), 
 When $3$ does not divide the base but $|c_0|$ is small (bases $5$, $11$), the character corrections remain comparable to the Mertens term for a long time. The finite-range $\alpha$ stays low. Not because the cancellation is imperfect, but because the asymptotic regime has not arrived yet. Give it more primes and $\alpha$ will climb. The theorem says it reaches $1$ whenever $c_0 \neq 0$.
 
 ## The constant from paper one
-
-I want to close with something that stopped me cold when I first computed it.
 
 In [the golden ratio selects prime three](https://alexpetty.com/why-the-golden-ratio-selects-the-prime-three/), the very first paper in this sequence, the alignment limit at the prime $3$ came out to $2/3$. That constant fell out of a self-referential cubic through the golden ratio. It was the number that started the whole program.
 
@@ -138,8 +136,9 @@ class 2 mean:   -1/3
 
 The splitting ratio between the two classes is $2/3$. The alignment limit. The same constant, arrived at through a completely different computation, sitting inside a completely different structure.
 
-I did not put it there. The digit function computed it, and the golden ratio's constant was waiting inside the answer. The collision program is not a line. It is a web, and the threads run backward as often as they run forward.
+The digit function produces the golden ratio's alignment limit from a completely different direction. The connections in this program are recursive.
 
+![The mod-3 splitting at base 10 and base 3](https://alexpetty.com/content/images/2026/04/post18_cancellation-1.png)
 ## A note from 2026
 
 *April 2026*

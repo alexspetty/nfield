@@ -1,8 +1,6 @@
 # The Double Transversality
 
-A quick recap for anyone just arriving. The collision invariant is a table of numbers, one for each way a prime interacts with the digit function $\lfloor br/p \rfloor$. That table can be decomposed into components, one for each Dirichlet character. Think of the characters as frequency channels, like the individual frequencies in a sound wave. Each channel carries a weight (how much the collision invariant cares about it) and a prime sum (how much the primes respond to it).
-
-[The general neutrality theorem](https://alexpetty.com/the-general-neutrality-theorem/) found something unexpected in the data. The channels where the collision invariant puts its biggest weights are the channels where the primes respond the least. And vice versa. The collision invariant and the prime distribution seem to be avoiding each other, like two radio stations that never broadcast on the same frequency.
+The collision invariant and the prime distribution were avoiding each other. [The General Neutrality Theorem](https://alexpetty.com/the-general-neutrality-theorem/) showed it: the channels where the collision invariant puts its biggest weights are the channels where the primes respond the least. The two signals dodge each other across the frequency spectrum.
 
 That avoidance, the anti-correlation, was measured at lag $1$ in a handful of bases. Two questions followed me out of that paper.
 
@@ -41,6 +39,8 @@ At the smallest cases (base $3$, lags $1$ and $2$, where there are only $3$ or $
 
 It did not dissolve in the tested range.
 
+![Anti-correlation persists across lags](https://alexpetty.com/content/images/2026/04/post20_lag_persistence-1.png)
+
 And look at the net column. The net is positive at every row, and it is growing. At base $3$, it climbs from $+0.62$ at lag $1$ to $+29.1$ at lag $6$. Whatever the digit function is doing, the computation sees more of it as the scale grows, not less.
 
 ## The disappearing signal
@@ -66,7 +66,9 @@ base    F°(0.5)
  31      +5.07
 ```
 
-Each base produces a real number. Some are positive, some negative. Base $31$ pushes the signal strongly positive. Base $11$ pushes it strongly negative. The range spans $6.4$ units. Each collision invariant is doing something real.
+Each base produces a real number. Some are positive, some negative. The range spans $6.4$ units. Each collision invariant is doing something real.
+
+![Base-specific signals cancelling](https://alexpetty.com/content/images/2026/04/post20_base_signals.png)
 
 Then I took the weighted sum across all ten bases.
 
@@ -81,9 +83,9 @@ Then I took the weighted sum across all ten bases.
 
 The base sum is $-0.01$.
 
-A range of $6.4$, compressed to $-0.01$. Ten bases, each carrying a real signal, and in this finite experiment the signals destroy each other almost perfectly.
+A range of $6.4$, compressed to $-0.01$. Ten bases, each carrying a signal, and in this finite experiment the signals destroy each other almost perfectly.
 
-I stared at this for a while. Each collision invariant avoids the prime-sensitive channels, but they avoid them in *different directions*. Base $31$ dodges left. Base $11$ dodges right. Base $3$ barely dodges at all. Each one finds its own way around the obstacle, and when you average all the dodges together, they cancel. The structural content of the collision invariant appears to be base-specific. It does not survive aggregation.
+Each collision invariant avoids the prime-sensitive channels, but they avoid them in *different directions*. Base $31$ dodges left. Base $11$ dodges right. Base $3$ barely dodges at all. Each one finds its own way around the obstacle, and when you average all the dodges together, they cancel. The structural content of the collision invariant appears to be base-specific. It does not survive aggregation.
 
 ## Two kinds of avoidance
 
@@ -93,23 +95,22 @@ This is what I call the double transversality. It is an observed pattern, not a 
 
 **Second layer: across bases, the avoidance directions cancel.** Each base dodges the prime-sensitive channels in its own direction. When you add up the dodges, they point in enough different directions that the sum is nearly zero.
 
-Think of it this way. Each base is a telescope pointed at the same sky, but through a different lens. Each telescope sees structure that the others miss, and misses structure that the others see. Point all the telescopes at the same patch and combine the images, and the features wash out. Not because there is nothing there, but because each telescope's distortion is unique, and the distortions cancel.
+Each base appears to provide partial information about a related underlying structure, but the bases emphasize different components. Combining them averages out the base-specific contributions, leaving little net signal.
 
 The collision invariant is not behaving like a universal measurement in these experiments. It is acting like a base-specific view of something universal. The signal is real at each base, but it seems to be real for base-specific reasons, and those reasons do not add up to a single global explanation.
 
 One subtlety. The vanishing of the base sum does not mean combining bases is useless. [The neutrality theorem](https://alexpetty.com/the-neutrality-theorem/) operates at the level of individual primes, not sums over primes. The individual-prime structure survives aggregation. The sum-over-primes structure does not. The double transversality is about the sum, not the primes.
 
-This is not a defect. It tells you what the collision invariant *is*. The digit function's geometry, projected onto the frequency channels at an angle that avoids the primes. Change the base, and the angle rotates. The avoidance persists. The direction does not.
-
+This is not a defect. In these computations, it suggests what the collision invariant is doing. The digit function's geometry, projected onto the frequency channels at an angle that avoids the primes. Change the base, and the angle rotates. The avoidance persists. The direction does not.
 ## A note from 2026
 
 *April 2026*
 
 The double transversality was a turning point in how I understood the program. Before this paper, I thought the collision invariant might be detecting a universal property of $L$-function zeros, something that would survive base-aggregation and point toward a single deep truth. The near-vanishing base sum in the tested family killed that idea for me. The collision invariant's relationship to zeros looks base-specific and non-aggregable.
 
-That turned out to be the right framing for the later papers. [The collision spectrum](https://alexpetty.com/the-collision-spectrum-and-the-l-function-landscape/) decomposes the invariant into Bernoulli numbers and diagonal character sums, and both of those quantities are base-dependent. [The polarity field](https://alexpetty.com/the-polarity-field/) measures the avoidance directly, and it varies with the base. The base-specificity is not an obstacle. It is the structure.
+That turned out to be the right framing for the later papers. [The collision spectrum](https://alexpetty.com/the-collision-spectrum-and-the-l-function-landscape/) decomposes the invariant into Bernoulli numbers and diagonal character sums, and both of those quantities are base-dependent. The polarity field measures the avoidance directly, and it varies with the base. The base-specificity is not an obstacle. It is the structure.
 
-The higher-lag persistence also mattered. The anti-correlation holding in the tested range from $3$ channels to $2{,}187$ channels means it is not behaving like a small-number artifact. Whatever the digit function is doing, the computation sees it at every tested scale. That observation fed directly into the [zero-density theorem](https://alexpetty.com/the-collision-zero-density-theorem/), which studies how the collision weights select for characters whose $L$-functions have no nearby zeros.
+The higher-lag persistence also mattered. The anti-correlation holding in the tested range from $3$ channels to $2{,}187$ channels means it is not behaving like a small-number artifact. Whatever the digit function is doing, the computation sees it at every tested scale. That observation fed directly into the zero-density theorem, which studies how the collision weights select for characters whose $L$-functions have no nearby zeros.
 
 .:.
 

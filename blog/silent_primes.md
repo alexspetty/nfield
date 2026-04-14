@@ -1,6 +1,6 @@
 # Silent Primes and the Variance of the Collision Count
 
-Sit down at a desk with a sharpened pencil, a sheet of paper, and a prime number. Pick a small one. Thirteen will do.
+Consider the prime $13$.
 
 Divide one by thirteen the long way, the way you learned in school. Write the digits as they come. After a few steps you find that the digits start repeating: zero, seven, six, nine, two, three, zero, seven, six, nine, two, three, and on it goes, forever. Six digits in the repeating block, then back to the beginning. This block, $076923$, is what mathematicians call the *repetend* of the fraction $1/13$. It is the part of the decimal that loops, and it is the soul of the prime as far as base ten is concerned.
 
@@ -8,7 +8,7 @@ Now do something a child might do. Cut the repetend out, paste it onto a thin st
 
 What you see is two rows of digits stacked, position by position. Compare them down the line. Where the digit on top equals the digit on bottom, you have a *match*. Count the matches.
 
-For the prime $13$, the count is zero. Not one match. The two ribbons, written out from the same six digits in different rotations, share no common digit at any position. They are perfectly mismatched. Even random sliding would be expected to produce one or two accidental matches. This produces none. The mismatch is total.
+For the prime $13$, the count is zero. Not one match. The two ribbons, written out from the same six digits in different rotations, share no common digit at any position. They are perfectly mismatched. Even random sliding would be expected to produce one or two accidental matches. This produces none.
 
 Try the prime $17$. Its repetend is sixteen digits long ($0588235294117647$). Cut a strip, make a copy, slide one position over, and count. The answer is positive. A few of the sixteen positions happen to share their digit with the slid copy.
 
@@ -20,17 +20,17 @@ Try $29$. Twenty-eight digits. Slide one. Count. Positive.
 
 Try $37$. Zero. Try $41$. Zero. Try $43$. Positive. Try $47$. Positive. Try $53$. Positive. Try $73$. Zero.
 
-If you keep going, walking up through the primes one at a time, sliding the ribbon by one position and counting the matches, you find that *most* primes give a small positive number, in the neighborhood of one or two or three. But a handful of primes give exactly zero. The ribbon and its shifted copy refuse to overlap at any position whatsoever, not even by accident. I started calling these primes *silent*. Silent because the signal, the count of matches between the loop and its shift, is not partially gone or mostly gone. It is fully gone. There is nothing to hear.
+If you keep going, walking up through the primes one at a time, sliding the ribbon by one position and counting the matches, you find that *most* primes give a small positive number, in the neighborhood of one or two or three. But a handful of primes give exactly zero. The ribbon and its shifted copy refuse to overlap at any position whatsoever, not even by accident. I call these the *silent* primes: those where the match count is exactly zero.
 
-The natural question is which primes are silent, and whether there is a way to know in advance without checking each prime one by one.
+The natural question is which primes are silent, and whether there is a way to know in advance without checking each prime one by one. The theorem in the accompanying note answers this exactly in the primitive-root regime, which is the setting of the examples below.
 
 ## A list and a formula
 
-Walk through every prime up to a thousand and write down the silent ones. The list comes out short:
+Walk through the primitive-root primes up to a thousand and write down the silent ones. The list comes out short:
 
 $$\{11,\ 13,\ 19,\ 23,\ 37,\ 41,\ 73\}.$$
 
-Seven primes. After $73$, no more silent ones at this slide. Walk all the way up to a million primes, ten million, a billion. The list does not grow. There are exactly seven primes greater than ten that are silent under a one-position slide in base ten. Forever.
+Seven primes. After $73$, no more silent ones at this slide. Walk all the way up to a million primes, ten million, a billion. The list does not grow. There are exactly seven primitive-root primes greater than ten that are silent under a one-position slide in base ten. Forever.
 
 That, on its own, is the first surprise. There are *finitely* many silent primes, and you can list them with seven entries. Past the seventh, the universe of primes goes on without producing another one.
 
@@ -60,7 +60,9 @@ Here is the recipe one more time, in plain language. Compute $100 - 9$. Then $10
 
 $$91,\quad 82,\quad 73,\quad 64,\quad 55,\quad 46,\quad 37,\quad 28,\quad 19.$$
 
-That is the list. Now factor each of the nine numbers and read off the prime factor that is greater than ten. (Sometimes the number is itself a prime greater than ten, in which case the factor and the number are the same. Sometimes the number factors only into primes that are too small to count, in which case it contributes nothing.)
+![The silent prime recipe](https://alexpetty.com/content/images/2026/04/silent_primes_recipe.png)
+
+Factor each of the nine numbers and read off the prime factor that is greater than ten. (Sometimes the number is itself a prime greater than ten, in which case the factor and the number are the same. Sometimes the number factors only into primes that are too small to count, in which case it contributes nothing.)
 
 ```
 value    factored      silent prime
@@ -78,13 +80,13 @@ value    factored      silent prime
 
 Read down the rightmost column. Throw out the two "none" rows, since they did not contribute anything new. Collect the seven primes that remain: $13$, $41$, $73$, $11$, $23$, $37$, $19$. Sort them in increasing order: $11$, $13$, $19$, $23$, $37$, $41$, $73$. These are exactly the seven silent primes I listed at the top of this section. Every single one, recovered by hand, from a recipe that took less than five minutes to apply.
 
-What this means is striking. Silent primes are not a hidden subset of the primes that you have to discover one at a time by computation. They are the prime divisors of nine specific small integers. Past the last factor, no further silent primes exist. The mystery of "which primes are silent" has the kind of answer most number theory questions never have. A finite list. An exact recipe. No exceptions.
+Silent primes in the primitive-root regime are not a hidden subset of the primes that you have to discover one at a time by computation. They are the prime divisors of nine specific small integers. Past the last factor, no further primitive-root silent primes exist at this lag. The mystery of "which primes are silent" has the kind of answer most number theory questions never have. A finite list. An exact recipe. No exceptions inside the theorem's scope.
 
-The recipe generalizes. At a slide of two positions (instead of one), the integers to factor are $1000 - 99$, $1000 - 198$, $1000 - 297$, and so on. At a slide of three positions, $10000 - 999$, $10000 - 1998$, and so on. At every slide, a finite list. At every slide, an exact recipe. The silent primes at any slide in any base are the prime divisors of a small arithmetic progression that depends only on the base and the slide.
+The recipe generalizes. At a slide of two positions (instead of one), the integers to factor are $1000 - 99$, $1000 - 198$, $1000 - 297$, and so on. At a slide of three positions, $10000 - 999$, $10000 - 1998$, and so on. At every fixed slide, a finite list. At every fixed slide, an exact recipe. In the primitive-root regime, the silent primes at any slide in any base are the prime divisors of a small arithmetic progression that depends only on the base and the slide.
 
 For the moment, set the silent primes aside. They look like a finished story. A finite list, an exact recipe, no further entries. The kind of result you can hold in your hand and put down. That is exactly how I treated them when I first found the formula.
 
-That view is wrong, and the rest of this paper is going to correct it. The seven silent primes in base ten are not seven curiosities. They are the *extreme case* of something much larger that runs across every prime, and the second half of this paper is what measures the larger thing. The silent primes are where the larger thing happens to hit its furthest boundary. They are not a side observation. They are the tail of a distribution.
+The seven silent primes in base ten are not seven curiosities. They are the *extreme case* of something much larger that runs across every prime, and the second half of this paper is what measures the larger thing. The silent primes are where the larger thing happens to hit its furthest boundary. They are not a side observation. They are the tail of a distribution.
 
 What that distribution is, and why the silent primes are at its tail, takes a little setup. Let me show it to you.
 
@@ -130,7 +132,9 @@ prime p     bin size Q     standard deviation / √Q
 
 The numbers in the right column are climbing toward something. They start in the low $0.8$s and walk up steadily, slowing down as they climb. By the time you have ten thousand primes in the calculation, the ratio is about $0.94$, and the slowing-down strongly suggests it converges to some constant in the neighborhood of $0.94$ or $0.95$.
 
-What this means is that the wobble of the count, measured properly, is *exactly the square root of the bin size*, with some constant in front that depends only on the base. Not the bin size itself. Not a constant. The square root.
+![Variance scaling](https://alexpetty.com/content/images/2026/04/variance_scaling-1.png)
+
+The ratio approaches a constant. The wobble of the count, measured properly, is the square root of the bin size, with some constant in front that depends only on the base.
 
 And now you can see what the silent primes were. The collision count usually wobbles around its mean by something on the order of $\sqrt{Q}$. The seven primes from the first half were the special cases where the wobble happened to hit *exactly* the bottom of its possible range. The count fell all the way to zero, the largest possible negative excursion the wobble can take. Silent primes are not seven oddities. They are the extreme case of the wobble, the primes where the deterministic comparisons inside the count happened to all line up the same way at once and reach the boundary. They are the tail of the distribution that the wobble describes.
 
@@ -140,7 +144,7 @@ If you have not seen the square root before in this kind of context, the next se
 
 ## Like the Riemann Hypothesis
 
-A few minutes of detour is needed here, because the wonder of the square root requires a piece of context from a different part of mathematics.
+A short detour is needed here, because the square root requires context from a different part of mathematics.
 
 There is a function in number theory called the *prime counting function*. It is exactly what it sounds like. For any number $x$ you choose, the prime counting function tells you how many primes are less than or equal to $x$. Mathematicians write it as $\pi(x)$. So $\pi(10) = 4$ (the primes up to $10$ are $2, 3, 5, 7$), $\pi(100) = 25$, $\pi(1000) = 168$, $\pi(10000) = 1229$, and on it goes.
 
@@ -150,7 +154,7 @@ The approximation is not exact. There is an error. The difference between $\pi(x
 
 The Riemann Hypothesis is the conjecture that the error is bounded by a particular shape. Specifically, the conjecture predicts that the difference between the actual count and the smooth approximation is at most about the square root of $x$, times a logarithmic factor. The Riemann Hypothesis says the error is on the order of $\sqrt{x}$, give or take some logarithms.
 
-Why is the square root the threshold? Because anything smaller than $\sqrt{x}$ would force the primes to be more regular than they have any right to be, and anything larger than $\sqrt{x}$ would force them to be more chaotic than the analytic machinery can tolerate. The square root is the boundary between *as much structure as you could hope for* and *more chaos than the proof permits*. It is the conjectured exact size of the deviation from the smooth answer.
+The square root is the threshold because an error term smaller than $\sqrt{x}$ would imply stronger regularity in the prime distribution than any known mechanism can produce, while an error term larger than $\sqrt{x}$ would be inconsistent with the known zero-free region of the zeta function. The square root marks the boundary between the two regimes, and it is the conjectured exact size of the deviation from the smooth answer.
 
 The Riemann Hypothesis has been unproved for a hundred and sixty years. It is the most famous unsolved problem in mathematics. Many mathematicians have spent their careers chasing it. There is a million-dollar prize for the first person to settle it. Generations of analytic number theory have grown up around its edges. The square root is the heart of the conjecture. Whoever proves the Riemann Hypothesis proves that the primes deviate from their smooth approximation by exactly that much, no more, no less.
 
@@ -161,7 +165,6 @@ I want to be careful here. The collision count is not the prime counting functio
 What this suggests, but does not prove, is that the same kind of analytic structure that controls the prime counting function also controls the collision count. The Riemann Hypothesis is about the zeros of a particular function called the Riemann zeta function, and those zeros appear to govern the deviations of $\pi(x)$ from $\mathrm{li}(x)$. The hope behind this paper is that some similar analytic structure, some similar list of zeros in some related function, governs the deviations of the collision count from its bin size. If the hope is real, the digit function and the Riemann zeta function are looking at the same skeleton from two different angles.
 
 Right now the hope is just a hope. The square-root scaling of the collision count is a numerical conjecture, supported by computation but not proved. The connection to a hidden $L$-function is suggested by the matching square-root shape but not established. This paper points at the hope. The next paper picks it up.
-
 ## A note from 2026
 
 *April 2026*

@@ -1,99 +1,134 @@
 # The Spectral Power of the Digit Function
 
-Every prime in base $10$ has a fingerprint, and the fingerprint is a list of ten integers.
-
-Pick a prime $p$. Divide $1$ by it, then $2$, then $3$, up through $p - 1$, and look at the leading decimal digit of each fraction. Some leading digits appear once, some twice, some not at all. Group the residues by their leading digit. The number of residues in each group is what I will call a *bucket size*. There are ten buckets in base $10$, one for each possible leading digit, and the list of bucket sizes is the prime's fingerprint.
+Take a prime $p$ in base $10$. For each residue $r = 1, \ldots, p-1$, look at the leading digit of $r/p$. Group the residues by that digit. The sizes of those ten groups are the **bucket sizes** of the prime, and they determine far more than you would expect from a list of ten integers.
 
 At $p = 7$, the bucket sizes are
-$$(0, 1, 1, 0, 1, 1, 0, 1, 1, 0).$$
-Six leading digits appear once each, the other four are empty. At $p = 13$, the buckets are
-$$(1, 1, 1, 2, 1, 1, 2, 1, 1, 1).$$
-Eight singletons and two doubled buckets. At $p = 29$ there are no zeros and no singletons; the bucket sizes settle into a mix of $2$s and $3$s. As $p$ grows, the bucket sizes drift toward an average of $p / 10$, but the way they drift depends on $p$ in a specific arithmetic way.
 
-Those bucket sizes are the load-bearing data of the entire alignment program. [The alignment limit paper](https://alexpetty.com/the-alignment-limit/) showed the limiting alignment of a prime is determined by the sum of squared bucket sizes. [The spectral structure paper](https://alexpetty.com/the-spectral-structure-of-fractional-fields/) showed the eigenvalues of the cross-alignment matrix come from a Fourier transform that ultimately traces back to the bucket structure. Each invariant in the chain reaches into the bucket sizes for its raw material and pulls out a different summary.
-
-None of those summaries is the natural object that contains them all. This paper builds the natural object. It is a function on the harmonics of the prime that takes a frequency as input and returns a number, and I call it the **spectral power** of the digit function. Every magnitude-side invariant of the alignment program is one of its values or one of its averages.
-
-## Why "spectral power"
-
-The name comes from signal processing. When you take an electrical signal, run it through a Fourier transform, and square the magnitude at each frequency, the resulting function is called the *power spectrum* or *spectral power* of the signal. It tells you how much of the signal's energy lives at each frequency. A pure tone has all its power at one frequency. A noisy signal has its power spread across many. The shape of the power spectrum is the harmonic identity of the signal.
-
-I am borrowing the name because I am doing the same operation. Instead of a sound wave or an electrical signal, my signal is the bucket structure of the digit function: the indicator that says "this residue lives in bucket $d$ for digit $d$." Run that indicator through a Fourier transform, square the magnitude, and you get a function on harmonics that says how much of the bucket structure's energy lives at each frequency. That function is the spectral power of the digit function. I will write it $\Phi$ throughout this paper.
-
-## Why this works at all
-
-The reason the spectral power has a clean closed form is one of those small geometric facts that does big work.
-
-Each bucket of the digit partition is a *run of consecutive residues*. It has to be, because the leading digit of $r/p$ moves up by one whenever $r$ crosses a multiple of $p / 10$, and otherwise stays put. So bucket zero is some run of small residues, bucket one is the next run, bucket two the next, and the runs march in order from small residues to large. The buckets do not jump around. They are intervals.
-
-Intervals are the simplest possible sets to take a Fourier transform of. When you take a run of $n$ consecutive numbers and run them through a Fourier transform on a finite circle, the result is one of the oldest objects in classical harmonic analysis, the **Dirichlet kernel**. It dates back to Dirichlet's work in the 1830s on the convergence of Fourier series. It has a clean trigonometric closed form. It has been studied for nearly two centuries.
-
-So the buckets in our digit partition do not produce just any kind of waves on the spectrum. They produce Dirichlet kernels, one per bucket, sized by how many residues the bucket contains. Sum the squared kernels across all the buckets, frequency by frequency, and you have the whole spectral power. That is the entire calculation, and the rest of this paper is just walking through what falls out of it.
-
-## A function on the harmonics
-
-There are $p$ harmonics in total at the prime $p$, the standard set you get when you do Fourier analysis on a finite cyclic group. The spectral power $\Phi$ takes one of these harmonics as input and returns a single number telling you how strongly the bucket partition resonates at that harmonic.
-
-One harmonic is special, and the special one is the lowest. At the zeroth harmonic, every Dirichlet kernel collapses to its bucket size, because Fourier evaluation at frequency zero is just counting (a sum of $n$ ones is $n$). Square the contribution from each bucket and add over all the buckets, and you get
-$$\Phi(0) = n_0^2 + n_1^2 + \ldots + n_{b-1}^2.$$
-This is exactly the bin-sum that [the alignment limit paper](https://alexpetty.com/the-alignment-limit/) named $S(p, b)$. So the alignment limit is recovered, as it should be, from the lowest mode of the spectral power. The DC component of $\Phi$ is the old invariant in new clothing. It is the trivial mode of the new harmonic analysis the same way the diagonal of the cross-alignment matrix is the trivial pattern of the matrix.
-
-For other frequencies, the spectral power is built one bucket at a time. Each bucket contributes a Dirichlet kernel whose shape depends on how many residues the bucket holds. Singletons contribute a flat constant at every frequency, the simplest possible shape. Buckets of size two contribute a small wave that peaks at the low frequencies and dies off at the high ones. Larger buckets contribute sharper waves with their own peaks and valleys. Sum the squared waves from every bucket and you have the whole spectral power.
-
-The point is that $\Phi$ is the harmonic shadow of the bucket sizes. Tell me the bucket sizes, and I can hand you $\Phi$ at every frequency without doing any new work, just by adding up the bucket Dirichlet kernels.
-
-## A worked example at $p = 13$
-
-To make the picture concrete, take $p = 13$ in base $10$. [The spectral structure paper](https://alexpetty.com/the-spectral-structure-of-fractional-fields/) looked at this same prime from a different angle, by sorting its fractions into the two cosets that the multiplicative action of $\times 10$ generates. That decomposition is *multiplicative*. The bucket partition is *additive*. It asks which residues land in which leading-digit bucket under the floor function. The two decompositions of $p = 13$ live on the same set of residues but split it differently, and they highlight different things.
-
-Look at the buckets directly.
-
+```text
+(0,1,1,0,1,1,0,1,1,0)
 ```
+
+Six buckets contain one residue, and four are empty.
+
+At $p = 13$, the bucket sizes are
+
+```text
+(1,1,1,2,1,1,2,1,1,1)
+```
+
+Eight buckets are singletons, and two contain two residues.
+
+At $p = 29$, the bucket sizes are a mix of $2$s and $3$s.
+
+![Bucket sizes of the digit function](https://alexpetty.com/content/images/2026/04/spectral_power_buckets.png)
+
+These lists look simple, but they already control several things:
+
+- the alignment limit
+- the digit-partitioning condition
+- part of the later spectral structure
+
+Here that information is gathered into a single function on the frequencies of the prime. I call it the **spectral power** of the digit function.
+
+## From buckets to frequencies
+
+The key fact is elementary. Each bucket is a run of consecutive residues.
+
+That happens because the digit function $\delta(r)=\lfloor 10r/p \rfloor$ is monotone in $r$. As $r$ increases, the leading digit can only stay the same for a while and then move up by one. So the residues assigned to digit $0$ form an interval, the residues assigned to digit $1$ form the next interval, and so on.
+
+Intervals are easy to analyze with Fourier series. The Fourier transform of a consecutive run is a classical trigonometric object called a **Dirichlet kernel**. So each bucket contributes one Dirichlet kernel, determined only by the size of that bucket.
+
+The spectral power $\Phi$ is what you get by taking those bucket Fourier coefficients, squaring their magnitudes, and summing over the ten buckets. It is a nonnegative function of the frequency.
+
+That is the whole construction.
+
+## The zeroth mode
+
+One frequency is special: frequency $0$.
+
+At frequency $0$, Fourier analysis just counts. A bucket of size $n_d$ contributes $n_d$, and after squaring and summing we get
+
+$$\Phi(0) = n_0^2 + n_1^2 + \cdots + n_9^2.$$
+
+This is exactly the old bin-sum from [The Alignment Limit](https://alexpetty.com/the-alignment-limit-for-all-primes/).
+
+So the alignment limit did not disappear. It became the lowest mode of a larger object.
+
+The first gain is structural. The spectral power does not replace the earlier invariant. It contains it.
+
+## A worked example: $p = 13$
+
+For $p = 13$, the buckets are
+
+```text
 digit 0:  {1}
 digit 1:  {2}
 digit 2:  {3}
-digit 3:  {4, 5}
+digit 3:  {4,5}
 digit 4:  {6}
 digit 5:  {7}
-digit 6:  {8, 9}
+digit 6:  {8,9}
 digit 7:  {10}
 digit 8:  {11}
 digit 9:  {12}
 ```
 
-Eight buckets of size one, two buckets of size two. The two doubled buckets are at digits three and six. They are the entire source of structure in the spectral power at this prime.
+There are eight singleton buckets and two doubled buckets.
 
-Compute $\Phi$ at frequency zero. Square every bucket size and add. Eight ones and two fours. Total sixteen. So $\Phi(0) = 16$, which is the bin-sum from the alignment limit paper, recovered as the value of the spectral power at the zeroth harmonic. The DC mode is the old invariant.
+At frequency $0$, this gives
 
-Now move to a nonzero frequency. The eight singleton buckets each contribute one, no matter what frequency you ask for. They are flat across the harmonics. The two doubled buckets each contribute a small wave whose height depends on the frequency. At the lowest nonzero frequency the wave is near its peak, and the doubled buckets push the spectral power up close to sixteen. Around the middle of the frequency range, the wave drops near zero and the doubled buckets vanish from the sum. The total drops to about eight, the contribution of the singletons alone. By symmetry, the wave climbs back up toward the top of the frequency range.
+$$\Phi(0) = 8 \cdot 1^2 + 2 \cdot 2^2 = 16.$$
 
-So the spectral power of $p = 13$ in base $10$ is a slow envelope. Sixteen at the DC mode, dropping to about eight in the middle, climbing back to sixteen at the top. The whole shape is set by the two doubled buckets fighting against the eight flat singletons.
+That is the same bin-sum we already knew.
 
-There is a Parseval-style sanity check that the total spectral energy across all frequencies has to come out to a specific number, namely $156 = p (p - 1)$, and the slow envelope above adds up to exactly that. The harmonic accounting closes. A reader can verify this with a calculator in five minutes; it is the kind of computation that is small enough to fit on a napkin and yet contains the entire harmonic identity of the prime.
+Away from frequency $0$, the singleton buckets are simple: each contributes the same flat amount at every frequency. The doubled buckets are the only source of variation. They create a low, slow envelope in the graph of $\Phi$: large near the lowest frequencies, smaller near the middle, then rising again by symmetry.
 
-## What the spectrum tells you
+So for $p = 13$, almost all of the shape comes from just two doubled buckets.
 
-The spectral power has three layers of meaning, and they line up neatly with three of the older invariants of the alignment program.
+This is a good example of what the spectral power does. It turns a small combinatorial imbalance in the buckets into a global frequency profile.
 
-**The first layer is the alignment limit.** The DC mode of $\Phi$ is the bin-sum, and the bin-sum controls the limit of the alignment as the modulus grows. Everything the alignment limit paper said about that quantity is now a statement about a single coefficient of $\Phi$.
+![Spectral power of the digit function](https://alexpetty.com/content/images/2026/04/spectral_power_phi.png)
 
-**The second layer is the digit-partitioning property.** A prime is digit-partitioning in a base if and only if its spectral power is constant in frequency. When every bucket has size one or zero, every nonempty bucket contributes the same flat constant at every harmonic, and $\Phi$ has no shape. It is white noise. Conversely, if $\Phi$ is constant, the buckets have to be singletons, which is exactly the digit-partitioning condition. Three different definitions of digit-partitioning, each living at a different level of the program, all turn out to be the same property in disguise.
+At $p = 11$, every occupied bucket is a singleton, so the graph is flat. At $p = 13$, two doubled buckets create a visible envelope. At $p = 29$, the bucket sizes vary more, and the graph has genuine frequency structure.
 
-**The third layer is the eigenvalue spectrum of the prime.** This is where $\Phi$ stops being enough, and it is where I plan to go next. The eigenvalues of the cross-alignment matrix are determined by an autocorrelation, and the autocorrelation depends on more than the loudness of the bucket harmonics. It also depends on their *timing*, on whether the harmonics are in step or out of step at related frequencies. The spectral power records the loudness only, because it was built by squaring, and squaring throws away the timing. My current line of attack is to introduce a richer object that keeps the timing and uses it to close the loop. We will see if it lands.
+## Three layers
 
-For now, what this paper has done is take the bucket sizes of a prime and turn them into a single function on the harmonics. The alignment limit lives at the lowest mode. The digit-partitioning property is the same as flatness. Everything else in the magnitude direction is also a contraction of the spectral power, and the spectral power itself is a sum of squared Dirichlet kernels weighted by the bucket sizes.
+The spectral power organizes several earlier facts.
 
+First, it recovers the alignment limit through the identity
+
+$$\Phi(0) = S(p,10).$$
+
+Second, it gives a clean characterization of digit-partitioning primes. A prime is digit-partitioning exactly when every occupied bucket has size $1$. In that case, every bucket contributes the same flat amount at every frequency, so $\Phi$ is constant. Conversely, if $\Phi$ is constant, the buckets must all be singletons. So:
+
+- digit-partitioning
+- all occupied buckets of size $1$
+- flat spectral power
+
+are three ways of saying the same thing.
+
+This is the second reason the paper matters. A condition first defined in terms of decimal collisions can also be recognized spectrally.
+
+## The limit of $\Phi$ alone
+
+The spectral power keeps magnitudes. It throws away phase.
+
+That means it does **not** determine everything. In particular, it does not yet determine the eigenvalue spectrum from [The Spectral Structure of Fractional Fields](https://alexpetty.com/the-spectral-structure-of-fractional-fields/). To recover that, you need a richer object that remembers how the Fourier modes line up with one another, not just how large they are.
+
+The spectral story does not end here. What appears in this paper is the magnitude side of it.
+
+That is still a real gain. A prime's bucket sizes no longer sit there as a list of ten integers. They now define a whole frequency profile, with the alignment limit at one end and flatness of digit-partitioning at the other.
+
+---
 ## A note from 2026
 
 *April 2026*
 
-This is the paper where the alignment program first learned to do harmonic analysis on the digit function instead of just counting the buckets. Before this paper, the program had the bucket sizes themselves and a handful of scalar combinations of them. After, the entire harmonic toolkit of the prime was available, and every later result in the chain used it.
+This paper gives the first full frequency-space portrait of the digit function. Before it, the bucket data had been compressed into a few scalars. Here the whole partition is pushed into Fourier space at once.
 
-The reason the toolkit became available at all is the small geometric fact that the buckets are runs of consecutive residues, because the digit function is monotone. Runs of consecutive residues have the simplest possible kind of harmonic content, a Dirichlet kernel, and Dirichlet kernels are objects classical analysis has known how to manipulate for nearly two centuries. So the buckets do not produce just any kind of waves on the spectral power; they produce a specific, very classical kind of wave that the rest of the alignment program could pick up and run with. The whole alignment program from this point forward is, at its core, the harmonic analysis of consecutive runs of integers.
+That shift matters because [The Autocorrelation Formula](https://alexpetty.com/the-autocorrelation-formula/) needs more than one scalar summary, and [Phase-Filtered Ramanujan Sums and the Spectral Gate](https://alexpetty.com/phase-filtered-ramanujan-sums-and-the-spectral-gate/) studies what happens when the same harmonic data is filtered by residue-class structure. [The Collision Spectrum](https://alexpetty.com/the-collision-spectrum/) uses the same interval geometry again in a different arithmetic setting.
 
-That observation has consequences far beyond this paper. The autocorrelation formula in [the next paper](https://alexpetty.com/the-autocorrelation-formula/) takes the bucket waves and combines them into a richer object that turns out to be the right tool for computing the eigenvalue spectrum of the cross-alignment matrix. Several papers later, the same waves get restricted to special families of frequencies and produce identities of a kind first studied by Ramanujan. Much further on, the collision program at conductor $b^2$ uses the same wave identity to evaluate a different signal on the same bucket geometry. Every single one of those later moves traces back to the harmonic content of consecutive runs of integers, made explicit for the first time in this paper.
-
-The interval geometry of the digit function is the load-bearing fact of the entire program. Everything else is built on top of it.
+The common fact behind all of these papers is simple and sturdy: the digit buckets are consecutive runs of residues. Once that is written down, classical harmonic analysis becomes available.
 
 .:.
 
@@ -101,26 +136,24 @@ The interval geometry of the digit function is the load-bearing fact of the enti
 
 ## Try it yourself
 
-```
+```text
 $ ./nfield spectral 11
   bucket sizes: 1,1,1,1,1,1,1,1,1,1
   Phi(0) = 10
-  Phi flat at every frequency (digit-partitioning)
+  Phi flat at every frequency
 
 $ ./nfield spectral 13
   bucket sizes: 1,1,1,2,1,1,2,1,1,1
   Phi(0) = 16
-  slow envelope, peaking at the DC mode and the top frequency
+  two doubled buckets create a low-frequency envelope
 
 $ ./nfield spectral 29
-  bucket sizes: 1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1
-  doubled buckets dominant
-  Phi(0) = 56
+  bucket sizes: a mix of 2s and 3s
+  Phi(0) = 80
+  the spectrum has visible variation across the frequencies
 ```
 
-At $p = 11$ the buckets are all singletons and the spectral power is perfectly flat. At $p = 13$ the two doubled buckets introduce a low-frequency bump. By $p = 29$ doubling has spread across most of the digit range, and the spectral power has real frequency structure that does not collapse to a single simple shape.
-
-The thing to watch in the demos is the way the doubled buckets accumulate. The first doubled bucket appears at the smallest non-digit-partitioning prime in the base. Each successive prime adds more doubled buckets until the bucket sizes settle into a pattern that scatters around the average $p / b$. By the time $p$ is much larger than $b$, the buckets are small integers near $p / b$, and the spectral power has nontrivial bumps at every frequency. The shape of $\Phi$ is the harmonic profile of the prime in the base, computed without ever doing the long division.
+What changes from one prime to the next is not just the total at frequency $0$. The whole shape changes with the bucket sizes.
 
 Code: [github.com/alexspetty/nfield](https://github.com/alexspetty/nfield)
 Paper: [The Spectral Power of the Digit Function](https://github.com/alexspetty/nfield/blob/main/research/spectral_power.pdf)

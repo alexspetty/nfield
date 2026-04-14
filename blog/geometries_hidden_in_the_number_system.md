@@ -184,7 +184,7 @@ Seven is the first prime whose field glyph fills the entire circle. Its multipli
 
 ![43](https://alexpetty.com/content/images/2018/12/fns-table-43.jpg)
 
-![47](https://alexpetty.com/content/images/2018/12/fns-table-47.jpg)
+![The field table of 47. Every product reduced, every residue colored. Red and blue for polarity, grey for the scaffold. Forty-six rows of arithmetic, and no two columns alike. The complete portrait of a prime, drawn by multiplication alone.](https://alexpetty.com/content/images/2018/12/fns-table-47.jpg)
 
 As the primes grow larger, the field tables become denser but the underlying geometric regularity persists. Each prime produces its own distinct pattern, and no two primes produce the same glyph.
 
@@ -254,12 +254,9 @@ This was my first attempt at a systematic visual catalog of what I now call frac
 
 The "field glyph" of a prime turned out to be a direct visualization of the digit function $\delta(r) = \lfloor br/p \rfloor$ and its multiplicative orbit. The observation that primes produce irreducible patterns while composites decompose into simpler ones is the distinction between prime and composite fractional fields that [why the golden ratio selects the prime three](https://alexpetty.com/why-the-golden-ratio-selects-the-prime-three/) formalizes.
 
-The three-way classification I proposed here (structural, polar, form) became more precise than I expected. "Polar" became *force*: the additive subgroup $\{3, 6, 9\}$, closed under addition mod $9$, generating the static scaffold. "Form" became the multiplicative orbit of $2$ mod $9$: the doubling cycle $1, 2, 4, 8, 7, 5$ that traces the transverse flow. Force and form are independent structures. Membership in one tells you nothing about position in the other. That independence is not a minor detail. It is the reason the [polarity field](https://alexpetty.com/the-polarity-field/) cannot accumulate coherently across primes, and the mechanism behind the avoidance that constrains zeros of $L$-functions.
+The three-way classification I proposed here (structural, polar, form) became more precise than I expected. "Polar" became *force*: the additive subgroup $\{3, 6, 9\}$, closed under addition mod $9$, generating the static scaffold. "Form" became the multiplicative orbit of $2$ mod $9$: the doubling cycle $1, 2, 4, 8, 7, 5$ that traces the transverse flow. Force and form are independent structures. Membership in one tells you nothing about position in the other. That independence is not a minor detail. It is the reason the polarity field cannot accumulate coherently across primes, and the mechanism behind the avoidance that constrains zeros of $L$-functions.
 
 The line I wrote in 2010, "primes stand apart from all three categories, each one producing an irreducible pattern that belongs to it alone," still holds. The collision invariant $S(p)$ is determined entirely by the prime's residue class, but the pattern within that class is irreducible. Composites decompose. Primes do not. That is what these glyphs were showing me.
 
 .:.
 
----
-
-*The field table of 47. Every product reduced, every residue colored. Red and blue for polarity, grey for the scaffold. Forty-six rows of arithmetic, and no two columns alike. The complete portrait of a prime, drawn by multiplication alone.*

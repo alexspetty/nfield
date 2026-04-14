@@ -1,12 +1,12 @@
 # The Collision Periodic Table
 
-Here is a fact I find genuinely beautiful. Every prime number past $100$, in base $10$, has a single small integer attached to it. The integer is determined entirely by the prime's last two digits. There are forty possible "last two digits" for a prime (the integers between $1$ and $99$ that are coprime to $10$), and so there are exactly forty integers in this table. Every prime past $100$, no matter how large it gets, sits on top of one of those forty cells.
+Every prime number past 100, in base 10, has a single small integer attached to it. The integer is determined entirely by the prime's last two digits. There are forty possible "last two digits" for a prime (the integers between 1 and 99 that are coprime to 10), and so there are exactly forty integers in this table. Every prime past 100, no matter how large it gets, sits on top of one of those forty cells.
 
 The prime $109$ produces the integer $+8$. So does the prime $50{,}009$. So does the prime $1{,}000{,}009$. All three end in $09$, so all three carry the fingerprint stamped onto class $09$.
 
 The prime $191$ produces the integer $-9$. So does the prime $491$. So does the prime $99{,}999{,}991$. All three end in $91$, all three carry the fingerprint of class $91$.
 
-This paper is about the forty fingerprints. It shows what they look like in base $10$, names the symmetry that holds them together, and explains the structural bias built into the table.
+This paper studies the forty collision values. It shows what they look like in base $10$, names the symmetry that holds them together, and explains the structural bias built into the table.
 
 ## Forty integers in base ten
 
@@ -33,6 +33,8 @@ The integer attached to class $a$ is what I call the *collision fingerprint* of 
 That is the table. Every prime past one hundred gets assigned one of these forty integers, by the simplest fact about the prime that you can name.
 
 When I describe the alignment program to anyone, this is the picture I show. The forty cells are concrete enough that a numerate reader can verify the antisymmetry I am about to walk through by adding entries on a finger, and rigid enough that the later analytic work had no choice but to reckon with them. In 2023, though, the point was simpler: the table itself already looked like structure, not noise.
+
+![The collision periodic table in base 10](https://alexpetty.com/content/images/2026/04/collision_periodic_table_heatmap-1.png)
 
 ## The pattern in the pairs
 
@@ -69,6 +71,8 @@ That is the antisymmetry of the table, and it is sharp. $S(a) + S(100 - a) = -1$
 
 The reason the constant is $-1$ rather than $0$ is also clean. The collision count $C$ excludes the residue zero, and the complement map $r \mapsto p - r$ that sends digit $d$ to digit $b - 1 - d$ has a parity offset that lands at exactly $-1$. The structure forces it.
 
+![Every pair on the line](https://alexpetty.com/content/images/2026/04/periodic_table_pairs.png)
+
 I want to call out what this antisymmetry does to the table, because it is more than a curiosity. The mean of the forty integers is the average of $-1$ across $20$ pairs, divided by the $40$ classes. That gives exactly $-1/2$. Not $-0.5001$, not $-0.4998$, exactly $-1/2$.
 
 It also forces a *structural negative bias*. If every pair sums to $-1$, and at least one member of each pair must therefore be negative, then exactly half of the forty classes are negative. This is not a sampling artifact that washes out at large $b$. It is a forced consequence of the pair sum, and it survives into every later paper in the program that uses the centered collision deviations as a signal. I cannot stress enough how much trouble it would have caused if this bias had been a statistical fluctuation instead of a theorem. The bias is the table's signature, baked into the structure from the moment the antisymmetry is proved.
@@ -95,12 +99,11 @@ Every base produces its own table, with $\varphi(b^2)$ cells in general, and eve
 
 ## The table as starting point
 
-I am calling this object "the collision periodic table" because the name fits. The chemical periodic table organizes a finite collection of elements by an internal symmetry, and what falls out is a predictive structure for chemistry. The collision table organizes a finite collection of integers by the antisymmetric pair structure, and I suspect that what falls out will be a predictive structure for something deeper. I do not yet know what. But forty integers, all small, all forced by one symmetry, all determined by the last two digits of a prime, feels like a foundation, not a dead end.
+I am calling this object "the collision periodic table" because the name fits. The chemical periodic table organizes a finite collection of elements by an internal symmetry, and what falls out is a predictive structure for chemistry. The collision table organizes a finite collection of integers by the antisymmetric pair structure, and I suspect that what falls out will be a predictive structure for something deeper. I do not yet know what. But forty integers, all small, all forced by one symmetry, all determined by the last two digits of a prime, has the character of a foundation.
 
 The table is where the centered collision sum gets its data. The convergence at $s = 1$ that [the centered collision sum](https://alexpetty.com/the-centered-collision-sum/) proved is a statement about these forty integers, summed over primes. Whatever the collision invariant turns out to encode about primes, it will have to read these forty integers as its input.
 
 .:.
-
 ## A note from 2026
 
 *April 2026*

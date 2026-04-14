@@ -126,11 +126,11 @@ The breathing analogy is the part of this post that I keep returning to. The int
 
 *April 2026*
 
-The palindromic oscillation here is the complement map. The outward path and the inward path are $k$ and $m - k$, two residues that sum to the modulus, walking in opposite directions through the same range. I did not have those words in 2010, but the structure I was drawing was the same one that later produced the antisymmetry $F(a) + F(m - a) = 0$ in the [polarity field](https://alexpetty.com/the-polarity-field/).
+The palindromic oscillation here is the complement map. The outward path and the inward path are $k$ and $m - k$, two residues that sum to the modulus, walking in opposite directions through the same range. I did not have those words in 2010, but the structure I was drawing was the same one that later produced the antisymmetry $F(a) + F(m - a) = 0$ in the polarity field.
 
 The breathing is more precise than I realized. The polarity field cancels in the first moment across primes. The positive and negative contributions wash out. But it persists in the second moment, where the amplitude is constant. Expansion and contraction that never settles and never escapes. That is what these spirals are showing. The field breathes because complement pairs force cancellation in the sum while preserving energy in the variance.
 
-The self-similarity at every magnification pointed toward something I could not have anticipated. The [sawtooth identity](https://alexpetty.com/the-polarity-field/) holds at every base and every prime, and the structure it produces is the same at every scale because the digit function $\delta(r) = \lfloor br/p \rfloor$ is scale-invariant by construction. The nested spirals in these diagrams are the visual trace of that invariance.
+The self-similarity at every magnification pointed toward something I could not have anticipated. The the sawtooth identity holds at every base and every prime, and the structure it produces is the same at every scale because the digit function $\delta(r) = \lfloor br/p \rfloor$ is scale-invariant by construction. The nested spirals in these diagrams are the visual trace of that invariance.
 
 The primes tracking certain arms of the spiral and avoiding others is the collision periodic table in embryonic form. Each arm of the spiral corresponds to a residue class, and the density of primes along each arm is governed by the collision invariant $S(p)$ assigned to that class. The non-uniform distribution I noticed here became the central object of [the alignment limit for all primes](https://alexpetty.com/the-alignment-limit-for-all-primes/) and the work that followed it.
 

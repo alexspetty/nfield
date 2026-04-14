@@ -6,9 +6,9 @@ I added up the first thousand. Still negative, and larger.
 
 I added up the first ten thousand. Larger still.
 
-The deviations were not cancelling. They were accumulating, slowly but steadily, in the negative direction, with no sign of turning around. The more primes I added, the further the total drifted from zero.
+The deviations were not cancelling. They were accumulating, slowly but steadily, in the negative direction. The more primes I added, the further the total drifted from zero.
 
-This was unexpected. Each prime has a [collision count](https://alexpetty.com/silent-primes/), the number of digit positions where its repetend matches a shifted copy of itself. That count sits close to its expected value of roughly $p/10$. The difference between the actual count and the expected value is a small signed number, sometimes positive, sometimes negative, sometimes zero. Add up a thousand of these small differences and you would expect the positives to cancel the negatives. The total should hover near zero. That is what random fluctuations do.
+Each prime has a [collision count](https://alexpetty.com/silent-primes/), the number of digit positions where its repetend matches a shifted copy of itself. That count sits close to its expected value of roughly $p/10$. The difference between the actual count and the expected value is a small signed number, sometimes positive, sometimes negative, sometimes zero. Add up a thousand of these small differences and you would expect the positives to cancel the negatives. The total should hover near zero. That is what random fluctuations do.
 
 These fluctuations were not doing it. The sum was drifting, and the drift had a shape.
 
@@ -62,7 +62,9 @@ last digit     mean deviation
     9              -0.12
 ```
 
-All four are negative. That is why the sum drifts downward, every family contributes negatively. But the biases are not the same. Primes ending in $1$ pull the sum down the hardest ($-1.70$). Primes ending in $9$ barely pull at all ($-0.12$). The drift has a family structure.
+All four are negative. That is why the sum drifts downward. But the biases are not the same.
+
+![Per-family collision bias](https://alexpetty.com/content/images/2026/04/collision_family_biases.png)
 
 And then a number I had not expected to see again.
 
@@ -74,7 +76,7 @@ The same $2/3$ that appeared in [the golden ratio selects prime three](https://a
 
 I did not put it there. I did not expect it. The digit function computed it, and the golden ratio's constant was sitting inside the answer.
 
-## The centered sum converges
+## The centering
 
 So the sum drifts. Here it is again, all four cutoffs, growing and not stopping:
 
@@ -101,6 +103,8 @@ primes     s = 1.5     s = 1.2     s = 1.0     s = 0.9     s = 0.5
 ```
 
 Look at the columns. At $s = 1.5$ and $s = 1.2$, the values stabilize. The sum converges. At $s = 1.0$, the values drift slowly (the Mertens rate). At $s = 0.9$ and $s = 0.5$, the values run away. The boundary between *settling down* and *running away* sits at exactly $s = 1$.
+
+![The collision fluctuation sum at three exponents](https://alexpetty.com/content/images/2026/04/collision_fluctuation_boundary.png)
 
 Now look at the per-family biases one more time:
 
@@ -132,30 +136,11 @@ Reading across each row. Start with the raw deviation (the prime's collision cou
 
 The centered deviations are smaller. Some are positive, some are negative, some are near zero. They no longer all pull in the same direction. That is the difference. The raw deviations are systematically negative (every family has a negative bias). The centered deviations are mixed.
 
-I ran the centered sum, using centered deviations instead of raw ones, across all primes up to ten million, and watched.
+That immediately suggests the next move. If the entire Mertens drift is being carried by four predictable family-level constants, then perhaps the right object is not the raw fluctuation sum but the centered one: subtract the family bias first, then sum only what remains.
 
-The sum stopped drifting.
+This paper does not prove that the centered sum converges. It only isolates the structure that makes centering natural. The raw sum drifts because every family has a negative bias. Once that fact is on the table, the next question is unavoidable: if you remove the family bias, does the remaining fluctuation cancel?
 
-I ran it further. Past ten million. Past fifty million. The centered sum stayed where it was. It bounced around, the way any finite sum does when you keep adding small terms, but it did not grow. It did not drift. It sat near a finite value and held.
-
-The raw sum was still climbing. At the same cutoffs, using the same primes, the raw sum was still drifting downward at the Mertens rate, still growing like $\log \log x$, still refusing to settle. I was watching two sums, computed from the same data, one diverging and one converging, and the only difference between them was four numbers from the bias table.
-
-Four numbers. That was all that separated convergence from divergence. Remove the four per-family biases and the sum converges. Leave them in and it diverges. The entire Mertens drift, the entire downward accumulation I had been watching since the first hundred primes, was living inside four predictable constants. Everything else, all the per-prime wobble, all the individual deviations that could not be predicted from the last digit alone, cancelled across the population of primes. The positives and the negatives destroyed each other, and the total stayed finite.
-
-I need to tell you what this reminds me of, because the resemblance is not casual.
-
-There is a theorem in analytic number theory that every working mathematician knows. It was proved at the end of the nineteenth century, independently by Hadamard and de la Vallée Poussin, and it says that the number of primes up to $x$ is approximately $x / \log x$. This is the *prime number theorem*. The approximation is not exact. There is an error term, the difference between the actual count and the smooth prediction. But the error does not grow as fast as the count itself. The deviation of the prime count from its smooth prediction converges.
-
-That convergence *is* the prime number theorem. Not the approximation formula. The convergence. The fact that the primes, despite looking random in their spacing, cancel their counting fluctuations across the population. The positives and the negatives in the error term wash each other out, and the total stays bounded. The convergence happens at the exponent $s = 1$, the edge of the critical strip.
-
-Now read the last few paragraphs of this paper one more time.
-
-The centered collision sum converges at $s = 1$. The positives and the negatives in the centered deviations wash each other out, and the total stays bounded. The convergence happens at the exponent $s = 1$.
-
-Same exponent. Same boundary. Same structural shape. The prime number theorem says the primes cancel their counting fluctuations at $s = 1$. The centered collision sum says the collision count cancels its per-prime fluctuations at $s = 1$. Two different quantities, two different sums, built from two completely different definitions. One boundary.
-
-I do not know yet whether the two convergences are governed by the same mechanism. The prime number theorem's convergence comes from the zeros of the Riemann zeta function. Whether the collision sum's convergence comes from the zeros of a related function is the question I want to take up next. But the fact that both sums converge at the same exponent, the fact that the boundary between convergence and divergence is the same number in both cases, is not something I can set aside. The digit function appears to know where the prime number theorem lives. It converges at the same address.
-
+That is the question the later centered papers take up. From the point of view of this note, the important thing is more basic. The drift is not random noise. It is organized. It lives in four class-specific constants, and once you see that, the divergence at $s = 1$ stops looking mysterious and starts looking removable.
 ## A note from 2026
 
 *April 2026*

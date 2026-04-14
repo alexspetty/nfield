@@ -120,7 +120,6 @@ But phi is the root of the simplest nontrivial polynomial over the integers. It 
 What I did not expect was for the connection to be algebraic and exact. Not phi appearing in an approximation or a limit. Phi's minimal polynomial dividing a cubic, and the remainder naming a specific prime. I was not looking for any of it. I was looking at digit patterns, and the digit patterns looked back.
 
 ---
-
 ## A note from 2026
 
 *April 2026*
@@ -192,4 +191,3 @@ Paper: [Why the Golden Ratio Selects the Prime Three](https://github.com/alexspe
 *Alexander S. Petty*
 January 2020 (updated April 2026)
 .:.
-

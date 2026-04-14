@@ -1,6 +1,6 @@
 # The Collision Transform
 
-Take the [collision periodic table](https://alexpetty.com/the-collision-periodic-table/). Forty signed integers in base $10$, computed from long division. To the eye they look irregular. Positives and negatives scattered across the cells, no obvious pattern.
+Take the [collision periodic table](https://alexpetty.com/the-collision-periodic-table/). Forty signed integers in base 10, computed from long division. To the eye they look irregular. Positives and negatives scattered across the cells, no obvious pattern.
 
 This paper takes the table apart with one tool, the Fourier transform, and finds three sharp symmetries hiding inside it. All three come from a single observation about the table itself. Complement pairs sum to $-1$.
 

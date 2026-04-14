@@ -1,18 +1,10 @@
 # The Spectral Repulsion
 
-I knew the collision invariant and the prime distribution were avoiding each other in the data. [The double transversality](https://alexpetty.com/the-double-transversality/) showed it qualitatively, the way you can see two magnets pushing apart without measuring the force. But "they avoid each other" is not a number. I wanted the number.
+I knew the collision invariant and the prime distribution were avoiding each other in the data. [The double transversality](https://alexpetty.com/the-double-transversality/) showed it qualitatively. But "they avoid each other" is not a number. I wanted the number.
 
-Three questions.
+The questions: how much avoidance is there, how stable is it across the tested bases, and does it have consequences beyond the collision transform?
 
-1. How much avoidance is there?
-2. Is it the same at every base?
-3. Does it have consequences beyond the collision transform, for other problems about primes?
-
-Three answers.
-
-1. About forty percent of the random-relabeling overlap is missing in the tested bases.
-2. The ratio is strikingly stable across the tested bases.
-3. Yes, it has consequences in the computations.
+In the tested bases, about forty percent of the random-relabeling overlap is missing. The ratio is stable across bases. And yes, it has consequences in the computations.
 
 ## Measuring the gap
 
@@ -50,7 +42,7 @@ I call that missing forty percent the spectral repulsion.
 
 The repulsion ratio is remarkably stable. From $3$ channels to $666$ channels, across eleven bases, it hovers near $0.6$. The values range from $0.54$ to $0.79$, but the central tendency does not drift. It does not approach $1$ (the random-relabeling baseline) as the base grows. It does not collapse toward $0$ (perfect orthogonality). It sits near $0.6$ and holds.
 
-That stability is the finding. A number that depends strongly on the base would be a curiosity. A number that stays this stable across the tested bases looks structural. It suggests the collision transform has a fixed relationship to the prime distribution, a fixed angle of avoidance, that does not vary much with the digit system. The base changes the characters, the modulus, the number of channels, everything about the setup. The fraction of overlap that survives changes surprisingly little.
+That stability is the finding. A number that depends strongly on the base would be a curiosity. A number that stays this stable across the tested bases suggests a real underlying pattern. It suggests the collision transform has a fairly stable relationship to the prime distribution across the tested digit systems. The base changes the characters, the modulus, the number of channels, everything about the setup. The fraction of overlap that survives changes surprisingly little.
 
 I do not know what $0.6$ is. Whether it has a closed form or is simply an empirical constant is an open question. What I know is that it is stable everywhere I can measure it, and a number that stable usually has a reason.
 
@@ -74,7 +66,9 @@ base    channels    collision support    prime support
 
 At base $29$, the collision invariant puts most of its weight on $64$ channels out of $406$. The prime distribution fills $295$ of them. As the base grows, the collision spectrum stays narrow while the prime spectrum expands. The spotlight does not widen. The floodlight does. The gap between them grows.
 
-That is the geometry behind the $0.6$. The collision invariant lives in a small corner of the channel space. The prime distribution fills most of the room. They overlap where the corner meets the room, and that overlap is about sixty percent of the random-relabeling baseline. The forty percent that is missing is not being destroyed by some later mechanism. It was never there in the first place. The collision invariant was born in a corner. The primes were born everywhere else.
+![Collision spectrum concentrates on fewer channels](https://alexpetty.com/content/images/2026/04/post21_effective_support-1.png)
+
+That is the geometry behind the $0.6$. In the tested bases, the collision invariant lives in a small corner of the channel space. The prime distribution fills most of the room. They overlap where the corner meets the room, and that overlap is about sixty percent of the random-relabeling baseline. The forty percent that is missing does not appear to be destroyed by some later mechanism. In these computations, it was never there in the first place.
 
 ## Multiplication only
 
@@ -94,7 +88,9 @@ base    mean H/R     std H/R
 
 Near zero. At every tested base. The collision invariant appears largely blind to the additive structure of primes in this experiment. It sees how primes interact with the digit function through multiplication. It has little visible purchase on how primes combine through addition. The spectral repulsion is consistent with that separation.
 
-This is a characterization of the instrument suggested by the data. The collision invariant is a purely multiplicative object. The additive landscape is nearly invisible to it in the tested range, not because the landscape is empty, but because the instrument is not built to detect it. An optical telescope cannot pick up radio waves. The blindness is in the instrument, not in the sky.
+![Multiplicative signal strong, additive signal near zero](https://alexpetty.com/content/images/2026/04/post21_additive_blindness-1.png)
+
+This is a characterization of the instrument suggested by the data. The collision invariant is built from multiplication, and the additive landscape is nearly invisible to it in the tested range. In these computations it measures multiplicative structure far more clearly than additive correlations among primes.
 
 ## The reflection underneath
 
@@ -105,7 +101,6 @@ If one prime has a non-negative collision deviation, its reflection partner must
 The obstruction is partial. It covers $1/m$ of all even numbers, not all of them. But the principle does not care about coverage. The reflection is always there, at every scale, at every modulus, pairing every unit with its complement and forcing their deviations to sum to $-1$. The collision invariant was forged by this symmetry. The partial obstruction does not explain the full additive blindness observed in the data, but it shows that the reflection is working against additive concentration at a structural level.
 
 One identity. The neutrality, the convergence, the partial Goldbach obstruction. The reflection keeps appearing at different levels of the same structure. I did not design this. I followed the digit function where it led, and the same room kept opening up.
-
 ## A note from 2026
 
 *April 2026*
@@ -122,7 +117,7 @@ The spotlight-and-floodlight picture (collision concentrates, primes spread) bec
 
 ## Try it yourself
 
-**Measure the repulsion.** Compute the spectral overlap at each prime base. The last column should land near $0.6$ throughout the tested range, from $3$ channels to $666$. The avoidance ratio is strikingly stable across the tested bases.
+**Measure the repulsion.** Compute the spectral overlap at each prime base. The last column should land near $0.6$ throughout the tested range, from $3$ channels to $666$. The avoidance ratio is stable across the tested bases.
 
 ```
 $ ./nfield spectral_overlap --lag 1 --bmax 37

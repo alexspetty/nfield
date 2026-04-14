@@ -27,6 +27,8 @@ last digit     class mean     computed (664K primes)
 
 The computed values, running across $664{,}574$ primes, match the exact rational values to three significant figures. The grand mean across all four classes is exactly $-1/2$. The complementary pairs sum to exactly $-1$: $(-17/10) + (7/10) = -1$, $(-9/10) + (-1/10) = -1$. Every pair, every base.
 
+![Twenty antisymmetric pairs](https://alexpetty.com/content/images/2026/04/class_means_antisymmetry.png)
+
 For prime bases, evaluating the table reveals something even more striking. The class means are evenly spaced. In base $3$ they are $-2/3$ and $-1/3$. In base $7$ they run from $-6/7$ to $-1/7$ in steps of $1/7$. The pattern is consistent with the formula $\overline{S}_R = (R+1)/b - 1$, verified by direct computation at every prime base I have tested. Whether a structural proof of this formula exists is an open question. The even spacing is observed, not explained.
 
 ## The proof
@@ -43,8 +45,6 @@ The details live in the [paper accompanying this writing](https://github.com/ale
 
 ## Watching it converge
 
-Here is what it looks like:
-
 ```
 primes        raw sum       centered sum
 ------        --------      ------------
@@ -55,6 +55,8 @@ primes        raw sum       centered sum
 ```
 
 The raw sum drifts. The centered sum sits at $0.023$ and does not move. The entire Mertens drift lived inside four rational numbers, the class means. Subtract them and the drift vanishes.
+
+![Centering removes the drift](https://alexpetty.com/content/images/2026/04/centered_vs_raw.png)
 
 The stability holds across every base and lag I have tested:
 
@@ -72,7 +74,6 @@ base    lag    raw sum     centered sum
 Six tests. Four bases. Three lags. Every raw sum drifts. Every centered sum is stable. The convergence is not an artifact of base ten.
 
 The class mean $-2/3$ in base $3$ at $R = 0$ is the same constant the [golden ratio selected](https://alexpetty.com/why-the-golden-ratio-selects-the-prime-three/) as the alignment limit of the prime $3$, and the same constant that appeared as a [per-family collision bias](https://alexpetty.com/the-collision-fluctuation-sum/) in base $10$. The centering that makes the collision sum converge is the centering that removes it.
-
 ## A note from 2026
 
 *April 2026*

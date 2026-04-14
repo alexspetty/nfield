@@ -1,10 +1,10 @@
 # The Collision Transform and the Critical Strip
 
-The [centered collision sum](https://alexpetty.com/the-centered-collision-sum/) converges at $s = 1$, the boundary where the prime number theorem lives. I proved that by decomposing the sum over Dirichlet characters and using Mertens' theorem to close the convergence. The proof was clean and short.
+The [centered collision sum](https://alexpetty.com/the-centered-collision-sum/) converges at s = 1, the boundary where the prime number theorem lives. I proved that by decomposing the sum over Dirichlet characters and using Mertens' theorem to close the convergence. The proof was clean and short.
 
 But $s = 1$ is the edge. Below it lies the critical strip, the region between $s = 0$ and $s = 1$ where the zeros of $L$-functions live, and where the Riemann Hypothesis makes its claim. The natural thing to do, once you have convergence at the edge, is to push the sum downward and see how far it survives.
 
-I pushed it. It survived further than I expected.
+![Edge and depth](https://alexpetty.com/content/images/2026/04/post17_edge_and_depth.png)
 
 ## Below the edge
 
@@ -44,21 +44,21 @@ Drift near zero means the sum is converging. Drift growing means it is not.
 
 Look at the base-$3$ column. The drift is $0.003$ at $s = 0.5$. Essentially zero. The centered collision sum in base $3$ appears to converge all the way down to $s = 1/2$.
 
-$s = 1/2$ is not just any number. It is the *critical line*, the vertical line in the complex plane where the Riemann Hypothesis says all the nontrivial zeros of $L$-functions sit. If the centered collision sum converges at $s = 1/2$, it is reaching the place where the deepest conjecture in mathematics makes its prediction.
+$s = 1/2$ is the critical line, the vertical line in the complex plane where the Riemann Hypothesis places the nontrivial zeros of $L$-functions. If the centered collision sum converges at $s = 1/2$, it is reaching the place where the deepest conjecture in mathematics makes its prediction.
 
 The other bases do not reach as far. Base $5$ is stable to $s = 0.7$ but shows drift at $s = 0.6$. Bases $7$ and $10$ are similar. Base $12$ starts drifting at $s = 0.7$. The depth varies with the base.
 
-## The base as instrument
+![Penetration below s = 1](https://alexpetty.com/content/images/2026/04/penetration_depth.png)
 
-This is worth pausing on.
+## The base as instrument
 
 Nobody thinks the base matters. We use base $10$ because we have ten fingers. Computers use base $2$ because switches have two states. Programmers use base $16$ because each hex digit maps to exactly four bits, turning a byte into two readable symbols instead of eight. The Babylonians chose base $60$ so that halves, thirds, quarters, fifths, sixths, tenths, and twelfths all come out clean, turning division into something you could do without writing anything down. In every case the base was picked to fit the job, and the mathematics is supposed to be the same regardless. The base is bookkeeping. It is the frame, not the painting.
 
-Except here it is part of the painting.
+In the collision transform, the base affects the depth of convergence.
 
 Base $3$ has six Dirichlet characters in its collision transform. Base $12$ has forty-eight. That is not a notational difference. Each character contributes its own sum over primes, and each of those sums needs enough primes to settle down before you can see whether the whole thing converges. Six sums settle faster than forty-eight. That is why base $3$ reaches $s = 0.5$ in my data and base $12$ reaches only $s = 0.7$. The base sets how finely the transform can resolve the structure underneath, the way the aperture of a telescope determines how much light you need before you can see a faint star. A small base is a wide aperture. A large base is a narrow one. Same star. Different exposure time.
 
-And that last sentence is important, because the $L$-functions do not know what base you are working in. Their zeros sit where they sit. The base does not move the mathematics. It moves the threshold of visibility. I believe the structure is the same in every base, and small bases reach the critical line with fewer primes because they have less noise to burn through before the signal comes clear.
+And that last sentence is important, because the $L$-functions do not know what base you are working in. Their zeros sit where they sit. The base does not change the structure; it changes the computational threshold at which the structure becomes visible. I believe the structure is the same in every base, and small bases reach the critical line with fewer primes because they have less noise to burn through before the signal comes clear.
 
 ## Under GRH
 
@@ -70,17 +70,13 @@ That is a conditional statement, not a theorem. But the data in the tables above
 
 **Conjecture.** *For every base $b$ and lag $\ell$, the penetration depth of the centered collision sum is $\sigma_0 = 1/2$. The collision transform reaches the critical line in every base.*
 
-## Removing the polarity kills the depth
-
-One more discovery, and it is the one that surprised me most.
+## Removing the mod-3 structure destroys convergence below $s = 1$
 
 The centered collision deviation has a mod-$3$ structure. Primes congruent to $1 \pmod 3$ carry a different average centered deviation than primes congruent to $2 \pmod 3$. This asymmetry is subtle but persistent, and it is invariant under reweighting of bases.
 
 I tried removing it. I subtracted the mod-$3$ bias on top of the spectral-class centering, producing a "doubly centered" sum $F^{\circ\circ}$.
 
-The doubly centered sum still converges at $s = 1$. The antisymmetry survives, and the convergence proof still works.
-
-But it does not converge below $s = 1$. At all.
+At $s = 1$, the tested doubly centered sum remains bounded. But in the computations below $s = 1$, it grows rapidly.
 
 In the table below, $F^\circ$ is the centered sum: the raw collision deviations with the per-family bias removed. $F^{\circ\circ}$ is the doubly centered sum: the same thing with the mod-$3$ bias removed on top of that. One correction deep, and two corrections deep.
 
@@ -92,15 +88,18 @@ In the table below, $F^\circ$ is the centered sum: the raw collision deviations 
  0.5          0.46              111
 ```
 
-The centered sum $F^\circ$ stays bounded at $s = 0.5$. The doubly centered sum $F^{\circ\circ}$ explodes. In the tested data, the mod-$3$ structure appears to matter for penetration below $s = 1$, even though it is not needed for convergence at $s = 1$ itself.
+The centered sum $F^\circ$ stays bounded at $s = 0.5$. The doubly centered sum $F^{\circ\circ}$ grows rapidly.
 
-This is an observed feature of the computations, not a theorem. But it suggests that the penetration of the collision transform into the critical strip depends on an interaction between the bilateral symmetry and the mod-$3$ distribution of collision coefficients. If that suggestion holds up, the depth of the instrument is governed by both structures together.
+![Removing the mod-3 structure](https://alexpetty.com/content/images/2026/04/post17_mod3_removal.png)
 
+In the tested data, the mod-$3$ structure appears relevant to penetration below $s = 1$, even though it does not appear to control the same $s = 1$ cancellation.
+
+This is an observed feature of the computations, not a theorem. But it suggests that the penetration of the collision transform into the critical strip depends on an interaction between the bilateral symmetry and the mod-$3$ distribution of collision coefficients. If that suggestion holds up, the depth of penetration is governed by both structures together.
 ## A note from 2026
 
 *April 2026*
 
-This paper is where the collision program first made contact with the critical strip, and looking back, the contact turned out to be real.
+The contact with the critical strip turned out to be real.
 
 The conditional penetration result (convergence below $s = 1$ given a zero-free hypothesis) became a central theorem of [The Collision Transform](https://arxiv.org/abs/2604.00047) preprint. The odd-character restriction (even characters vanish from the centered transform) became the antisymmetry theorem in the same preprint. Both results from this research note survived into the formal publication essentially unchanged.
 

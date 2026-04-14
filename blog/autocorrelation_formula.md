@@ -1,140 +1,120 @@
 # The Autocorrelation Formula
 
-There was one place in the chain where the gears didn't quite mesh.
+One quantity in the spectral chain resisted a closed form longer than the others.
 
-Take $1/7$ in base $10$. The repeating loop is $142857$. Slide it by one and lay the slid copy under the original.
+Take the repeating block of $1/7$ in base $10$:
 
+```text
+142857
 ```
+
+Shift it by one place and compare the shifted copy with the original:
+
+```text
 1 4 2 8 5 7
 4 2 8 5 7 1
 ```
 
-Zero matches. Slide by two, three, four, five. Same answer every time.
+There are no matches. Shift by two, three, four, or five places, and the answer is still zero. For $p = 7$, the repeating block never agrees with a nontrivial cyclic shift of itself.
 
-```
-shift:    1  2  3  4  5
-matches:  0  0  0  0  0
-```
+That behavior is not typical. At $p = 29$, some shifts produce matches. At $p = 97$, the profile is much richer.
 
-Five shifts, five zeros. The loop of $1/7$ refuses to line up with any shifted copy of itself at any position. That row of zeros is a fact about the prime $7$, and it does not generalize. At other primes the row is not all zeros. The loop of $1/29$ matches itself at three or four positions out of twenty-eight at certain shifts. The loop of $1/41$ has its own pattern. Each prime has its own profile of self-agreement under shifting.
+![Autocorrelation profiles](https://alexpetty.com/content/images/2026/04/autocorrelation_profile.png)
 
-That profile is the load-bearing data of an entire chain of formulas. Run it through a discrete Fourier transform and you get the eigenvalues of the prime, the harmonic content of its field of fractions $1/p, 2/p, 3/p, \ldots$ at a depth that the prime's other invariants do not reach.
+The number of matches at shift $\ell$ is the **autocorrelation** $R(\ell)$. It is one of the key objects in the spectral side of the program, because the eigenvalues of the cross-alignment matrix are the discrete Fourier transform of this profile.
 
-The chain from the self-match counts to the eigenvalues had every step in closed form. Every step except one. The counts themselves had no formula. To get them, I had to write out the loop, slide it, and compare, position by position. The whole chain was arithmetic except for that one place, and that one place was patience. It was the gear that didn't mesh.
+The problem was simple to state and awkward to compute. The definition of $R(\ell)$ comes straight from digit comparison, but that means computing it directly requires writing out the repetend and checking every shift by hand or by brute force.
 
-This paper finds the missing formula. The self-match counts come out of the structure of the prime alone, without ever doing the long division.
+Here that quantity is expressed directly in terms of the prime's harmonic data.
 
-## What loudness cannot see
+## The limit of spectral power alone
 
-Before this paper, I already had a way to measure how loud the prime is at each harmonic. [The spectral power paper](https://alexpetty.com/the-spectral-power-of-the-digit-function/) gave me a function, computable from a few elementary things about the prime, that records the loudness profile across all frequencies. I had hoped that profile would be enough to compute the self-match counts.
+[The Spectral Power of the Digit Function](https://alexpetty.com/the-spectral-power-of-the-digit-function/) already gave a closed formula for the magnitude profile of the digit partition. That was enough to recover the bin-sum and to characterize digit-partitioning primes, but it was not enough to recover $R(\ell)$.
 
-It is not. The reason is the same reason loudness alone cannot tell you whether two waves cancel when you add them up.
+The reason is the same as in ordinary wave interference. Magnitude tells you how large a frequency component is. It does not tell you how two frequency components line up when they are added. For that, phase matters.
 
-Imagine two waves of identical loudness. One peaks at the start of each second. The other peaks in the middle. Their loudnesses are the same. But if you lay them on top of each other, the first wave's peaks fall on the second wave's troughs, and the sum is zero. The waves cancel each other and disappear. Now imagine instead that the second wave peaks at the start of each second too, in step with the first. The waves stack instead of canceling, and the sum is twice as loud. Same loudness in both cases, completely different result.
+Autocorrelation depends on exactly that missing phase information. Two frequencies can have the same magnitude and still reinforce or cancel in different ways depending on how they are aligned.
 
-The difference between cancellation and reinforcement is timing. Loudness alone cannot see timing. To predict cancellation or reinforcement, you need a richer measurement that records *when* the peaks fall, not just how high they reach.
+So a one-variable magnitude function is not enough. A two-variable object is needed.
 
-The self-match counts of a prime have exactly the same structure. They depend on whether the prime's harmonic content is in step or out of step at related frequencies. The loudness profile tells me how strong each frequency is. It does not tell me when each frequency peaks. To recover the self-match counts, I needed an object one rung up from loudness, an object that kept the timing as well as the loudness.
+## The cross-spectral table
 
-## One step richer
+The repair is to keep track of pairs of frequencies instead of single frequencies.
 
-The fix turned out to be mechanical, and the result was one of those upgrades that feels obvious once you have it in front of you.
+For each pair $(k,k')$, the paper defines a table $G(k,k')$ built from the Fourier coefficients of the digit bins. The diagonal of this table recovers the spectral power. The off-diagonal entries record the phase relations that the spectral power discards.
 
-Instead of recording one number per frequency, record one number per *pair* of frequencies. The result is a two-dimensional table. The rows and columns are indexed by frequencies. Each entry of the table holds the joint timing-and-loudness information of the prime at that pair of frequencies.
+That is the right level of information for autocorrelation.
 
-I will call the table $G$ once, here, so the formula at the end has a name to point at. You do not need to remember the letter. Stay on the surface with me. The diagonal of the table is the loudness profile that I already knew. The off-diagonal entries are new. They are the timing information that the loudness profile threw away. The table has more in it than the loudness alone, exactly enough more to count self-matches.
+One fact about this table drives the whole argument:
 
-I want to claim that the self-match count at any given shift is a sum of entries from the table along a particular path. Different shifts trace different paths through the same table. To prove the claim, I need one small fact about the table, and the fact is so quiet that you could pass over it the first time you see it without noticing.
+$$\sum_{k,k'} G(k,k') = 0.$$
 
-## A small fact that does big work
+At first sight this looks incidental. It is not. It is the cancellation identity that turns a long expansion into a usable formula.
 
-The fact is this. **If you add up every entry in the table, the result is exactly zero.**
+## The formula
 
-The reason is obvious once you understand it. Each entry of the table is built out of pieces, and each piece is a sum of waves spaced evenly around a circle. Evenly spaced waves around a circle always cancel. Every piece vanishes for that one reason, and the whole table vanishes in the aggregate.
+The starting point is the direct definition of $R(\ell)$: count the residues whose digit agrees with the digit of their shifted partner.
 
-It does not look like a useful fact. It looks like a footnote. Hold onto it anyway.
+The agreement test can be written in terms of the digit bins. Each bin indicator can then be expanded in additive characters on $\mathbf{Z}/p\mathbf{Z}$. After that substitution, the residue sum collapses and the result becomes a sum over pairs of frequencies weighted by the cross-spectral table $G$.
 
-## The collapse
+At that stage there are two classes of terms:
 
-Here is where everything has been heading.
+- terms where the combined frequency is zero
+- terms where it is not
 
-Start with what the count actually is. At a given shift, the self-match count asks how many residues have the same digit at their original position and at their shifted position. Write that as one big sum, one term per residue, where the term is a $1$ when the two digits agree and a $0$ when they do not.
+The standard character sum over nonzero residues takes two values in those two cases, so the formula splits into two pieces. The cancellation identity
 
-The first move is to break the agreement test open. Two digits agree exactly when there is some bin they both land in. So the agreement test becomes a sum over bins of a paired bin check, did this residue land in this bin, and did its shifted partner land in the same bin. The count is now a double sum: one layer over residues, one layer over bins.
+$$\sum_{k,k'} G(k,k') = 0$$
 
-The second move turns counting into harmonics. Every bin indicator, the function that says "yes you're in this bin" or "no you're not", can be rewritten as a sum of waves on the circle of $p$ residues. Substitute that rewriting into both bin checks. The sum over residues folds up into a wave sum, and what is left is a double sum over pairs of frequencies, with each pair weighted by an entry of the table from before. In schematic form,
+then forces those two pieces to collapse into one.
 
-$$R(\ell) = \sum_{\text{pairs of frequencies}} (\text{table entry}) \cdot (\text{wave sum at the combined frequency}).$$
+What remains is the autocorrelation formula:
 
-The wave sum is the small object we already met. It takes one of two values. If the combined frequency is zero on the circle of $p$ residues, the waves all line up and the sum is the large positive number $p - 1$. Otherwise the waves cancel and the sum is the small negative number $-1$. Two values, exactly as advertised.
+$$R(\ell) = \frac{1}{p}\sum_{k=0}^{p-1} G\!\left(k,\,-k\,b^{-\ell}\!\!\!\pmod p\right).$$
 
-So every pair of frequencies pays one of two prices, and the count splits cleanly into two pieces,
+So $R(\ell)$ is no longer defined by comparing digits in a loop. It is computed by walking one orbit path through the table $G$ and summing what lies on that path.
 
-$$R(\ell) = (p - 1) \cdot (\text{sum of table entries on the diagonal}) - (\text{sum of table entries off the diagonal}).$$
-
-The "diagonal" here is the set of pairs whose combined frequency is zero, the path the shift carves out across the table. The "off-diagonal" is everything else. Two unknown sums, one equation. It looks bad.
-
-And here, finally, the small fact walks on stage. The whole table sums to zero. Every pair lives in exactly one of the two camps. So the two camp sums must be equal and opposite. Whatever the off-diagonal sum is, it is exactly the negative of the on-diagonal sum.
-
-That single observation eats half the formula.
-
-Substitute. The minus sign in front of the off-diagonal sum turns into a plus. The two camps merge into one. The whole expression compresses to a single walk along the diagonal,
-
-$$R(\ell) = \frac{1}{p} \cdot (\text{sum of table entries along the diagonal the shift carves out}).$$
-
-That is the autocorrelation formula. The self-match count at any shift is one walk along one diagonal of the table, divided by the prime. The dense expansion, the two warring camps, the long sum over pairs, all of it has compressed into one walk along one path.
-
-The first time you watch this happen it looks like a trick. Two completely unknown sums, locked together by a single throwaway identity, fold into each other and out pops a closed formula. After sitting with it for a while the trick starts to feel like something else. The two camps are equal and opposite not because we are lucky but because the prime has exactly $p$ residues, and the harmonics over $p$ residues are forced to balance around the circle. The collapse is not a coincidence I exploited. It is the prime telling me what shape it is. I am just transcribing.
+That is the structural step this paper contributes.
 
 ## Watching it work at $p = 7$
 
-Time to go back to $p = 7$ and watch the formula reproduce the string of zeros from the opening, step by step, with no hand waving.
+At $p = 7$, every occupied digit bin has size one. The table $G$ takes only two values: $6$ on the diagonal (where $k = k'$) and $-1$ everywhere else. A $7 \times 7$ grid, bright along the diagonal, dark in every other cell.
 
-In base $10$, the loop of $1/7$ is
+![The table at p = 7 with shift-1 path](https://alexpetty.com/content/images/2026/04/autocorrelation_table_walk.png)
 
-```
-1/7 => 0.|142857|
-```
+The gold circles mark the path for shift 1. Each shift determines its own path through the table: the formula sends frequency $k$ to $k \cdot b^{-1} \bmod p$. Since $10 \equiv 3 \pmod{7}$, shift 1 maps $k$ to $3k \bmod 7$, and the path visits cells $(0,0)$, $(1,3)$, $(2,6)$, $(3,2)$, $(4,5)$, $(5,1)$, $(6,4)$. Seven cells. One of them lands on the diagonal and picks up $6$. The other six land off the diagonal and each picks up $-1$.
 
-Six digits, all different. Each digit shows up exactly once in the loop. So the six bins of the digit function (the groupings of residues that share a digit) are all the same size, one residue apiece. The bins of $7$ in base $10$ are perfectly uniform.
+$$6 + 6(-1) = 0. \qquad R(1) = 0/7 = 0.$$
 
-That uniformity is what makes the table for $p = 7$ so well-behaved. When the bins are all the same size, the table only ever takes two values. Most of its entries are the small negative number $-1$. Seven of them, sitting on one particular line of the table, are the large positive number $6$. Forty-two minus ones and seven sixes. That is the entire table for $p = 7$.
+Shifts 2 through 5 trace different paths through the same table, but each one also hits the diagonal exactly once. Every path sums to zero. The formula reproduces the full row of zeros from the opening without ever writing down the repetend.
 
-Now pick the shift of one position. The diagonal the shift carves out is a walk through seven entries of the table, one entry per frequency. Of those seven entries, exactly one of them falls on the line of $6$s and the other six fall on the field of $-1$s. So the path picks up the values
+This is the point where the chain closes:
 
-```
-6, -1, -1, -1, -1, -1, -1
-```
+- the digit bins determine the Fourier coefficients
+- the Fourier coefficients determine the table $G$
+- the table $G$ determines $R(\ell)$
+- the discrete Fourier transform of $R(\ell)$ gives the eigenvalues
 
-Add them up. $6 + 6 \cdot (-1) = 0$. Divide by $p = 7$. The self-match count at shift one is exactly $0$. The formula has reproduced the first zero from the opening.
-
-Now do it again for shift two. The path is a different walk through the table, picking up a different combination of seven entries. But again exactly one of them lands on the line of $6$s and the other six land on the field of $-1$s. Total: zero. Repeat for three, four, five. Same outcome every time.
-
-```
-shift:     1  2  3  4  5
-path sum:  0  0  0  0  0
-R(shift):  0  0  0  0  0
-```
-
-Five shifts, five walks through the table, five zeros, every one verified by hand against the row of zeros at the top of this paper. I never wrote down the digits of $1/7$ to get them. I never sliced the loop or compared it to a shifted copy. I built the table from the bin sizes, walked the seven entries the shift picked out, and added the numbers. The arithmetic was simpler than the long division would have been.
-
-This is what closing the chain feels like. The bin sizes go in. The table is built. The paths are walked. The self-match counts fall out. The eigenvalues fall out of those. Every step is finite arithmetic. At no point do I have to look at the digits of $1/p$.
+Everything is now explicit.
 
 ## The hole that remains
 
-The argument above works at primes where the base $10$ generates the full multiplicative structure modulo $p$. That technical condition is what makes the cancellation exact. At primes where the base $10$ does not generate the full structure (the multi-coset primes), the same trick fails. The table walks through a smaller world, and the simple cancellation that worked above no longer carries through cleanly.
+The clean formula belongs to the primitive-root case, where the base runs through the full multiplicative orbit modulo $p$. In that setting, the path through $G$ has the right shape and the cancellation identity finishes the job.
 
-The fix needs another layer of harmonic analysis sitting on top of the one used here. That generalization is not in this paper. It is the next problem in the chain, and my current plan is to take it up next. For now, the formula closes the chain at most primes, and I hope that "most" will turn out to be enough to make the rest of what I want to do go through.
+At multi-coset primes, the same expansion can still be written down, but the collapse is no longer so direct. The table is there, the paths are there, but the orbit structure is smaller and the neat one-line reduction no longer follows from the same argument.
 
+So the paper does something precise. It closes the chain in the regime where the Fourier geometry is cleanest, and it identifies exactly what remains to be understood outside that regime.
+
+That is still a substantial change in the state of the subject. Before this paper, autocorrelation was the one place in the chain where brute-force digit comparison was still doing essential work. After this paper, that role is gone in the primitive-root case.
+
+---
 ## A note from 2026
 
 *April 2026*
 
-The cancellation that powers this paper turned out to be the structural ancestor of a move that runs through the entire program. Every time a centered Fourier sum collapses two pieces into one because the trivial-character contribution was killed by a centering identity, the underlying mechanism is the small fact about $G$ from this paper. The collision invariant program at conductor $b^2$ uses an analogous identity to force the trivial coefficient of the collision invariant table to be exactly $-1/2$, and the [collision transform](https://alexpetty.com/the-collision-transform/) builds its Mertens-style cancellation argument on a centering identity that has the same shape as the one used here. Different signal, different group, same move.
+The cancellation identity behind this paper lasted. The same pattern keeps returning: a one-variable invariant sits on the diagonal of a richer two-variable object, and the off-diagonal data is what makes the stronger formula possible. [The Collision Spectrum](https://alexpetty.com/the-collision-spectrum/) has the same flavor. Variance-type quantities are visible on the diagonal, but the real structure lives in the correlations.
 
-The two-variable table $G$ also generalizes. In the [collision spectrum](https://alexpetty.com/the-collision-spectrum/), the collision invariant table at conductor $b^2$ is decomposed over the Dirichlet characters modulo $b^2$, and a two-variable correlation table plays the role of $G$ for that program. A one-variable invariant (the loudness here, the variance there) is always the diagonal of a two-variable invariant, and the off-diagonal always carries the deeper information. Once you have learned to look for the off-diagonal, you start finding it everywhere.
-
-The closing of the chain at this paper, the moment when every arrow becomes explicit, was a small declaration of what kind of program this is. The alignment program is computational at every step. There is no point in the chain where a quantity is defined only through limits or only through existence theorems. Bin sizes are arithmetic. The harmonic pieces are trigonometric. The self-match counts are finite character sums. The eigenvalues are a finite Fourier transform. Everything at this level can be handed to a calculator and verified by hand at small primes. That property survived into every later chapter of the program, and it is what made the eventual leap to $L$-functions tractable. By the time the analytic machinery enters, every quantity it touches has already been built explicitly from below.
+This paper also fixed something methodological. Once the autocorrelation formula was written down, the path from digit bins to eigenvalues became explicit from end to end. That set a standard the collision papers kept. Even when the analytic setting becomes much deeper, the quantities under study are still built from finite arithmetic data that can be checked directly in small cases.
 
 .:.
 
@@ -142,25 +122,21 @@ The closing of the chain at this paper, the moment when every arrow becomes expl
 
 ## Try it yourself
 
-```
+```text
 $ ./nfield autocorrelation 7
   R(0) = 6
   R(1) = R(2) = R(3) = R(4) = R(5) = 0
-  formula matches direct count: yes
 
 $ ./nfield autocorrelation 29
   R(0) = 28
-  R(1)..R(27): values from 0 to 4
-  formula matches direct count: yes
+  nonzero values appear at several shifts
 
-$ ./nfield autocorrelation 41
-  R(0) = 40
-  rich self-match profile, all values verified
+$ ./nfield autocorrelation 97
+  R(0) = 96
+  the self-match profile is visibly structured
 ```
 
-At $p = 7$ the self-match count is the all-zeros pattern that the long-division check predicts. At $p = 29$ the count is small but nonzero at several shifts, and the formula reproduces every value. By $p = 41$ the count has real internal structure, and the eigenvalues that come out of it have the spread you would expect from a prime where the digit bins are crowded.
-
-The thing to notice in the demos is that the verification happens twice. Once by counting digit matches the slow way, by long division and comparison, and once by walking the paths through the table. The two answers agree. Before the formula, only one of those two methods existed. After the formula, the slow way is a check on the fast way, not the only way to know the answer.
+At $p = 7$, the nontrivial shifts all vanish. At $p = 29$, the profile is still sparse but no longer trivial. At $p = 97$, the pattern is dense enough that the underlying harmonic structure is hard to miss.
 
 Code: [github.com/alexspetty/nfield](https://github.com/alexspetty/nfield)
 Paper: [The Autocorrelation Formula](https://github.com/alexspetty/nfield/blob/main/research/autocorrelation_formula.pdf)
