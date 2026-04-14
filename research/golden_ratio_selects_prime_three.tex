@@ -1,0 +1,646 @@
+% ============================================================
+% Why the Golden Ratio Selects the Prime Three
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Why the Golden Ratio Selects the Prime Three}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{January 2020 (revised April 2026)}
+\subjclass[2020]{11A63, 11B83}
+
+\begin{document}
+\begin{abstract}
+For a prime $p$ and a $b$-smooth integer $m$, the alignment
+proportion $\alpha(pm) = (2m{-}1)/(pm{-}1)$ measures the fraction
+of the fractional field $\{k/(pm) : 1 \le k \le pm{-}1\}$ whose
+repetend matches that of $1/(pm)$. The formula's algebraic
+properties are independent of the choice of base.
+
+We prove that $\alpha \ge 1/\varphi$ (the reciprocal of the golden
+ratio) if and only if $m \ge \varphi^{2} = \varphi + 1$, provided
+$p = 3$. We then establish a stronger result. The self-referential
+condition $m^{*}(\tau) = 1/\tau^{2}$ yields a cubic equation that
+admits a root in $(0,1)$ for every prime $p \ge 3$, but that factors
+over $\mathbb{Q}$ only for $p \in \{2, 3, 5\}$. The two non-trivial
+factorizations produce thresholds $1/\varphi$ and $1/\varphi^{2}$,
+both in the golden ratio's number field $\mathbb{Q}(\sqrt{5})$. The
+golden ratio's minimal polynomial $\tau^{2} + \tau - 1$ divides the
+cubic if and only if $p = 3$, with coefficient~$3$ produced by
+polynomial division. For $p \ge 7$, the cubic is irreducible and the
+self-referential threshold is a cubic irrational outside any quadratic
+field.
+
+The concrete setting is decimal arithmetic, where the alignment formula
+describes the coherence of fractional fields $\{k/n : 1 \le k \le
+n{-}1\}$. But the central results, the golden threshold, the
+self-referential characterization, and the algebraic selection of the
+prime~$3$, hold for any positional base $b$ with
+$b \equiv 1 \pmod{3}$ (including base~$10$).
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+The decimal expansion of a rational number $k/n$ either terminates or
+eventually repeats. When it repeats, the shortest repeating block is
+called the \emph{repetend}. The length of the repetend of $1/n$, for
+$\gcd(n,10)=1$, equals the multiplicative order
+$\operatorname{ord}_{n}(10)$, and the repetends of the family
+$\{k/n : \gcd(k,n)=1\}$ are cyclic permutations of one another. These
+facts are classical~\cite{hardy}.
+
+Less studied is the following question. Given a fixed denominator $n$,
+consider the \emph{full fractional field}
+$\mathcal{F}(n) = \{k/n : 1 \le k \le n-1\}$ and ask: what proportion
+of this field shares the repetend character of $1/n$? Some elements
+will have the same repeating digit or block; others will differ; still
+others will terminate altogether. The resulting proportion is a
+natural measure of \emph{coherence}: the degree to which the
+arithmetic of $n$ organizes its fractional field into a single periodic
+pattern.
+
+In this note we compute this measure exactly for a natural family of
+denominators, obtain a closed-form alignment formula, and discover that
+the golden ratio plays a structural role in the result. (This note
+predates the collision invariant series~\cite{nfield} and uses the
+earlier repetend/alignment notation rather than the digit-function
+conventions of that series.)
+The central theorems depend only on the alignment formula
+$\alpha = (2m{-}1)/(pm{-}1)$ and the algebra of the golden ratio, and
+are therefore independent of the choice of positional base. Decimal
+arithmetic provides the motivating instance, but the algebraic content
+is base-free.
+
+% ============================================================
+\section{Definitions}
+
+We work in base~$10$ throughout. For positive integers $k$ and $n$ with
+$1 \le k \le n-1$, the decimal expansion of $k/n$ takes the form
+\[
+\frac{k}{n} = 0.a_{1}a_{2}\cdots a_{s}\,
+\overline{d_{1}d_{2}\cdots d_{\ell}},
+\]
+where $a_{1}\cdots a_{s}$ is the non-repeating prefix and
+$d_{1}\cdots d_{\ell}$ is the repetend of length $\ell \ge 0$. When
+$\ell = 0$ the expansion terminates.
+
+\begin{definition}
+A positive integer is called \emph{$\{2,5\}$-smooth} (or
+\emph{$10$-smooth}) if its only prime factors belong to $\{2,5\}$.
+Equivalently, $m$ is $10$-smooth if and only if $1/m$ has a terminating
+decimal expansion. We write $\mathcal{S}_{10}$ for the set of all
+$10$-smooth positive integers.
+\end{definition}
+
+\begin{definition}
+The \emph{repetend alignment} of $n$ in base $b$ is the mean,
+over $k \in \{1, \ldots, n{-}1\}$, of the position-wise
+digit-match proportion between the repetend of $k/n$ and the
+repetend of $1/n$:
+\[
+\alpha(n) = \frac{1}{n-1}
+\sum_{k=1}^{n-1} a(k/n,\, 1/n),
+\]
+where $a(k/n,\, 1/n)$ is defined as follows: if $k/n$
+terminates, $a = 1$; if $k/n$ has a repetend of the same length
+as $1/n$, $a$ is the fraction of positions at which the two
+repetends share the same digit; otherwise $a = 0$. In the family
+$n = 3m$ studied here, the repetend of $1/n$ has length one,
+so $a$ reduces to exact single-digit matching.
+\end{definition}
+
+\begin{remark}
+For the family $n = 3m$ with $m \in \mathcal{S}_{10}$, the
+repetend of $1/n$ has length one. In this case, the position-wise
+definition reduces to exact digit matching: $a = 1$ if the
+repeating digit agrees, $a = 0$ otherwise. The general
+position-wise definition is used throughout the series to handle
+longer repetends at other primes.
+\end{remark}
+
+% ============================================================
+\section{The Three Classes}
+
+The following lemma establishes the arithmetic that underlies the
+alignment count.
+
+\begin{lemma}\label{lem:three-classes}
+Let $n = 3m$ with $m \in \mathcal{S}_{10}$ and $m \ge 1$. For each
+$k \in \{1,\ldots,n{-}1\}$, exactly one of the following holds:
+\begin{enumerate}
+\item[\textup{(A)}]
+$k \equiv 0 \pmod{3}$. Then $k/n = (k/3)/m$, and since
+$m \in \mathcal{S}_{10}$ the expansion terminates.
+\item[\textup{(B)}]
+$k \equiv 1 \pmod{3}$. Then $k/n$ has repetend of length one,
+equal to the repeating digit of $1/n$.
+\item[\textup{(C)}]
+$k \equiv 2 \pmod{3}$. Then $k/n$ has repetend of length one,
+equal to the nines complement of the repeating digit of $1/n$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Write $k = 3q + r$ with $r \in \{0,1,2\}$. Then
+\[
+\frac{k}{3m} = \frac{q}{m} + \frac{r}{3m}.
+\]
+Since $m \in \mathcal{S}_{10}$, the term $q/m$ terminates.
+Adding a terminating decimal does not change the repetend.
+
+\medskip\noindent
+\emph{Case $r=0$.}
+Then $k/(3m) = q/m$, which terminates.
+
+\medskip\noindent
+\emph{Case $r=1$.}
+The repetend of $k/(3m)$ equals the repetend of
+$1/(3m)$, which is the repeating digit of $1/n$.
+(Since $\operatorname{ord}_{3}(10) = 1$, the repetend
+has length one.)
+
+\medskip\noindent
+\emph{Case $r=2$.}
+The repetend of $k/(3m)$ equals the repetend of
+$2/(3m)$. Since $1/(3m) + 2/(3m) = 1/m$ terminates,
+the repeating digits of $1/(3m)$ and $2/(3m)$ are
+nines complements: they sum to~$9$.
+\end{proof}
+
+\begin{remark}
+The nines complement relationship $d^{*} + (9 - d^{*}) = 9$ between
+classes (B) and~(C) reflects the identity $1/3 + 2/3 = 1$ and its
+decimal manifestation $0.\overline{3} + 0.\overline{6} = 0.\overline{9}
+= 1$. This complement symmetry is a special case of the universal
+identity $k/n + (n{-}k)/n = 1$, which pairs every element of
+$\mathcal{F}(n)$ with its complement. In base~$10$ the digit pairs
+$\{0,9\}$, $\{1,8\}$, $\{2,7\}$, $\{3,6\}$, $\{4,5\}$ each sum
+to~$9$, and the alignment classes (B) and~(C) correspond precisely to
+the complement pair $\{3,6\}$ associated with the prime~$3$.
+\end{remark}
+
+% ============================================================
+\section{The Alignment Formula}
+
+\begin{theorem}\label{thm:alignment}
+Let $n = 3m$ with $m \in \mathcal{S}_{10}$ and $m \ge 1$. Then
+\[
+\alpha(n) = \frac{2m-1}{3m-1}.
+\]
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:three-classes} the aligned fractions comprise
+classes~(A) and~(B). The counts are as follows.
+
+\smallskip
+
+\emph{Class~(A):} The multiples of~$3$ in $\{1,\ldots,3m{-}1\}$ are
+$3, 6, \ldots, 3(m{-}1)$, giving $m-1$ elements.
+
+\smallskip
+
+\emph{Class~(B):} The integers $k \equiv 1 \pmod{3}$ in
+$\{1,\ldots,3m{-}1\}$ are $1, 4, 7, \ldots, 3m{-}2$, giving $m$
+elements.
+
+\smallskip
+
+\emph{Class~(C):} The remaining $m$ elements are not aligned.
+
+\smallskip
+
+The total count of aligned elements is $(m{-}1) + m = 2m - 1$ out of
+$3m - 1$, and the formula follows.
+\end{proof}
+
+\begin{corollary}\label{cor:limit}
+As $m \to \infty$ through $\mathcal{S}_{10}$,
+\[
+\alpha(3m) \;\longrightarrow\; \frac{2}{3}.
+\]
+\end{corollary}
+
+The convergence is monotone from below. The first few values are
+displayed in Table~\ref{tab:values}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrl}
+\toprule
+$m$ & $n = 3m$ & $\alpha(n)$ & Decimal \\
+\midrule
+1  &   3 & $1/2$    & $0.500000$ \\
+2  &   6 & $3/5$    & $0.600000$ \\
+4  &  12 & $7/11$   & $0.636364$ \\
+5  &  15 & $9/14$   & $0.642857$ \\
+8  &  24 & $15/23$  & $0.652174$ \\
+10 &  30 & $19/29$  & $0.655172$ \\
+16 &  48 & $31/47$  & $0.659574$ \\
+32 &  96 & $63/95$  & $0.663158$ \\
+100 & 300 & $199/299$ & $0.665552$ \\
+256 & 768 & $511/767$ & $0.666232$ \\
+\bottomrule
+\end{tabular}
+\caption{Repetend alignment $\alpha(3m)$ for selected $10$-smooth
+values of $m$.}
+\label{tab:values}
+\end{table}
+
+% ============================================================
+\section{The Golden Threshold}
+
+We now ask: for which $10$-smooth integers $m$ does the alignment exceed
+the reciprocal of the golden ratio $\varphi = (1+\sqrt{5})/2$?
+
+\begin{theorem}\label{thm:golden}
+Let $m \ge 1$ be a positive integer. Then
+\[
+\frac{2m-1}{3m-1} \ge \frac{1}{\varphi}
+\qquad\Longleftrightarrow\qquad
+m \ge \varphi^{2}.
+\]
+Since $\varphi^{2} = \varphi + 1 = (3+\sqrt{5})/2 \approx 2.618$,
+the integer threshold is $m \ge 3$.
+\end{theorem}
+
+\begin{proof}
+The inequality $(2m{-}1)/(3m{-}1) \ge 1/\varphi$ is equivalent to
+\[
+\varphi(2m-1) \ge 3m-1.
+\]
+Expanding and collecting terms:
+\[
+m(2\varphi - 3) \ge \varphi - 1.
+\]
+Since $\varphi - 1 = 1/\varphi$ and $\varphi^{2} = \varphi + 1$, we
+compute
+\[
+2\varphi - 3 = 2\varphi - 3 = \frac{2(1+\sqrt{5}) - 6}{2}
+= \frac{2\sqrt{5} - 4}{2} = \sqrt{5} - 2.
+\]
+This is positive (since $\sqrt{5} > 2$), so we may divide:
+\[
+m \ge \frac{1/\varphi}{\sqrt{5}-2}
+= \frac{1}{\varphi(\sqrt{5}-2)}.
+\]
+Now $\varphi(\sqrt{5}-2) = \varphi\sqrt{5} - 2\varphi$.
+Using $\varphi = (1{+}\sqrt{5})/2$:
+\[
+\varphi\sqrt{5} = \frac{(1+\sqrt{5})\sqrt{5}}{2}
+= \frac{\sqrt{5}+5}{2},
+\qquad
+2\varphi = 1+\sqrt{5},
+\]
+so
+\[
+\varphi(\sqrt{5}-2)
+= \frac{\sqrt{5}+5}{2} - (1+\sqrt{5})
+= \frac{\sqrt{5}+5 - 2 - 2\sqrt{5}}{2}
+= \frac{3-\sqrt{5}}{2}.
+\]
+Therefore
+\[
+m \ge \frac{2}{3-\sqrt{5}} = \frac{2(3+\sqrt{5})}{(3-\sqrt{5})(3+\sqrt{5})}
+= \frac{2(3+\sqrt{5})}{4} = \frac{3+\sqrt{5}}{2} = \varphi^{2}.
+\qedhere
+\]
+\end{proof}
+
+The identity $\varphi^{2} = \varphi + 1$ is the defining property of the
+golden ratio~\cite{koshy}. Its appearance here is not assumed but
+\emph{derived}: it emerges from the interaction between the golden
+threshold $1/\varphi$ and the ternary structure of residue classes
+modulo~$3$.
+
+\begin{corollary}\label{cor:classification}
+Among denominators of the form $n = 3m$ with $m \in \mathcal{S}_{10}$,
+the repetend alignment $\alpha(n)$ exceeds $1/\varphi$ if and only if
+$m \ge 4$ \textup{(}the smallest $10$-smooth integer at least
+$3$\textup{)}.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:golden} the integer threshold is $m \ge 3$. The
+value $m = 3$ is not $10$-smooth (since $3 \notin \{2,5\}$), so the
+smallest admissible value is $m = 4 = 2^{2}$.
+\end{proof}
+
+The first admissible denominator is therefore $n = 12$, and
+$\alpha(12) = 7/11 \approx 0.6364$, above
+$1/\varphi \approx 0.6180$.
+
+\subsection*{The qualifying families}
+
+Two families of integers are proved to satisfy
+$\alpha(n) \ge 1/\varphi$:
+
+\begin{enumerate}
+\item[\textbf{Tier~1.}]
+$n \in \mathcal{S}_{10}$. Every fraction $k/n$ terminates, so
+$\alpha(n) = 1$.
+
+\item[\textbf{Tier~2.}]
+$n = 3m$ with $m \in \mathcal{S}_{10}$ and $m \ge 4$. Alignment
+satisfies $1/\varphi \le \alpha(n) < 1$ by
+Theorem~\ref{thm:alignment} and Theorem~\ref{thm:golden}.
+\end{enumerate}
+
+Exhaustive computation up to $n \le 909$ finds no integer outside
+these two families satisfying $\alpha(n) \ge 1/\varphi$. The
+following conjecture asserts that the two families above form the
+complete classification.
+
+\begin{conjecture}\label{conj:complete}
+For every positive integer $n$, the repetend alignment satisfies
+$\alpha(n) \ge 1/\varphi$ if and only if $n \in \mathcal{S}_{10}$
+or $n = 3m$ with $m \in \mathcal{S}_{10}$ and $m \ge 4$.
+\end{conjecture}
+
+\emph{Note added April 2026: Conjecture~\ref{conj:complete} was
+subsequently proved by the author as the three-tier theorem
+(``The Three-Tier Theorem,'' research note, 2022). The expected
+mechanism, sketched below, is the proof that paper uses.}
+
+The expected mechanism is the nines complement: non-terminating
+fractions $k/n$ and $(n{-}k)/n$ have complementary digits at every
+position, so their alignment contributions cannot overlap, which
+bounds $\alpha(n) \le (t{+}1)/(2t)$ for rough part~$t$. This bound
+falls below $1/\varphi$ for $t \ge 7$.
+
+% ============================================================
+\section{Why the Golden Ratio, and Why the Prime Three}
+
+The result of Theorem~\ref{thm:golden} invites the question: is there
+something special about the threshold $1/\varphi$, or would any
+threshold between $3/5$ and $7/11$ produce a similar classification?
+
+A threshold $\tau$ separates the family $\{3m : m \in \mathcal{S}_{10}\}$
+into aligned and non-aligned members if and only if it lies in the gap
+between $\alpha(6) = 3/5$ and $\alpha(12) = 7/11$. Since
+$3/5 < 1/\varphi < 7/11$, the golden ratio does lie in this gap.
+In this narrow sense, any $\tau \in (3/5,\, 7/11)$ would work.
+
+What distinguishes $1/\varphi$ is the algebraic structure of the
+threshold equation. For a general prime $p$ not dividing the base $b$,
+with $b \equiv 1 \pmod{p}$ (so that $\operatorname{ord}_{p}(b) = 1$
+and the repetend has length one), the alignment formula generalizes to
+\[
+\alpha(pm) = \frac{2m-1}{pm-1},
+\]
+since the classes $k \equiv 0$ and $k \equiv 1 \pmod{p}$ are aligned
+while the remaining $p{-}2$ classes are not. The threshold equation
+$\alpha(pm) \ge 1/\varphi$ then requires
+$m(2\varphi - p) \ge \varphi - 1$.
+When $p < 2\varphi \approx 3.236$, the coefficient
+$2\varphi - p$ is positive, giving a finite threshold
+$m \ge (\varphi - 1)/(2\varphi - p)$.
+For $p = 2$ this gives $m \ge 1/2$, trivially satisfied.
+For $p = 3$ this gives $m \ge \varphi^2$.
+
+When $p \ge 5$, the coefficient $2\varphi - p$ is negative,
+so dividing reverses the inequality:
+$m \le (\varphi - 1)/(2\varphi - p) < 0$.
+No positive integer satisfies this. Alignment never
+reaches $1/\varphi$.
+
+The prime $p = 3$ is therefore the \emph{unique} value for which the
+golden threshold produces a non-trivial classification, and the critical
+resolution $\varphi^{2} = \varphi + 1$ is the signature of this
+uniqueness.
+
+% ============================================================
+\section{The Self-Referential Cubic and the Golden Field}
+
+The preceding section establishes that $1/\varphi$ is the unique
+golden threshold selecting exactly one non-trivial prime. We now show
+that the golden ratio has a deeper algebraic role in the
+self-referential structure of the alignment formula.
+
+\begin{definition}
+For a threshold $\tau \in (0,1)$ and a prime $p$, the \emph{critical
+resolution} is the value $m^{*}(\tau, p)$ at which the alignment
+$(2m{-}1)/(pm{-}1)$ equals~$\tau$:
+\[
+m^{*}(\tau,p) = \frac{1-\tau}{2-p\tau}.
+\]
+We say the classification is \emph{self-referential} at $(\tau,p)$ if
+the critical resolution equals the reciprocal square of the threshold:
+\[
+m^{*}(\tau,p) = \frac{1}{\tau^{2}}.
+\]
+\end{definition}
+
+The self-referential condition requires $\tau$ to satisfy the cubic
+\begin{equation}\label{eq:cubic}
+\tau^{3} - \tau^{2} - p\tau + 2 = 0.
+\end{equation}
+Since $f(\tau) = \tau^{3} - \tau^{2} - p\tau + 2$ satisfies
+$f(0) = 2 > 0$ and $f(1) = 2 - p < 0$ for every prime $p \ge 3$,
+the intermediate value theorem guarantees a root in $(0,1)$ for every
+such~$p$. The self-referential condition therefore admits a solution
+for every prime $p \ge 3$.
+
+What distinguishes $p = 3$ is not the existence of a solution but
+its algebraic nature. The following theorem shows that the
+self-referential cubic factors over $\mathbb{Q}$ for exactly three
+primes, and the two non-trivial cases both produce thresholds in the
+golden ratio's number field.
+
+\begin{theorem}\label{thm:cubic-factors}
+The self-referential cubic~\eqref{eq:cubic} factors over
+$\mathbb{Q}$ if and only if $p \in \{2, 3, 5\}$. The factorizations
+are:
+\begin{align}
+p = 2: \quad & (\tau - 1)(\tau^{2} - 2) = 0, \label{eq:p2} \\
+p = 3: \quad & (\tau - 2)(\tau^{2} + \tau - 1) = 0, \label{eq:p3} \\
+p = 5: \quad & (\tau + 2)(\tau^{2} - 3\tau + 1) = 0. \label{eq:p5}
+\end{align}
+For $p \ge 7$, the cubic is irreducible over $\mathbb{Q}$.
+\end{theorem}
+
+\begin{proof}
+By the rational root theorem, the only possible rational roots of
+$\tau^{3} - \tau^{2} - p\tau + 2$ are $\pm 1$ and $\pm 2$.
+Evaluating:
+\[
+f(1) = 2 - p, \quad f(-1) = p, \quad f(2) = 6 - 2p, \quad
+f(-2) = 2p - 10.
+\]
+These vanish at $p = 2, 3, 5$ respectively ($f(-1) = p$ is never
+zero for a prime). For $p \ge 7$, no rational root exists and the
+cubic is irreducible.
+\end{proof}
+
+The case $p = 2$ yields $\tau = 1$ (boundary of the interval) and
+$\tau = \sqrt{2}$ (outside $(0,1)$), so it produces no
+self-referential threshold. The two non-trivial factorizations are
+$p = 3$ and $p = 5$.
+
+\begin{theorem}\label{thm:golden-field}
+The self-referential thresholds for $p = 3$ and $p = 5$ are
+\[
+\tau(3) = \frac{\sqrt{5}-1}{2} = \frac{1}{\varphi},
+\qquad
+\tau(5) = \frac{3 - \sqrt{5}}{2} = \frac{1}{\varphi^{2}}.
+\]
+Both lie in the quadratic number field
+$\mathbb{Q}(\sqrt{5})$, the field generated by the golden ratio.
+They are consecutive powers of $1/\varphi$.
+
+For $p \ge 7$, the self-referential threshold is a cubic irrational
+and does not lie in any quadratic number field.
+\end{theorem}
+
+\begin{proof}
+The quadratic factors in~\eqref{eq:p3} and~\eqref{eq:p5} have
+discriminants $1 + 4 = 5$ and $9 - 4 = 5$ respectively, so both
+roots lie in $\mathbb{Q}(\sqrt{5})$. For $p = 3$, the root in
+$(0,1)$ is $(\sqrt{5}-1)/2 = 1/\varphi$. For $p = 5$, it is
+$(3-\sqrt{5})/2$. Since $(3-\sqrt{5})/2 = ((\sqrt{5}-1)/2)^{2}$
+(verified by expanding), this equals $1/\varphi^{2}$.
+
+For $p \ge 7$, the cubic is irreducible over $\mathbb{Q}$ by
+Theorem~\ref{thm:cubic-factors}, so its roots generate a cubic
+extension of $\mathbb{Q}$ and cannot lie in any quadratic field.
+\end{proof}
+
+\begin{corollary}\label{cor:fourth-power}
+The golden ratio's minimal polynomial $\tau^{2} + \tau - 1$ divides
+the self-referential cubic if and only if $p = 3$. The resulting
+fourth-power identity is
+\[
+\tau^{4} = 2 - 3\tau,
+\]
+where the coefficient~$3$ is the unique prime annihilating the
+remainder of the polynomial division.
+\end{corollary}
+
+\begin{proof}
+Dividing $\tau^{3} - \tau^{2} - p\tau + 2$ by $\tau^{2} + \tau - 1$
+yields quotient $\tau - 2$ and remainder $(3 - p)\tau$. The remainder
+vanishes if and only if $p = 3$. The fourth-power identity follows
+from $\tau^{2} = 1 - \tau$.
+\end{proof}
+
+The self-referential structure therefore reveals a hierarchy among
+primes:
+
+\begin{enumerate}
+\item $p = 3$: threshold $1/\varphi$, governed by the golden ratio's
+      own minimal polynomial. The alignment limit $2/3$ exceeds this
+      threshold, producing the classification of
+      Theorem~\ref{thm:golden}.
+
+\item $p = 5$: threshold $1/\varphi^{2}$, governed by the companion
+      quadratic $\tau^{2} - 3\tau + 1$. The alignment limit $2/5$
+      exceeds this threshold, but falls below $1/\varphi$, so
+      no golden classification arises.
+
+\item $p \ge 7$: thresholds are cubic irrationals outside
+      $\mathbb{Q}(\sqrt{5})$. No connection to the golden ratio
+      persists.
+\end{enumerate}
+
+The golden ratio's number field $\mathbb{Q}(\sqrt{5})$
+controls exactly two primes in the self-referential hierarchy.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{Base independence}
+
+The alignment formula $\alpha = (2m{-}1)/(pm{-}1)$ and the
+self-referential characterization of Theorem~\ref{thm:golden-field} are
+purely algebraic and make no reference to a positional base. The base
+enters only in determining which prime~$p$ governs the periodicity of
+$1/n$. In any base $b$ satisfying $b \equiv 1 \pmod{3}$
+(such as $4$, $7$, $10$, $13$, $16$, or~$19$), the
+prime~$3$ plays this role and the full theorem applies with
+``$10$-smooth'' replaced by ``$b$-smooth.'' In bases where $3$
+divides~$b$ (such as $6$, $12$, or~$30$), a different prime governs
+periodicity. Since $p = 3$ is the unique prime selected by the golden
+ratio's algebra, the theorem does not apply to such bases. The result
+is therefore base-free in its algebraic content and base-dependent only
+in whether its hypotheses are met.
+
+\subsection*{Terminating fractions as aligned}
+
+The decision to count terminating fractions as aligned is not
+mathematically forced. If terminating fractions are instead excluded, the
+alignment among purely periodic fractions is exactly $1/2$ for every $m$,
+and the golden ratio plays no role. The classification theorem therefore
+reflects a specific but natural convention: that the absence of a
+repeating obstruction constitutes compatibility.
+
+\subsection*{Connection to Midy's theorem}
+
+Midy's theorem~\cite{midy,leavitt} and its generalizations study
+digit-sum relations within a single repetend, typically for prime
+denominators. The present result addresses a complementary question:
+not the internal structure of one repetend, but the collective
+organization of an entire fractional field. The nines complement
+relationship between classes~(B) and~(C) is, however, a manifestation
+of the same arithmetic that underlies Midy's observation.
+
+\subsection*{Computational origin}
+
+This result was discovered through computational exploration of the
+fractional fields $\mathcal{F}(n)$ for $n \le 909$, using software that
+computes structural invariants of decimal expansions~\cite{nfield}. The
+empirical observation that a $1/\varphi$ threshold cleanly separates
+a family of denominators was observed computationally; the algebraic proof came later.
+
+% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{midy}
+E.~Midy,
+\emph{De quelques propri\'et\'es des nombres et des fractions
+d\'ecimales p\'eriodiques},
+Nantes, 1836.
+
+\bibitem{leavitt}
+W.~G.~Leavitt,
+A theorem on repeating decimals,
+\emph{Amer.\ Math.\ Monthly} \textbf{74} (1967), no.~6, 669--673.
+
+\bibitem{hardy}
+G.~H.~Hardy and E.~M.~Wright,
+\emph{An Introduction to the Theory of Numbers},
+6th ed., Oxford University Press, 2008.
+
+\bibitem{koshy}
+T.~Koshy,
+\emph{Fibonacci and Lucas Numbers with Applications},
+2nd ed., Wiley, 2019.
+
+\bibitem{nfield}
+A.~S.~Petty,
+\emph{nfield: A structural analysis engine for fractional field invariants},
+software.
+\url{https://github.com/alexspetty/nfield}
+
+\end{thebibliography}
+
+\end{document}

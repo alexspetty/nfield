@@ -1,0 +1,599 @@
+% ============================================================
+% The Collision Spectrum and the L-Function Landscape
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{observation}[theorem]{Observation}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Collision Spectrum\\and the $L$-Function Landscape}
+
+\author{Alexander S.\ Petty}
+\email{alexander.petty@gmail.com}
+\date{November 2025 (revised April 2026)}
+\subjclass[2020]{11A63, 11N05, 11M06}
+
+\begin{document}
+\begin{abstract}
+The collision transform decomposes the centered
+collision deviation $S^{\circ}$ over odd Dirichlet
+characters modulo $m = b^{\ell+1}$. This paper proves
+that at lag~$1$ (so $m=b^2$), for prime $b$ and
+primitive odd $\chi$:
+\[
+\hat{S}^{\circ}(\chi)
+= -\frac{B_{1,\overline{\chi}} \cdot
+\overline{S_G(\chi)}}{\phi(m)},
+\]
+where $B_{1,\overline{\chi}}$ is the generalized
+Bernoulli number and $S_G(\chi)$ is the diagonal
+character sum. In magnitude:
+$|\hat{S}^{\circ}| = |B_1| \cdot |S_G| / \phi(m)$.
+
+Combined with the Bernoulli--$L$-value formula
+\[
+|B_1| = \frac{\sqrt{m}}{\pi}\,|L(1,\chi)|
+\]
+and the $S_G$ factorization theorem (proved in
+a companion paper~\cite{paperC}), this gives
+\[
+|\hat{S}^{\circ}(\chi)|
+= \frac{\sqrt{m}}{\pi\,\phi(m)}\,
+|L(1, \chi)| \cdot |S_G(\chi)|.
+\]
+The collision invariant's Fourier spectrum encodes
+$L$-function special values. Computation shows
+$|S_G|$ itself correlates with $|L(1)|$, giving
+$|\hat{S}^{\circ}| \sim |L(1)|^{\alpha}$ with
+$\alpha = 2.00$ at base~$5$ (exact) and
+$\alpha \approx 1.80$ across the tested prime bases.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+The collision transform~\cite{paperB} decomposes the
+centered collision deviation $S^{\circ}$ over Dirichlet
+characters modulo $m = b^{\ell+1}$. The antisymmetry
+theorem restricts the decomposition to odd characters.
+The preceding papers recorded computationally that the collision
+coefficients $|\hat{S}^{\circ}(\chi)|$ correlate with
+$|L(s, \chi)|$ at Pearson $r > 0.87$ across all
+prime bases tested~\cite{paper19,paper20}.
+
+This paper proves the structural identity underlying
+the correlation. The proof uses three ingredients: the
+slice formula from~\cite{paperA}, the classical
+Bernoulli identity for character sums over fractional
+parts, and the vanishing of coset sums for primitive
+characters.
+
+% ============================================================
+\section{The Decomposition Theorem}
+
+\begin{theorem}[Decomposition]\label{thm:decompose}
+Let $b$ be prime, $m = b^2$, and $\chi$ a primitive
+odd character modulo~$m$. Then
+\[
+\hat{S}^{\circ}(\chi)
+= -\frac{B_{1,\overline{\chi}} \cdot
+\overline{S_G(\chi)}}{\phi(m)},
+\]
+where
+$B_{1,\overline{\chi}} = (1/m) \sum_{a} a\,
+\overline{\chi}(a)$ is the generalized first Bernoulli
+number and
+$G = \{r(b{+}1) : 0 \le r \le b{-}1\}$ is the diagonal
+set, and
+$S_G(\chi) = \sum_{n \in G}
+[\overline{\chi}(n{+}1) - \overline{\chi}(n)]$
+is the diagonal character sum.
+\end{theorem}
+
+\begin{proof}
+Write $\phi = \phi(m)$. The Fourier coefficient is
+\[
+\phi\, \hat{S}^{\circ}(\chi)
+= \sum_a S^{\circ}(a)\, \overline{\chi}(a)
+= \sum_a \bigl[S(a) - \overline{S}_{R(a)}\bigr]\,
+\overline{\chi}(a).
+\]
+
+\emph{Step 1: the centering term vanishes.}
+The class mean $\overline{S}_{R}$ is constant on
+each spectral class $R = (a{-}1) \bmod b$. The sum
+over each class is
+$\sum_{a \equiv k \bmod b} \overline{\chi}(a)
+= \overline{\chi}(k) \sum_{j=0}^{b-1}
+\overline{\chi}(1 + jb)$.
+For primitive $\chi$ modulo $b^2$ (conductor $b^2$,
+not $b$), the restriction of $\chi$ to the subgroup
+$\{1 + jb : j = 0, \ldots, b{-}1\}$ is non-trivial.
+By character orthogonality over this subgroup, the
+sum vanishes. Therefore
+$\sum_a \overline{S}_{R(a)}\, \overline{\chi}(a) = 0$.
+
+\emph{Step 2: expand $S(a)$ via the slice formula.}
+By~\cite{paperA},
+$S(a) = -1 - \lfloor a/b \rfloor
++ \sum_{n \in G} d_n(a)$
+where $d_n(a) = \lfloor(n{+}1)a/m\rfloor
+- \lfloor na/m \rfloor$.
+
+The constant term: $\sum_a (-1)\, \overline{\chi}(a)
+= 0$ (non-trivial $\chi$).
+
+The floor term: $\lfloor a/b \rfloor = a/b - \{a/b\}$.
+Since $\{a/b\} = \{ba/m\}$ and the Bernoulli identity
+(Lemma~\ref{lem:bernoulli} below) gives
+$\sum_a \{ba/m\}\, \overline{\chi}(a)
+= \chi(b)\, B_{1,\overline{\chi}} = 0$ (because
+$\gcd(b, m) \ne 1$, so $\chi(b) = 0$):
+\[
+-\sum_a \lfloor a/b \rfloor\, \overline{\chi}(a)
+= -(1/b) \sum_a a\, \overline{\chi}(a) + 0
+= -b\, B_{1,\overline{\chi}}.
+\]
+
+\emph{Step 3: the diagonal terms.}
+The endpoint slices are handled separately. For
+$n = 0$, one has $d_0(a)=0$, so the contribution
+vanishes. For $n = m{-}1$, one has
+$d_{m-1}(a)=1$ for every unit $a$, so the sum against
+the non-trivial character $\overline{\chi}(a)$ also
+vanishes.
+
+For the interior slices, Lemma~\ref{lem:bernoulli}
+gives
+$\sum_a \lfloor na/m \rfloor\, \overline{\chi}(a)
+= [n - \chi(n)]\, B_{1,\overline{\chi}}$
+for $\gcd(n, m) = 1$. Therefore
+\begin{align*}
+\sum_a d_n(a)\, \overline{\chi}(a)
+&= [(n{+}1) - \chi(n{+}1)]\, B_1
+- [n - \chi(n)]\, B_1 \\
+&= [1 + \chi(n) - \chi(n{+}1)]\, B_1.
+\end{align*}
+
+Summing over $G$ ($|G| = b$ slices):
+\[
+\sum_{n \in G} \sum_a d_n(a)\, \overline{\chi}(a)
+= B_1 \left[b - \sum_{n \in G}
+(\chi(n{+}1) - \chi(n))\right]
+= B_1 \bigl[b - \overline{S_G(\chi)}\bigr].
+\]
+
+\emph{Step 4: combine.}
+\[
+\phi\, \hat{S}^{\circ}(\chi)
+= 0 + (-b\, B_1) + B_1\bigl[b -
+\overline{S_G(\chi)}\bigr] - 0
+= -B_1 \cdot \overline{S_G(\chi)}.
+\]
+Dividing by $\phi$ gives the result.
+\end{proof}
+
+\begin{lemma}[Bernoulli identity]\label{lem:bernoulli}\leavevmode\newline
+For primitive $\chi$ modulo $m$ and $\gcd(n,m)=1$:
+\[
+\sum_{\substack{a = 1 \\ \gcd(a,m)=1}}^{m-1}
+\overline{\chi}(a) \left\{\frac{na}{m}\right\}
+= \chi(n)\, B_{1,\overline{\chi}}.
+\]
+\end{lemma}
+
+\begin{proof}
+The fractional part $\{na/m\}$ is periodic in $a$
+modulo~$m$. Since $\gcd(n,m)=1$, the map
+$a \mapsto na$ permutes the units, so
+\begin{align*}
+\sum_a \overline{\chi}(a)\{na/m\}
+&= \sum_a \overline{\chi}(n^{-1}a)\{a/m\} \\
+&= \chi(n)\sum_a \overline{\chi}(a)\{a/m\}
+= \chi(n)\,B_{1,\overline{\chi}},
+\end{align*}
+where the last step uses
+$B_{1,\overline{\chi}}
+= (1/m)\sum a\,\overline{\chi}(a)
+= \sum \overline{\chi}(a)\,\{a/m\}$
+(since $\{a/m\}=a/m$ for $1 \le a \le m{-}1$).
+\end{proof}
+
+% ============================================================
+\section{The $L$-Function Encoding}
+
+\begin{corollary}\label{cor:L-encoding}
+For prime $b$ and primitive odd $\chi$ modulo $b^2$:
+\[
+|\hat{S}^{\circ}(\chi)|
+= \frac{\sqrt{m}}{\pi\, \phi(m)}\,
+|L(1, \chi)| \cdot |S_G(\chi)|.
+\]
+\end{corollary}
+
+\begin{proof}
+By the Bernoulli--$L$-value formula for odd primitive
+characters~\cite{davenport},
+$|B_{1,\overline{\chi}}| = \sqrt{m}\,
+|L(1, \chi)| / \pi$.
+Substituting into
+$|\hat{S}^{\circ}| = |B_1| \cdot |S_G| / \phi$
+gives the result.
+\end{proof}
+
+The collision coefficient factors into:
+\begin{itemize}
+\item $|L(1, \chi)|$: the $L$-function special value,
+measuring distance from zeros;
+\item $|S_G(\chi)|$: the diagonal character sum,
+which by the $S_G$ factorization
+theorem~\cite{paperC} equals
+$2\,|\sum_{k=1}^{b-1} \overline{\chi}(k)|$.
+\end{itemize}
+
+% ============================================================
+\section{The Double Encoding}
+
+The $S_G$ factorization gives
+$|S_G| = 2|\sum_{k=1}^{b-1} \overline{\chi}(k)|$.
+Computation shows this partial sum correlates with
+$|L(1, \chi)|$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrr}
+\toprule
+$b$ & $n$ & $r(|P|, |L|)$ &
+$r \cdot \log b$ \\
+\midrule
+$5$ & $8$ & $1.00$ & $1.61$ \\
+$7$ & $18$ & $0.88$ & $1.71$ \\
+$13$ & $72$ & $0.83$ & $2.13$ \\
+$19$ & $162$ & $0.86$ & $2.52$ \\
+$31$ & $450$ & $0.84$ & $2.90$ \\
+$43$ & $882$ & $0.85$ & $3.18$ \\
+$61$ & $1800$ & $0.84$ & $3.46$ \\
+$71$ & $2450$ & $0.84$ & $3.57$ \\
+\bottomrule
+\end{tabular}
+\caption{Correlation between the partial sum
+$|P| = |\sum_{k=1}^{b-1} \overline{\chi}(k)|$ and
+$|L(1, \chi)|$ across primitive odd characters.
+The correlation is consistent with decay on the
+scale of $c / \log b$.}
+\label{tab:decay}
+\end{table}
+
+At base~$5$, the encoding is exact:
+$|P| = (\sqrt{5}/2)\,|B_{1,\overline{\chi}}|$ for
+every primitive character, giving
+$|\hat{S}^{\circ}| \propto |L(1)|^2$. At larger
+bases, the correlation decays, and the effective
+exponent in $|\hat{S}^{\circ}| \sim |L(1)|^{\alpha}$
+decreases from $2.00$ toward $1$.
+
+% ============================================================
+\section{The Apostol Decomposition}
+
+The partial sum $P = \sum_{k=1}^{b-1}
+\overline{\chi}(k)$ has an exact decomposition
+via the Apostol--Berndt identity for short character
+sums~\cite{davenport}. Normalizing by the Gauss sum:
+\[
+\widetilde{P} = \frac{\pi}{\tau(\chi)}\, P
+= L(1, \overline{\chi}) + \Delta(\chi),
+\]
+where the \emph{packet}
+\[
+\Delta(\chi) = \frac{i}{\varphi(b)}
+\sum_{\substack{\xi \bmod b \\ \xi(-1) = 1,\;
+\xi \ne 1}} \tau(\overline{\xi})\,
+L(1, \xi\overline{\chi})
+\]
+is a sum of twisted $L$-values weighted by Gauss
+sums over the even characters modulo~$b$.
+
+\begin{observation}[Packet magnitude]
+The mean ratio $|\Delta| / |L(1)|$ is constant at
+approximately $1.08$ across all prime bases tested
+($b = 5$ to $43$). The packet has the same magnitude
+as the main term.
+\end{observation}
+
+\begin{observation}[Phase uniformity]
+The relative phase
+$\theta = \arg(\Delta) - \arg(L(1, \overline{\chi}))$
+has $\langle \cos\theta \rangle = 0.000$ at every base.
+The packet's phase is uniformly distributed relative to
+$L(1)$.
+\end{observation}
+
+\begin{observation}[Variance decay]
+The standard deviation of $|\Delta| / |L(1)|$ across
+primitive odd characters is consistent with decay on
+the scale of $c / \log b$, with
+$\operatorname{std} \cdot \log b \approx 1.2$ across
+all bases tested.
+\end{observation}
+
+A natural explanation for the correlation decay is
+the observed packet behavior. The partial sum $\widetilde{P}
+= L(1) + \Delta$ combines two terms of equal
+magnitude and uniform relative phase. When the ratio
+$|\Delta|/|L|$ has high variance (small $b$), the
+variation in $|\widetilde{P}|$ tracks the variation
+in $|L|$, producing high correlation. As $b$ grows,
+the variance of $|\Delta|/|L|$ decreases (the packet
+becomes more uniform relative to $L$), and the
+$L$-specific information in $|\widetilde{P}|$ is
+washed out.
+
+This is consistent with the fact that $\Delta$ is a sum of
+$(\varphi(b)/2 - 1)$ twisted $L$-value terms. As the
+number of terms grows, the relative fluctuation of
+the sum decreases, concentrating
+$|\Delta|/|L|$ around its mean.
+
+% ============================================================
+\section{The Moment Theorem}
+
+The decomposition theorem translates the primitive odd
+sector of the collision transform into a mean-value
+statement about $L$-function special values. Write
+\[
+F^{\circ}_{\mathrm{prim}}(s)
+=
+\sum_{\substack{\chi \bmod m \\
+\chi \text{ primitive odd}}}
+\hat{S}^{\circ}(\chi)\, P(s,\chi),
+\qquad m=b^2.
+\]
+
+\begin{theorem}[Moment majorant]\label{thm:moment}
+For prime $b$ and primitive odd characters modulo
+$m=b^2$, one has
+\[
+\left|F^{\circ}_{\mathrm{prim}}(1)\right|
+\le
+\frac{1}{\phi(m)}
+\sum_{\substack{\chi \bmod m \\
+\chi \text{ primitive odd}}}
+|B_{1,\overline{\chi}}| \cdot |S_G(\chi)|
+\cdot |P(1, \chi)|
+\]
+where
+$P(1, \chi) = \sum_p \chi(p)/p$.
+\end{theorem}
+
+\begin{proof}
+By the decomposition theorem,
+\[
+F^{\circ}_{\mathrm{prim}}(1)
+= -\frac{1}{\phi}\sum_{\chi\text{ prim.\ odd}}
+B_{1,\overline{\chi}}\cdot
+\overline{S_G(\chi)}\cdot P(1,\chi).
+\]
+The triangle inequality gives the stated majorant.
+\end{proof}
+
+By the Bernoulli--$L$-value formula,
+$|B_1|=\sqrt{m}\,|L(1,\chi)|/\pi$.
+By the $S_G$ factorization,
+$|S_G|=2\,|\sum_{k=1}^{b-1}\overline{\chi}(k)|$.
+And $P(1,\chi)$ relates to $\log L(1,\chi)$ via the
+Euler product. The majorant therefore places
+$|F^{\circ}_{\mathrm{prim}}(1)|$ beneath an explicit
+weighted combination of
+$|L(1,\chi)|\cdot|S_G(\chi)|\cdot|\log L(1,\chi)|$
+across the primitive odd characters modulo~$m$.
+
+\begin{corollary}
+At lag~$1$, the modulus $m = b^2$
+has $\phi(m)/2 = b(b{-}1)/2$ odd characters. The
+moment majorant expresses
+$|F^{\circ}_{\mathrm{prim}}(1)|$ as lying beneath an
+explicit weighted average over the primitive odd family.
+\end{corollary}
+
+\begin{remark}
+At base~$5$, lag~$1$: $|S_G| = (5\sqrt{5}/\pi)
+|L(1)|$ exactly, so the moment majorant reads
+\[
+\left|F^{\circ}_{\mathrm{prim}}(1)\right|
+\le C \sum |L(1)|^2 |\log L(1)|
+\]
+for an explicit constant $C$: a weighted second
+moment majorizing the finite collision transform at
+the edge.
+\end{remark}
+
+\begin{theorem}[Conditional cross-moment]
+\label{thm:cross}
+Fix $\sigma_0 \in (1/2, 1)$ and suppose every primitive
+odd $L$-function modulo $m=b^2$ satisfies
+$L(s, \chi) \ne 0$ for
+$\operatorname{Re}(s) > \sigma_0$.
+Then for every real $s > \sigma_0$:
+\[
+\left|F^{\circ}_{\mathrm{prim}}(s)\right|
+\le
+\frac{1}{\phi(m)}
+\sum_{\substack{\chi \bmod m \\
+\chi \text{ primitive odd}}}
+|B_{1,\overline{\chi}}| \cdot |S_G(\chi)|
+\cdot |P(s, \chi)|.
+\]
+\end{theorem}
+
+\begin{proof}
+By the conditional penetration
+theorem~\cite{paperB}, $F^{\circ}(s)$ converges for
+real $s > \sigma_0$. The decomposition theorem gives
+$F^{\circ}_{\mathrm{prim}}(s) = -(1/\phi) \sum B_1 \cdot
+\overline{S_G} \cdot P(s, \chi)$. The triangle
+inequality gives the bound.
+\end{proof}
+
+Since $|B_1| = \sqrt{m}\, |L(1, \chi)| / \pi$ and
+$P(s, \chi) = \log L(s, \chi) - H(s, \chi)$, the
+cross-moment majorant places $|F^{\circ}_{\mathrm{prim}}(s)|$
+beneath a weighted sum of products
+\[
+|L(1, \chi)| \cdot |S_G(\chi)| \cdot
+|\log L(s, \chi)|
+\]
+across odd characters. This connects $L$-values at
+two points: $s = 1$ (the edge, through $B_1$) and
+$s = \sigma_0$ (in the strip, through $P$). As
+$\sigma_0 \to 1/2$, the bound constrains
+$L$-values approaching the critical line, weighted
+by $L$-values at the edge and filtered by the
+collision geometry through $S_G$.
+
+% ============================================================
+\section{The Zero Coupling}
+
+The decomposition theorem gives the exact structural
+identity behind part of what the preceding
+papers~\cite{paper19,paper20} observed. The factor
+$B_1$ shows that characters with small $|L(1,\chi)|$
+necessarily have small collision coefficients
+$|\hat{S}^{\circ}(\chi)|$. This does not by itself
+prove the anti-correlation, the spectral repulsion,
+or the double transversality, since those involve
+additional information about $S_G(\chi)$, partial
+prime sums, and cross-character geometry. It does,
+however, explain why the edge value $L(1,\chi)$ is a
+structural input to every coefficient.
+
+The analytic continuation
+from~\cite{paperB} gives
+\[
+\mathcal{F}^{\circ}(s)
+= -\frac{1}{\phi} \sum_{\chi \text{ odd}}
+B_{1,\overline{\chi}} \cdot \overline{S_G(\chi)}
+\cdot \bigl[\log L(s, \chi) - H(s, \chi)\bigr].
+\]
+Near a zero $\rho$ of $L(s, \chi_0)$, the term
+$\log L(s, \chi_0) \to -\infty$. The coefficient
+of this divergence is
+$B_{1,\overline{\chi}_0} \cdot
+\overline{S_G(\chi_0)} / \phi$, which involves
+$L(1, \chi_0)$ through $B_1$. The behavior of the
+collision transform near a zero at $s = \rho$ is
+therefore controlled by the $L$-value at $s = 1$.
+
+\begin{remark}
+The digit function couples different points of the
+critical strip: the singularity structure at depth
+$s$ is weighted by the health at $s = 1$. A zero of
+$L(s, \chi)$ deep in the strip produces a
+singularity in $\mathcal{F}^{\circ}$ whose residue
+is proportional to $|L(1, \chi)|$. Characters that
+are healthy at the edge produce large residues at
+depth. Characters that are weak at the edge produce
+small residues. The collision geometry mediates this
+coupling through the Bernoulli number.
+\end{remark}
+
+% ============================================================
+\section{Remarks}
+
+The decomposition
+$\hat{S}^{\circ} = -B_1 \cdot \overline{S_G} / \phi$
+is exact for every primitive odd character at every
+prime base. It connects the collision invariant to
+two classical objects: the Bernoulli number $B_1$
+(encoding $|L(1)|$ via the Bernoulli--$L$-value formula) and
+the partial character sum $P = \sum_{k=1}^{b-1}
+\overline{\chi}(k)$ (encoding a second, decaying
+factor of $|L|$).
+
+At base~$5$, the double encoding is exact:
+$|\hat{S}^{\circ}| \propto |L(1)|^2$. At larger
+bases, the second factor's encoding degrades
+logarithmically. The digit function's ``opening
+act'' (its values at the first $b{-}1$ units) carries
+information about the $L$-function landscape, but the
+fidelity of this information is consistent with
+decay on the scale of $1/\log b$ across the tested
+prime bases.
+
+For imaginary quadratic fields $\mathbb{Q}(\sqrt{-d})$,
+the class number satisfies
+$h(-d) = (\sqrt{d}/\pi)\, |L(1, \chi_d)|$.
+The decomposition theorem therefore encodes class
+numbers: at base~$5$,
+$|\hat{S}^{\circ}| \propto h(-d)^2$. The digit
+function squares class numbers.
+
+The open problem is to prove this decay rate. The
+decomposition theorem, the Abel summation formula,
+and the near-linear structure of $G(k)$ provide the
+algebraic framework. What remains is a bound on the
+correlation between partial character sums over
+$\{1, \ldots, b{-}1\}$ and $L$-function special
+values for primitive characters modulo~$b^2$.
+
+% ============================================================
+\begin{thebibliography}{99}
+
+\bibitem{davenport}
+H.~Davenport,
+\emph{Multiplicative Number Theory},
+3rd~ed., Springer, 2000.
+
+\bibitem{iwaniec}
+H.~Iwaniec and E.~Kowalski,
+\emph{Analytic Number Theory},
+AMS Colloquium Publications, vol.~53, 2004.
+
+\bibitem{paperA}
+A.~S.~Petty,
+The collision invariant,
+preprint, 2026.
+
+\bibitem{paperB}
+A.~S.~Petty,
+The collision transform,
+preprint, 2026.
+
+\bibitem{paperC}
+A.~S.~Petty,
+The collision spectrum,
+preprint, 2026.
+
+\bibitem{paper19}
+A.~S.~Petty,
+The general neutrality theorem,
+research note, 2025.
+
+\bibitem{paper20}
+A.~S.~Petty,
+The double transversality,
+research note, 2025.
+
+\bibitem{nfield}
+A.~S.~Petty,
+\emph{nfield: A structural analysis engine for fractional
+field invariants},
+software.
+\url{https://github.com/alexspetty/nfield}
+
+\end{thebibliography}
+
+\end{document}

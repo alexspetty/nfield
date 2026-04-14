@@ -1,0 +1,292 @@
+% ============================================================
+% The Three-Tier Theorem (proved April 2022)
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Three-Tier Theorem}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{February 2022 (revised April 2026)}
+\subjclass[2020]{11A63, 11B83}
+
+\begin{document}
+\begin{abstract}
+This note completes the three-tier classification of
+positive integers by the golden threshold $1/\varphi$.
+Tiers~1 and~2 (smooth and golden-family integers) are
+established in the companion alignment
+papers~\cite{paper1,paper2}. Here we prove Tier~3:
+every integer outside these families has
+$\alpha(n) < 1/\varphi$.
+
+The proof rests on the nines complement: non-terminating
+fractions $k/n$ and $(n{-}k)/n$ have complementary digits
+and cannot both match $1/n$ at any position. This bounds
+the average non-terminating alignment to~$1/2$, giving
+$\alpha(n) \le (t{+}1)/(2t)$ for rough part~$t$. Since
+$4/7 < 1/\varphi$ and the smallest admissible rough part
+$\ge 4$ in base~$10$ is $t = 7$, all non-golden integers
+fall below the threshold.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+This paper proves the three-tier classification.
+
+The first paper~\cite{paper1} introduced repetend
+alignment and identified the golden threshold
+$1/\varphi$. Papers~2 and~3~\cite{paper2,paper3}
+established the alignment formula for all primes, with
+the golden bound $\alpha(pm) < 1/\varphi$ for $p \ge 5$.
+The classification is:
+
+\begin{enumerate}
+\item[\textbf{Tier~1.}] $n$ is $10$-smooth: $\alpha(n) = 1$.
+\item[\textbf{Tier~2.}] $n = 3m$, $m$ is $10$-smooth, $m \ge 4$:
+      $1/\varphi \le \alpha(n) < 1$.
+\item[\textbf{Tier~3.}] All other $n$: $\alpha(n) < 1/\varphi$.
+\end{enumerate}
+
+Tiers~1 and~2 are proved in~\cite{paper1}. Tier~3 is
+proved here by the nines complement bound: for any
+$n$ with rough part $t \ge 7$ (coprime to the base),
+$\alpha(n) \le (t{+}1)/(2t) \le 4/7 < 1/\varphi$.
+The cases $t = 3$ with small smooth part are verified
+directly.
+
+% ============================================================
+\section{The Rough Part}
+
+\begin{definition}
+For a positive integer $n$ and a base $b$, the \emph{smooth part}
+$s(n)$ is the largest divisor of $n$ whose prime factors all
+divide~$b$. The \emph{rough part} is $t(n) = n / s(n)$.
+\end{definition}
+
+In base~$10$, the smooth part absorbs all factors of $2$ and $5$,
+and the rough part collects all other prime factors. For example:
+$s(60) = 20$, $t(60) = 3$; and $s(28) = 4$, $t(28) = 7$.
+
+\begin{lemma}\label{lem:terminating-count}
+The number of terminating fractions in $\{k/n : 1 \le k \le n{-}1\}$
+is $s(n) - 1$.
+\end{lemma}
+
+\begin{proof}
+The fraction $k/n$ terminates if and only if $n / \gcd(k,n)$ is
+$b$-smooth, which occurs if and only if $t(n)$ divides~$k$. The
+multiples of $t(n)$ in $\{1, \ldots, n{-}1\}$ number
+$n/t(n) - 1 = s(n) - 1$.
+\end{proof}
+
+% ============================================================
+\section{The Nines Complement Bound}
+
+\begin{lemma}[Complement pairing]\label{lem:complement}
+For $n = tm$ with rough part $t$ coprime to the even
+base~$b$: if $k$ is non-terminating ($t \nmid k$), then
+$k/n$ and $(n{-}k)/n$ are digit complements in the
+periodic part of their expansions. At each repetend
+position, their periodic digits sum to $b - 1$. In
+particular:
+\[
+a(k/n,\, 1/n) + a((n{-}k)/n,\, 1/n) \le 1.
+\]
+\end{lemma}
+
+\begin{proof}
+After the transient prefix (determined by the smooth
+part~$m$), the periodic digits of $k/n$ are governed by
+remainders modulo~$t$. For a remainder $q$ with
+$1 \le q \le t{-}1$: $\gcd(t, b) = 1$ ensures
+$bq/t \notin \mathbb{Z}$, so
+\[
+\left\lfloor \frac{b(t{-}q)}{t} \right\rfloor
+= b - \left\lceil \frac{bq}{t} \right\rceil
+= b - 1 - \left\lfloor \frac{bq}{t} \right\rfloor.
+\]
+The periodic digits of $k/n$ and $(n{-}k)/n$ therefore
+sum to $b - 1$ at each position.
+
+For even~$b$: $(b{-}1)/2$ is not an integer, so a digit
+$d$ and its complement $b{-}1{-}d$ are always distinct.
+Two complementary fractions cannot both match $1/n$ at
+the same periodic position.
+\end{proof}
+
+\begin{lemma}\label{lem:upper-bound}
+For $n = tm$ with rough part $t$ and smooth part $m$:
+\[
+\alpha(n) \le \frac{m(t{+}1)/2 - 1}{tm - 1}.
+\]
+For $m \ge 1$ this is at most $(t{+}1)/(2t)$.
+\end{lemma}
+
+\begin{proof}
+The $m - 1$ terminating fractions each contribute
+alignment~$1$. The $(t{-}1)m$ non-terminating fractions
+pair into complement pairs $(k, n{-}k)$ (both are
+non-terminating since $t \mid k$ iff $t \mid n{-}k$).
+The only possible fixed point $k = n/2$ would require
+$t \mid n/2 = tm/2$; since $t$ is odd (coprime to
+the even base), this means $2 \mid m$, so $n/2$ is a
+multiple of~$t$ and hence terminating. No non-terminating
+fraction is unpaired.
+By Lemma~\ref{lem:complement}, each pair contributes
+total alignment at most~$1$, so the average
+non-terminating alignment is at most~$1/2$. Therefore:
+\[
+(tm{-}1)\,\alpha(n) \le (m{-}1) +
+\frac{(t{-}1)m}{2} = \frac{m(t{+}1)}{2} - 1.
+\]
+The ratio $(m(t{+}1)/2 - 1)/(tm - 1) \le (t{+}1)/(2t)$
+holds for all $m \ge 1$ (the difference is
+$(t{-}1)/(2t(tm{-}1)) \ge 0$).
+\end{proof}
+
+\begin{proposition}\label{prop:threshold}
+In base~$10$, the rough part $t(n)$ is coprime to~$10$.
+The coprime integers $t \ge 4$ with $\gcd(t, 10) = 1$
+satisfy $t \ge 7$. For all such~$t$:
+\[
+\frac{t+1}{2t} \le \frac{8}{14} = \frac{4}{7}
+< \frac{1}{\varphi}.
+\]
+\end{proposition}
+
+\begin{proof}
+The function $(t{+}1)/(2t) = 1/2 + 1/(2t)$ is
+decreasing. Its maximum for $t \ge 7$ is at $t = 7$:
+$8/14 = 4/7 \approx 0.5714$. Since
+$1/\varphi \approx 0.6180$: $4/7 < 1/\varphi$.
+\end{proof}
+
+% ============================================================
+\section{The Three-Tier Theorem}
+
+\begin{theorem}[Three-tier classification]\label{thm:three-tier}
+In base~$10$, the repetend alignment $\alpha(n) \ge 1/\varphi$
+if and only if one of the following holds:
+\begin{enumerate}
+\item[\textup{(i)}] $n$ is $10$-smooth, or
+\item[\textup{(ii)}] $n = 3m$ with $m$ a $10$-smooth integer and
+      $m \ge 4$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\emph{Sufficiency.}
+Case~(i): if $n$ is $10$-smooth, every fraction
+$k/n$ terminates, so $\alpha(n) = 1 \ge 1/\varphi$.
+Case~(ii): by~\cite[Theorem~2]{paper1},
+$\alpha(3m) = (2m{-}1)/(3m{-}1) \ge 1/\varphi$ if and only if
+$m \ge \varphi^{2} \approx 2.618$, hence $m \ge 3$. Since $m$ is
+$10$-smooth and $m \ge 4$, the bound holds.
+
+\medskip
+\emph{Necessity.} Let $n$ have rough part $t$ and smooth
+part $m$.
+
+If $t \ge 7$: Lemma~\ref{lem:upper-bound} and
+Proposition~\ref{prop:threshold} give
+$\alpha(n) \le (t{+}1)/(2t) \le 4/7 < 1/\varphi$.
+
+If $t = 3$ and $m \le 2$: direct computation gives
+$\alpha(3) = 1/2$ and $\alpha(6) = 3/5$, both below
+$1/\varphi$. (The value $m = 3$ is not $10$-smooth.)
+
+If $t = 1$: $n$ is smooth, which is case~(i).
+
+If $t = 3$ and $m \ge 4$ smooth: this is case~(ii).
+\end{proof}
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{The gap}
+
+The closest any Tier~3 integer comes to $1/\varphi$ is
+$n = 6$ with $\alpha(6) = 3/5 = 0.600$. The gap is
+$1/\varphi - 3/5 \approx 0.018$. For $t \ge 7$, the
+nines complement bound gives $\alpha \le 4/7 \approx 0.571$,
+leaving a gap of $1/\varphi - 4/7 \approx 0.047$.
+The three-tier structure is robust.
+
+\subsection*{The nines complement}
+
+The proof rests on one observation: complementary fractions
+$k/n$ and $(n{-}k)/n$ have digits summing to $b{-}1$ at
+every position. For even base~$b$, this means they can
+never simultaneously match a third fraction at the same
+position. The average alignment of non-terminating
+fractions with $1/n$ is therefore at most~$1/2$.
+
+\subsection*{Why $t = 7$}
+
+In base~$10$, the rough part $t$ must be coprime to~$10$.
+The integers $4, 5, 6$ share a factor with~$10$, so
+the smallest admissible $t \ge 4$ is $t = 7$. The bound
+$(t{+}1)/(2t) = 4/7 < 1/\varphi$ closes the proof.
+
+\subsection*{Other even bases}
+
+The nines complement proof extends to even bases $b$
+with $b \equiv 1 \pmod{3}$ and $3 \nmid b$: the
+complement identity holds on the periodic denominator
+(since $\gcd(t, b) = 1$), complementary digits are
+distinct (since $b$ is even), and the smallest coprime
+$t \ge 4$ satisfies $(t{+}1)/(2t) < 1/\varphi$.
+
+\subsection*{Odd bases}
+
+For odd bases, the three-tier classification requires
+modification: the prime~$2$ is no longer $b$-smooth,
+so $n = 2$ has $\alpha = 1$ but is not in Tier~1.
+Additional families must be included. The complement
+bound also requires care, since the middle digit
+$(b{-}1)/2$ is an integer for odd~$b$. A counting
+bound (bounding per-position matches by the bin size)
+handles most cases, with finitely many $(b, t)$ pairs
+verified directly.
+
+% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{paper1}
+A.~S.~Petty,
+Why the golden ratio selects the prime three,
+research note, 2020.
+
+\bibitem{paper2}
+A.~S.~Petty,
+Digit-partitioning primes and the alignment formula,
+research note, 2020.
+
+\bibitem{paper3}
+A.~S.~Petty,
+The alignment limit for all primes,
+research note, 2021.
+
+\end{thebibliography}
+
+\end{document}

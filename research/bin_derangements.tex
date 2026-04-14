@@ -1,0 +1,537 @@
+% ============================================================
+% Bin Derangements and the Gate Width Theorem
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Bin Derangements and the Gate Width Theorem}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{April 2024; revised April 2026}
+\subjclass[2020]{11A63, 11A07, 11B83}
+
+\begin{document}
+\begin{abstract}
+For any prime $p > b$, define the collision count
+$C(g) = \#\{r : \lfloor br/p \rfloor =
+\lfloor b(gr \bmod p)/p \rfloor\}$. We prove that
+the set of multipliers $g$ with $C(g) = 0$
+(bin derangements) is exactly
+$\{-u/(b{-}u) \bmod p : u = 1, \ldots, b{-}1\}$.
+In particular, there are exactly $b - 1$ such elements,
+independent of the prime. No primitive-root hypothesis
+is needed. The key observation is that the map
+$r \mapsto br \bmod p$ sends contiguous digit bins to
+residue classes modulo~$b$.
+
+When $b$ is a primitive root modulo $p$, the bin
+derangements coincide with the zero lags of the
+cyclic autocorrelation.
+
+For the non-deranging multipliers $g \ne 1$
+(those with $C(g) > 0$), the mean collision count satisfies an
+exact formula:
+\[
+\overline{C} = \frac{Q\bigl(b(Q{-}1) + 2R\bigr)}{b(Q{-}1) + R},
+\]
+where $Q = \lfloor (p{-}1)/b \rfloor$ and $R = (p{-}1) \bmod b$.
+For the residue class $R = 0$, this simplifies to
+$\overline{C}=Q$ exactly. For $Q = 1$ (equivalently,
+$b+1 < p \le 2b+1$), the mean is always~$2$.
+
+Together, these results decompose the autocorrelation into two
+independent controls: the base determines how many lags produce
+zero autocorrelation ($b - 1$), while the prime determines which
+lags are blocked and how strongly the surviving lags contribute.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+This paper characterizes the zero set of the autocorrelation.
+
+The digit function $\delta(r) = \lfloor br/p \rfloor$, which
+assigns to each residue $r \bmod p$ its leading digit in
+base~$b$, has been studied in connection with the distribution
+of digits of primes~\cite{mauduit-rivat}, exponential sums
+over digit constraints~\cite{shparlinski}, and classical
+properties of positional expansions~\cite{hardy-wright}. The
+function partitions $\{1, \ldots, p{-}1\}$ into $b$ bins
+$B_0, \ldots, B_{b-1}$, where
+\[
+B_d = \{r \in \{1, \ldots, p{-}1\} : \delta(r) = d\}.
+\]
+These bins form a partition by contiguous intervals: the bin sizes are
+$\lfloor (d{+}1)p/b \rfloor - \lfloor dp/b \rfloor$,
+determined directly by interval arithmetic.
+
+When $b$ is a primitive root modulo $p$, the autocorrelation of
+the repetend of $1/p$ at lag~$\ell$ counts positions $j$ where
+the digit at position~$j$ equals the digit at position
+$j + \ell$:
+\[
+R(\ell) = \bigl|\{j \in \{0, \ldots, L{-}1\} :
+\delta(b^j) = \delta(b^{j+\ell})\}\bigr|
+= \sum_{d=0}^{b-1} |B_d \cap g B_d|,
+\]
+where $g = b^{\ell} \bmod p$ and the intersection is under
+multiplication in $(\mathbb{Z}/p\mathbb{Z})^{\times}$.
+
+Without the primitive-root hypothesis, the same formula defines
+the collision count
+\[
+C(g) = \sum_{d=0}^{b-1} |B_d \cap g B_d|
+\]
+for an arbitrary multiplier $g \in \mathbb{F}_p^\times$, and
+the algebraic arguments below work directly with $C(g)$.
+
+The question of when $R(\ell) = 0$ reduces to a combinatorial
+question about the Beatty partition: for which group elements
+$g$ does multiplication by $g$ move every residue to a
+different bin? Such elements are \emph{derangements} of the
+bin partition, in the sense of the classical theory of
+permutation derangements~\cite{stanley}. We determine their
+exact number and give an explicit formula.
+
+% ============================================================
+\section{The Bin Partition}
+
+The bins $B_0, \ldots, B_{b-1}$ are contiguous intervals of
+$\{1, \ldots, p{-}1\}$ determined by the floor function
+$\delta(r) = \lfloor br/p \rfloor$. Their sizes are controlled
+by the division $p - 1 = bQ + R$, where
+$Q = \lfloor (p{-}1)/b \rfloor$ and $R = (p{-}1) \bmod b$:
+exactly $R$ bins have size $Q + 1$ and $b - R$ bins have
+size~$Q$. Equivalently,
+\[
+|B_d|
+= \left\lfloor \frac{(d+1)p}{b}\right\rfloor
+ - \left\lfloor \frac{dp}{b}\right\rfloor .
+\]
+
+When $p \le b + 1$, each bin contains at most one residue,
+the partition is injective, and the autocorrelation is trivially
+zero at all non-zero lags. When $p > b + 1$, multiple residues
+share bins, and non-trivial autocorrelation structure emerges.
+
+% ============================================================
+\section{Bin Derangements}
+
+\begin{definition}
+An element $g \in (\mathbb{Z}/p\mathbb{Z})^{*}$ is a
+\emph{bin-deranging multiplier} (or \emph{bin derangement}) if
+\[
+g B_d \cap B_d = \varnothing \quad \text{for every } d \in
+\{0, \ldots, b{-}1\}.
+\]
+That is, multiplication by $g$ moves every residue out of its
+digit bin. The terminology follows the classical notion of a
+derangement (a permutation with no fixed points)~\cite{stanley},
+extended to the partition setting: no element remains in its
+original bin block.
+\end{definition}
+
+\begin{proposition}\label{prop:derangement-equiv}
+For a prime $p$ where $b$ is a primitive root,
+$R(\ell) = 0$ if and only if $g = b^{\ell} \bmod p$ is a
+bin-deranging multiplier.
+\end{proposition}
+
+\begin{proof}
+$R(\ell) = \sum_d |B_d \cap g B_d|$ where $g = b^{\ell}$.
+Each term is non-negative, so $R(\ell) = 0$ if and only if
+every term vanishes, which is the bin-derangement condition.
+\end{proof}
+
+The bin-derangement condition has a geometric interpretation.
+The bins $B_0, \ldots, B_{b-1}$ are contiguous intervals in
+$\{1,\ldots,p-1\}$. Multiplication by $g$ permutes the nonzero
+residues modulo $p$. A bin derangement is a multiplier for which
+no bin meets its image.
+
+% ============================================================
+\section{The Gate Width Theorem}
+
+\begin{lemma}[Conjugation]\label{lem:conjugation}
+For each $r \in \{1, \ldots, p{-}1\}$, let $x = [br]_p$ (the
+least positive residue of $br$ modulo $p$). Then
+$br = p\,\delta(r) + x$, and consequently
+\[
+\delta(r) = \delta(s)
+\quad\Longleftrightarrow\quad
+[br]_p \equiv [bs]_p \pmod{b}.
+\]
+Under the permutation $r \mapsto [br]_p$, the digit bins are
+exactly the residue classes modulo~$b$.
+\end{lemma}
+
+\begin{proof}
+Since $p \nmid br$, the least positive residue of $br$ modulo $p$
+is the remainder after division: $br = p\lfloor br/p \rfloor +
+[br]_p = p\,\delta(r) + x$. Reducing modulo $b$:
+$0 \equiv p\,\delta(r) + x \pmod{b}$. Since $\gcd(p,b) = 1$,
+the residue class of $x$ modulo $b$ determines $\delta(r)$
+uniquely.
+\end{proof}
+
+\begin{lemma}\label{lem:collision-congruence}
+For every $g \in \mathbb{F}_p^{\times}$,
+\[
+C(g) = \#\{x \in \{1, \ldots, p{-}1\} :
+x \equiv [gx]_p \pmod{b}\}.
+\]
+\end{lemma}
+
+\begin{proof}
+The map $r \mapsto x = [br]_p$ is a permutation of
+$\{1, \ldots, p{-}1\}$. Apply Lemma~\ref{lem:conjugation} to
+the pair $r$ and $gr \bmod p$.
+\end{proof}
+
+\begin{lemma}\label{lem:no-collision}
+Fix $g \ne 1$ and define $c \equiv b(1{-}g)^{-1} \pmod{p}$ with
+$1 \le c \le p{-}1$. If $1 \le c \le b{-}1$, then $C(g) = 0$.
+\end{lemma}
+
+\begin{proof}
+The key geometric idea is that when $c$ is small (between $1$ and
+$b-1$), the shifted sequence $mc \bmod p$ stays too close to zero
+to reach the reference sequence $mb$, preventing any collision.
+
+A collision gives $y = [gx]_p$ with $y = x + mb$ for some
+integer~$m$, and $x \equiv -mc \pmod{p}$.
+
+If $m \ge 0$: from $x + mb \le p{-}1$,
+$1 \le x + mc \le p{-}1{-}m(b{-}c) < p$, but $x + mc \equiv 0
+\pmod{p}$, a contradiction.
+
+If $m < 0$: write $m = -n$ with $n \ge 1$; from $x - nb \ge 1$,
+$0 < x - nc = (x{-}nb) + n(b{-}c) \le p{-}1$,
+again contradicting $x - nc \equiv 0 \pmod{p}$.
+\end{proof}
+
+\begin{lemma}\label{lem:collision-exists}
+If $c \ge b + 1$, then $C(g) \ge 1$.
+\end{lemma}
+
+\begin{proof}
+Conversely, when $c$ is large enough ($c \ge b+1$), the gap between
+the shifted and reference sequences is wide enough that a collision
+point can be constructed explicitly.
+
+Take $x = p - c$. Then $1 \le x \le p{-}b{-}1$, so
+$y := x + b = p - c + b$ lies in $\{1, \ldots, p{-}1\}$ with
+$y \equiv x \pmod{b}$. Since $x \equiv -c \pmod{p}$ and
+$c(1{-}g) \equiv b$, we get $(1{-}g)x \equiv -b$, hence
+$gx \equiv x + b = y \pmod{p}$. So $x$ contributes a collision.
+\end{proof}
+
+\begin{theorem}[Gate width]\label{thm:gate-width}
+Let $p$ be prime and $2 \le b < p$. Then
+\[
+\{g \in \mathbb{F}_p^{\times} : C(g) = 0\}
+= \left\{-\frac{u}{\,b - u\,} \pmod{p} :
+u = 1, \ldots, b{-}1\right\}.
+\]
+In particular, there are exactly $b - 1$ bin-deranging elements.
+No primitive-root hypothesis is needed.
+\end{theorem}
+
+\begin{proof}
+By Lemmas~\ref{lem:no-collision} and~\ref{lem:collision-exists},
+$C(g) = 0$ if and only if $c = b(1{-}g)^{-1} \in \{1, \ldots,
+b{-}1\}$. Solving: $g = 1 - b/c$. Setting $u = b - c$ gives
+$g = -u/(b{-}u) \pmod{p}$ for $u = 1, \ldots, b{-}1$. These
+are distinct: $-u_1/(b{-}u_1) \equiv -u_2/(b{-}u_2) \pmod{p}$
+implies $b(u_1 - u_2) \equiv 0 \pmod{p}$, and since $p > b$
+this gives $u_1 = u_2$.
+\end{proof}
+
+\begin{corollary}\label{cor:ratio-set}
+$\displaystyle
+\left|\bigcup_{d=0}^{b-1} B_d / B_d\right| = p - b$.
+\end{corollary}
+
+\begin{proof}
+For $g \in \mathbb{F}_p^\times$, the condition
+$g \in \bigcup_{d=0}^{b-1} B_d/B_d$ means that
+$g = xy^{-1}$ for some $x,y \in B_d$, equivalently
+$gy = x \in B_d$ for some $y \in B_d$. Thus
+$g$ lies in the union if and only if it is not bin-deranging.
+By Theorem~\ref{thm:gate-width}, exactly $b-1$ of the $p-1$
+units are deranging, so the union has size
+$(p-1)-(b-1)=p-b$.
+\end{proof}
+
+\begin{remark}
+The key step is the conjugation
+(Lemma~\ref{lem:conjugation}): the permutation $r \mapsto [br]_p$
+transforms the contiguous Beatty bins into residue classes
+modulo~$b$. The partition geometry linearizes completely under
+this change of variables. The squeezing argument in
+Lemmas~\ref{lem:no-collision} and~\ref{lem:collision-exists}
+then determines the zero set exactly.
+\end{remark}
+
+\begin{remark}
+The deranging multipliers $g = -u/(b{-}u) \pmod{p}$ form a
+rational family. For $u = b/2$ (when $b$ is even),
+$g \equiv -1 \pmod{p}$, the complement element. The remaining
+derangers come in inverse pairs: $-u/(b{-}u)$ and $-(b{-}u)/u$
+are mutual inverses modulo~$p$.
+\end{remark}
+
+\begin{remark}
+The number $b - 1$ depends only on the base. It does not depend
+on the prime, the spectral class, or the scale. The gate width
+is a property of the coordinate system, not of the object being
+observed. What varies with the prime is \emph{which} $b - 1$
+lags are blocked, and \emph{how strongly} the surviving lags
+contribute.
+\end{remark}
+
+% ============================================================
+\section{The Sum Rule and Mean Formula}
+
+The autocorrelation satisfies a simple double-counting identity
+connecting the collision count to the zeroth bin-size moment.
+
+\begin{proposition}[Sum rule]\label{prop:sum-rule}
+\[
+\sum_{g \in \mathbb{F}_p^{\times}} C(g)
+= \sum_{d=0}^{b-1} n_d^2,
+\]
+where $n_d = |B_d|$ is the size of the $d$-th digit bin.
+\end{proposition}
+
+\begin{proof}
+$\sum_g C(g) = \sum_g \sum_r [\delta(r) = \delta(gr)]
+= \sum_r \sum_g [\delta(gr) = \delta(r)]$.
+For each $r$, as $g$ ranges over $\mathbb{F}_p^{\times}$, the
+element $gr$ ranges over all of $\mathbb{F}_p^{\times}$.
+The inner sum counts how many residues share a bin with $r$,
+which is $n_{\delta(r)}$. Summing over $r$:
+$\sum_r n_{\delta(r)} = \sum_d n_d^2$.
+\end{proof}
+
+The bin sizes for a prime $p > b + 1$ are determined by the division
+$p - 1 = bQ + R$, where $Q = \lfloor (p{-}1)/b \rfloor$ and $R
+= (p{-}1) \bmod b$. There are $R$ bins of size $Q + 1$ and $b -
+R$ bins of size $Q$. Hence
+\[
+\sum_{d=0}^{b-1} n_d^2 = R(Q+1)^2 + (b-R)Q^2 = bQ^2 + R(2Q + 1).
+\]
+
+\begin{theorem}[Mean constructive value]\label{thm:mean}
+For $p > b + 1$ (so that constructive multipliers
+exist), the mean of $C(g)$ over the $p - b - 1$
+constructive multipliers is
+\[
+\overline{C} = \frac{Q\bigl(b(Q{-}1) + 2R\bigr)}{b(Q{-}1) + R}.
+\]
+When $b$ is a primitive root modulo $p$, this equals the mean of
+$R(\ell)$ over constructive lags.
+\end{theorem}
+
+\begin{proof}
+There are $p - 2$ multipliers $g \ne 1$, of which $b - 1$ have
+$C(g) = 0$ by Theorem~\ref{thm:gate-width}. The number of
+constructive multipliers is $p - 2 - (b-1) = p - b - 1
+= b(Q{-}1) + R$.
+
+The sum over constructive multipliers equals
+\[
+\sum_{g \in \mathbb{F}_p^\times} C(g) - C(1)
+= bQ^2 + R(2Q+1) - (p-1)
+= bQ^2 - bQ + 2RQ
+= Q(b(Q{-}1) + 2R).
+\]
+
+Dividing: $\overline{C} = Q(b(Q{-}1) + 2R) / (b(Q{-}1) + R)$.
+\end{proof}
+
+\begin{corollary}\label{cor:special-cases}
+\begin{enumerate}
+\item For $R = 0$ (class $p \equiv 1 \pmod{b}$):
+      $\overline{C} = Q$ exactly.
+\item For $Q = 1$ (equivalently, $b+1 < p \le 2b+1$):
+      $\overline{C} = 2$.
+\item As $Q \to \infty$ (large primes in any class):
+      $\overline{C}/Q \to 1$, equivalently
+      $\overline{C} = Q + O(1)$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+(1) Set $R = 0$: the formula gives $Q \cdot b(Q{-}1) / b(Q{-}1)
+= Q$.
+(2) Set $Q = 1$: the numerator is $1 \cdot (0 + 2R) = 2R$ and
+the denominator is $0 + R = R$, giving $2$.
+(3) Rewrite the mean as
+\[
+\overline{C}
+= Q + \frac{QR}{b(Q{-}1)+R}.
+\]
+Since $0 \le R < b$, the second term is $O(1)$ and hence
+$\overline{C}/Q \to 1$ as $Q \to \infty$.
+\end{proof}
+
+% ============================================================
+\section{Computational Verification}
+
+All results have been verified using the \texttt{nfield} software
+engine across multiple bases.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrrrr}
+\toprule
+$b$ & $p$ & $p\bmod b$ & $Q$ & $R$ & zeros & $\overline{C}$ actual
+& $\overline{C}$ formula \\
+\midrule
+$10$ & $17$ & $7$ & $1$ & $6$ & $9$ & $2.00$ & $2.00$ \\
+$10$ & $61$ & $1$ & $6$ & $0$ & $9$ & $6.00$ & $6.00$ \\
+$10$ & $97$ & $7$ & $9$ & $6$ & $9$ & $9.63$ & $9.63$ \\
+$10$ & $131$ & $1$ & $13$ & $0$ & $9$ & $13.00$ & $13.00$ \\
+$10$ & $179$ & $9$ & $17$ & $8$ & $9$ & $17.81$ & $17.81$ \\
+$10$ & $193$ & $3$ & $19$ & $2$ & $9$ & $19.21$ & $19.21$ \\
+$6$ & $11$ & $5$ & $1$ & $4$ & $5$ & $2.00$ & $2.00$ \\
+$6$ & $41$ & $5$ & $6$ & $4$ & $5$ & $6.71$ & $6.71$ \\
+$6$ & $89$ & $5$ & $14$ & $4$ & $5$ & $14.68$ & $14.68$ \\
+$7$ & $17$ & $3$ & $2$ & $2$ & $6$ & $2.44$ & $2.44$ \\
+$7$ & $41$ & $6$ & $5$ & $5$ & $6$ & $5.76$ & $5.76$ \\
+$7$ & $97$ & $6$ & $13$ & $5$ & $6$ & $13.73$ & $13.73$ \\
+$12$ & $17$ & $5$ & $1$ & $4$ & $11$ & $2.00$ & $2.00$ \\
+$12$ & $67$ & $7$ & $5$ & $6$ & $11$ & $5.56$ & $5.56$ \\
+\bottomrule
+\end{tabular}
+\caption{Gate width and mean formula verified across bases. The
+zero count equals $b - 1$ in every case, and the mean formula is
+exact. The third column records the residue class $p \bmod b$.}
+\label{tab:verification}
+\end{table}
+
+% ============================================================
+\section{The Two Controls}
+
+The autocorrelation of a prime repetend is governed by two
+independent parameters:
+
+\begin{enumerate}
+\item \textbf{The base} determines the gate width: exactly
+$b - 1$ lags are blocked, regardless of which prime is being
+analyzed. This is a property of the coordinate system (the
+positional representation), not of the prime.
+
+\item \textbf{The prime} determines the gate pattern and
+intensity. Among the $p - b - 1$ constructive multipliers,
+the distribution of $C(g)$ values carries the structural
+fingerprint of the prime. The mean intensity satisfies
+$\overline{C} = Q + O(1)$, so in particular $\overline{C}/Q \to 1$
+for large primes, but the
+distribution around the mean encodes the bin geometry.
+\end{enumerate}
+
+This decomposition separates two independent controls.
+The number of blocked lags is universal ($b - 1$), depending
+only on the base. The positions of blocked lags depend on~$p$
+(not just its residue class modulo~$b$), and the mean
+intensity at constructive lags has an exact closed form
+in~$(Q, R)$.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{The linearization}
+
+The proof reveals that the partition geometry, which resisted
+Fourier, combinatorial, and representation-theoretic approaches,
+linearizes completely under the change of variables $r \mapsto
+[br]_p$. In $r$-space, the bins are contiguous Beatty intervals.
+In $x = [br]_p$ space, the same bins are the residue classes
+modulo~$b$. The collision condition $\delta(r) = \delta(gr)$
+becomes the congruence $x \equiv [gx]_p \pmod{b}$, and the
+squeezing argument in Steps~3 and~4 completes the proof.
+
+\subsection*{The explicit deranging set}
+
+The deranging multipliers $g = -u/(b{-}u) \pmod{p}$ for
+$u = 1, \ldots, b{-}1$ form a rational family. For $u = b/2$
+(when $b$ is even), $g \equiv -1 \pmod{p}$, the complement
+element. The remaining derangers come in inverse pairs:
+$-u/(b{-}u)$ and $-(b{-}u)/u$ are mutual inverses modulo~$p$.
+
+\subsection*{Generality}
+
+The theorem holds for all primes $p > b$, not only those where
+$b$ is a primitive root. The original computational verification
+used the primitive-root hypothesis because the autocorrelation
+$R(\ell)$ is defined on the orbit of $b$. The algebraic proof
+bypasses the orbit entirely, working directly with the digit
+function and the collision count $C(g)$.
+
+% ============================================================
+\begin{thebibliography}{99}
+
+\bibitem{hardy-wright}
+G.~H.~Hardy and E.~M.~Wright,
+\emph{An Introduction to the Theory of Numbers},
+6th~ed., Oxford University Press, 2008.
+
+\bibitem{mauduit-rivat}
+C.~Mauduit and J.~Rivat,
+Sur un probl\`eme de Gelfond: la somme des chiffres des
+nombres premiers,
+\emph{Ann.\ of Math.}\ \textbf{171} (2010), 1591--1646.
+
+\bibitem{ramanujan}
+S.~Ramanujan,
+On certain trigonometrical sums and their applications in the
+theory of numbers,
+\emph{Trans.\ Cambridge Philos.\ Soc.}\ \textbf{22} (1918),
+259--276.
+
+\bibitem{shparlinski}
+I.~E.~Shparlinski,
+Character sums over shifted primes,
+\emph{Mathematika}\ \textbf{56} (2010), 363--372.
+
+\bibitem{sos}
+V.~T.~S\'os,
+On the distribution mod 1 of the sequence $n\alpha$,
+\emph{Ann.\ Univ.\ Sci.\ Budapest.\ E\"otv\"os Sect.\ Math.}\
+\textbf{1} (1958), 127--134.
+
+\bibitem{stanley}
+R.~P.~Stanley,
+\emph{Enumerative Combinatorics}, vol.~1,
+2nd~ed., Cambridge University Press, 2012.
+
+\bibitem{nfield}
+A.~S.~Petty,
+\emph{nfield: A structural analysis engine for fractional field
+invariants},
+software.
+\url{https://github.com/alexspetty/nfield}
+
+\end{thebibliography}
+
+\end{document}

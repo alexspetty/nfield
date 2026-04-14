@@ -1,0 +1,537 @@
+% ============================================================
+% The Centered Collision Sum
+% Combined research note (merging collision transform and
+% centered collision sum papers)
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{observation}[theorem]{Observation}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Centered Collision Sum}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{October 2023; revised April 2026}
+\subjclass[2020]{11A63, 11N05, 11M06}
+
+\begin{document}
+\begin{abstract}
+For a prime $p > b$ and lag $\ell \ge 1$, the collision
+deviation $S_{\ell}(p) = C(b^{\ell} \bmod p) - Q$ depends
+only on $p \bmod b^{\ell+1}$ (the finite determination
+theorem). This reduces the collision deviation to a function
+on the finite group
+$(\mathbb{Z}/b^{\ell+1}\mathbb{Z})^{\times}$.
+
+The \emph{collision transform} decomposes this function over
+Dirichlet characters modulo~$b^{\ell+1}$. The trivial
+coefficient is exactly $-1/2$, forced by the reflection
+identity $S(a) + S(m{-}a) = -1$. The non-trivial characters
+carry the centered fluctuation.
+
+Subtracting the per-class mean defines the centered
+fluctuation sum $F^{\circ}(1, \ell) = \sum_p S^{\circ}_p / p$.
+By Mertens' theorem for arithmetic progressions, $F^{\circ}$
+converges at $s = 1$ for every base~$b$ and lag~$\ell$. This
+is the Centered Collision PNT: the centered collision
+fluctuations cancel at the edge of the critical strip.
+
+For prime bases at lag~$1$, finite evaluation suggests the
+explicit class mean formula
+$\overline{S}_R = (R{+}1)/b - 1$, compatible with grand mean
+$-1/2$ and reflection symmetry
+$\overline{S}_R + \overline{S}_{b-2-R} = -1$.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+This paper proves the convergence of the centered collision
+fluctuation sum. The preceding paper~\cite{paper-fluct}
+conjectured that the raw fluctuation sum $F(1, \ell)$ diverges
+at the Mertens rate $-\mu_{\ell} \cdot \log\log x$, driven by
+a persistent per-class bias. The present paper identifies the
+bias exactly, subtracts it, and proves that the remainder
+converges.
+
+The proof has three steps. First, the finite determination
+theorem (Section~2) shows that $S_{\ell}(p)$ depends only on
+$p \bmod b^{\ell+1}$. Second, the collision transform
+(Section~3) decomposes the resulting finite function over
+Dirichlet characters. Third, the Centered Collision PNT
+(Section~6) assembles the convergence from Mertens' theorem
+for arithmetic progressions.
+
+% ============================================================
+\section{The Finite Determination Theorem}
+
+\begin{theorem}[Finite determination]\label{thm:finite}
+For any base $b \ge 2$, lag $\ell \ge 1$, and integer
+$p > b^{\ell+1}$ with $\gcd(p, b) = 1$, the collision
+deviation $S_{\ell}(p) = C(b^{\ell} \bmod p) - \lfloor
+(p{-}1)/b \rfloor$ depends only on $p \bmod b^{\ell+1}$.
+Primality of $p$ is not required.
+\end{theorem}
+
+\begin{proof}
+Set $m = b^{\ell+1}$. For each $r \in \{1, \ldots, p{-}1\}$,
+define the slice index $n(r) = \lfloor mr/p \rfloor
+\in \{0, \ldots, m{-}1\}$.
+
+Since the slice width $p/m > 1$, each slice contains integers.
+The digit function and the collision multiplier are constant on
+each slice:
+\[
+\delta(r) = \left\lfloor \frac{br}{p} \right\rfloor
+= \left\lfloor \frac{n}{b^{\ell}} \right\rfloor,
+\qquad
+\delta(b^{\ell} r \bmod p) = n \bmod b.
+\]
+
+A slice is \emph{diagonal} if
+$\lfloor n/b^{\ell} \rfloor = n \bmod b$. Let
+$G_{\ell,b} = \{n \in \{0, \ldots, m{-}1\} :
+\lfloor n/b^{\ell} \rfloor = n \bmod b\}$.
+Then $|G_{\ell,b}| = b^{\ell}$ and
+\[
+C(b^{\ell} \bmod p) = -1 + \sum_{n \in G_{\ell,b}}
+\left(
+\left\lfloor \frac{(n{+}1)p}{m} \right\rfloor
+- \left\lfloor \frac{np}{m} \right\rfloor
+\right).
+\]
+
+Write $p = mt + a$ with $1 \le a < m$ and $\gcd(a, b) = 1$.
+Then
+\[
+\left\lfloor \frac{(n{+}1)p}{m} \right\rfloor
+- \left\lfloor \frac{np}{m} \right\rfloor
+= t + \left\lfloor \frac{(n{+}1)a}{m} \right\rfloor
+- \left\lfloor \frac{na}{m} \right\rfloor.
+\]
+Since $Q = b^{\ell} t + \lfloor a/b \rfloor$:
+\[
+S_{\ell}(p) = -1 - \left\lfloor \frac{a}{b} \right\rfloor
++ \sum_{n \in G_{\ell,b}}
+\left(
+\left\lfloor \frac{(n{+}1)a}{m} \right\rfloor
+- \left\lfloor \frac{na}{m} \right\rfloor
+\right),
+\]
+which depends only on $a = p \bmod m$.
+\end{proof}
+
+\begin{remark}
+The modulus $b^{\ell+1}$ is sharp. In base~$10$ at lag~$2$:
+$S_2(1009) = 8$ and $S_2(1109) = -10$, though
+$1009 \equiv 1109 \pmod{100}$. Reduction modulo~$b^2$ does
+not determine $S_2$; modulo $b^3 = 1000$ does.
+\end{remark}
+
+% ============================================================
+\section{The Collision Transform}
+
+Since $S_{\ell}$ is a function on
+$(\mathbb{Z}/b^{\ell+1}\mathbb{Z})^{\times}$, it admits a
+Fourier expansion over Dirichlet characters.
+
+\begin{definition}
+The \emph{collision transform} is
+\[
+\hat{S}_{\ell}(\chi) = \frac{1}{\phi(b^{\ell+1})}
+\sum_{a \in (\mathbb{Z}/b^{\ell+1}\mathbb{Z})^{\times}}
+S_{\ell}(a)\, \overline{\chi}(a)
+\]
+for each Dirichlet character $\chi$ modulo~$b^{\ell+1}$.
+\end{definition}
+
+\begin{theorem}[Reflection identity]\label{thm:reflection}
+For $m = b^{\ell+1}$ and any unit $a$:
+\[
+S_{\ell}(a) + S_{\ell}(m - a) = -1.
+\]
+\end{theorem}
+
+\begin{proof}
+Replacing $a$ by $m - a$ in the formula of
+Theorem~\ref{thm:finite} sends
+$\lfloor na/m \rfloor$ to $n - 1 - \lfloor na/m \rfloor$
+for $0 < na < m$ (the complementary floor identity). The
+sum over diagonal slices transforms accordingly, giving
+$S_{\ell}(m - a) = -1 - S_{\ell}(a)$.
+\end{proof}
+
+\begin{corollary}[Trivial coefficient]\label{cor:trivial}
+$\hat{S}_{\ell}(\chi_0) = -1/2$.
+\end{corollary}
+
+\begin{proof}
+The involution $a \mapsto m - a$ pairs the units. By
+Theorem~\ref{thm:reflection}, each pair averages to $-1/2$.
+\end{proof}
+
+\begin{corollary}[Nontrivial even characters vanish]
+For every nontrivial even character $\chi$ (i.e., $\chi(-1) = +1$):
+$\hat{S}_{\ell}(\chi) = 0$.
+\end{corollary}
+
+\begin{proof}
+Since $\chi$ is even, $\chi(-a)=\chi(a)$. Pairing $a$ with
+$-a$ and using Theorem~\ref{thm:reflection},
+\[
+\hat{S}_{\ell}(\chi)
+= \frac{1}{2\phi(b^{\ell+1})}
+\sum_{a}
+\bigl(S_{\ell}(a)+S_{\ell}(-a)\bigr)\overline{\chi}(a)
+= -\frac{1}{2\phi(b^{\ell+1})}\sum_a \overline{\chi}(a).
+\]
+For a nontrivial character, the last sum is zero.
+\end{proof}
+
+% ============================================================
+\section{The Half-Group Structure}
+
+\begin{theorem}[Half-group]\label{thm:half}
+For every diagonal slice $n \in G_{\ell,b}$ with $n \neq m-1$,
+the wrapping set
+$W_n = \{a : (n{+}1)a \bmod m < a\}$
+satisfies $|W_n| = \phi(m)/2$.
+\end{theorem}
+
+\begin{proof}
+Let $c = n + 1$. If $a \in W_n$, then
+$c(m{-}a) \bmod m = m - (ca \bmod m) > m - a$,
+so $m - a \notin W_n$. The involution $a \mapsto m - a$
+maps $W_n$ bijectively onto its complement.
+\end{proof}
+
+% ============================================================
+\section{The Class Mean Formula}
+
+\begin{definition}
+For spectral class $R = (p{-}1) \bmod b$, the class mean is
+\[
+\overline{S}_R = \frac{1}{|\mathcal{A}_R|}
+\sum_{a \in \mathcal{A}_R} S_{\ell}(a),
+\]
+where $\mathcal{A}_R = \{a \in
+(\mathbb{Z}/b^{\ell+1}\mathbb{Z})^{\times} :
+a \equiv R{+}1 \pmod{b}\}$.
+\end{definition}
+
+\begin{observation}[Prime-base class mean at lag~$1$]
+\label{prop:class-mean}
+For prime base $b$ at lag $\ell = 1$:
+$\overline{S}_R = (R{+}1)/b - 1$.
+\end{observation}
+
+This is obtained by evaluating $S_1(a)$ at all
+$a \in (\mathbb{Z}/b^2\mathbb{Z})^{\times}$ using
+Theorem~\ref{thm:finite} and averaging over each class.
+
+For composite bases, the class means are rational and
+satisfy the following universal properties.
+
+\begin{corollary}\label{cor:universal}
+For all bases $b \ge 2$ at any lag $\ell \ge 1$, let
+$\mathcal{R} = \{R \in \{0, \ldots, b{-}2\} : \gcd(R{+}1, b) = 1\}$
+be the set of admissible spectral classes. Then:
+\begin{enumerate}
+\item[\textup{(i)}] Grand mean:
+$\displaystyle\frac{1}{|\mathcal{R}|}
+\sum_{R \in \mathcal{R}} \overline{S}_R = -\frac{1}{2}$.
+\item[\textup{(ii)}] Reflection symmetry:
+$\overline{S}_R + \overline{S}_{b-2-R} = -1$
+for every $R \in \mathcal{R}$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Property~(i) follows from
+Corollary~\ref{cor:trivial}. Property~(ii)
+follows from the reflection identity: the map
+$a \mapsto m - a$ sends class~$R$ to class~$b{-}2{-}R$.
+\end{proof}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrr}
+\toprule
+$R$ & $0$ & $2$ & $6$ & $8$ \\
+\midrule
+$\overline{S}_R$ (exact) & $-17/10$ & $-9/10$ & $-1/10$ & $7/10$ \\
+computed & $-1.709$ & $-0.897$ & $-0.097$ & $+0.699$ \\
+\bottomrule
+\end{tabular}
+\caption{Class means in base~$10$ at lag~$1$, computed over
+$166{,}000$ primes per class ($664{,}574$ total, $p \le 10^7$).}
+\label{tab:class-means}
+\end{table}
+
+% ============================================================
+\section{The Centered Collision PNT}
+
+\begin{definition}
+The centered collision deviation is
+$S^{\circ}_p = S_{\ell}(p) - \overline{S}_{R(p)}$.
+The centered fluctuation sum is
+\[
+F^{\circ}(s, \ell) = \sum_{\substack{p > b^{\ell+1} \\
+\gcd(p,b) = 1}} \frac{S^{\circ}_p}{p^s}.
+\]
+\end{definition}
+
+\begin{theorem}[Centered Collision PNT]\label{thm:cpnt}
+For every base $b \ge 2$ and lag $\ell \ge 1$,
+$F^{\circ}(1, \ell)$ converges.
+\end{theorem}
+
+\begin{proof}
+Set $q=b^{\ell+1}$. By Theorem~\ref{thm:finite}, $S_{\ell}(p)$
+depends only on the residue class of $p$ modulo $q$, so the
+same is true for the centered quantity $S_p^\circ$. Define the
+finite function
+\[
+f^\circ(a)=S_\ell(a)-\overline{S}_{R(a)}
+\qquad
+\bigl(a\in(\mathbb Z/q\mathbb Z)^\times\bigr),
+\]
+where $R(a)$ is determined by $a\equiv R(a)+1 \pmod b$.
+By definition of the class means,
+\[
+\sum_{a\in \mathcal A_R} f^\circ(a)=0
+\]
+for every spectral class $\mathcal A_R$, hence in particular
+\[
+\sum_{a\in (\mathbb Z/q\mathbb Z)^\times} f^\circ(a)=0.
+\]
+Therefore the trivial Fourier coefficient vanishes, and the
+collision transform expands as
+\[
+f^\circ(a)=\sum_{\chi \ne \chi_0}\hat{f}^{\circ}(\chi)\,\chi(a),
+\]
+with a finite sum over nontrivial Dirichlet characters modulo $q$.
+Substituting $a=p \bmod q$ gives
+\[
+F^{\circ}(1, \ell)
+= \sum_{\chi \ne \chi_0}\hat{f}^{\circ}(\chi)
+\sum_{\substack{p>b^{\ell+1}\\ p\nmid b}} \frac{\chi(p)}{p}.
+\]
+
+For each nontrivial $\chi$ modulo $q$, Mertens' theorem for
+arithmetic progressions (see, for example, the discussion in
+\cite[Ch.~22]{davenport}) gives
+\[
+\sum_{\substack{p \le x \\ p \equiv a \pmod{q}}}
+\frac{1}{p} = \frac{\log\log x}{\phi(q)} + M_a + o(1).
+\]
+Summing this identity against $\chi(a)$ over the reduced residue
+classes modulo $q$ yields
+\[
+\sum_{p \le x} \frac{\chi(p)}{p}
+\;=\;
+\frac{\log\log x}{\phi(q)}\sum_a \chi(a)
++ \sum_a \chi(a) M_a + o(1).
+\]
+Because $\chi$ is nontrivial, $\sum_a \chi(a)=0$, so the
+$\log\log x$ term cancels. Hence each prime sum
+\[
+\sum_{p} \frac{\chi(p)}{p}
+\]
+converges. Since only finitely many characters occur, the outer
+sum is finite, and therefore $F^\circ(1,\ell)$ converges.
+\end{proof}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrr}
+\toprule
+primes & $p_{\max}$ & $F(1,1)$ & $F(1,1)/\!\log\!\log p$
+& $F^{\circ}$ & $F^{\circ}/\!\log\!\log p$ \\
+\midrule
+$1{,}000$ & $7{,}949$ & $-1.46$ & $-0.664$
+& $0.020$ & $0.009$ \\
+$10{,}000$ & $104{,}773$ & $-1.69$ & $-0.690$
+& $0.023$ & $0.009$ \\
+$100{,}000$ & $1{,}299{,}791$ & $-1.86$ & $-0.705$
+& $0.023$ & $0.009$ \\
+$664{,}574$ & $9{,}999{,}991$ & $-1.99$ & $-0.714$
+& $0.023$ & $0.008$ \\
+\bottomrule
+\end{tabular}
+\caption{Raw vs.\ centered fluctuation sums in base~$10$
+at lag~$1$. The raw ratio drifts toward a Mertens constant.
+The centered ratio decreases toward zero, consistent with
+convergence.}
+\label{tab:centered}
+\end{table}
+
+% ============================================================
+\section{Computational Universality Checks}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrr}
+\toprule
+base & lag & primes & $F(1,\ell)$ & $F^{\circ}$ & behavior \\
+\midrule
+$3$ & $1$ & $18{,}000$ & $-1.59$ & $0.163$ & small \\
+$7$ & $1$ & $42{,}000$ & $-1.66$ & $0.031$ & small \\
+$10$ & $1$ & $78{,}000$ & $-1.76$ & $0.043$ & small \\
+$10$ & $2$ & $78{,}000$ & $-1.83$ & $0.072$ & small \\
+$10$ & $3$ & $78{,}000$ & $-0.56$ & $-0.227$ & small \\
+$12$ & $1$ & $42{,}000$ & $-1.67$ & $0.129$ & small \\
+\bottomrule
+\end{tabular}
+\caption{Centered fluctuation sums across bases and lags.
+All centered sums remain comparatively small over the computed
+range.}
+\label{tab:universal}
+\end{table}
+
+% ============================================================
+\section{Computational Resonance Data}
+
+Define $\psi_k(p) = e(kc_p/p)$, where
+$c_p = b(1 - b^{\ell})^{-1} \bmod p$ is the collision
+parameter. The partial sums
+$\Sigma_k(x) = \sum_{p \le x} \psi_k(p)$ exhibit a
+dichotomy controlled by $\gcd(k, b{-}1)$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrr}
+\toprule
+$k$ & $\gcd(k, b{-}1)$ & $|\Sigma_k| / \sqrt{\pi(x)}$
+& behavior \\
+\midrule
+$1$ & $1$ & $0.16$ & cancels \\
+$2$ & $1$ & $0.21$ & cancels \\
+$3$ & $3$ & $140$ & resonates \\
+$5$ & $1$ & $0.06$ & cancels \\
+$7$ & $1$ & $0.22$ & cancels \\
+$9$ & $9$ & $280$ & resonates \\
+$10$ & $1$ & $0.15$ & cancels \\
+\bottomrule
+\end{tabular}
+\caption{Fourier modes in base~$10$ at $78{,}493$ primes.
+Modes with $\gcd(k, b{-}1) = 1$ are numerically small at this
+scale, while modes with $\gcd(k, b{-}1) > 1$ are numerically
+large.}
+\label{tab:resonance}
+\end{table}
+
+The data suggest that the resonant modes correspond to
+characters modulo~$b^{\ell+1}$ that factor through characters
+modulo~$b$, while the non-resonant modes distinguish
+sub-classes within each spectral class.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{Connection to the alignment limit}
+
+The class mean $\overline{S}_0 = -2/3$ in base~$3$ is the
+alignment limit of the prime~$3$ from~\cite{paper1}. The
+constant $2/3$ appears both as the alignment limit and as
+the magnitude of the class bias in the simplest nontrivial
+case. More generally, for prime base~$b$,
+$\overline{S}_0 = 1/b - 1 = -(b{-}1)/b$.
+
+\subsection*{The Mertens constant}
+
+The grand mean $-1/2$ controls the leading-order Mertens
+constant. By Mertens' theorem for arithmetic progressions,
+the raw sum diverges at rate $(-1/2) \cdot \log\log x$
+from the grand mean alone. The per-class deviations from
+$-1/2$ and the spectral class corrections determine the
+exact Mertens constant $\mu_{\ell}$.
+
+\subsection*{Toward an explicit collision PNT}
+
+A genuine collision analogue of the prime number theorem
+would give an asymptotic formula for the unweighted sum
+$\sum_{p \le x} S^{\circ}(p)$ with a proved error bound.
+The collision transform expresses $S^{\circ}$ as a linear
+combination of Dirichlet characters, and the classical
+explicit formula for character sums provides the machinery.
+
+% ============================================================
+\begin{thebibliography}{99}
+
+\bibitem{paper1}
+A.~S.~Petty,
+Why the golden ratio selects the prime three,
+research note, 2020.
+
+\bibitem{paper-fluct}
+A.~S.~Petty,
+The collision fluctuation sum,
+research note, 2023.
+
+\bibitem{hardy-wright}
+G.~H.~Hardy and E.~M.~Wright,
+\emph{An Introduction to the Theory of Numbers},
+6th~ed., Oxford University Press, 2008.
+
+\bibitem{mauduit-rivat}
+C.~Mauduit and J.~Rivat,
+Sur un probl\`eme de Gelfond: la somme des chiffres des
+nombres premiers,
+\emph{Ann.\ of Math.}\ \textbf{171} (2010), 1591--1646.
+
+\bibitem{davenport}
+H.~Davenport,
+\emph{Multiplicative Number Theory},
+3rd~ed., Springer, 2000.
+
+\bibitem{mertens}
+F.~Mertens,
+Ein Beitrag zur analytischen Zahlentheorie,
+\emph{J.\ Reine Angew.\ Math.}\ \textbf{78} (1874), 46--62.
+
+\bibitem{shparlinski}
+I.~E.~Shparlinski,
+Character sums over shifted primes,
+\emph{Mathematika} \textbf{56} (2010), 363--372.
+
+\bibitem{sos}
+V.~T.~S\'os,
+On the distribution mod~1 of the sequence $n\alpha$,
+\emph{Ann.\ Univ.\ Sci.\ Budapest.\ E\"otv\"os Sect.\ Math.}
+\textbf{1} (1958), 127--134.
+
+\bibitem{stanley}
+R.~P.~Stanley,
+\emph{Enumerative Combinatorics}, vol.~1,
+2nd~ed., Cambridge University Press, 2012.
+
+\bibitem{nfield}
+A.~S.~Petty,
+\emph{nfield: A structural analysis engine for fractional
+field invariants},
+software, 2025--2026,
+tag \texttt{boundary-alphabet-q2-v4-2026-04-10-r2},
+commit \texttt{e0b799d8ab947f09b2d714dfe2a70ea20f7251e3}.
+Repository: \url{https://github.com/alexspetty/nfield}.
+
+\end{thebibliography}
+
+\end{document}

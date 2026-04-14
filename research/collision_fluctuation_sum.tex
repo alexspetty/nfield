@@ -1,0 +1,400 @@
+% ============================================================
+% The Collision Fluctuation Sum
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\title{The Collision Fluctuation Sum}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{October 2024}
+\subjclass[2020]{11A63, 11N05, 11M41}
+
+\begin{document}
+\begin{abstract}
+For a prime $p > b + 1$ not dividing the base~$b$, the
+\emph{collision fluctuation} at lag~$\ell$ is
+$\Delta_p(\ell) = C(b^{\ell} \bmod p) - \overline{C}_p$,
+the deviation of the collision count from its mean over
+constructive multipliers. The partial sum
+\[
+\Phi_x(s, \ell) = \sum_{\substack{b+1 < p \le x \\ p \nmid b}}
+\frac{\Delta_p(\ell)}{p^s}
+\]
+converges absolutely for $\operatorname{Re}(s) > 2$.
+Computation to $10^7$ suggests Mertens-rate divergence at
+$s = 1$: $\Phi_x(1, \ell) \sim -\mu_{\ell} \cdot \log\log x$,
+where $\mu_{\ell}$ depends on the lag and base
+($\mu_1 \approx 0.68$ in base~$10$).
+
+The divergence is controlled by the decomposition
+$\Delta_p = S - QR/(p{-}1{-}b)$, where $S = C - Q$ is an
+integer and $QR/(p{-}1{-}b)$ is a deterministic
+correction from the spectral class $R = (p{-}1) \bmod b$.
+The bilateral symmetry of the repetend forces $C(g)$ to be
+even for all $g$ and constrains $S$ to have the same parity
+as $Q$.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+This paper studies the fluctuation of the collision count across primes.
+
+The preceding paper~\cite{paper12} decomposed the fractional
+field Dirichlet series into a mean part
+(controlled by the mean formula from the gate width
+paper~\cite{paper11}) and a fluctuation part. The mean part
+converges for $\operatorname{Re}(s) > 2$. The present paper
+studies the fluctuation part.
+
+The classical prime number theorem is equivalent to the
+statement that $\sum \mu(n)/n$ converges, where $\mu$ is the
+M\"obius function~\cite{davenport,hardy}. This convergence
+encodes the cancellation of multiplicative structure across the
+integers at the edge of the critical strip.
+
+Computation to $10^7$ suggests that the collision fluctuation
+sum diverges at $s = 1$, growing like $\log\log x$ in a
+Mertens-type growth law~\cite{mertens}. The divergence arises
+from a persistent negative bias in the collision deviation: the
+specific multiplier $b^{\ell}$ is systematically below the mean
+collision count. A later paper investigates whether a centered
+version of the fluctuation sum converges at $s = 1$.
+
+% ============================================================
+\section{The Fluctuation Sum}
+
+\begin{definition}
+For a prime $p > b + 1$ not dividing $b$, the \emph{collision
+fluctuation} at lag~$\ell$ is
+\[
+\Delta_p(\ell) = C(b^{\ell} \bmod p) - \overline{C}_p,
+\]
+where $\overline{C}_p$ is the mean collision count over
+constructive nonidentity multipliers (those $g \ne 1$ with
+$C(g) > 0$). The \emph{fluctuation partial sum} is
+\[
+\Phi_x(s, \ell) = \sum_{\substack{b+1 < p \le x \\ p \nmid b}}
+\frac{\Delta_p(\ell)}{p^s}.
+\]
+The digit-partitioning prime $p = b + 1$ (when prime) is
+excluded because $\overline{C}_p$ is undefined there
+($p - 1 - b = 0$).
+\end{definition}
+
+\begin{proposition}[Analytic convergence]\label{prop:convergence}
+The series $\Phi(s, \ell) = \lim_{x \to \infty} \Phi_x(s, \ell)$
+converges absolutely for $\operatorname{Re}(s) > 2$.
+\end{proposition}
+
+\begin{proof}
+The fluctuation satisfies $|\Delta_p(\ell)| \le p - 1$
+trivially. Thus $|\Delta_p(\ell)|/p^s = O(p^{1 - s})$.
+The sum $\sum_p p^{1 - s}$ converges for
+$\operatorname{Re}(s) > 2$.
+\end{proof}
+
+\begin{remark}
+The variance scaling~\cite{paper12} gives
+$\operatorname{Var}(\Delta) = O(Q)$ across multipliers
+at fixed~$p$, suggesting typical $|\Delta_p| = O(\sqrt{Q})
+= O(\sqrt{p/b})$. If this bound held pointwise for the
+specific multiplier $b^{\ell}$, convergence would extend to
+$\operatorname{Re}(s) > 3/2$. However, the variance scaling
+is a statement about the distribution across multipliers,
+not a pointwise bound for a fixed lag. For a specific
+lag~$\ell$, the magnitude $|\Delta_p(\ell)|$ could be as
+large as~$Q$.
+\end{remark}
+
+% ============================================================
+\section{The Exact Decomposition}
+
+\begin{theorem}[Collision decomposition]\label{thm:decomp}
+The collision deviation satisfies
+\[
+\Delta_p = S - \frac{QR}{p - 1 - b},
+\]
+where $S = C(b^{\ell} \bmod p) - Q$ is an integer,
+$Q = \lfloor (p{-}1)/b \rfloor$, and $R = (p{-}1) \bmod b$.
+\end{theorem}
+
+\begin{proof}
+The mean collision count is
+$\overline{C}_p = Q(b(Q{-}1) + 2R) / (b(Q{-}1) + R)$.
+Since $b(Q{-}1) + R = p - 1 - b$:
+$\overline{C}_p = Q + QR/(p{-}1{-}b)$.
+Therefore $\Delta_p = C - \overline{C}_p
+= (C - Q) - QR/(p{-}1{-}b) = S - QR/(p{-}1{-}b)$.
+\end{proof}
+
+\begin{remark}
+Computation in base~$10$ at lag~$1$ shows that $S$ takes
+values in $\{-9, -7, -4, -3, -2, -1, 0, 1, 2, 3, 6, 8\}$
+for primes up to $10^7$, with $S \in \{-1, 0\}$ for
+approximately $60\%$ of primes. Whether $S$ is uniformly
+bounded as $p \to \infty$ is not established; the trivial
+bound is $|S| \le Q$.
+\end{remark}
+
+\begin{theorem}[Bilateral parity]\label{thm:parity}
+For any prime $p > b$ and any $g \in \mathbb{F}_p^{\times}$,
+the collision count $C(g)$ is even.
+\end{theorem}
+
+\begin{proof}
+If $r$ contributes to $C(g)$ (i.e., $\delta(r) = \delta(gr)$),
+then $p - r$ also contributes: $\delta(p{-}r) = b{-}1{-}\delta(r)$
+and $\delta(g(p{-}r)) = \delta(-gr) = b{-}1{-}\delta(gr)$,
+so $\delta(p{-}r) = \delta(g(p{-}r))$. Since $r \ne p - r$
+for $r \ne p/2$ (impossible for prime $p > 2$), the
+contributions pair.
+\end{proof}
+
+\begin{corollary}
+$S = C - Q$ has the same parity as $Q$.
+\end{corollary}
+
+% ============================================================
+\section{The Mertens Growth Law}
+
+Computation to $10^7$ (664,574 primes) indicates that
+the partial sum $\Phi_x(1, 1)$ diverges at $s = 1$, growing
+like $\log\log x$:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrr}
+\toprule
+primes & $p_{\max}$ & $\Phi_x(1,1)$ & $\Phi_x/\log\log p$ \\
+\midrule
+$1{,}000$ & $7{,}951$ & $-1.37$ & $-0.623$ \\
+$10{,}000$ & $104{,}779$ & $-1.60$ & $-0.652$ \\
+$100{,}000$ & $1{,}299{,}811$ & $-1.77$ & $-0.671$ \\
+$664{,}574$ & $9{,}999{,}991$ & $-1.90$ & $-0.682$ \\
+\bottomrule
+\end{tabular}
+\caption{$\Phi_x(1,1)/\log\log p$ drifts steadily toward a
+constant $\mu_1 \approx 0.68$.}
+\end{table}
+
+At smaller scales (up to 8,000 primes), the growth is invisible
+because $\log\log x$ grows extremely slowly:
+$\log\log(10^4) \approx 2.25$ versus
+$\log\log(10^7) \approx 2.78$.
+
+\begin{conjecture}[Mertens growth]\label{conj:mertens}
+The partial sum satisfies
+\[
+\Phi_x(1, \ell) = -\mu_{\ell} \cdot \log\log x + O(1)
+\]
+for a constant $\mu_{\ell} > 0$ depending on the lag and base.
+\end{conjecture}
+
+\begin{observation}\label{obs:transition}
+The transition from convergence to divergence is visible
+in the partial sums:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrr}
+\toprule
+primes & $s = 1.5$ & $s = 1.2$ & $s = 1.0$ & $s = 0.9$ &
+$s = 0.5$ \\
+\midrule
+$100$ & $-0.17$ & $-0.47$ & $-1.07$ & $-1.42$ & $-6.97$ \\
+$500$ & $-0.18$ & $-0.55$ & $-1.28$ & $-2.02$ & $-17.0$ \\
+$1000$ & $-0.18$ & $-0.56$ & $-1.37$ & $-2.17$ & $-21.4$ \\
+$2000$ & $-0.18$ & $-0.57$ & $-1.45$ & $-2.30$ & $-26.0$ \\
+\bottomrule
+\end{tabular}
+\caption{$\Phi_x(s, 1)$ for various $s$. For $s > 1$, partial
+sums appear to stabilize. At $s = 1$, logarithmic growth.
+For $s < 1$, power-law growth.}
+\end{table}
+\end{observation}
+
+The divergence arises because $\Delta_p$ has a persistent
+negative mean: the mean of $\Delta_p$ over primes
+$p \le x$ is approximately $-0.91$ in base~$10$ at $\ell = 1$,
+with $70\%$ of primes having $\Delta_p < 0$, $20\%$ having
+$\Delta_p > 0$, and $10\%$ having $\Delta_p = 0$. The
+bilateral symmetry constrains $C(g)$ to be even but does not
+force $\Delta_p$ to have zero mean.
+
+% ============================================================
+\section{The Per-Class Structure}
+
+The collision deviation $\Delta_p$ decomposes by spectral
+class $a = p \bmod b$.
+
+\begin{observation}\label{obs:class-means}
+For each coprime class~$a$, the mean of $\Delta_p$ over
+primes $p \equiv a \pmod{b}$ with $p \le 10^7$ stabilizes
+to a class-specific value.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrr}
+\toprule
+$p \bmod 10$ & $R$ & mean $S$ & mean $\overline{\Delta}$ \\
+\midrule
+$1$ & $0$ & $-1.70$ & $-1.70$ \\
+$3$ & $2$ & $-0.91$ & $-1.11$ \\
+$7$ & $6$ & $-0.08$ & $-0.68$ \\
+$9$ & $8$ & $+0.68$ & $-0.12$ \\
+\bottomrule
+\end{tabular}
+\caption{Per-class means for all primes up to $10^7$
+in base~$10$ at $\ell = 1$. All classes have negative mean
+$\overline{\Delta}$.}
+\label{tab:class-means}
+\end{table}
+\end{observation}
+
+The per-class collision bias for the spectral class $R = 6$
+(digit~$7$, the negative pole) is
+\[
+\overline{\Delta}_{R=6} \approx -\frac{2}{3}.
+\]
+The value $2/3$ is the alignment limit of the prime~$3$ from
+the first paper~\cite{paper1}. The same constant appears as
+the collision bias of the negative polarity class.
+
+The per-class mean of $S$ in the complementary class $R = 8$
+(digit~$9$, the neutral pole) is $\overline{S}_{R=8} \approx
++2/3$. The bilateral symmetry exchanges these roles: the
+positive $S$ in class~$9$ is absorbed by the spectral class
+correction $R/b = 0.8$, leaving a small negative
+$\overline{\Delta}$.
+
+% ============================================================
+\section{The Mertens Constant}
+
+The following heuristic relates the overall Mertens constant
+to the per-class biases.
+
+By Mertens' theorem~\cite{mertens} for arithmetic
+progressions~\cite{davenport}, each coprime class contributes
+equally to the prime sum at leading order. The Mertens constant
+is therefore approximately
+\[
+\mu_{\ell} \approx \frac{1}{\varphi(b)}
+\sum_{\substack{a \bmod b \\ \gcd(a,b)=1}}
+|\overline{\Delta}_a|,
+\]
+where $\varphi$ is Euler's totient function.
+
+In base~$10$ at $\ell = 1$: the average of the four class
+biases ($1.70$, $1.11$, $0.68$, $0.12$) is $0.90$. The
+observed ratio $\Phi_x(1,1)/\log\log x \approx 0.68$ is
+smaller; the discrepancy suggests that the absolute-value
+average overstates the effective constant, since the per-class
+contributions partially cancel in the signed sum. A precise
+derivation of $\mu_{\ell}$ from the class means remains open.
+
+The constant $2/3$ from~\cite{paper1} appears not as the
+overall Mertens constant but as the per-class collision bias
+for the negative polarity class ($R = 6$, digit~$7$). The
+Mertens constant is a weighted average in which $2/3$ is one
+of four terms.
+
+% ============================================================
+\section{Structure of the Cancellation}
+
+The partial cancellation in $\Phi_x(1, \ell)$ arises from the
+sawtooth structure of the collision count established in the
+preceding paper~\cite{paper12}.
+
+At each prime $p$, the collision count decomposes as
+$C(b^{\ell} \bmod p) = Q + S$, where $S$ is a signed sum of
+$Q$ terms, each $\pm 1$. The sign of each term is determined by
+a comparison of two sawtooth sequences modulo~$p$: one
+controlled by the collision parameter $c = b(1 - b^{\ell})^{-1}
+\bmod p$, the other by the base~$b$.
+
+As $p$ ranges over the primes, the collision parameter $c$
+traces a path through the residues modulo~$p$. The
+equidistribution of this path, controlled by the M\"obius
+deranging family, determines how many of the $Q$ signed terms
+are positive versus negative. The persistent negative bias means
+that $c$ systematically occupies positions with more negative
+than positive sawtooth terms.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{The boundary at $s = 1$}
+
+The Riemann Hypothesis is equivalent to $\sum \mu(n)/n^s$
+converging for all $\operatorname{Re}(s) > 1/2$. The collision
+fluctuation sum converges for $\operatorname{Re}(s) > 2$ and
+appears to diverge logarithmically at $s = 1$.
+Computation suggests that $s = 1$ is the boundary between
+convergence and divergence for $\Phi(s, \ell)$, with
+Mertens-type logarithmic growth rather than PNT-type
+convergence.
+
+\subsection*{Forward direction}
+
+The divergence at $s = 1$ arises from a persistent per-class
+bias in $\Delta_p$. The next paper investigates whether
+subtracting this bias (centering) produces a sum that converges
+at $s = 1$.
+
+% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{paper1}
+A.~S.~Petty,
+Why the golden ratio selects the prime three,
+research note, 2020.
+
+\bibitem{paper11}
+A.~S.~Petty,
+Bin derangements and the gate width theorem,
+research note, 2024.
+
+\bibitem{paper12}
+A.~S.~Petty,
+Silent primes and the variance of the collision count,
+research note, 2024.
+
+\bibitem{mertens}
+F.~Mertens,
+Ein Beitrag zur analytischen Zahlentheorie,
+\emph{J.\ Reine Angew.\ Math.}\ \textbf{78} (1874), 46--62.
+
+\bibitem{davenport}
+H.~Davenport,
+\emph{Multiplicative Number Theory},
+3rd~ed., Springer, 2000.
+
+\bibitem{hardy}
+G.~H.~Hardy and E.~M.~Wright,
+\emph{An Introduction to the Theory of Numbers},
+6th~ed., Oxford University Press, 2008.
+
+\end{thebibliography}
+
+\end{document}

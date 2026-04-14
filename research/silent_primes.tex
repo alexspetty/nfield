@@ -1,0 +1,382 @@
+% ============================================================
+% Silent Primes and the Variance of the Collision Count
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{Silent Primes and the Variance\\of the Collision Count}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{August 2024}
+\subjclass[2020]{11A63, 11N05, 11M41}
+
+\begin{document}
+\begin{abstract}
+The gate width theorem gives an explicit formula for the
+bin-deranging set. This paper develops two consequences.
+First, for primitive-root primes at each fixed lag, the
+silent primes (those with zero autocorrelation) are the
+prime factors of an explicit arithmetic sequence, and
+only finitely many exist. Second, computation suggests
+the collision count $C(g)$ across non-deranging
+multipliers ($p > b{+}1$) has variance proportional to
+$Q = \lfloor (p{-}1)/b \rfloor$ (conjectured, not
+proved).
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+This paper studies the variance of the collision count and introduces the Dirichlet series $L^G(s)$.
+
+The gate width theorem~\cite{paper11} proved that the digit
+function $\delta(r) = \lfloor br/p \rfloor$ has exactly $b - 1$
+bin-deranging elements for any prime $p > b$, and identified them
+as the M\"obius family $g = -u/(b{-}u) \pmod{p}$ for
+$u = 1, \ldots, b{-}1$. The present paper asks two questions.
+First: as $p$ varies, which primes are silent at a given lag?
+Second: how does the collision count fluctuate across the
+non-deranging multipliers?
+
+The first question leads to an explicit arithmetic
+characterization of the silent primes. The second reveals a
+square-root variance law that connects the fractional field to
+the equidistribution theory of sequences modulo~$p$.  The
+Dirichlet series framework follows
+classical methods~\cite{davenport,hardy}.
+
+% ============================================================
+\section{Silent Primes}
+
+\begin{definition}
+A prime $p > b$ is \emph{silent at lag~$\ell$} if $R_p(\ell) = 0$.
+\end{definition}
+
+For a prime $p$ where $b$ is a primitive root, $R_p(\ell) =
+C(b^{\ell} \bmod p)$. By the gate width theorem, $C(g) = 0$ if
+and only if $g \equiv -u/(b{-}u) \pmod{p}$ for some
+$u \in \{1, \ldots, b{-}1\}$.
+
+\begin{theorem}\label{thm:silent}
+For a primitive-root prime $p > b$ at fixed lag~$\ell \ge 1$,
+$p$ is silent at lag~$\ell$ (i.e., $R_p(\ell) = 0$) if and
+only if $p$ divides
+\[
+N(\ell, u) = b^{\ell+1} + u(1 - b^{\ell})
+\]
+for some $u \in \{1, \ldots, b{-}1\}$. Only finitely many
+primes are silent at any given lag.
+\end{theorem}
+
+\begin{proof}
+The condition $b^{\ell} \equiv -u/(b{-}u) \pmod{p}$ gives
+$b^{\ell}(b{-}u) + u \equiv 0 \pmod{p}$, i.e.,
+$p \mid N(\ell, u)$. Since $N(\ell, u) \ne 0$ for $\ell \ge 1$,
+only finitely many primes divide it.
+\end{proof}
+
+\begin{proposition}\label{prop:arithmetic}
+The $b - 1$ integers $N(\ell, u)$ for $u = 1, \ldots, b{-}1$
+form an arithmetic sequence with first term
+$b^{\ell}(b{-}1) + 1$ and common difference $-(b^{\ell} - 1)$.
+\end{proposition}
+
+\begin{proof}
+$N(\ell, u) = b^{\ell+1} - u(b^{\ell} - 1)$. The common
+difference is $-(b^{\ell} - 1)$.
+\end{proof}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrl}
+\toprule
+$\ell$ & silent primes ($p > 10$) & from $N(\ell, u)$ \\
+\midrule
+$1$ & $11, 13, 19, 23, 37, 41, 73$ & factors of
+  $91, 82, \ldots, 19$ \\
+$2$ & $13, 17, 19, 29, 37, 53, 101, \ldots$ & factors of
+  $901, 802, \ldots, 109$ \\
+$3$ & $11, 13, 19, 31, 47, 79, 97, \ldots$ & factors of
+  $9001, \ldots, 1009$ \\
+\bottomrule
+\end{tabular}
+\caption{Silent primes at the first three lags in base~$10$.}
+\label{tab:silent}
+\end{table}
+
+% ============================================================
+\section{The Collision Parameter and the Sawtooth Form}
+
+For a non-deranging $g \ne 1$, the gate width proof introduces
+the collision parameter $c = b(1{-}g)^{-1} \pmod{p}$ with
+$c \in \{b{+}1, \ldots, p{-}1\}$.
+
+Write $\left(\!\left( x \right)\!\right) = \{x\} - \tfrac{1}{2}$
+for the sawtooth function.
+
+\begin{theorem}[Sawtooth form]\label{thm:sawtooth}
+With the sawtooth notation above,
+\[
+C(g) = Q + \sum_{m=1}^{Q}
+\operatorname{sgn}\!\left(
+\left(\!\left(\frac{mc}{p}\right)\!\right) -
+\left(\!\left(\frac{mb}{p}\right)\!\right)
+\right),
+\]
+where $Q = \lfloor (p{-}1)/b \rfloor$ and
+$c = b(1 - g)^{-1} \bmod p$ is the collision parameter.
+\end{theorem}
+
+\begin{proof}
+The collision condition at residue $r$ with parameter $c$
+reduces to a comparison of sawtooth values at
+$m = 1, \ldots, Q$. For each $m$: if
+$((mc/p)) > ((mb/p))$, both $r$ and $p - r$ produce
+collisions (by the bilateral symmetry $r \mapsto p - r$,
+which preserves the comparison). So each positive
+comparison contributes $2$ collisions. If
+$((mc/p)) < ((mb/p))$, neither $r$ nor $p - r$
+collides, contributing $0$. Writing
+$\mathbf{1}_{>} = (1 + \operatorname{sgn})/2$ and
+doubling: the total collision count is
+$2 \cdot \sum_{m=1}^{Q} \frac{1 + \operatorname{sgn}}{2}
+= Q + \sum \operatorname{sgn}$.
+\end{proof}
+
+The sawtooth form expresses the collision count as a signed
+comparison of two sequences modulo~$p$: the sequence $mc \bmod p$
+(controlled by the collision parameter) and the reference
+sequence $mb$ (controlled by the base). The collision count
+measures how often the first sequence ``leads'' the second.
+
+The collision count depends on $c$ through the wrapping
+behavior of the sequence $mc \bmod p$. The exact
+relationship between $c$ and $C(g)$ is governed by the
+sawtooth comparison above.
+
+% ============================================================
+\section{The Variance Conjecture}
+
+The collision count $C(g)$ varies across the non-deranging
+multipliers. We now characterize its fluctuations.
+
+\begin{definition}
+For a prime $p > b$, the \emph{collision variance} is
+\[
+V(p) = \frac{1}{|S|} \sum_{g \in S} \bigl(C(g) -
+\overline{C}\bigr)^2,
+\]
+where $S = \{g \in \mathbb{F}_p^{\times} : C(g) > 0,\,
+g \ne 1\}$ and $\overline{C}$ is the mean of $C$ over~$S$.
+\end{definition}
+
+\begin{conjecture}[Variance scaling]\label{conj:variance}
+The collision variance satisfies
+\[
+V(p) = \lambda_b \cdot Q + O(1),
+\]
+where $\lambda_b > 0$ is a constant depending only on the
+base~$b$, and $Q = \lfloor (p{-}1)/b \rfloor$.
+
+Equivalently, the standard deviation of $C(g)$ over the
+non-deranging multipliers is $O(\sqrt{Q}) = O(\sqrt{p/b})$.
+\end{conjecture}
+
+This conjecture has been verified computationally for all primes
+$p \le 10000$ in bases $b \in \{3, 6, 7, 10, 12\}$. The
+constant $\lambda_b$ depends on $b$ and converges slowly as
+$Q \to \infty$. In base~$10$: $\lambda_{10} \approx 0.89$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrr}
+\toprule
+$p$ & $Q$ & $V(p)$ & $V/Q$ & $\sigma/\!\sqrt{Q}$ \\
+\midrule
+$97$ & $9$ & $6.00$ & $0.667$ & $0.817$ \\
+$193$ & $19$ & $13.97$ & $0.735$ & $0.857$ \\
+$499$ & $49$ & $40.45$ & $0.826$ & $0.909$ \\
+$997$ & $99$ & $84.35$ & $0.852$ & $0.923$ \\
+$1999$ & $199$ & $173.10$ & $0.870$ & $0.933$ \\
+$4999$ & $499$ & $440.55$ & $0.883$ & $0.940$ \\
+$9973$ & $997$ & $884.83$ & $0.888$ & $0.942$ \\
+\bottomrule
+\end{tabular}
+\caption{Collision variance in base~$10$. The ratio $V/Q$
+converges to $\lambda_{10} \approx 0.89$, giving
+$\sigma/\!\sqrt{Q} \to 0.94$.}
+\label{tab:variance}
+\end{table}
+
+\begin{remark}
+The square-root scaling $\sigma(C) \sim \sqrt{Q}$ is the
+characteristic fluctuation of equidistributed sequences
+modulo~$p$. The sawtooth comparison in
+Theorem~\ref{thm:sawtooth} sums $Q$ terms, each $\pm 1$, whose
+signs depend on the equidistribution of $mc \bmod p$ relative to
+$mb$. When the signs are approximately independent (as occurs for
+generic $c$), the central limit theorem gives variance
+proportional to $Q$. This scaling is observed computationally;
+a rigorous proof that the signs are sufficiently independent
+remains open.
+
+The collision count $C(g)$ therefore fluctuates around its mean
+$\overline{C} \approx Q$ with amplitude $\sqrt{Q}$. This is
+the same square-root fluctuation pattern that governs the error
+term in the prime number theorem under the Riemann Hypothesis:
+$\pi(x) - \operatorname{li}(x) = O(\sqrt{x} \log x)$.
+Whether the fluctuations of $C(g)$ and the fluctuations of
+$\pi(x)$ are controlled by the same mechanism (the zeros of an
+$L$-function) is the central open question.
+\end{remark}
+
+% ============================================================
+\section{The Dirichlet Series}
+
+\begin{definition}
+The \emph{fractional field Dirichlet series} at lag~$\ell$ is
+\[
+L^{G}(s, \ell) = \sum_{p > b} \frac{R_p(\ell)}{p^s}.
+\]
+\end{definition}
+
+\begin{theorem}\label{thm:convergence}
+$L^{G}(s, \ell)$ converges absolutely for
+$\operatorname{Re}(s) > 2$.
+\end{theorem}
+
+\begin{proof}
+The trivial bound $0 \le R_p(\ell) \le p - 1$ gives
+$|R_p(\ell) / p^s| \le p^{1-\operatorname{Re}(s)}$.
+The sum $\sum_p p^{1-s}$ converges for
+$\operatorname{Re}(s) > 2$.
+\end{proof}
+
+At each lag~$\ell$, the series runs over primes $p > b$.
+For primitive-root primes,
+$R_p(\ell) = C(b^{\ell} \bmod p)$, connecting the
+autocorrelation to the global collision count. For
+non-primitive-root primes, this equality does not hold
+in general.
+
+If the variance conjecture holds, the individual terms
+fluctuate by $O(\sqrt{p/b})$ around the mean. Whether
+these fluctuations have additional analytic structure
+(meromorphic continuation, connection to $L$-functions)
+is an open question.
+
+% ============================================================
+\section{The M\"obius Family}
+
+The deranging set $\{-u/(b{-}u) : u = 1, \ldots, b{-}1\}$ is a
+family of $b - 1$ rational numbers, independent of~$p$.
+In base~$10$:
+\[
+-\tfrac{1}{9},\quad -\tfrac{1}{4},\quad -\tfrac{3}{7},\quad
+-\tfrac{2}{3},\quad -1,\quad -\tfrac{3}{2},\quad
+-\tfrac{7}{3},\quad -4,\quad -9.
+\]
+
+\begin{proposition}\label{prop:mobius-structure}
+The M\"obius family satisfies:
+\begin{enumerate}
+\item \textbf{Inversion symmetry.} $-u/(b{-}u)$ and
+      $-(b{-}u)/u$ are multiplicative inverses. The deranging
+      set is closed under inversion.
+\item \textbf{Complement element.} For even $b$, $u = b/2$
+      gives $g \equiv -1 \pmod{p}$.
+\item \textbf{Complementary structure.} The fractions $u/(b{-}u)$ for
+      $u = 1, \ldots, b{-}1$ are the ratios of complementary
+      parts of~$b$.
+\end{enumerate}
+\end{proposition}
+
+The reduction of the M\"obius family modulo varying primes
+governs both the silent prime structure (Section~2) and the
+collision variance (Section~4). At each lag~$\ell$, the silent
+primes are those where $b^{\ell}$ reduces to a member of the
+family. The collision variance measures how the non-family
+elements distribute their collision counts.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{Toward the fluctuation sum}
+
+The decomposition of $L^{G}(s, \ell)$ into mean and fluctuation
+parts sets up the central question for the next paper: does the
+fluctuation sum
+\[
+\Phi_x(s, \ell) = \sum_{b+1 < p \le x}
+\frac{C(b^{\ell} \bmod p) - \overline{C}_p}{p^s}
+\]
+have meromorphic continuation beyond its half-plane of
+convergence? Assuming the variance conjecture
+(Conjecture~\ref{conj:variance}), the individual
+fluctuation terms would be $O(\sqrt{p/b})$, suggesting
+(but not proving) convergence for
+$\operatorname{Re}(s) > 3/2$.
+
+If $F$ admits continuation to $\operatorname{Re}(s) > 1$ with
+controlled growth, the zeros of $F$ in the critical strip would
+govern the distribution of collision fluctuations across primes,
+in direct analogy to how the zeros of $\zeta(s)$ govern the
+distribution of primes.
+
+\subsection*{The variance constant}
+
+The constant $\lambda_b$ in Conjecture~\ref{conj:variance} depends
+on~$b$ and converges slowly with~$Q$. Its exact value is an open
+problem. The sawtooth form (Theorem~\ref{thm:sawtooth}) suggests
+that $\lambda_b$ is determined by the equidistribution properties
+of the sequence $mc \bmod p$ as $c$ varies over
+$\{b{+}1, \ldots, p{-}1\}$, connecting the variance to the
+discrepancy theory of modular sequences.  The logarithmic
+divergence of $\sum 1/p$ that underpins the Mertens-type
+growth law was established by Mertens~\cite{mertens}; see
+also~\cite{hardy}.
+
+% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{paper11}
+A.~S.~Petty,
+Bin derangements and the gate width theorem,
+research note, 2024.
+
+\bibitem{davenport}
+H.~Davenport,
+\emph{Multiplicative Number Theory},
+3rd~ed., Springer, 2000.
+
+\bibitem{hardy}
+G.~H.~Hardy and E.~M.~Wright,
+\emph{An Introduction to the Theory of Numbers},
+6th~ed., Oxford University Press, 2008.
+
+\bibitem{mertens}
+F.~Mertens,
+Ein Beitrag zur analytischen Zahlentheorie,
+\emph{J.\ Reine Angew.\ Math.}\ \textbf{78} (1874), 46--62.
+
+\end{thebibliography}
+
+\end{document}

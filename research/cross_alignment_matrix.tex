@@ -1,0 +1,216 @@
+% ============================================================
+% The Cross-Alignment Matrix
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\title{The Cross-Alignment Matrix}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{April 2021}
+\subjclass[2020]{11A63, 11B83, 42A16}
+
+\begin{document}
+\begin{abstract}
+We introduce the cross-alignment matrix of a fractional
+field: the symmetric matrix $\mathbf{A}(n)$ whose
+$(i,j)$ entry is the position-wise digit-match
+proportion between $i/n$ and $j/n$. For
+digit-partitioning primes, $\mathbf{A}(p) = I$.
+For $n = ps$ with $p$ digit-partitioning and $s$
+smooth, $\mathbf{A}$ decomposes into $p$ blocks of
+rank~$1$, giving $\operatorname{rank}(\mathbf{A}) = p$.
+
+The pairwise alignment $\sigma(n)$ is the mean
+off-diagonal entry. For primitive-root primes, the
+matrix is permutation-similar to a circulant whose
+eigenvalues are the DFT of the cyclic autocorrelation.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+Scalars measure one thing at a time. The matrix
+measures everything at once.
+
+The preceding papers measured the fractional field
+$\mathcal{F}(n) = \{k/n : 1 \le k \le n{-}1\}$ through
+$\alpha(n)$, $\sigma(n)$, and $F(n)$. This paper
+introduces the object they are projections of: the
+cross-alignment matrix.
+
+% ============================================================
+\section{Definition}
+
+\begin{definition}
+The \emph{cross-alignment matrix} of $n$ in base $b$ is the
+$(n{-}1) \times (n{-}1)$ symmetric matrix $\mathbf{A}(n)$ with
+entries
+\[
+A_{ij} = a(i/n,\, j/n),
+\]
+where $a(i/n,\, j/n)$ is the position-wise digit-match proportion
+between the repetends of $i/n$ and $j/n$. Terminating pairs
+contribute~$1$; pairs with different cycle lengths contribute~$0$;
+the diagonal satisfies $A_{ii} = 1$.
+\end{definition}
+
+The matrix is symmetric by construction ($A_{ij} = A_{ji}$)
+and positive semidefinite, since within each period class
+the submatrix is a scalar multiple of an all-ones matrix
+(which is PSD), and the direct sum of PSD matrices is
+PSD~\cite{horn}.
+
+% ============================================================
+\section{Recovery of Scalar Invariants}
+
+The pairwise alignment $\sigma$ is recovered directly
+from $\mathbf{A}$:
+\[
+\sigma(n) = \binom{n-1}{2}^{-1} \sum_{i<j} A_{ij}
+\qquad \text{(mean off-diagonal entry)}.
+\]
+
+The alignment $\alpha(n)$ is not determined by
+$\mathbf{A}$ alone, because $\alpha$ counts terminating
+fractions as aligned with $1/n$ (contributing $1$),
+while $\mathbf{A}$ assigns $0$ to pairs with different
+cycle lengths. The matrix captures the non-terminating
+pairwise structure. The alignment $\alpha$ additionally
+requires the terminating-fraction convention from the
+earlier papers.
+
+% ============================================================
+\section{Spectral Structure for Digit-Partitioning Primes}
+
+\begin{theorem}\label{thm:dp-identity}
+If $p$ is a digit-partitioning prime in base $b$ (i.e., $p \le b{+}1$),
+then $\mathbf{A}(p) = \mathbf{I}_{p-1}$, the identity matrix.
+\end{theorem}
+
+\begin{proof}
+By the digit-partitioning property, no two distinct fractions
+$i/p$ and $j/p$ share a digit at any common position. Thus
+$A_{ij} = 0$ for $i \ne j$ and $A_{ii} = 1$.
+\end{proof}
+
+All eigenvalues equal~$1$. The field is maximally non-degenerate:
+every fraction is structurally independent from every other.
+
+% ============================================================
+\section{Spectral Structure for Non-DP Primes}
+
+\begin{observation}\label{obs:non-dp-spectrum}
+For a prime $p$ not dividing $b$ with $p > b{+}1$,
+the eigenvalue spectrum of $\mathbf{A}(p)$ reflects
+the coset structure of $\langle b \rangle$ in
+$(\mathbb{Z}/p\mathbb{Z})^{*}$.
+
+When $b$ is a primitive root modulo $p$, the matrix
+is permutation-similar to a circulant~\cite{davis}
+(reordering rows and columns by discrete logarithm),
+with eigenvalues given by the DFT of the cyclic
+autocorrelation.
+
+When there are exactly two cosets ($L = (p{-}1)/2$),
+computation shows the spectrum has two eigenvalue
+levels whose values depend on the cross-coset
+digit-match count.
+\end{observation}
+
+In base~$10$: $p = 13$ ($L = 6$, two cosets) has eigenvalues
+$4/3$ and $2/3$, each with multiplicity~$6$. The prime $p = 17$
+($L = 16$, primitive root) has nine distinct eigenvalues ranging
+from $0.25$ to $1.75$.
+
+% ============================================================
+\section{Block Structure}
+
+\begin{proposition}\label{prop:block}
+For $n = ps$ with $p$ a digit-partitioning prime and
+$s$ a $b$-smooth integer, the cross-alignment matrix is
+permutation-similar to
+\[
+\mathbf{A}(ps) \cong J_{s-1} \oplus
+\underbrace{J_s \oplus \cdots \oplus J_s}_{p-1},
+\]
+where $J_m$ is the $m \times m$ all-ones matrix.
+In particular, $\operatorname{rank}(\mathbf{A}(ps)) = p$.
+\end{proposition}
+
+\begin{proof}
+The $s - 1$ terminating fractions form one block
+(pairwise alignment $1$). The $(p{-}1)$ exact
+repetend classes, each of size $s$, form the remaining
+blocks (within-class alignment $1$, cross-class $0$
+by the digit-partitioning property). Each all-ones
+block $J_m$ has rank $1$.
+\end{proof}
+
+For digit-partitioning $n = ps$, the rank is always $p$,
+regardless of $s$. The null space grows with the smooth
+factor because each repetend class of size $s$ contributes
+rank $1$ (all members are structurally identical in
+alignment space).
+
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{What the matrix captures}
+
+The pairwise alignment $\sigma$ is directly recoverable
+from $\mathbf{A}$. The alignment $\alpha$ requires the
+additional terminating-fraction convention. For
+digit-partitioning primes, $\mathbf{A}(p) = I$
+characterizes the property completely.
+
+
+\subsection*{Open directions}
+
+Whether the eigenvalue spectrum of $\mathbf{A}(n)$ admits a
+closed-form description in terms of the prime factorization of $n$
+and the digit function is open. The connection
+to Dirichlet characters~\cite{iwaniec}, suggested by the coset-level
+structure of the spectrum, is pursued in the papers that follow.
+
+% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{davis}
+P.~J.~Davis,
+\emph{Circulant Matrices},
+2nd ed., Chelsea, 1994.
+
+\bibitem{horn}
+R.~A.~Horn and C.~R.~Johnson,
+\emph{Matrix Analysis},
+2nd ed., Cambridge University Press, 2013.
+
+\bibitem{iwaniec}
+H.~Iwaniec and E.~Kowalski,
+\emph{Analytic Number Theory},
+Amer.\ Math.\ Soc., 2004.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,425 @@
+% ============================================================
+% The Spectral Structure of Fractional Fields
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Spectral Structure of Fractional Fields}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{July 2021 (revised April 2026)}
+\subjclass[2020]{11A63, 11B83, 42A16}
+
+\begin{document}
+\begin{abstract}
+For primitive-root primes ($\operatorname{ord}_p(b) = p{-}1$),
+we prove that the cross-alignment matrix, reordered by
+discrete-logarithm offset, is a circulant whose eigenvalues
+are the Fourier transform of the digit-equality
+autocorrelation. For primes with exactly two cosets and
+zero within-coset autocorrelation at nonzero lags, the
+spectrum has two eigenvalue levels determined by the
+cross-coset match count. The multi-coset case is described
+observationally.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+The cross-alignment matrix $\mathbf{A}(p)$ introduced
+in~\cite{paper6} is a symmetric, positive semidefinite
+matrix on the fractions of a prime $p$ in base $b$, whose
+$(i,j)$ entry is the digit-equality proportion between
+$i/p$ and $j/p$. For digit-partitioning primes
+($p \le b{+}1$), the matrix is the identity, every
+fraction is a stranger to every other, and the eigenvalue
+spectrum is trivially flat. For non-digit-partitioning
+primes, the matrix is no longer the identity. Its
+eigenvalue spectrum encodes the interference geometry of
+the field, but the spectrum was not given a closed form
+in~\cite{paper6}.
+
+This paper identifies the eigenvalues. The main result
+(Theorem~\ref{thm:circulant}) is that for primes $p$
+where $b$ is a primitive root modulo $p$, the matrix
+$\mathbf{A}(p)$, after a discrete-logarithm reordering of
+its rows and columns, becomes a circulant matrix whose
+first row is the cyclic autocorrelation of the base
+repetend $1/p$, divided by the cycle length $L = p - 1$.
+Standard properties of circulants~\cite{davis} then
+identify the eigenvalues as the discrete Fourier
+transform of the first row. The eigenvalue spectrum of
+$\mathbf{A}(p)$ is a character expansion of the
+repetend's autocorrelation.
+
+For primes $p$ where $b$ is not a primitive root, the
+fractions partition into $C = (p{-}1)/L$ orbits of
+$\langle b \rangle$, and the matrix decomposes into
+within-orbit and between-orbit blocks. We treat the
+two-orbit case in detail (Theorem~\ref{thm:two-coset})
+and show that under the natural sufficient conditions,
+which are satisfied at $p = 13$ in base $10$, the
+spectrum collapses to two eigenvalue levels determined
+by an involution. The general multi-orbit case is
+described observationally in~\S\ref{sec:multi-coset}.
+
+The connection to harmonic analysis on finite groups is
+explicit: the eigenvalues are inner products of the
+autocorrelation function with the additive characters of
+$\mathbb{Z}/L\mathbb{Z}$. This identifies the eigenvalue
+spectrum as a Fourier transform on a finite cyclic group,
+which is the natural starting point for the harmonic
+analysis pursued in the next several papers.
+
+% ============================================================
+\section{The Circulant Theorem}
+
+\begin{definition}
+The \emph{cyclic autocorrelation} of the base repetend
+$(d_0, d_1, \ldots, d_{L-1})$ of $1/p$ is the sequence
+\[
+R(\ell) = |\{j \in \{0, \ldots, L{-}1\} : d_j = d_{(j+\ell)
+\bmod L}\}|,
+\qquad \ell = 0, 1, \ldots, L{-}1.
+\]
+\end{definition}
+
+Note that $R(0) = L$ (every position matches itself) and
+$R(\ell) \ge 0$ for all $\ell$.
+
+\begin{theorem}\label{thm:circulant}
+Let $p$ be a prime for which $b$ is a primitive root
+($\operatorname{ord}_p(b) = p{-}1$). Then the cross-alignment
+matrix $\mathbf{A}(p)$, reordered by discrete-logarithm
+offset, is a circulant matrix with first row
+\[
+\left(\frac{R(0)}{L},\; \frac{R(1)}{L},\;
+\frac{R(2)}{L},\; \ldots,\; \frac{R(L{-}1)}{L}\right).
+\]
+Its eigenvalues are given by the discrete Fourier
+transform~\cite{davis}:
+\[
+\lambda_j = \frac{1}{L} \sum_{\ell=0}^{L-1}
+R(\ell)\, \omega^{j\ell},
+\qquad j = 0, 1, \ldots, L{-}1,
+\]
+where $\omega = e^{2\pi i / L}$.
+\end{theorem}
+
+\begin{proof}
+When $b$ is a primitive root modulo $p$, every fraction $k/p$ is a
+cyclic rotation of $1/p$ in the sense that the repetend of $k/p$ in
+base $b$ is the repetend of $1/p$ shifted by $\log_b k$ positions
+modulo $L$ (where $\log_b$ denotes the discrete logarithm with
+respect to $b$ modulo $p$). Ordered by rotation offset, the
+fractions are $1/p,\ b/p,\ b^2/p,\ \ldots,\ b^{L-1}/p$ (each
+reduced modulo $p$).
+
+In this ordering, the $(i, j)$ entry of $\mathbf{A}(p)$ is the
+digit-equality proportion between $b^i/p$ and $b^j/p$, which is
+the proportion of positions in the repetend of $1/p$ where the
+digit at position $\ell$ agrees with the digit at position
+$\ell + (j - i) \bmod L$. By the definition of $R$, this proportion
+is $R(j - i \bmod L)/L$. The $(i,j)$ entry depends only on the
+difference $j - i$ modulo $L$, so the matrix is circulant
+with first row $(R(0)/L,\ R(1)/L,\ \ldots,\ R(L-1)/L)$.
+
+The eigenvalues of a circulant are the discrete Fourier transform
+of its first row~\cite{davis}, which yields the stated formula.
+\end{proof}
+
+\begin{corollary}\label{cor:dp-flat}
+If $p$ is digit-partitioning ($p \le b{+}1$), every eigenvalue
+of $\mathbf{A}(p)$ equals $1$.
+\end{corollary}
+
+\begin{proof}
+By~\cite{paper6}, $\mathbf{A}(p) = I_{p-1}$ for digit-partitioning
+$p$, so the spectrum is the constant sequence $1$. For
+primitive-root digit-partitioning primes, the same conclusion
+follows from Theorem~\ref{thm:circulant}: the digit-partitioning
+condition forces $R(\ell) = 0$ for $\ell \ne 0$ (no two distinct
+positions of the repetend share a digit), and the DFT of
+$(L, 0, 0, \ldots, 0)/L$ is the constant sequence $1$.
+\end{proof}
+
+% ============================================================
+\section{Worked Example: $p = 7$ in Base $10$}\label{sec:p7}
+
+In base $10$, the prime $p = 7$ is digit-partitioning
+($p \le b{+}1 = 11$) and primitive-root
+($\operatorname{ord}_7(10) = 6$). The repetend of $1/7$ is
+$142857$, of length $L = 6$. By Theorem~\ref{thm:circulant},
+$\mathbf{A}(7)$ in the discrete-logarithm ordering is a
+$6 \times 6$ circulant whose first row is
+$(R(0)/6, R(1)/6, \ldots, R(5)/6)$.
+
+The autocorrelation values are computed by direct comparison
+of $142857$ with its rotations. At lag $\ell = 1$ the rotated
+sequence is $428571$, and the position-wise comparison
+$(1{:}4,\ 4{:}2,\ 2{:}8,\ 8{:}5,\ 5{:}7,\ 7{:}1)$ yields zero
+matches. The same calculation at every lag $\ell \in
+\{1, 2, 3, 4, 5\}$ gives zero matches. Hence
+$R(0) = 6$ and $R(\ell) = 0$ for $\ell \ne 0$, and the first
+row of the circulant is $(1, 0, 0, 0, 0, 0)$.
+
+The DFT of this row is the constant sequence
+$(1, 1, 1, 1, 1, 1)$. All six eigenvalues of $\mathbf{A}(7)$
+equal $1$, in agreement with the digit-partitioning case
+of Corollary~\ref{cor:dp-flat}.
+
+% ============================================================
+\section{The Two-Orbit Case}
+
+When $\operatorname{ord}_p(b) = L < p{-}1$, the fractions
+partition into $C = (p{-}1)/L$ orbits of $\langle b \rangle$
+in $(\mathbb{Z}/p\mathbb{Z})^*$. For $C = 2$, the
+cross-alignment matrix has additional structure that we
+make precise below.
+
+\begin{theorem}\label{thm:two-coset}
+Let $p$ be a prime with exactly two orbits of $\langle b
+\rangle$ in $(\mathbb{Z}/p\mathbb{Z})^*$, each of size
+$L = (p{-}1)/2$. Suppose
+\begin{enumerate}
+\item the within-orbit autocorrelation
+$R_C(\ell)$ (the digit-equality count between rotations
+within the same orbit) satisfies $R_C(\ell) = 0$ for
+$\ell \ne 0$, and
+\item each fraction in one orbit matches exactly one
+fraction in the other orbit at exactly $m$ positions, with
+all other cross-orbit pairs matching at zero positions.
+\end{enumerate}
+Then the eigenvalues of $\mathbf{A}(p)$ are
+\[
+1 + \frac{m}{L} \quad \text{and} \quad 1 - \frac{m}{L},
+\]
+each with multiplicity $L = (p{-}1)/2$.
+\end{theorem}
+
+\begin{proof}
+Under these conditions, every diagonal entry of $\mathbf{A}$
+is $1$, every within-orbit off-diagonal entry is $0$ (from
+condition (1)), and every cross-orbit off-diagonal entry is
+either $m/L$ (for the unique partner) or $0$ (otherwise).
+We can therefore write
+\[
+\mathbf{A}(p) = \mathbf{I} + \frac{m}{L}\, \mathbf{P},
+\]
+where $\mathbf{P}$ is the permutation matrix that pairs each
+fraction with its unique cross-orbit partner. Since the
+pairing is symmetric, $\mathbf{P}$ is an involution
+($\mathbf{P}^2 = \mathbf{I}$), so its eigenvalues are
+$\pm 1$, each with multiplicity equal to half its dimension,
+i.e., multiplicity $L$ each. The eigenvalues of $\mathbf{A}$
+follow as $1 \pm m/L$.
+\end{proof}
+
+\begin{proposition}\label{prop:p13-verify}
+The hypotheses of Theorem~\ref{thm:two-coset} are satisfied
+at $p = 13$ in base $10$, with $m = 2$ and $L = 6$.
+The eigenvalues of $\mathbf{A}(13)$ are $4/3$ and $2/3$,
+each with multiplicity $6$.
+\end{proposition}
+
+\begin{proof}
+The order of $10$ modulo $13$ is $6$, so $L = 6$ and
+$C = 2$. The two orbits of $\langle 10 \rangle$ in
+$(\mathbb{Z}/13\mathbb{Z})^*$ are
+$\{1, 10, 9, 12, 3, 4\}$ and $\{2, 7, 5, 11, 6, 8\}$. The
+repetends within the first orbit are the rotations of
+$076923$, and within the second orbit they are the rotations
+of $153846$.
+
+Within-orbit comparison: comparing $076923$ with each of its
+rotations $769230$, $692307$, $923076$, $230769$, $307692$
+position by position gives zero matches in every case.
+Hence $R_C(\ell) = 0$ for $\ell \ne 0$, verifying
+condition (1).
+
+Cross-orbit comparison: comparing $1/13 = 076923$ with each
+member of the second orbit gives the following position-wise
+match counts:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+partner & matches \\
+\midrule
+$2/13 = 153846$ & $0$ \\
+$5/13 = 384615$ & $0$ \\
+$6/13 = 461538$ & $0$ \\
+$7/13 = 538461$ & $0$ \\
+$8/13 = 615384$ & $0$ \\
+$11/13 = 846153$ & $2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+The unique partner of $1/13$ in the other orbit is $11/13$,
+matching at exactly $2$ positions (positions $3$ and $6$).
+The same pattern holds for every other fraction in the first
+orbit, by replaying the calculation: each fraction has a
+unique cross-orbit partner matching at exactly $2$ positions
+and matches every other cross-orbit fraction at $0$
+positions. This verifies condition (2) with $m = 2$.
+
+By Theorem~\ref{thm:two-coset}, the eigenvalues of
+$\mathbf{A}(13)$ are $1 + 2/6 = 4/3$ and $1 - 2/6 = 2/3$,
+each with multiplicity $6$.
+\end{proof}
+
+Whether the hypotheses of Theorem~\ref{thm:two-coset}
+hold for every two-orbit prime, or only for a subfamily
+that includes $p = 13$, is not determined here.
+
+% ============================================================
+\section{The General Multi-Orbit Case}\label{sec:multi-coset}
+
+For primes with $C = (p{-}1)/L > 2$ orbits, the cross-alignment
+matrix has a block decomposition that we describe but do not
+prove in full generality.
+
+\begin{proposition}\label{prop:block-decomp}
+For any prime $p$ with $C$ orbits of $\langle b \rangle$
+in $(\mathbb{Z}/p\mathbb{Z})^*$, each of size $L$, the
+cross-alignment matrix admits the decomposition
+\[
+\mathbf{A}(p) = \mathbf{W}(p) + \mathbf{X}(p),
+\]
+where $\mathbf{W}(p)$ is the block-diagonal within-orbit
+contribution (a direct sum of $C$ circulant $L \times L$
+matrices, one per orbit, each governed by the within-orbit
+autocorrelation) and $\mathbf{X}(p)$ is the
+block-off-diagonal between-orbit contribution (whose
+$(i,j)$ block records the cross-orbit alignments between
+orbit $i$ and orbit $j$).
+\end{proposition}
+
+\begin{proof}
+The block partition follows from grouping the rows and
+columns of $\mathbf{A}(p)$ by orbit. Within each orbit
+of size $L$, the rotation argument of
+Theorem~\ref{thm:circulant} applies verbatim, since
+fractions within the same orbit are rotations of one
+another, so each diagonal block is a circulant whose first
+row is $R_C(\ell)/L$ for that orbit.
+The cross-orbit blocks contain the digit-equality
+proportions between fractions of different orbits and have
+no cyclic structure in general.
+\end{proof}
+
+The within-orbit eigenvalues are the DFT of $R_C(\ell)/L$
+for each orbit, by Theorem~\ref{thm:circulant} applied
+within the orbit. The cross-orbit blocks add a perturbation
+whose eigenvalues depend on the joint structure of all
+$C$ orbits.
+
+Computation for all primes $p \le 37$ in base $10$ shows
+that the spectrum of $\mathbf{A}(p)$ is determined by the
+within-orbit autocorrelations $R_C(\ell)$ together with the
+cross-orbit alignment data, in the sense that two primes
+with the same orbit structure and the same alignment data
+have the same spectrum. A closed-form expression for the
+multi-orbit eigenvalues in terms of these data is not
+given here.
+
+% ============================================================
+\section{Connection to Harmonic Analysis}
+
+The DFT that produces the eigenvalues is a sum over characters
+of $\mathbb{Z}/L\mathbb{Z}$:
+\[
+\lambda_j = \frac{1}{L} \sum_{\ell=0}^{L-1}
+R(\ell)\, \chi_j(\ell),
+\]
+where $\chi_j(\ell) = e^{2\pi i j\ell/L}$ is the $j$-th character.
+The eigenvalue $\lambda_j$ is therefore the inner product of the
+autocorrelation function with the character $\chi_j$.
+
+This identifies the eigenvalue spectrum of the cross-alignment
+matrix as a \emph{character expansion} of the repetend's
+autocorrelation, in the sense of harmonic analysis on finite
+abelian groups~\cite{terras}. The digit-partitioning property corresponds to a
+flat character expansion (all coefficients equal). Non-DP primes
+exhibit character-dependent structure.
+
+For primitive-root primes, where $L = p - 1$, the additive
+characters of $\mathbb{Z}/L\mathbb{Z}$ used here are not the
+Dirichlet characters of $(\mathbb{Z}/p\mathbb{Z})^*$, but the
+two character groups are isomorphic via the discrete logarithm:
+the map $\log_b : (\mathbb{Z}/p\mathbb{Z})^* \to \mathbb{Z}/L\mathbb{Z}$
+intertwines a multiplicative character of
+$(\mathbb{Z}/p\mathbb{Z})^*$ with an additive character of
+$\mathbb{Z}/L\mathbb{Z}$. The eigenvalues of $\mathbf{A}(p)$ can
+therefore be re-expressed as evaluations of Dirichlet characters
+modulo $p$ on the autocorrelation pulled back through the
+discrete logarithm. The Dirichlet character framework~\cite{iwaniec}
+provides the analytic machinery for relating these character sums
+to $L$-functions, and is the natural setting in which the next
+several papers in the chain are developed.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{The autocorrelation in the primitive-root case}
+
+For primitive-root primes, the cyclic autocorrelation
+$R(\ell)$ determines the full eigenvalue spectrum
+(Theorem~\ref{thm:circulant}). For multi-coset primes,
+the within-coset autocorrelation alone does not suffice:
+the between-coset cross-correlation data is also needed
+(as seen at $p = 13$ in base~$10$, where $R(\ell) = 0$
+for $\ell \ne 0$ yet the spectrum is not flat).
+
+\subsection*{From spectra to $L$-functions}
+
+The expression $\lambda_j = L^{-1} \sum R(\ell) \chi_j(\ell)$
+resembles a Gauss-type sum. If the autocorrelation $R(\ell)$ can
+be expressed in terms of the Legendre symbol or other
+multiplicative characters, the eigenvalues become evaluations of
+Dirichlet $L$-functions at specific points. Whether this connection
+yields non-trivial analytic information about the fractional field
+is open.
+
+% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{paper6}
+A.~S.~Petty,
+The cross-alignment matrix,
+research note, 2021.
+
+\bibitem{davis}
+P.~J.~Davis,
+\emph{Circulant Matrices},
+2nd ed., Chelsea, 1994.
+
+\bibitem{terras}
+A.~Terras,
+\emph{Fourier Analysis on Finite Groups and Applications},
+Cambridge University Press, 1999.
+
+\bibitem{iwaniec}
+H.~Iwaniec and E.~Kowalski,
+\emph{Analytic Number Theory},
+Amer.\ Math.\ Soc., 2004.
+
+\end{thebibliography}
+
+\end{document}

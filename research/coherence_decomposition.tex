@@ -1,0 +1,316 @@
+% ============================================================
+% The Coherence Decomposition
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Coherence Decomposition}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{June 2022 (revised April 2026)}
+\subjclass[2020]{11A63, 11B83}
+
+\begin{document}
+\begin{abstract}
+We introduce two new invariants of the fractional field
+$\mathcal{F}(n) = \{k/n : 1 \le k \le n{-}1\}$: the \emph{pairwise
+alignment} $\sigma(n)$ and the \emph{focused alignment}
+$F(n) = \alpha(n) - \sigma(n)$, where $\alpha(n)$ is the repetend
+alignment of previous papers. For digit-partitioning primes, these
+admit exact formulas:
+\[
+\alpha(ps) = \frac{2s-1}{ps-1}, \qquad
+F(ps) = \frac{s}{ps-1}, \qquad
+\sigma(ps) = \frac{s-1}{ps-1},
+\]
+with limits $2/p$, $1/p$, and $1/p$ respectively as the smooth
+factor $s \to \infty$.
+
+The decomposition $\alpha = F + \sigma$ separates total coherence into
+a focused component (how strongly $1/n$ is distinguished within its
+field) and a diffuse component (the background pairwise coherence
+among all fractions). For digit-partitioning primes, the golden threshold
+$1/\varphi$ lies strictly between the focused and total
+limits if and only if $p \in \{2, 3\}$. Among primes
+$p \ge 3$, only $p = 3$ has this property.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+This paper decomposes alignment into focused and diffuse components.
+
+The preceding papers in this series studied the repetend alignment
+$\alpha(n)$, which measures the coherence of the fractional field
+$\mathcal{F}(n)$ relative to $1/n$. This paper introduces a
+complementary measure: the \emph{pairwise alignment} $\sigma(n)$,
+which quantifies the background coherence among all pairs of
+fractions in the field, independent of any distinguished member.
+
+The difference $F(n) = \alpha(n) - \sigma(n)$ isolates the
+\emph{focused alignment}: the excess coherence that $1/n$ enjoys
+over a generic field member. Together, $\alpha$, $\sigma$, and $F$
+decompose the coherence of $\mathcal{F}(n)$ into structural
+components with distinct limits and distinct roles in the golden
+ratio classification.
+
+% ============================================================
+\section{Definitions}
+
+\begin{definition}
+The \emph{pairwise alignment} of $n$ in base $b$ is
+For $n \ge 3$:
+\[
+\sigma(n) = \binom{n-1}{2}^{-1}
+\sum_{1 \le j < k \le n-1}
+a(j/n,\, k/n).
+\]
+where $a(j/n,\, k/n)$ is the position-wise digit-match proportion
+between the repetends of $j/n$ and $k/n$. Pairs of terminating
+fractions contribute $a = 1$. Pairs of non-terminating fractions
+with the same cycle length are compared position-wise. All other
+pairs (terminating with non-terminating, or different cycle
+lengths) contribute $a = 0$.
+\end{definition}
+
+\begin{definition}
+The \emph{focused alignment} of $n$ is
+\[
+F(n) = \alpha(n) - \sigma(n).
+\]
+\end{definition}
+
+Focused alignment measures how much more coherent the field is with
+$1/n$ than with a randomly chosen pair of its own members.
+
+% ============================================================
+\section{The Decomposition for Digit-Partitioning Primes}
+
+\begin{theorem}\label{thm:decomposition}
+Let $p$ be a digit-partitioning prime in base $b$ and let $s \ge 1$
+be a $b$-smooth integer. Then
+\begin{align}
+\alpha(ps) &= \frac{2s-1}{ps-1}, \label{eq:alpha} \\[4pt]
+F(ps) &= \frac{s}{ps-1}, \label{eq:F} \\[4pt]
+\sigma(ps) &= \frac{s-1}{ps-1}. \label{eq:sigma}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Equation~\eqref{eq:alpha} is the alignment formula from~\cite{paper2}.
+
+For $\sigma$, we count the pairs $(j,k)$ with $j < k$ and
+$a(j/n, k/n) = 1$. There are three sources of such pairs.
+
+\smallskip
+\emph{Terminating--terminating pairs.}\quad
+The $s - 1$ terminating fractions (multiples of $p$ in
+$\{1, \ldots, ps{-}1\}$) all contribute $a = 1$ in pairs by the
+definition of pairwise alignment, giving $\binom{s-1}{2}$ pairs.
+
+\smallskip
+\emph{Identical-repetend pairs among non-terminating fractions.}\quad
+By the cycle-partition argument in~\cite{paper2}
+(Universal Alignment Formula section),
+the $(p-1)s$ non-terminating fractions in $\{k/(ps)\}$ partition
+into $(p-1)/L$ families of $sL$ each, with $L = \operatorname{ord}_p(b)$.
+Within each family, the fractions split into $L$ same-repetend
+classes of $s$ each, indexed by the cyclic shift of the base
+repetend. (Each of the $L$ shifts is achieved by exactly $s$
+fractions, since the residue $r \in \{1, \ldots, p{-}1\}$
+producing a given shift has $s$ representatives in
+$\{k : 1 \le k \le ps{-}1,\ p \nmid k\}$.) Across all
+$(p-1)/L$ families, there are $(p-1)/L \cdot L = p - 1$
+same-repetend classes total, each of size $s$. Within each
+same-repetend class, all $\binom{s}{2}$ pairs have identical
+repetends and contribute $a = 1$. The total is
+$(p-1)\binom{s}{2}$ pairs.
+
+\smallskip
+\emph{All other pairs contribute $0$.}\quad
+Pairs of non-terminating fractions with different repetends
+(i.e., from different same-repetend classes) are cyclic shifts
+of each other; by the digit-partitioning characterization
+in~\cite{paper2}, the digit function is injective on
+$\{1, \ldots, p{-}1\}$, so distinct cyclic shifts share no
+positions and contribute $a = 0$. Pairs mixing a terminating
+with a non-terminating fraction contribute $a = 0$ by definition.
+
+\smallskip
+Summing:
+\[
+\Sigma = \binom{s-1}{2} + (p-1)\binom{s}{2}.
+\]
+
+Expanding and dividing by $\binom{ps-1}{2}$:
+\begin{align*}
+\sigma(ps)
+&= \frac{\binom{s-1}{2} + (p-1)\binom{s}{2}}{\binom{ps-1}{2}}
+= \frac{(s-1)(s-2)/2 + (p-1)s(s-1)/2}{(ps-1)(ps-2)/2} \\
+&= \frac{(s-1)\bigl[(s-2) + (p-1)s\bigr]}{(ps-1)(ps-2)}
+= \frac{(s-1)(ps - 2)}{(ps-1)(ps-2)}
+= \frac{s-1}{ps-1}.
+\end{align*}
+
+Finally, $F = \alpha - \sigma = (2s{-}1)/(ps{-}1) - (s{-}1)/(ps{-}1)
+= s/(ps{-}1)$.
+\end{proof}
+
+\begin{corollary}\label{cor:limits}
+As $s \to \infty$ through $b$-smooth integers,
+\[
+\alpha(ps) \to \frac{2}{p}, \qquad
+F(ps) \to \frac{1}{p}, \qquad
+\sigma(ps) \to \frac{1}{p}.
+\]
+\end{corollary}
+
+At infinite resolution, total coherence splits equally between
+focused and diffuse components.
+
+% ============================================================
+\section{The Golden Gap}
+
+\begin{theorem}\label{thm:golden-gap}
+For digit-partitioning primes $p$ not dividing $b$, the
+golden threshold $1/\varphi$ lies strictly between the focused
+and total coherence limits, $1/p < 1/\varphi < 2/p$, if and only
+if $p \in \{2, 3\}$. For $p = 2$, the digit-partitioning
+formula gives $\alpha(2s) = 1$ identically, so the
+threshold question is trivial. Among primes $p \ge 3$,
+only $p = 3$ has the gap.
+\end{theorem}
+
+\begin{proof}
+The condition $1/p < 1/\varphi$ requires $p > \varphi \approx 1.618$,
+satisfied by all primes. The condition $1/\varphi < 2/p$ requires
+$p < 2\varphi \approx 3.236$, satisfied only by $p = 2$
+and $p = 3$.
+\end{proof}
+
+For $p = 3$, the limits are $F \to 1/3 \approx 0.333$ and
+$\alpha \to 2/3 \approx 0.667$, with $1/\varphi \approx 0.618$
+falling in between. The golden threshold occupies the gap between
+focused and total coherence. For $p \ge 5$, the total limit $2/p
+\le 2/5 = 0.4$ falls below $1/\varphi$, so both $F$ and $\alpha$
+remain below the golden threshold at all resolutions.
+
+This gives a new characterization of the golden ratio's role. The
+three-tier classification arises because $p = 3$ is the unique prime
+whose diffuse coherence $\sigma$ is large enough to push the total
+$\alpha = F + \sigma$ above $1/\varphi$. The focused component alone
+never reaches $1/\varphi$ for any prime. It is the accumulation of
+pairwise background coherence that carries the total across the
+threshold.
+
+% ============================================================
+\section{The Sigma-Zero Characterization}
+
+\begin{proposition}\label{prop:sigma-zero}
+For a prime $p \ge 3$ not dividing $b$:
+$\sigma(p) = 0$ if and only if $p$ is
+digit-partitioning in base $b$.
+\end{proposition}
+
+\begin{proof}
+If $p$ is digit-partitioning, no two distinct fractions
+$j/p$ and $k/p$ share a digit at any common position,
+so every off-diagonal $a(j/p, k/p) = 0$ and
+$\sigma(p) = 0$.
+
+Conversely, if $p$ is not digit-partitioning
+($p > b{+}1$), there exist distinct $r, s$ with
+$\delta(r) = \delta(s)$. The fractions $r/p$ and $s/p$
+share the digit $\delta(r)$ at position $0$, giving
+$a(r/p, s/p) \ge 1/L > 0$ where
+$L = \operatorname{ord}_p(b)$. Hence $\sigma(p) > 0$.
+\end{proof}
+
+This provides an equivalent characterization of the
+digit-partitioning property: $p$ is digit-partitioning if and
+only if no two
+distinct fractions in $\{k/p : 1 \le k \le p{-}1\}$ share a digit
+at any common position.
+
+% ============================================================
+\section{Composite Denominators}
+
+For composite rough parts, the decomposition
+$\alpha = F + \sigma$ continues to hold by definition,
+but the exact formulas for digit-partitioning primes
+do not extend directly. The composite case requires a
+theory of cross-cycle digit coincidences that is beyond
+the scope of this paper.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{Three invariants}
+
+The fractional field $\mathcal{F}(n)$ now carries three defined
+invariants:
+\begin{itemize}
+\item $\alpha(n)$: total coherence (alignment with $1/n$),
+\item $\sigma(n)$: diffuse coherence (pairwise background alignment),
+\item $F(n)$: focused coherence (structural identity of $1/n$).
+\end{itemize}
+These are distinct measures with distinct limits and distinct roles
+in the classification. Alpha connects to the golden ratio. Sigma
+characterizes digit-partitioning at prime level. $F$ measures
+the excess coherence of $1/n$ over a generic pair. All
+three are computable from the fractional field alone.
+
+\subsection*{The gap as a structural principle}
+
+The golden threshold does not act on a single quantity. It acts on
+the \emph{gap} between focused and total coherence. The three-tier
+classification arises because $p = 3$ is the unique prime for which
+this gap is wide enough to contain $1/\varphi$. The width of the gap
+is $1/p$ (the diffuse limit), and the condition $1/p > 1/\varphi -
+1/p$ simplifies to $2/p > 1/\varphi$, recovering the golden bound
+$p < 2\varphi$.
+
+% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{paper2}
+A.~S.~Petty,
+Digit-partitioning primes and the alignment formula,
+research note, 2020.
+
+\bibitem{hardy}
+G.~H.~Hardy and E.~M.~Wright,
+\emph{An Introduction to the Theory of Numbers},
+6th ed., Oxford University Press, 2008.
+
+\bibitem{davenport}
+H.~Davenport,
+\emph{Multiplicative Number Theory},
+3rd ed., Springer, 2000.
+
+\bibitem{montgomery}
+H.~L.~Montgomery and R.~C.~Vaughan,
+\emph{Multiplicative Number Theory I: Classical Theory},
+Cambridge University Press, 2007.
+
+\end{thebibliography}
+
+\end{document}

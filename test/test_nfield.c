@@ -541,7 +541,7 @@ static void test_polar(void)
     printf("\n");
 }
 
-/* -- Digit function structural tests ------------ */
+/* -- Paper G: digit function structural tests ------------ */
 
 static int gcd_test(int a, int b) {
     while (b) { int t = b; b = a % b; a = t; }
@@ -556,7 +556,7 @@ static int modinv_test(int a, int m) {
 
 static void test_paper_g(void)
 {
-    printf("Digit function structural identities:\n\n");
+    printf("Paper G structural identities:\n\n");
 
 
     int b = 3;

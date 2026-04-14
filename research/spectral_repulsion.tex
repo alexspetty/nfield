@@ -1,0 +1,351 @@
+% ============================================================
+% The Spectral Repulsion
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{observation}[theorem]{Observation}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Spectral Repulsion}
+
+\author{Alexander S.\ Petty}
+\email{alexander.petty@gmail.com}
+\date{October 2025 (revised April 2026)}
+\subjclass[2020]{11A63, 11N05, 11M06}
+
+\begin{document}
+\begin{abstract}
+The collision transform decomposes the centered
+collision deviation $S^{\circ}$ over odd Dirichlet
+characters modulo $b^{\ell+1}$. The squared
+coefficients $|\hat{S}^{\circ}(\chi)|^2$ and the
+squared prime character sums $|P(s, \chi)|^2$ define
+two probability distributions on the same character
+space. This paper measures their overlap.
+
+The overlap decays like $\rho / n$, where $n$ is the
+number of odd characters and $\rho \approx 0.6$ is
+stable across all prime bases tested ($b = 3$ to $37$,
+$n = 3$ to $666$). Equivalently, the scaled overlap
+$n\Omega$ stays near $0.6$ across the tested bases.
+Under the random-relabeling null model, where one
+spectrum is uniformly permuted relative to the other,
+the expected overlap is exactly $1/n$. Thus the
+measured overlap is about $60\%$ of that null-model
+baseline, and the missing $40\%$ is the spectral
+repulsion.
+
+The repulsion has consequences. The collision-weighted
+Goldbach correlation $\sum_{p+q=N} S^{\circ}(p)\,
+S^{\circ}(q)$ has near-zero mean in the tested range.
+The reflection identity creates a further
+obstruction: if $S(a) \ge 0$ then $S(m{-}a) \le -1$,
+so both primes in a Goldbach pair cannot lie in the
+same collision half-group.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+The preceding papers recorded two computational
+patterns: the anti-correlation between
+$|\hat{S}^{\circ}(\chi)|$ and $|P(s, \chi)|$~\cite{paper19},
+and the double transversality at the level of finite
+base experiments~\cite{paper20}. Those notes do not
+prove a general mechanism; they isolate a repeatable
+numerical pattern.
+
+This paper quantifies the avoidance. The two squared
+distributions $|\hat{S}^{\circ}|^2$ and $|P|^2$ on
+the odd characters have a measurable overlap that
+decays with the group size. The scaled overlap
+$n\Omega$ is the statistic studied here.
+
+% ============================================================
+\section{The Overlap}
+
+\begin{definition}
+For a fixed base $b$ at lag $\ell = 1$, let
+$n = \phi(b^2)/2$ be the number of odd characters
+modulo $b^2$. Define the normalized distributions
+\[
+p_c = \frac{|\hat{S}^{\circ}(\chi_c)|^2}
+{\sum_j |\hat{S}^{\circ}(\chi_j)|^2},
+\qquad
+q_c = \frac{|P(s, \chi_c)|^2}
+{\sum_j |P(s, \chi_j)|^2},
+\]
+where the sums run over odd characters. The
+\emph{spectral overlap} is
+\[
+\Omega(b, s) = \sum_{c=1}^{n} p_c\, q_c.
+\]
+\end{definition}
+
+The quantity $\Omega$ is the raw overlap of the two
+normalized spectra. The comparison benchmark used in
+this paper is the \emph{random-relabeling null model}:
+fix the multisets of weights $\{p_c\}$ and $\{q_c\}$,
+and choose a uniform random permutation $\pi$ of the
+channels. Then the relabeled overlap is
+\[
+\Omega_\pi=\sum_{c=1}^{n} p_c\, q_{\pi(c)}.
+\]
+Since $\mathbb{E}[q_{\pi(c)}]=\frac1n\sum_j q_j=1/n$,
+one has
+\[
+\mathbb{E}[\Omega_\pi]=\sum_{c=1}^{n} p_c\cdot\frac1n
+=\frac1n.
+\]
+Thus $1/n$ is the exact expected overlap under random
+relabeling, regardless of how nonuniform $p$ and $q$
+are.
+
+% ============================================================
+\section{The Repulsion Ratio}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrr}
+\toprule
+$b$ & $n$ & $\Omega$ & $1/n$ & $n\Omega$ &
+$\Omega/(1/n)$ \\
+\midrule
+$3$ & $3$ & $0.1931$ & $0.3333$ & $0.58$ & $0.58$ \\
+$5$ & $10$ & $0.0766$ & $0.1000$ & $0.77$ & $0.77$ \\
+$7$ & $21$ & $0.0257$ & $0.0476$ & $0.54$ & $0.54$ \\
+$11$ & $55$ & $0.0108$ & $0.0182$ & $0.60$ & $0.60$ \\
+$13$ & $78$ & $0.0078$ & $0.0128$ & $0.61$ & $0.61$ \\
+$17$ & $136$ & $0.0041$ & $0.0074$ & $0.56$ & $0.56$ \\
+$19$ & $171$ & $0.0046$ & $0.0058$ & $0.79$ & $0.79$ \\
+$23$ & $253$ & $0.0024$ & $0.0040$ & $0.60$ & $0.60$ \\
+$29$ & $406$ & $0.0015$ & $0.0025$ & $0.63$ & $0.63$ \\
+$31$ & $465$ & $0.0013$ & $0.0022$ & $0.63$ & $0.63$ \\
+$37$ & $666$ & $0.0009$ & $0.0015$ & $0.58$ & $0.58$ \\
+\bottomrule
+\end{tabular}
+\caption{Spectral overlap $\Omega$ at $s = 0.5$
+across prime bases. The scaled overlap $n\Omega$ is
+stable near $0.6$. Thus the measured overlap is about
+$60\%$ of the random-relabeling benchmark $1/n$.}
+\label{tab:overlap}
+\end{table}
+
+\begin{definition}
+The \emph{repulsion ratio} is
+$\rho(b,s) = n\,\Omega(b,s)$, the scaled overlap
+at base~$b$ and point~$s$. If the limit
+$\rho(s) = \lim_{n \to \infty} \rho(b,s)$ exists,
+it is the asymptotic repulsion ratio.
+\end{definition}
+
+In the tested bases, $\rho \approx 0.6$ at $s = 0.5$,
+with no visible dependence on~$b$. If $\rho = 1$, the distributions would be
+as overlapped as the random-relabeling benchmark. If $\rho = 0$,
+they would be perfectly orthogonal. The observed value
+$\rho \approx 0.6$ indicates a $40\%$ deficit relative
+to the random-relabeling benchmark: in the tested
+bases, the collision spectrum under-overlaps the prime
+spectrum.
+
+\begin{remark}
+The value $\rho \approx 0.6$ is close to
+$1/\varphi = (\sqrt{5}-1)/2 \approx 0.618$. Whether
+this is a coincidence or a structural connection to
+the golden ratio (which selects the prime $3$ in the
+alignment theory~\cite{paperA}) is an open question.
+\end{remark}
+
+% ============================================================
+\section{Effective Support}
+
+The Shannon entropy $H = -\sum p_c \log p_c$ measures
+the spread of a distribution. The effective support is
+$e^H$: the number of characters that carry most of the
+distribution's weight.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrr}
+\toprule
+$b$ & $n$ & eff($\hat{S}$) & eff($P$) &
+product & product/$n$ \\
+\midrule
+$3$ & $3$ & $2.0$ & $2.5$ & $5.1$ & $1.7$ \\
+$7$ & $21$ & $7.0$ & $10.7$ & $74.6$ & $3.6$ \\
+$13$ & $78$ & $18.0$ & $52.0$ & $933$ & $12.0$ \\
+$19$ & $171$ & $33.2$ & $112$ & $3{,}716$ & $21.7$ \\
+$29$ & $406$ & $64.0$ & $295$ & $18{,}877$ & $46.5$ \\
+$37$ & $666$ & --- & --- & --- & --- \\
+\bottomrule
+\end{tabular}
+\caption{Effective support of the collision spectrum
+and the prime spectrum. The collision spectrum
+concentrates; the prime spectrum spreads. Their
+product grows faster than $n$.}
+\label{tab:effective}
+\end{table}
+
+The collision invariant concentrates its Fourier energy
+on a small number of characters, with effective support
+growing much more slowly than the ambient dimension in
+the displayed data. The prime distribution spreads its
+energy across most characters in the same data. The two
+spectra therefore occupy visibly different regions of
+character space in the tested bases.
+
+% ============================================================
+\section{The Goldbach Null}
+
+The spectral repulsion has implications for the
+collision invariant's interaction with additive
+prime problems.
+
+\begin{definition}
+The \emph{collision-weighted Goldbach correlation} is
+\[
+H(N) = \sum_{\substack{p + q = N \\ p, q \text{ prime}}}
+S^{\circ}(p)\, S^{\circ}(q).
+\]
+\end{definition}
+
+\begin{observation}[Goldbach null]\leavevmode\newline
+The normalized correlation
+$H(N)/R(N)$ (where $R(N)$ is the Goldbach count)
+averages to approximately zero across all tested
+bases.
+\end{observation}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrr}
+\toprule
+$b$ & mean $H/R$ & std $H/R$ \\
+\midrule
+$3$ & $+0.000$ & $0.63$ \\
+$5$ & $+0.001$ & $0.89$ \\
+$7$ & $+0.002$ & $1.20$ \\
+$10$ & $+0.002$ & $1.55$ \\
+$13$ & $+0.004$ & $1.75$ \\
+\bottomrule
+\end{tabular}
+\caption{The collision-weighted Goldbach correlation
+averages to zero. Even $N$ from $1{,}000$ to
+$100{,}000$.}
+\label{tab:goldbach}
+\end{table}
+
+The null result is consistent with the same separation
+seen in the overlap statistic: the collision-weighted
+Goldbach correlation does not show a sustained mean in
+the tested range.
+
+% ============================================================
+\section{The Reflection Obstruction}
+
+The reflection identity creates a further constraint
+on collision-class Goldbach problems.
+
+\begin{proposition}\label{prop:obstruction}
+If $S(a) \ge 0$, then $S(m{-}a) \le -1$. Therefore,
+for any Goldbach pair $p + q = N$ with
+$p \equiv a \pmod{m}$ and $q \equiv N{-}a \pmod{m}$,
+the two primes cannot both have non-negative collision
+deviation when $N \equiv 0 \pmod{m}$.
+\end{proposition}
+
+\begin{proof}
+By the reflection identity~\cite{paperA},
+$S(a) + S(m{-}a) = -1$. If $S(a) \ge 0$, then
+$S(m{-}a) = -1 - S(a) \le -1$.
+When $N \equiv 0 \pmod{m}$, the residue of $q$ is
+$m - a \pmod{m}$, so the two deviations have
+opposite signs.
+\end{proof}
+
+\begin{remark}
+For general $N$, the residue of $q$ is
+$(N - a) \bmod m \ne m - a$ unless $N \equiv 0$.
+The obstruction is partial, not total: it affects
+$1/m$ of all even $N$. But it demonstrates that the
+bilateral symmetry of the collision invariant is
+structurally incompatible with same-class Goldbach
+restrictions.
+\end{remark}
+
+% ============================================================
+\section{Remarks}
+
+The spectral repulsion quantifies the central
+observation of this program: the collision invariant
+and the prime distribution occupy different parts of
+character space. The repulsion ratio $\rho \approx 0.6$
+is stable across all bases tested and is the main
+numerical invariant recorded by this note.
+
+The collision invariant does not see the $L$-function
+zeros in the same way the prime spectrum does
+(anti-correlation, observed in the earlier note). Its
+collision-weighted Goldbach correlation has near-zero
+mean in the tested range. And the double-transversality
+note suggests the same kind of misalignment across
+bases. Together these observations point toward a
+base-specific geometry that is not well captured by
+standard additive or multiplicative averages alone.
+
+The repulsion ratio $\rho \approx 0.6$ is the
+quantitative signature of this separation. It
+measures the degree to which the digit function's
+geometry is transverse to the prime distribution's
+analytic structure in the tested family. That this
+ratio is stable across bases and close to a familiar
+constant is suggestive, but no theorem identifying its
+source is proved here.
+
+% ============================================================
+\begin{thebibliography}{99}
+
+\bibitem{paperA}
+A.~S.~Petty,
+The collision invariant,
+preprint, 2026.
+
+\bibitem{paperB}
+A.~S.~Petty,
+The collision transform,
+preprint, 2026.
+
+\bibitem{paper19}
+A.~S.~Petty,
+The general neutrality theorem,
+research note, 2025.
+
+\bibitem{paper20}
+A.~S.~Petty,
+The double transversality,
+research note, 2025.
+
+\bibitem{nfield}
+A.~S.~Petty,
+\emph{nfield: A structural analysis engine for fractional
+field invariants},
+software.
+\url{https://github.com/alexspetty/nfield}
+
+\end{thebibliography}
+
+\end{document}

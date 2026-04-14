@@ -1,0 +1,576 @@
+% ============================================================
+% The Neutrality Theorem
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Neutrality Theorem}
+
+\author{Alexander S.\ Petty}
+\email{alexander.petty@gmail.com}
+\date{August 2025}
+\subjclass[2020]{11A63, 11N05, 11M06}
+
+\begin{document}
+\begin{abstract}
+The centered collision fluctuation sum $F^{\circ}(s)$
+converges at $s = 1$ and appears to converge below
+$s = 1$ into the critical strip. This paper identifies
+the mechanism.
+
+The centered sum decomposes as
+$F^{\circ} = F^{\circ\circ} + \mathcal{M}$, where
+$F^{\circ\circ}$ is doubly centered and $\mathcal{M}$
+is the mod-$3$ component. In the nontrivial cancellation
+regime $c_0 \ne 0$, both diverge individually below
+$s = 1$, but their ratio approaches $-1$ with increasing
+precision. At finite range the deviation
+$(1 + \text{ratio}) \sim C / |F^{\circ\circ}|^{\alpha}$
+fits $\alpha \approx 0.6$, but the character
+decomposition proves $\alpha = 1$: the cancellation
+is perfect.
+
+The proof is algebraic. The mod-$3$ component
+decomposes over characters modulo~$3$ as
+$\mathcal{M} = c_0 \sum_p p^{-s} + c_1 \sum_p
+\chi_3(p)\, p^{-s}$. The doubly centered sum carries
+the same Mertens term $-c_0 \sum_p p^{-s}$ with
+opposite sign. In $F^{\circ} = F^{\circ\circ} +
+\mathcal{M}$, the Mertens terms cancel exactly,
+leaving $F^{\circ}$ as a pure linear combination of
+non-trivial character sums. These converge wherever
+the corresponding $L$-functions have no zeros.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+This paper studies why the centered collision
+fluctuation sum $F^{\circ}(s)$ penetrates below $s = 1$.
+
+The preceding papers~\cite{paper16,paper17} proved
+convergence at $s = 1$ via the collision transform and
+Mertens' theorem, and observed computational convergence
+to at least $s = 0.6$ in base~$10$. The mod-$3$ polarity
+was identified as the structural feature controlling the
+penetration depth: removing the mod-$3$ component
+preserves convergence at $s = 1$ but destroys it below.
+
+The present paper proves that the mod-$3$ cancellation
+is algebraically perfect. The doubly centered sum
+$F^{\circ\circ}$ and the mod-$3$ component $\mathcal{M}$
+share a common Mertens divergence
+$\pm c_0 \sum_p p^{-s}$ that cancels in their sum.
+The residual $F^{\circ}$ contains only non-trivial
+character sums.
+
+% ============================================================
+\section{The Decomposition}
+
+\begin{definition}
+Let $S^{\circ}(a)$ denote the singly centered collision
+deviation (centered by spectral class). For each unit
+$a \bmod m$ with $m = b^{\ell+1}$, define:
+\begin{align*}
+\mu_3(a) &= \frac{1}{|\{a' : a' \equiv a \!\!\pmod{3}\}|}
+\sum_{\substack{a' \equiv a \pmod{3}}}
+S^{\circ}(a'), \\
+S^{\circ\circ}(a) &= S^{\circ}(a) - \mu_3(a).
+\end{align*}
+The \emph{mod-$3$ component} is
+$\mathcal{M}(s) = \sum_p \mu_3(p) / p^s$
+and the \emph{doubly centered sum} is
+$F^{\circ\circ}(s) = \sum_p S^{\circ\circ}(p) / p^s$.
+\end{definition}
+
+By construction:
+\[
+F^{\circ}(s) = F^{\circ\circ}(s) + \mathcal{M}(s).
+\]
+
+\begin{proposition}
+The antisymmetry $S^{\circ}(a) = -S^{\circ}(m{-}a)$ is
+preserved by the mod-$3$ centering: $S^{\circ\circ}(a)
+= -S^{\circ\circ}(m{-}a)$.
+\end{proposition}
+
+\begin{proof}
+The reflection $a \mapsto m - a$ pairs mod-$3$ classes:
+it sends residue class $r$ to $m-r \pmod{3}$. Since
+$S^{\circ}$ is antisymmetric, the mod-$3$ means of
+reflected classes satisfy
+\[
+\mu_3(r) = -\mu_3(m-r).
+\]
+Therefore
+\[
+S^{\circ\circ}(m-a)
+= S^{\circ}(m-a) - \mu_3(m-a)
+= -S^{\circ}(a) + \mu_3(a)
+= -S^{\circ\circ}(a).
+\]
+\end{proof}
+
+\begin{corollary}
+$F^{\circ\circ}(1)$ converges: the antisymmetry ensures
+even characters vanish, and the proof of the Centered
+Collision PNT~\cite{paper16} applies.
+\end{corollary}
+
+% ============================================================
+\section{The Character Algebra}
+
+The function $\mu_3(a)$ depends only on $a \bmod 3$.
+When $3 \nmid b$, we have $\gcd(3,m)=1$, so the
+restriction to primes $p > 3$ (where
+$p \bmod 3 \in \{1,2\}$) gives a decomposition over
+characters modulo~$3$:
+\[
+\mu_3(p) = c_0 + c_1 \chi_3(p),
+\]
+where $\chi_3$ is the non-trivial character modulo~$3$,
+\[
+c_0 = \frac{m_1 + m_2}{2}, \qquad
+c_1 = \frac{m_1 - m_2}{2},
+\]
+and $m_1, m_2$ are the mod-$3$ means:
+$m_j = \mu_3(a)$ for any $a \equiv j \pmod{3}$.
+
+In base~$10$ at lag~$1$: $m_1 = -1.30$, $m_2 = 0$,
+giving $c_0 = c_1 = -0.65$.
+
+The mod-$3$ component is therefore
+\begin{equation}\label{eq:M-decomp}
+\mathcal{M}(s) = c_0 \sum_p \frac{1}{p^s}
++ c_1 \sum_p \frac{\chi_3(p)}{p^s}.
+\end{equation}
+
+The first sum is the Mertens prime sum, diverging like
+$\log\log x$ at $s = 1$ and like $x^{1-s}/((1{-}s)\log x)$
+for $s < 1$. The second converges at $s = 1$ by
+Dirichlet's theorem~\cite{davenport}.
+
+% ============================================================
+\section{The Cancellation Theorem}
+
+\begin{theorem}[Perfect cancellation]\label{thm:cancel}
+The Mertens divergence in $F^{\circ\circ}$ and
+$\mathcal{M}$ cancels exactly:
+\[
+F^{\circ}(s) = \sum_{\substack{\chi \bmod m \\
+\chi(-1) = -1}} \hat{S}^{\circ}(\chi)\, P(s, \chi),
+\]
+where $P(s, \chi) = \sum_p \chi(p)/p^s$. No trivial
+character (Mertens) term appears.
+\end{theorem}
+
+\begin{proof}
+By the collision transform~\cite{paper16},
+$S^{\circ}(p) = \sum_{\chi} \hat{S}^{\circ}(\chi)\,
+\chi(p)$, and the antisymmetry theorem restricts
+the sum to odd characters ($\chi(-1) = -1$). Therefore
+\[
+F^{\circ}(s) = \sum_{\substack{\chi \bmod m \\
+\chi(-1) = -1}} \hat{S}^{\circ}(\chi)
+\sum_p \frac{\chi(p)}{p^s}
+= \sum_{\substack{\chi \bmod m \\
+\chi(-1) = -1}} \hat{S}^{\circ}(\chi)\, P(s, \chi).
+\]
+Every character in this sum is non-trivial (the trivial
+character is even), so no Mertens term
+$\sum_p p^{-s}$ appears.
+
+The decomposition $F^{\circ} = F^{\circ\circ} +
+\mathcal{M}$ introduces the Mertens term
+$c_0 \sum_p p^{-s}$ via~\eqref{eq:M-decomp}, and
+$F^{\circ\circ}$ must carry $-c_0 \sum_p p^{-s}$ to
+compensate. In $F^{\circ}$, these cancel algebraically.
+\end{proof}
+
+\begin{definition}
+The \emph{cancellation exponent} $\alpha$ is defined by
+\[
+1 + \frac{F^{\circ\circ}(s)}{\mathcal{M}(s)}
+\sim \frac{C}{|F^{\circ\circ}(s)|^{\alpha}}
+\]
+as $|F^{\circ\circ}(s)| \to \infty$.
+\end{definition}
+
+\begin{corollary}\label{cor:alpha-one}
+Assume $c_0 \ne 0$, so that the Mertens term in
+\eqref{eq:M-decomp} is present and
+$|F^{\circ\circ}(s)| \to \infty$. Then the cancellation
+exponent is $\alpha = 1$.
+\end{corollary}
+
+\begin{proof}
+Since $1 + F^{\circ\circ}/\mathcal{M} =
+F^{\circ}/\mathcal{M}$, and $F^{\circ}(s)$ converges
+to a finite value while
+$|\mathcal{M}(s)| \sim |c_0| \sum_p p^{-s} \to \infty$,
+the ratio $F^{\circ}/\mathcal{M} \to 0$. Since
+$F^{\circ\circ} = F^{\circ} - \mathcal{M}$ and
+$F^{\circ}(s)$ converges while
+$|\mathcal{M}(s)| \to \infty$, we have
+$F^{\circ\circ}/\mathcal{M} = F^{\circ}/\mathcal{M}
+- 1 \to -1$, so $|F^{\circ\circ}| \sim |\mathcal{M}|$.
+Therefore
+\[
+\bigl|1 + \text{ratio}\bigr|
+= \frac{|F^{\circ}(s)|}{|\mathcal{M}(s)|}
+\sim \frac{C}{|F^{\circ\circ}(s)|^1}.
+\]
+\end{proof}
+
+% ============================================================
+\section{Computational Verification}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrrr}
+\toprule
+primes & $s$ & $F^{\circ}$ & $F^{\circ\circ}$ &
+$\mathcal{M}$ & $1 {+} \text{ratio}$ &
+$\alpha_{\text{fit}}$ \\
+\midrule
+$10{,}000$ & $0.7$ & $+0.27$ & $+7.1$ & $-6.8$
+& $-0.039$ & $0.58$ \\
+$100{,}000$ & $0.7$ & $+0.28$ & $+13.1$ & $-12.8$
+& $-0.022$ & $0.61$ \\
+$348{,}488$ & $0.7$ & $+0.29$ & $+18.1$ & $-17.8$
+& $-0.016$ & $0.62$ \\
+$700{,}000$ & $0.7$ & $+0.26$ & $+21.6$ & $-21.3$
+& $-0.012$ & $0.91$ \\
+$1{,}270{,}000$ & $0.7$ & $+0.27$ & $+25.2$ & $-24.9$
+& $-0.011$ & $0.75$ \\
+\bottomrule
+\end{tabular}
+\caption{The fitted cancellation exponent $\alpha$
+drifts upward as the prime range increases. At
+$348{,}488$ primes $\alpha \approx 0.6$; at
+$1{,}270{,}000$ primes the fit is noisy but trends
+toward $\alpha = 1$. Base~$10$, lag~$1$.}
+\label{tab:drift}
+\end{table}
+
+The finite-range exponent $\alpha \approx 0.6$ reported
+in earlier computation reflects the pre-asymptotic
+regime. As the prime count increases, the Mertens term
+$c_0 \sum_p p^{-s}$ dominates both $F^{\circ\circ}$
+and $\mathcal{M}$, and the ratio
+$F^{\circ}/\mathcal{M}$ shrinks as $1/|\mathcal{M}|$,
+confirming $\alpha = 1$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrr}
+\toprule
+$s$ & $F^{\circ}$ & $|F^{\circ\circ}|$ &
+$(1{+}\text{ratio}) \cdot |F^{\circ\circ}|$ \\
+\midrule
+$1.0$ & $+0.08$ & $0.90$ & $0.085$ \\
+$0.9$ & $+0.12$ & $2.38$ & $0.126$ \\
+$0.8$ & $+0.18$ & $7.25$ & $0.187$ \\
+$0.7$ & $+0.27$ & $25.2$ & $0.273$ \\
+$0.6$ & $+0.37$ & $96.6$ & $0.369$ \\
+$0.5$ & $+0.37$ & $399.6$ & $0.370$ \\
+\bottomrule
+\end{tabular}
+\caption{With $\alpha = 1$, the product
+$(1{+}\text{ratio}) \cdot |F^{\circ\circ}|$ equals
+$|F^{\circ}(s)|$, which is bounded. Compare with
+Table~\ref{tab:drift}: the product stabilizes as
+the prime count grows. $1{,}270{,}000$ primes.}
+\label{tab:alpha-one}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrrr}
+\toprule
+$b$ & $\phi(b^2)$ & $c_0$ & $F^{\circ}(0.5)$ &
+$|F^{\circ\circ}(0.5)|$ & $\alpha_{\text{fit}}$ &
+type \\
+\midrule
+$3$ & $6$ & $0$ & $+0.65$ & $0.65$ & --- & $3 \mid b$ \\
+$5$ & $20$ & $+0.11$ & $+0.88$ & $51$ & $0.69$ &
+weak \\
+$7$ & $42$ & $-0.70$ & $+1.76$ & $323$ & $0.69$ &
+strong \\
+$10$ & $40$ & $-0.65$ & $+0.09$ & $296$ & $0.93$ &
+strong \\
+$11$ & $110$ & $+0.02$ & $+1.72$ & $8.3$ & --- &
+weak \\
+$12$ & $48$ & $0$ & $-0.64$ & $0.64$ & --- & $3 \mid b$ \\
+$13$ & $156$ & $-0.80$ & $+3.53$ & $369$ & $0.60$ &
+strong \\
+\bottomrule
+\end{tabular}
+\caption{The cancellation exponent across bases
+($664{,}000$ primes). When $3 \mid b$, the mod-$3$
+bias vanishes ($c_0 = 0$) and $F^{\circ} = F^{\circ\circ}$
+with no cancellation needed. When $3 \nmid b$, the
+bias is strong ($|c_0| > 0.5$) or weak ($|c_0| < 0.2$).
+At strong bias, $\alpha$ is already near $1$ at this
+range. At weak bias, the Mertens term has not yet
+dominated and the finite-range $\alpha$ is lower.}
+\label{tab:multi-base}
+\end{table}
+
+Three regimes emerge. When $3 \mid b$, the modulus
+$m \equiv 0 \pmod{3}$ forces all units into mod-$3$
+classes $1$ and $2$, and the centering removes the
+bias completely: $c_0 = 0$ and no cancellation mechanism
+is needed. When $3 \nmid b$ and the bias is strong
+($|c_0| \approx 0.7$), the Mertens term dominates
+early and $\alpha$ approaches $1$ quickly. When $3 \nmid b$
+but the bias is weak ($|c_0| \approx 0.02$), the
+character sum corrections remain comparable to the
+Mertens term at this range, and the finite-range
+$\alpha$ stays low. In the nontrivial cancellation
+regime $c_0 \ne 0$, the theorem predicts
+$\alpha = 1$ asymptotically; when $c_0 = 0$, no
+cancellation exponent is defined because no divergent
+Mertens term is present.
+
+% ============================================================
+\section{Consequences}
+
+\begin{corollary}
+$F^{\circ}(s)$ converges for
+$\operatorname{Re}(s) > 1 - c/\log m$, where $c > 0$
+is the constant from the classical zero-free region
+for Dirichlet $L$-functions modulo~$m$.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:cancel}, $F^{\circ}(s) = \sum
+\hat{S}^{\circ}(\chi)\, P(s, \chi)$ over non-trivial
+odd characters. By partial summation and the explicit
+formula for $\sum_{p \le x} \chi(p)$
+(see~\cite[Ch.~20]{davenport}
+or~\cite[Ch.~13]{montgomery}), each $P(s, \chi)$
+converges wherever $L(s, \chi)$ has no zeros with real
+part $\ge \operatorname{Re}(s)$. The classical zero-free
+region~\cite{davenport,montgomery} guarantees this
+for $\operatorname{Re}(s) > 1 - c/\log m$.
+\end{proof}
+
+\begin{remark}
+By the convergence theorem for Dirichlet
+series~\cite{hardy}, convergence of $F^{\circ}$ at a
+real point $s_0$ extends to the half-plane
+$\operatorname{Re}(s) > s_0$. The question of
+penetration depth is therefore a question about the
+real abscissa of convergence.
+
+Computation indicates convergence to at least
+$s_0 = 0.5$~\cite{paper17}. If confirmed, this would
+imply convergence for all
+$\operatorname{Re}(s) > 1/2$. Since $F^{\circ}$ is
+a finite linear combination of character sums
+$P(s, \chi)$, two scenarios are possible.
+
+If the products
+$\hat{S}^{\circ}(\chi) \cdot P(s, \chi)$ were to have
+non-negative real part,
+then convergence of $F^{\circ}$ requires each
+$P(s, \chi)$ to converge individually, which is
+equivalent to $L(s, \chi) \ne 0$ for
+$\operatorname{Re}(s) > 1/2$: the Generalized Riemann
+Hypothesis for the odd $L$-functions modulo~$m$.
+
+If the positivity condition fails, convergence of
+$F^{\circ}$ could arise from cancellation between
+divergent character sums. This would mean the
+collision coefficients $\hat{S}^{\circ}(\chi)$ encode
+structural information about the zeros of the
+corresponding $L$-functions.
+\end{remark}
+
+% ============================================================
+\section{The Neutrality Theorem}
+
+The mod-$3$ component $\mathcal{M}$ arises because the
+collision invariant $S$ has unequal means across mod-$3$
+classes. The following theorem identifies the universal
+structure.
+
+\begin{theorem}[Neutrality of the fixed class]\label{thm:neutral}
+For any base $b$ with $3 \nmid b$ and any lag
+$\ell \ge 1$, let $m=b^{\ell+1}$ and let
+$r_m \in \{1,2\}$ be the unique residue class satisfying
+\[
+2r_m \equiv m \pmod{3}
+\qquad\text{equivalently}\qquad
+r_m \equiv -m \pmod{3}.
+\]
+Then the mean of $S$ (the collision deviation at lag~$\ell$)
+over units
+$a \equiv r_m \pmod{3}$ in
+$(\mathbb{Z}/b^{\ell+1}\mathbb{Z})^{\times}$ equals
+$-1/2$ (the grand mean). In particular, when
+$m \equiv 1 \pmod{3}$ the neutral class is $2$, and when
+$m \equiv 2 \pmod{3}$ the neutral class is $1$.
+\end{theorem}
+
+\begin{proof}
+Since $3 \nmid b$, the class $r_m$ is well-defined modulo~$3$.
+The reflection $a \mapsto m-a$ sends residue class $r$ to
+$m-r \pmod{3}$. The class $r_m$ is fixed by this map because
+\[
+m-r_m \equiv r_m \pmod{3}
+\qquad\Longleftrightarrow\qquad
+2r_m \equiv m \pmod{3}.
+\]
+Thus reflection is a self-map on the class-$r_m$ units. The
+reflection identity
+$S(a) + S(m{-}a) = -1$ pairs units within this class,
+and each pair averages to $-1/2$.
+\end{proof}
+
+\begin{corollary}\label{cor:swap}
+The remaining two mod-$3$ classes are swapped by reflection,
+so their means sum to $-1$. Thus all deviation from the
+grand mean is concentrated in the reflected pair, with equal
+magnitude and opposite sign around $-1/2$.
+\end{corollary}
+
+For the lag-$1$ case studied in the critical-strip note,
+$m=b^2 \equiv 1 \pmod{3}$ whenever $3 \nmid b$, so the
+neutral class is $2$ and the reflected pair is $\{0,1\}$.
+Since primes $p>3$ satisfy $p \bmod 3 \in \{1,2\}$, the
+prime harmonic sum then sees only classes $1$ (which carries
+a base-dependent bias) and $2$ (which is neutral). This is
+the source of the lag-$1$ mod-$3$ polarity used in the
+critical-strip computations.
+
+\begin{remark}
+Since $3 \mid 3$, Theorem~\ref{thm:neutral} does not
+apply to base~$3$.  In base~$3$, the class-$1$ mean
+is $-2/3$ and the class-$2$ mean is $-1/3$, giving a
+splitting ratio of
+$|{-}2/3|/(|{-}2/3|{+}|{-}1/3|) = 2/3$. The fraction
+$2/3 = (p{-}1)/p$ at $p = 3$ is the alignment limit
+of the prime~$3$~\cite{paper1}. This ratio is specific
+to base~$3$; in the bases with $3 \nmid b$ and
+$m \equiv 1 \pmod{3}$, the class-$2$ mean is $-1/2$
+(neutral), while in the cases with $m \equiv 2 \pmod{3}$
+the neutral class is $1$. The universal structure is the
+neutrality of the fixed reflected class, not the ratio $2/3$.
+\end{remark}
+
+Computation confirms the neutrality theorem across all
+bases $b \le 40$ with $3 \nmid b$: in the cases with
+$m \equiv 1 \pmod{3}$ one finds
+$2 \cdot \text{sum}_2 = -\text{count}_2$ exactly, while
+in the cases with $m \equiv 2 \pmod{3}$ the analogous
+identity holds with class~$1$ in place of class~$2$.
+For bases with $3 \mid b$, the modulus $m \equiv 0 \pmod{3}$,
+no units satisfy $a \equiv 0 \pmod{3}$, and the
+structure is different.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{What is proved}
+
+The decomposition
+$F^{\circ} = F^{\circ\circ} + \mathcal{M}$ is exact.
+In the nontrivial cancellation regime $c_0 \ne 0$, the
+character algebra proves $\alpha = 1$: the Mertens
+divergence cancels algebraically, leaving $F^{\circ}$
+as a pure non-trivial character sum. When $c_0 = 0$,
+no cancellation is needed. Convergence
+extends to the classical zero-free region for
+$L$-functions modulo~$m$~\cite{davenport}. The
+neutrality of the fixed mod-$3$ reflected class is
+proved from the reflection identity.
+
+\subsection*{What the computation shows}
+
+At finite range ($348{,}488$ primes), the fitted
+exponent $\alpha \approx 0.6$ reflects the
+pre-asymptotic regime where character sum corrections
+are comparable to the Mertens term. As the range
+increases to $1{,}270{,}000$ primes, the fit drifts
+toward $\alpha = 1$, confirming the theorem.
+
+\subsection*{The arc}
+
+The alignment limit $2/3$ from~\cite{paper1} is the
+base-$3$ instance of the neutrality theorem: at base~$3$,
+the class-$1$ bias is $-2/3$ and the class-$2$ mean is
+$-1/3$ (neutral at $-1/2$ in the centered picture). The
+universal structure is not the ratio $2/3$ but the
+neutrality of the fixed reflected class, which follows
+from the bilateral symmetry of the digit function. The collision
+transform~\cite{paper16} provides the character
+decomposition, and the antisymmetry
+theorem~\cite{paper17} restricts to odd characters,
+eliminating the Mertens term and producing perfect
+cancellation.
+
+% ============================================================
+\begin{thebibliography}{99}
+
+\bibitem{davenport}
+H.~Davenport,
+\emph{Multiplicative Number Theory},
+3rd~ed., Springer, 2000.
+
+\bibitem{hardy}
+G.~H.~Hardy and M.~Riesz,
+\emph{The General Theory of Dirichlet's Series},
+Cambridge Tracts in Mathematics, 1915.
+
+\bibitem{iwaniec}
+H.~Iwaniec and E.~Kowalski,
+\emph{Analytic Number Theory},
+AMS Colloquium Publications, vol.~53, 2004.
+
+\bibitem{montgomery}
+H.~L.~Montgomery and R.~C.~Vaughan,
+\emph{Multiplicative Number Theory I: Classical Theory},
+Cambridge University Press, 2007.
+
+\bibitem{paper1}
+A.~S.~Petty,
+Why the golden ratio selects the prime three,
+research note, 2020.
+
+\bibitem{paper16}
+A.~S.~Petty,
+The collision transform,
+research note, 2025.
+
+\bibitem{paper17}
+A.~S.~Petty,
+The collision transform in the critical strip,
+research note, 2025.
+
+\bibitem{nfield}
+A.~S.~Petty,
+\emph{nfield: A structural analysis engine for fractional
+field invariants},
+software.
+\url{https://github.com/alexspetty/nfield}
+
+\end{thebibliography}
+
+\end{document}

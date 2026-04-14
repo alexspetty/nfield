@@ -1,0 +1,412 @@
+% ============================================================
+% The Spectral Power of the Digit Function
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Spectral Power of the Digit Function}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{October 2021 (revised April 2026)}
+\subjclass[2020]{11A63, 11B83, 42A16}
+
+\begin{document}
+\begin{abstract}
+We derive an exact closed-form expression for the spectral
+power $\Phi(k)$ of the digit partition induced by
+$\delta(r) = \lfloor br/p \rfloor$ on
+$\mathbb{Z}/p\mathbb{Z}$. For $k \ne 0$,
+\[
+\Phi(k) = \sum_{d=0}^{b-1}
+\left|\frac{\sin(\pi k n_d / p)}{\sin(\pi k / p)}\right|^2,
+\]
+where $n_d$ is the size of the $d$-th digit bin. At $k = 0$,
+$\Phi(0) = \sum_d n_d^2 = S(p,b)$, recovering the bin-sum
+from~\cite{paper3}. Parseval's identity gives
+$\sum_k \Phi(k) = p(p-1)$.
+
+The spectral power captures the magnitude of the bin
+Fourier coefficients but not their phase. Its zeroth mode
+$\Phi(0) = S(p,b)$ governs the alignment limit
+of~\cite{paper3}, and a prime $p$ is digit-partitioning
+in base $b$ if and only if $\Phi(k)$ is constant in $k$.
+The cyclic autocorrelation $R(\ell)$ used
+in~\cite{paper7} to compute the eigenvalue spectrum
+requires the phase information discarded by squaring,
+and is treated separately in the sequel via a
+two-variable cross-spectral function whose
+diagonal recovers $\Phi$. The present paper identifies
+the additive Fourier analysis of
+$\mathbb{Z}/p\mathbb{Z}$ as the natural setting for the
+digit-bin partition and derives every closed form that
+follows from magnitude data alone.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+The digit partition of a prime $p$ in base $b$ is the
+collection of bins
+$B_d = \{r : 1 \le r \le p{-}1,\ \lfloor br/p \rfloor = d\}$
+for $d = 0, 1, \ldots, b{-}1$. The bin sizes $n_d = |B_d|$
+are integer invariants of the pair $(p,b)$. Earlier papers in
+this series have used the bin sizes through several scalar
+combinations: the bin-sum $S(p,b) = \sum_d n_d^2$ that
+governs the alignment limit~\cite{paper3}, the alignment
+$\alpha$ and pairwise alignment $\sigma$ of the coherence
+decomposition~\cite{paper5}, and the cyclic autocorrelation
+$R(\ell)$ used in the spectral structure paper~\cite{paper7}
+to compute the eigenvalues of the cross-alignment
+matrix~\cite{paper6}. Each of these invariants is some
+contraction of the bin partition. None of them is a function
+of a single Fourier mode of the partition itself.
+
+This paper identifies that single Fourier mode. We define
+the \emph{spectral power} $\Phi(k)$ of the digit
+partition as the sum of squared magnitudes of the bin
+indicators' additive Fourier coefficients, prove that
+$\Phi(k)$ has a closed form in terms of Dirichlet kernels
+weighted by the bin sizes, and show that the existing
+scalar invariants are values or contractions of $\Phi$.
+The bin-sum $S(p,b)$ is $\Phi(0)$. The digit-partitioning
+characterization $p \le b+1$ is equivalent to constancy of
+$\Phi(k)$ in $k$. The cyclic autocorrelation $R(\ell)$ is
+not determined by $\Phi$ alone (squaring discards the phase
+information that $R$ depends on) but is naturally expressed
+through a two-variable extension of $\Phi$, the
+cross-spectral function, which is the subject of the
+sequel paper.
+
+The technical content of this paper is the observation
+that the bins $B_d$ are contiguous integer intervals
+(because $\delta(r) = \lfloor br/p \rfloor$ is monotone
+in $r$), so each bin indicator's Fourier transform is a
+geometric sum, and its magnitude is a Dirichlet kernel.
+Once that is in place, the closed form for $\Phi(k)$
+follows in one line from the definition. The recovery of
+$S(p,b)$ as $\Phi(0)$ is a corollary of the same
+identity, and Parseval's identity gives the total
+spectral energy $\sum_k \Phi(k) = p(p-1)$ as a sanity
+check.
+
+% ============================================================
+\section{The Bin Partition and Its Fourier Expansion}
+
+\begin{definition}
+For a prime $p$ not dividing $b$, the \emph{bin indicator} of
+digit $d$ is the function
+$\mathbf{1}_{B_d} : \{1, \ldots, p{-}1\} \to \{0,1\}$ defined by
+\[
+\mathbf{1}_{B_d}(r) =
+\begin{cases}
+1 & \text{if } \lfloor br/p \rfloor = d, \\
+0 & \text{otherwise}.
+\end{cases}
+\]
+The bin $B_d$ is a contiguous interval of integers in
+$\{1, \ldots, p{-}1\}$ of length $n_d$.
+\end{definition}
+
+Since $B_d$ is a contiguous interval, the additive Fourier
+transform of $\mathbf{1}_{B_d}$ is a geometric sum.
+
+\begin{lemma}\label{lem:fourier-bin}
+The Fourier coefficient of $\mathbf{1}_{B_d}$ at frequency $k$ is
+\[
+\widehat{\mathbf{1}}_{B_d}(k)
+= \sum_{r \in B_d} e^{-2\pi i k r / p}.
+\]
+For $k \ne 0$, this equals a Dirichlet kernel evaluation:
+\[
+|\widehat{\mathbf{1}}_{B_d}(k)|
+= \left|\frac{\sin(\pi k n_d / p)}{\sin(\pi k / p)}\right|.
+\]
+For $k = 0$, $|\widehat{\mathbf{1}}_{B_d}(0)| = n_d$.
+\end{lemma}
+
+\begin{proof}
+The bin $B_d$ is an interval of $n_d$ consecutive integers starting
+at some $a_d$. The sum is geometric:
+\[
+\widehat{\mathbf{1}}_{B_d}(k) = e^{-2\pi i k a_d / p}
+\cdot \frac{1 - e^{-2\pi i k n_d / p}}{1 - e^{-2\pi i k / p}}.
+\]
+Taking absolute values cancels the phase and gives the stated
+Dirichlet kernel form.
+\end{proof}
+
+% ============================================================
+\section{The Spectral Power}
+
+\begin{definition}
+The \emph{spectral power} of the digit function at frequency $k$
+is
+\[
+\Phi(k) = \sum_{d=0}^{b-1}
+|\widehat{\mathbf{1}}_{B_d}(k)|^2.
+\]
+\end{definition}
+
+\begin{theorem}\label{thm:spectral-power}
+The spectral power has the exact closed form
+\[
+\Phi(k) = \sum_{d=0}^{b-1}
+\left|
+\frac{\sin(\pi k n_d / p)}{\sin(\pi k / p)}
+\right|^2
+\]
+for $k \ne 0$, and $\Phi(0) = \sum_{d} n_d^2 = S(p,b)$.
+\end{theorem}
+
+\begin{proof}
+Immediate from Lemma~\ref{lem:fourier-bin} and the definition.
+\end{proof}
+
+\begin{corollary}\label{cor:parseval}
+$\sum_{k=0}^{p-1} \Phi(k) = p(p-1)$.
+\end{corollary}
+
+\begin{proof}
+By Parseval's identity applied to each bin indicator:
+$\sum_k |\widehat{\mathbf{1}}_{B_d}(k)|^2 = p \cdot n_d$.
+Summing over $d$: $\sum_k \Phi(k) = p \sum_d n_d = p(p{-}1)$.
+\end{proof}
+
+% ============================================================
+\section{Worked Example at $p = 13$ in Base $10$}\label{sec:example}
+
+To make Theorem~\ref{thm:spectral-power} concrete, we
+compute $\Phi$ explicitly at $p = 13$ in base $10$. The
+bin sizes $n_d = |\{r \in \{1, \ldots, 12\} :
+\lfloor 10r/13 \rfloor = d\}|$ are
+\[
+(n_0, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8, n_9)
+= (1, 1, 1, 2, 1, 1, 2, 1, 1, 1).
+\]
+Eight singleton bins and two doubled bins, summing to
+$\sum_d n_d = 12 = p - 1$. The bin-sum is
+\[
+\Phi(0) = S(13, 10) = 8 \cdot 1 + 2 \cdot 4 = 16.
+\]
+
+For $k \ne 0$, the singleton bins contribute Dirichlet
+kernel value $1$, and the doubled bins contribute
+$|2 \cos(\pi k/13)|^2 = 4 \cos^2(\pi k/13)$. Summing,
+\[
+\Phi(k) = 8 + 8 \cos^2\!\left(\frac{\pi k}{13}\right),
+\qquad k = 1, 2, \ldots, 12.
+\]
+The total spectral energy is
+$\sum_{k=0}^{12} \Phi(k) = 16 + \sum_{k=1}^{12}
+[8 + 8\cos^2(\pi k/13)] = 16 + 96 + 8 \cdot 11/2
+= 16 + 96 + 44 = 156$, in agreement with
+Corollary~\ref{cor:parseval} since
+$p(p-1) = 13 \cdot 12 = 156$. The constant $11/2$ in
+the cosine sum comes from the standard identity
+$\sum_{k=1}^{p-1} \cos^2(\pi k/p) = (p{-}2)/2$.
+
+% ============================================================
+\section{Equivalent Characterization of Digit-Partitioning Primes}
+
+The spectral power gives a clean spectral characterization
+of the digit-partitioning property.
+
+\begin{proposition}\label{prop:dp-flat}
+A prime $p$ is digit-partitioning in base $b$
+(equivalently, $p \le b{+}1$) if and only if
+$\Phi(k)$ is constant in $k$ for $k \in \{0, 1, \ldots, p{-}1\}$.
+\end{proposition}
+
+\begin{proof}
+If $p$ is digit-partitioning then $n_d \le 1$ for every $d$,
+so each Dirichlet kernel
+$|\sin(\pi k n_d/p)/\sin(\pi k/p)|$ is identically $1$ at
+nonzero $k$, and $\Phi(k) = p{-}1$ for $k \ne 0$.
+Also $\Phi(0) = \sum_d n_d^2 = p{-}1$ since each
+nonzero $n_d$ equals $1$. So $\Phi$ is constant.
+
+Conversely, suppose $\Phi$ is constant. Then $\Phi(0) =
+\sum n_d^2$ equals the common value $\Phi(k)$ for any
+nonzero $k$. By Corollary~\ref{cor:parseval}, the
+constant value is $\Phi(k) = p - 1$ for all $k$.
+So $\sum_d n_d^2 = p - 1 = \sum_d n_d$, which forces
+$n_d \in \{0, 1\}$ for every $d$ (since $n_d^2 = n_d$
+only at these values). Hence each nonempty bin has exactly
+one element, so the bin partition is a digit partition,
+which by~\cite{paper2} is equivalent to $p \le b{+}1$.
+\end{proof}
+
+% ============================================================
+\section{The Position of $\Phi$ in the Chain}
+
+The spectral power is the magnitude-only data of the bin
+Fourier coefficients. To recover the cyclic autocorrelation
+$R(\ell)$ used in~\cite{paper7} for the eigenvalue spectrum,
+the phase information discarded by squaring is needed. The
+``same digit'' indicator expands as
+\[
+\mathbf{1}[\delta(r) = \delta(s)]
+= \sum_d \mathbf{1}_{B_d}(r)\, \mathbf{1}_{B_d}(s),
+\]
+and substituting $s = b^{\ell} r \bmod p$ followed by the
+inverse Fourier expansion of each indicator gives
+\[
+R(\ell) = \frac{1}{p}
+\sum_{k=0}^{p-1}
+\sum_d \widehat{\mathbf{1}}_{B_d}(k)\,
+\overline{\widehat{\mathbf{1}}_{B_d}(b^{-\ell}k)}.
+\]
+The inner sum at fixed $\ell$ involves cross-frequency
+products
+$\widehat{\mathbf{1}}_{B_d}(k)\,
+\overline{\widehat{\mathbf{1}}_{B_d}(b^{-\ell}k)}$,
+which are not captured by $|\widehat{\mathbf{1}}_{B_d}(k)|^2
+= \Phi(k)$ alone. The two-variable cross-spectral function
+$G(k,k') = \sum_d \widehat{\mathbf{1}}_{B_d}(k)\,
+\widehat{\mathbf{1}}_{B_d}(k')$, of which $\Phi$ is the
+antidiagonal $G(k,-k)$, is the natural object that
+contains the phase data; it is introduced in the
+sequel paper, where the closed-form expression for
+$R(\ell)$ as a sum of $G$ along an orbit path is
+proved.
+
+% ============================================================
+\section{Unification of Earlier Invariants}
+
+Several scalar invariants of the alignment program are
+contractions of $\Phi$. The alignment limit
+of~\cite{paper3} is governed by the zeroth mode
+$\Phi(0) = S(p,b)$, since the limiting alignment
+$\mathcal{L}(p,b) = (p - 1 + S(p,b))/(p(p-1))$ in the
+equidistributed case is a function of $\Phi(0)$ alone.
+The coherence decomposition $\alpha = F + \sigma$
+of~\cite{paper5} expresses $\alpha$, $\sigma$, and $F$
+through $\Phi(0)$ together with the orbit structure of
+$\langle b \rangle$ in $(\mathbb{Z}/p\mathbb{Z})^*$. The
+digit-partitioning characterization, by
+Proposition~\ref{prop:dp-flat}, is the statement that
+$\Phi$ is constant in $k$. The eigenvalue spectrum
+of~\cite{paper7} is the DFT of the cyclic autocorrelation
+$R(\ell)$, which is not determined by $\Phi$ alone but
+which is naturally expressed through the cross-spectral
+function whose diagonal is $\Phi$.
+
+In each case, $\Phi$ encodes the interaction between the
+Euclidean geometry of the digit function (the bin sizes
+$n_d$, which are integer counts of consecutive residues)
+and the additive harmonic analysis of
+$\mathbb{Z}/p\mathbb{Z}$ (the Dirichlet kernel at each
+frequency). It is the simplest single object from which
+the magnitude-side invariants of the program can be
+read.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{The Dirichlet kernel and the digit function}
+
+The Dirichlet kernel $D_N(x) = \sin(N\pi x)/\sin(\pi x)$, a
+classical object in harmonic analysis~\cite{zygmund,iwaniec}, appears
+because the digit bins are contiguous intervals. This is a
+consequence of the monotonicity of the digit function
+$\delta(r) = \lfloor br/p \rfloor$: the function is
+nondecreasing in $r$, and each preimage $B_d$ is a
+contiguous interval (possibly empty). The spectral power
+inherits the Dirichlet kernel's properties: concentration at low
+frequencies for large bins, oscillatory behavior at high
+frequencies.
+
+\subsection*{Additive vs multiplicative characters}
+
+The Legendre symbol (a multiplicative character) was tested in
+the spectral structure paper~\cite{paper7} and found insufficient
+to determine $R(\ell)$. The
+spectral power uses additive characters instead, which succeed
+because the bin partition is defined by an additive condition
+(contiguous intervals in $\mathbb{Z}/p\mathbb{Z}$). The digit
+function bridges multiplicative structure (the orbit of $b$) with
+additive structure (the bin intervals), and the spectral power is
+the natural invariant of this bridge.  The interplay between
+additive and multiplicative characters in number-theoretic contexts
+is treated systematically in~\cite{iwaniec}.
+
+\subsection*{Toward $L$-functions}
+
+The spectral power $\Phi(k)$ is defined on
+$\mathbb{Z}/p\mathbb{Z}$ and is symmetric ($\Phi(k) =
+\Phi(p{-}k)$). Its values at specific $k$ can be related to
+Ramanujan sums~\cite{ramanujan} and Kloosterman-type expressions. Whether the
+generating function $\sum_k \Phi(k) z^k$ or the Dirichlet series
+$\sum_p \Phi_p(k) p^{-s}$ (summing over primes at a fixed
+frequency $k$) exhibit analytic continuation or functional
+equations is an open question.
+
+% ============================================================
+\begin{thebibliography}{9}
+
+\bibitem{paper1}
+A.~S.~Petty,
+Why the golden ratio selects the prime three,
+research note, 2020.
+
+\bibitem{paper2}
+A.~S.~Petty,
+Digit-partitioning primes and the alignment formula,
+research note, 2020.
+
+\bibitem{paper3}
+A.~S.~Petty,
+The alignment limit for all primes,
+research note, 2020.
+
+\bibitem{paper5}
+A.~S.~Petty,
+The coherence decomposition,
+research note, 2021.
+
+\bibitem{paper6}
+A.~S.~Petty,
+The cross-alignment matrix,
+research note, 2021.
+
+\bibitem{paper7}
+A.~S.~Petty,
+The spectral structure of fractional fields,
+research note, 2021.
+
+\bibitem{zygmund}
+A.~Zygmund,
+\emph{Trigonometric Series}, vols.~I--II,
+3rd ed., Cambridge University Press, 2002.
+
+\bibitem{ramanujan}
+S.~Ramanujan,
+On certain trigonometrical sums and their applications in the
+theory of numbers,
+\emph{Trans.\ Cambridge Philos.\ Soc.} \textbf{22} (1918), 259--276.
+
+\bibitem{iwaniec}
+H.~Iwaniec and E.~Kowalski,
+\emph{Analytic Number Theory},
+AMS Colloquium Publications, vol.~53, 2004.
+
+\end{thebibliography}
+
+\end{document}

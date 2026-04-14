@@ -1,0 +1,562 @@
+% ============================================================
+% The Collision Transform in the Critical Strip
+% ============================================================
+
+\documentclass[12pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Collision Transform\\and the Critical Strip}
+
+\author{Alexander S.\ Petty}
+
+\email{alexander.petty@gmail.com}
+\date{June 2025}
+\subjclass[2020]{11A63, 11M06, 11M26}
+
+\begin{document}
+\begin{abstract}
+The centered collision sum
+$F^{\circ}(s) = \sum_p S^{\circ}_p / p^s$
+converges at $s = 1$ (proved in the preceding paper).
+This paper investigates whether convergence extends
+below $s = 1$ into the critical strip.
+
+The collision transform writes $F^{\circ}(s)$ as a
+finite linear combination of character sums
+$P(s, \chi) = \sum_p \chi(p)/p^s$, linked to
+$\log L(s, \chi)$ for $L$-functions modulo
+$b^{\ell+1}$. Antisymmetry restricts the sum to odd
+characters. Conditional on a zero-free hypothesis for
+the relevant $L$-functions, $F^{\circ}(s)$ converges
+for real $s > \sigma_0$, where $\sigma_0$ depends on
+the zero-free region.
+
+Computation suggests convergence persists to
+$s \approx 0.5$ in base~$3$ and to $s \approx 0.6$
+in bases $5$, $7$, $10$, $12$. These observations
+are consistent with, but do not prove, convergence
+in the strip.
+\end{abstract}
+\maketitle
+
+% ============================================================
+\section{Introduction}
+
+This paper investigates the collision transform below $s = 1$.
+
+The preceding paper~\cite{paper16} proved that the centered
+collision fluctuation sum
+\[
+F^{\circ}(1, \ell)
+= \sum_{\chi \ne \chi_0}
+\hat{S}_{\ell}(\chi) \sum_p \frac{\chi(p)}{p}
+\]
+converges at $s = 1$. The proof used the finite determination
+theorem (the collision deviation $S_{\ell}(p)$ depends only on
+$p \bmod b^{\ell+1}$), the collision transform (decomposition
+over Dirichlet characters modulo $b^{\ell+1}$), and Mertens'
+theorem for arithmetic progressions.
+
+The present paper investigates whether convergence extends
+below $s = 1$.
+
+% ============================================================
+\section{The Character Decomposition Below $s = 1$}
+
+For $\operatorname{Re}(s) > 1$, the prime character
+sum~\cite{davenport,iwaniec-kowalski}
+\[
+P(s, \chi) = \sum_p \frac{\chi(p)}{p^s}
+\]
+is related to the Dirichlet $L$-function by
+\begin{equation}\label{eq:P-and-L}
+P(s, \chi) = \log L(s, \chi) - H(s, \chi),
+\end{equation}
+where the higher-power sum
+$H(s,\chi) = \sum_p \sum_{k\ge2} \chi(p)^k/(k\,p^{ks})$
+converges absolutely for $\operatorname{Re}(s)>1/2$.
+
+The centered fluctuation sum is therefore
+\[
+F^{\circ}(s) = -\sum_{\chi \ne \chi_0}
+\hat{S}(\chi)\, \log L(s, \chi)
++ \sum_{\chi \ne \chi_0}
+\hat{S}(\chi)\, H(s, \chi).
+\]
+The second sum converges for $\operatorname{Re}(s) > 1/2$.
+The convergence of $F^{\circ}(s)$ at $s = \sigma$ is
+therefore controlled by the first sum: the weighted
+combination of $\log L(s, \chi)$ values at
+$s = \sigma$.
+
+If $L(\sigma, \chi)$ has a zero at some $\rho$ with
+$\operatorname{Re}(\rho) > \sigma$, then
+$\log L(s, \chi)$ has a logarithmic singularity at
+$\rho$. Convergence of $F^{\circ}(\sigma)$ despite
+such singularities would require cancellation across
+characters: the contributions from zeros of different
+$L$-functions, weighted by $\hat{S}(\chi)$, must cancel.
+
+% ============================================================
+\section{Computational Evidence}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrrr}
+\toprule
+$s$ & base $3$ & base $5$ & base $7$ & base $10$ & base $12$ \\
+\midrule
+$1.0$ & $-0.151$ & $-0.187$ & $-0.137$ & $-0.199$ & $-0.278$ \\
+$0.9$ & $-0.168$ & $-0.230$ & $-0.186$ & $-0.282$ & $-0.417$ \\
+$0.8$ & $-0.186$ & $-0.277$ & $-0.250$ & $-0.402$ & $-0.624$ \\
+$0.7$ & $-0.205$ & $-0.322$ & $-0.337$ & $-0.577$ & $-0.926$ \\
+$0.6$ & $-0.227$ & $-0.347$ & $-0.457$ & $-0.835$ & $-1.346$ \\
+$0.5$ & $-0.257$ & $-0.312$ & $-0.636$ & $-1.219$ & $-1.880$ \\
+\bottomrule
+\end{tabular}
+\caption{$F^{\circ}(s)$ at lag $\ell = 1$ across bases,
+using $18{,}000$--$78{,}000$ primes per base.}
+\label{tab:values}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrrrr}
+\toprule
+$s$ & base $3$ & base $5$ & base $7$ & base $10$ & base $12$ \\
+\midrule
+$1.0$ & $0.000$ & $0.000$ & $0.000$ & $0.000$ & $0.000$ \\
+$0.9$ & $0.000$ & $0.001$ & $0.001$ & $0.000$ & $0.001$ \\
+$0.8$ & $0.000$ & $0.004$ & $0.002$ & $0.001$ & $0.005$ \\
+$0.7$ & $0.000$ & $0.013$ & $0.007$ & $0.004$ & $0.017$ \\
+$0.6$ & $0.001$ & $0.042$ & $0.027$ & $0.016$ & $0.058$ \\
+$0.5$ & $0.003$ & $0.135$ & $0.099$ & $0.065$ & $0.205$ \\
+\bottomrule
+\end{tabular}
+\caption{Drift: absolute change in $F^{\circ}(s)$ between
+the first and second halves of the prime range. Small drift
+indicates convergence. Drift less than $0.01$ is consistent
+with stability.}
+\label{tab:drift}
+\end{table}
+
+The data reveals a base-dependent penetration pattern:
+
+\begin{itemize}
+\item \textbf{Base~$3$}: drift $< 0.003$ at all $s$ down to
+$s = 0.5$. The centered sum appears to converge on the
+critical line.
+
+\item \textbf{Base~$5$}: stable to $s = 0.7$. Drift grows at
+$s = 0.6$ and $s = 0.5$.
+
+\item \textbf{Bases~$7$, $10$}: stable to $s = 0.7$. Moderate
+drift at $s = 0.6$. Growing drift at $s = 0.5$.
+
+\item \textbf{Base~$12$}: stable to $s = 0.7$. Significant
+drift at $s = 0.6$ and $s = 0.5$.
+\end{itemize}
+
+% ============================================================
+\section{The Penetration Depth}
+
+\begin{definition}
+The \emph{penetration depth} of the collision transform at
+base $b$ and lag $\ell$ is
+\[
+\sigma_0(b, \ell) = \inf\{\sigma > 0 :
+F^{\circ}(\sigma, \ell) \text{ converges}\}.
+\]
+\end{definition}
+
+The data suggests $\sigma_0(3, 1) \le 0.5$ and
+$\sigma_0(b, 1) \le 0.7$ for all bases tested.
+
+The base dependence of the apparent penetration depth
+may reflect the number of primes required rather than
+a genuine difference in $\sigma_0$. Base~$3$ has
+$\phi(9) = 6$ characters modulo $b^2 = 9$, while
+base~$12$ has $\phi(144) = 48$. Cancellation among
+more characters requires more primes to manifest.
+
+\begin{conjecture}[Universal penetration]\label{conj:penetration}
+For every base $b \ge 2$ and lag $\ell \ge 1$:
+$\sigma_0(b, \ell) = 1/2$.
+\end{conjecture}
+
+This conjecture is consistent with GRH. By
+equation~\eqref{eq:P-and-L}, the convergence of
+$F^{\circ}(s)$ for $\operatorname{Re}(s) > 1/2$ is
+equivalent to the convergence of
+$\sum_{\chi \ne \chi_0} \hat{S}(\chi)\, \log L(s, \chi)$
+for $\operatorname{Re}(s) > 1/2$. Under GRH, the
+individual $P(s, \chi)$ converge for
+$\operatorname{Re}(s) > 1/2$, and the finite sum
+$F^{\circ}(s)$ inherits this convergence.
+
+% ============================================================
+\section{The Antisymmetry Theorem}
+
+\begin{theorem}[Odd-character restriction]\label{thm:odd}
+The centered collision transform satisfies
+$\hat{S}^{\circ}(\chi) = 0$ for every even Dirichlet
+character $\chi$ modulo $b^{\ell+1}$.
+\end{theorem}
+
+\begin{proof}
+By the reflection identity~\cite{paper16},
+$S(a) + S(m{-}a) = -1$ for $m = b^{\ell+1}$. The map
+$a \mapsto m - a$ sends spectral class $R$ to class
+$b - 2 - R$, with class means satisfying
+$\overline{S}_R + \overline{S}_{b-2-R} = -1$. Therefore
+$S^{\circ}(a) + S^{\circ}(m{-}a) = 0$.
+
+For any character $\chi$, $\chi(m{-}a) = \chi(-1)\chi(a)$.
+If $\chi$ is even ($\chi(-1) = 1$):
+\[
+\hat{S}^{\circ}(\chi) = \frac{1}{\phi(m)}
+\sum_a S^{\circ}(a)\, \overline{\chi}(a)
+= \frac{1}{\phi(m)}
+\sum_a S^{\circ}(a)\, \overline{\chi}(m{-}a)
+= -\hat{S}^{\circ}(\chi),
+\]
+using $S^{\circ}(m{-}a) = -S^{\circ}(a)$ and
+$\overline{\chi}(m{-}a) = \overline{\chi}(a)$.
+Therefore $\hat{S}^{\circ}(\chi) = 0$.
+\end{proof}
+
+\begin{corollary}
+The centered fluctuation sum decomposes as
+\[
+F^{\circ}(s) = \sum_{\substack{\chi \bmod m \\
+\chi(-1) = -1}} \hat{S}^{\circ}(\chi)\, P(s, \chi).
+\]
+Only odd $L$-functions control the penetration depth.
+\end{corollary}
+
+% ============================================================
+\section{Positivity of Character Products}
+
+At the small bases displayed below, each odd character
+$\chi$ contributing to $F^{\circ}$ has
+\[
+\operatorname{Re}\bigl(\hat{S}^{\circ}(\chi)\, P(1/2, \chi)\bigr)\ge 0.
+\]
+This is only a finite observation, not a general positivity
+law.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrr}
+\toprule
+base & odd $\chi$ & $|\hat{S}^{\circ}|$ & $|P(1/2)|$
+& $\operatorname{Re}(\hat{S}^{\circ} \cdot P)$ \\
+\midrule
+$3$ & $j = 1$ & $0.667$ & $0.469$ & $+0.309$ \\
+$3$ & $j = 5$ & $0.667$ & $0.469$ & $+0.309$ \\
+$5$ & $j = 3$ & $0.828$ & $0.520$ & $+0.368$ \\
+$5$ & $j = 17$ & $0.828$ & $0.520$ & $+0.368$ \\
+\bottomrule
+\end{tabular}
+\caption{Character products at selected small bases.
+All displayed real parts are non-negative. Later
+computation at base~$10$ shows that mixed signs occur
+in general.}
+\label{tab:positivity}
+\end{table}
+
+Later computation shows positivity fails in general:
+at base~$10$, $7$ of $20$ products have negative real
+part. Convergence of $F^{\circ}(s)$ below $s = 1$
+therefore depends on cancellation between terms, not
+on individual term convergence.
+
+\begin{remark}[Conditional penetration]
+The following conditional statement illustrates one
+possible route from the collision transform to GRH,
+though the required positivity hypothesis has since
+been shown to fail in general.
+
+If the products
+$\hat{S}^{\circ}(\chi) \cdot P(s, \chi)$ had
+non-negative real part for all odd $\chi$ and all
+$s \ge 1/2$, then:
+\[
+F^{\circ}(1/2) \text{ converges}
+\;\Longleftrightarrow\;
+L(s, \chi) \ne 0 \;\text{for}\;
+\operatorname{Re}(s) > \tfrac{1}{2},\;
+\chi \in \mathcal{X}^{-}.
+\]
+Since positivity fails, the reverse direction of this
+argument does not apply. Convergence of $F^{\circ}(s)$
+below $s = 1$ may occur through cancellation between
+terms of mixed sign, without requiring each individual
+$L$-function to be zero-free. The relationship between
+$F^{\circ}$ and GRH remains open.
+\end{remark}
+
+% ============================================================
+\section{The Aperiodic Residual}
+
+The finite determination theorem shows that
+$S_{\ell}(p)$ depends only on $p \bmod b^{\ell+1}$. The
+centered version $S^{\circ}$ removes the class mean. A
+deeper question: does the residual $S^{\circ}$ carry
+additional modular structure at higher resolution?
+
+In the tested lag-$1$ cases, computation shows it does
+not. For each lag-$1$ class
+$a \bmod b^2$, the sub-classes $a' \bmod b^3$ satisfying
+$a' \equiv a \pmod{b^2}$ all have identical mean $S$
+values. For these examples, the lag-$1$ residual carries
+no additional modular information at lag~$2$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrrrr}
+\toprule
+base & lag-$1$ mod & lag-$2$ mod & sub-classes & residual \\
+\midrule
+$3$ & $9$ & $27$ & $3$ per class & $0$ everywhere \\
+$5$ & $25$ & $125$ & $5$ per class & $0$ everywhere \\
+\bottomrule
+\end{tabular}
+\caption{Tested lag-$1$ towers in bases $3$ and $5$.
+In these examples, the lag-$1$ residual does not split
+further at lag~$2$.}
+\label{tab:tower}
+\end{table}
+
+These examples suggest that the centered deviation
+$S^{\circ}$ behaves aperiodically after the lag-$1$ class
+mean is removed: in the tested towers, it is not refined
+by passing from $b^2$ to $b^3$. The stamp at each lag may
+capture all of the modular structure visible at that lag,
+with the remainder behaving as a non-periodic fluctuation.
+
+The convergence of $F^{\circ}(s)$ at $s = \sigma$ is
+therefore, at least heuristically, a statement about
+whether this residual cancels at weighting $1/p^{\sigma}$.
+At $s = 1$, the centered sum cancels by the collision
+transform (proved). Whether convergence extends below
+$s = 1$ depends on cancellation between terms of mixed
+sign and remains open.
+
+% ============================================================
+\section{The Base Sweep}
+
+The preceding sections analyze the collision transform at a
+single base. A different computational perspective emerges
+from sweeping across a finite family of bases. For a fixed
+prime~$p$ and a finite tested set $\mathcal{B}$, define the
+base-swept resistance
+\[
+\mathcal{R}_{\mathcal{B},w}(p) = \sum_{b \in \mathcal{B}} w(b)\, S_1(p, b),
+\]
+where $w(b)$ is a chosen weight on $\mathcal{B}$. This
+aggregates the collision deviation of a single prime across
+the tested bases simultaneously.
+
+In the tested sweeps, $\mathcal{R}_{\mathcal{B},w}(p)$
+splits by $p \bmod 3$: primes $\equiv 1 \pmod{3}$ carry
+approximately $2/3$ of the total resistance and primes
+$\equiv 2 \pmod{3}$ carry approximately $1/3$. This ratio
+is stable across the tested weights $w = 1/b$, $w = 1$,
+$w = 1/\sqrt{b}$, and $w = 1/b^2$, but no general
+invariance theorem is claimed here.
+
+The mod-$3$ structure is not visible from any single base.
+In these experiments, it emerges only from the collective
+instrument.
+
+% ============================================================
+\section{The Mod-$3$ Polarity}
+
+In the tested cases, the centered residual $S^{\circ}$
+shows no modular structure in the base direction: the
+lag tower appears flat (Section~\ref{tab:tower}). But
+it has structure in the \emph{prime} direction.
+Its mean over primes $p \equiv 1 \pmod{3}$ differs from
+its mean over primes $p \equiv 2 \pmod{3}$. In base~$10$
+at lag~$1$, the centered values $S^{\circ}(a)$ for units
+$a \equiv 1 \pmod{3}$ average $-1.30$, while those for
+$a \equiv 2 \pmod{3}$ average~$0$.
+
+In the tested base sweeps, this asymmetry is stable
+under the reweightings described in the previous
+section.  A base-swept resistance
+\[
+\textstyle\sum_{b \in \mathcal{B}} w(b)\, S_1(p, b)
+\]
+splits by $p \bmod 3$: primes $\equiv 1 \pmod{3}$
+carry approximately $2/3$ of the total resistance
+and primes $\equiv 2 \pmod{3}$ carry approximately
+$1/3$.
+
+Despite this asymmetry, the antisymmetry
+$S^{\circ}(a) = -S^{\circ}(m{-}a)$ is compatible with the
+mod-$3$ structure because the reflection $a \mapsto m - a$
+respects the mod-$3$ pairing (in base~$10$:
+$m = 100 \equiv 1 \pmod{3}$).
+
+However, in the computations reported here, removing the
+mod-$3$ bias (doubly centering by both spectral class and
+$p \bmod 3$) destroys the apparent penetration depth. The
+doubly centered sum $F^{\circ\circ}$ still exhibits the
+same antisymmetry, but in the tested data it grows rapidly
+for $s < 1$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{rrr}
+\toprule
+$s$ & $F^{\circ}$ & $F^{\circ\circ}$ \\
+\midrule
+$1.0$ & $0.08$ & $0.77$ \\
+$0.7$ & $0.27$ & $12.3$ \\
+$0.5$ & $0.46$ & $111$ \\
+\bottomrule
+\end{tabular}
+\caption{Removing the mod-$3$ component in the tested
+base-$3$ data leaves the $s=1$ value bounded but produces
+rapid growth below $s = 1$. This suggests that the
+mod-$3$ polarity is relevant to penetration depth.}
+\end{table}
+
+The data suggests that the mod-$3$ structure is not needed
+for convergence at $s = 1$, but may matter for any deeper
+penetration below $s = 1$. At present this is an observed
+feature of the computations, not a theorem.
+
+The fraction $2/3$ that governs this distribution is
+the alignment limit of the prime~$3$ from the first
+paper in this series~\cite{paper1}: the constant
+$(p{-}1)/p$ evaluated at the prime the golden ratio
+selects. Its reappearance here, as the observed fraction
+of base-swept resistance carried by primes
+$\equiv 1 \pmod{3}$, is suggestive: the constant that
+began the program as a threshold for digit matching may
+also be connected to penetration into the critical strip.
+
+% ============================================================
+\section{Remarks}
+
+\subsection*{The instrument}
+
+The collision transform was introduced
+in~\cite{paper16} to prove the Centered Collision PNT at
+$s = 1$. The present paper observes that the same instrument
+sees deeper. The digit function
+$\delta(r) = \lfloor br/p \rfloor$, through its collision
+statistics, produces a Dirichlet series whose convergence
+appears, in the tested data, to extend into the critical
+strip. The depth of this apparent region is a new
+computational invariant of the collision structure.
+
+\subsection*{Base as instrument}
+
+The conventional view treats the positional base as a
+notational choice with no mathematical content. This
+program suggests otherwise. The base determines the bin
+partition and the number of characters in the collision
+transform, and at finite range the observed penetration
+depth varies with the base. Different bases are different
+instruments: base~$3$
+has six characters and, in the present data, reaches
+$s = 0.5$; base~$12$ has forty-eight and reaches only
+$s = 0.7$ at the same computational depth. The base is
+not mere notation here. It acts as the resolution of the
+instrument that probes the prime.
+
+\subsection*{The equivalence}
+
+The digit function $\delta(r) = \lfloor br/p \rfloor$
+encodes the prime's internal geometry. The collision
+transform reads a finite stamp (the modular structure)
+and isolates the aperiodic residual. The antisymmetry
+restricts the residual to odd characters. The character
+products have mixed signs, so convergence below $s = 1$
+depends on cancellation between terms. Whether this
+cancellation extends to $s = 1/2$, and how it relates
+to the zeros of the relevant $L$-functions, remains open.
+
+\subsection*{The arc}
+
+The program began with the alignment of the prime~$3$
+approaching $2/3$~\cite{paper1}. It built through the gate
+width theorem~\cite{paper11}, the collision
+transform~\cite{paper16}, and arrives here at the critical
+strip.
+Each step revealed structure or a new question: the gate
+width is universal, the collision deviation is finitely
+determined, the centered residual appears aperiodic in the
+tested towers, and the problem of convergence at
+$s = 1/2$ brings the program into direct contact with the
+zero distribution of the relevant family of $L$-functions.
+The inside of the prime and the zeros of the $L$-function
+are connected through the collision transform, but the full
+relationship remains open.
+
+% ============================================================
+\begin{thebibliography}{99}
+
+\bibitem{davenport}
+H.~Davenport,
+\emph{Multiplicative Number Theory},
+3rd~ed., Springer, 2000.
+
+\bibitem{iwaniec-kowalski}
+H.~Iwaniec and E.~Kowalski,
+\emph{Analytic Number Theory},
+AMS Colloquium Publications, vol.~53, 2004.
+
+\bibitem{montgomery-vaughan}
+H.~L.~Montgomery and R.~C.~Vaughan,
+\emph{Multiplicative Number Theory I: Classical Theory},
+Cambridge University Press, 2007.
+
+\bibitem{paper1}
+A.~S.~Petty,
+Why the golden ratio selects the prime three,
+research note, 2020.
+
+\bibitem{paper11}
+A.~S.~Petty,
+Bin derangements and the gate width theorem,
+research note, 2024.
+
+\bibitem{paper15}
+A.~S.~Petty,
+The centered Collision PNT,
+research note, 2025.
+
+\bibitem{paper16}
+A.~S.~Petty,
+The collision transform,
+research note, 2025.
+
+\bibitem{nfield}
+A.~S.~Petty,
+\emph{nfield: A structural analysis engine for fractional field
+invariants},
+software.
+\url{https://github.com/alexspetty/nfield}
+
+\end{thebibliography}
+
+\end{document}
