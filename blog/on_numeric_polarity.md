@@ -152,5 +152,3 @@ The diagrams here are not rigorous. The philosophical framing reflects where I w
 .:.
 
 ---
-
-*The circle of nine, partitioned by polarity. The doubling cycles trace through neutral, positive, and negative sectors while the 3-6-9 axis holds still at the center. Stillness creates the scaffold. Motion fills the channels.*

@@ -171,5 +171,3 @@ I also wrote "I suspect there is more to find." The selection of the prime $3$ w
 .:.
 
 ---
-
-*The golden ratio constructed from a pentagon. AB to BC is 1 to φ. The simplest polygon that is not built from right angles, and the self-referential ratio that falls out of it.*

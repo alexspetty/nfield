@@ -185,5 +185,3 @@ The line I wrote here in 2010, "any base will produce its own modular cycles," t
 .:.
 
 ---
-
-*The five's table on the circle of nine. The turning point, where multiplication reverses direction and the star pattern crosses through every position. Growth without structure on the grid. Motion through geometry on the circle.*

@@ -137,5 +137,3 @@ The primes tracking certain arms of the spiral and avoiding others is the collis
 .:.
 
 ---
-
-*The integers on the circle of nine at 2x magnification. Blue and gold bands mark the oscillation of digit sums as numbers expand outward and contract back along their mirror paths. The breathing is not a metaphor. It is the complement map, made visible.*

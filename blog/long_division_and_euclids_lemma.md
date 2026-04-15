@@ -103,5 +103,3 @@ The experiment here, generating the full quotient-remainder table for many small
 .:.
 
 ---
-
-*The division lemma for small integers, laid out as a grid. Quotients and remainders for every pair, colored by structure. The most elementary operation in arithmetic, and the one that turned out to contain everything.*

@@ -141,6 +141,8 @@ The reflection identity says the entries of the table pair under complementation
 
 The half-group theorem says every wrapping set is exactly half the unit group.
 
+The collision invariant does not redefine what a prime is. It shows that once a base is fixed, a prime carries more visible structure than indivisibility alone suggests. The digit function of long division imposes a finite collision geometry on the prime, and that geometry is rigid enough to satisfy a reflection identity and a finite determination law. In that sense, the prime is not only an atomic integer. It is also a structured object in a base-dependent arithmetic space.
+
 All four come from one observation: multiplying every remainder by the base flattens the digit bins into residue classes. After that single move, the geometric structure of long division becomes the algebraic structure of a finite group, and every theorem is a short calculation in that group.
 
 The digit function $\lfloor br/p \rfloor$, the operation taught in third grade and then mostly forgotten, has produced a finite signed table attached to every base, organized by a complement involution, with gate counts and wrapping counts that depend on the base and nothing else. That table is the collision invariant.
