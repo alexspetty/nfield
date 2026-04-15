@@ -133,6 +133,10 @@ void   decompose_print(int n, int base);
 
 void   spectral_print(int p, int base);
 
+/* ── Spectral coherence geometry (Watson framework) ──── */
+
+void   coherence_print(int base, int N);
+
 /* ── Verification ────────────────────────────────────── */
 
 int    verify_dispatch(const char *name);

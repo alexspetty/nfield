@@ -33,6 +33,7 @@ static void usage(void)
         "  nfield decompose <n> [--base <b>]         Show alpha, sigma, F\n"
         "  nfield spectral <p> [--base <b>]          Show Phi(k) spectrum\n"
         "  nfield table [--base <b>]                  Collision periodic table\n"
+        "  nfield coherence [N] [--base <b>]          Spectral coherence geometry\n"
         "  nfield verify [<theorem>]                 Verify published theorems\n"
         "  nfield div <n> [--base <b>]               Division table for all k/n\n"
         "  nfield equations                          Show invariant definitions\n"
@@ -252,6 +253,14 @@ int main(int argc, char **argv)
             printf("\n");
         }
         printf("\nMean = -1/2. Complement pairs: S(a) + S(%d - a) = -1.\n", m);
+
+    } else if (strcmp(cmd, "coherence") == 0) {
+        int base = parse_base(argc, argv, 2);
+        int N = 300;
+        for (int i = 2; i < argc; i++)
+            if (argv[i][0] >= '0' && argv[i][0] <= '9' && strcmp(argv[i-1], "--base") != 0)
+                N = atoi(argv[i]);
+        coherence_print(base, N);
 
     } else if (strcmp(cmd, "verify") == 0) {
         const char *theorem = (argc >= 3) ? argv[2] : "all";

@@ -1,9 +1,9 @@
 CC      = gcc
 CFLAGS  = -O2 -Wall -Wextra -std=c99
-LDFLAGS = -lm
+LDFLAGS = -lm /lib/x86_64-linux-gnu/liblapack.so.3 /lib/x86_64-linux-gnu/libblas.so.3
 
 # Core library (no main, no verify)
-LIB_SRC = src/repetend.c src/field.c src/invariants.c src/output.c
+LIB_SRC = src/repetend.c src/field.c src/invariants.c src/output.c src/coherence.c
 LIB_OBJ = $(LIB_SRC:.c=.o)
 LIB     = libnfield.a
 
