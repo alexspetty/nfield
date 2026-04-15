@@ -24,7 +24,7 @@ It was not.
 
 Once the collisions were centered, they began to settle into a rigid object. The count was not wandering freely across the primes. It was controlled by a finite table. Complementary classes paired exactly. Later the same object decomposed over Dirichlet characters and reached weighted $L$-values. The local motion looked noisy. The aggregate did not.
 
-That is why I called it the collision invariant. The longer companion note, [The Noble Gas of Primes](https://github.com/alexspetty/nfield/blob/main/publication/drafts/the_noble_gas_of_primes.pdf), is an expository paper about that analogy and why I kept the name.
+That is why I called it the collision invariant. The longer companion note, [The Noble Gas of Primes](https://github.com/alexspetty/nfield/blob/main/research/the_noble_gas_of_primes.pdf), is an expository paper about that analogy and why I kept the name.
 
 In physics, a collision invariant is not one particle striking another. It is the part that survives after the collisions have been absorbed into the whole gas. It is the quantity the local chaos does not destroy.
 
@@ -46,6 +46,8 @@ with no exceptions.
 
 This is not momentum conservation. Nothing physical is being transported from one side to the other. But the experience is similar. What first looks like a system with many degrees of freedom turns out to be locked by a simple reciprocal law. Every peak has a valley. Every arithmetic echo has its mirror.
 
+![Reflection pairs in the collision periodic table, base 10. Gold bars show S(a), blue bars show S(m-a). The bottom panel confirms: every complement pair sums to exactly -1.](https://alexpetty.com/content/images/2026/04/the_structure_that_survives_reflection-1.png)
+
 That was the turn. The object stopped looking like a clever statistic and started looking like a structural one.
 
 From there the program moved the way it had to move. Long division led to collisions. Collisions led to a finite signed table. The table led to reflection. Reflection led to the transform. The transform led to the spectrum. I did not build that chain backward from the Riemann Hypothesis. I followed it forward from a smaller question. If the local arithmetic looks chaotic, what survives?
@@ -64,7 +66,7 @@ I mean that the same pattern appears in both places. Local collisions, global la
 
 That pattern is not the whole content of the collision program. But it is one of the deepest reasons the program exists.
 
-Paper: [The Noble Gas of Primes](https://github.com/alexspetty/nfield/blob/main/publication/drafts/the_noble_gas_of_primes.pdf)
+Paper: [The Noble Gas of Primes](https://github.com/alexspetty/nfield/blob/main/research/the_noble_gas_of_primes.pdf)
 
 *Alexander S. Petty*
 April 2026
