@@ -1,0 +1,27 @@
+# Build artifacts
+*.o
+*.a
+nfield
+libnfield.a
+test/test_nfield
+verify/*.o
+src/*.o
+
+# Paper artifacts are not part of the public source repo.
+publication/
+papers/
+*.pdf
+*.tex
+*.bib
+
+# LaTeX temporary files, in case a local build is run beside docs.
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.toc
+texput.log
