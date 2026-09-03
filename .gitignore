@@ -6,9 +6,10 @@ libnfield.a
 test/test_nfield
 verify/*.o
 src/*.o
+proofs/.lake/
+*.olean
 
 # Paper artifacts are not part of the public source repo.
-publication/
 papers/
 *.pdf
 *.tex

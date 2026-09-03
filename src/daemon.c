@@ -21,6 +21,7 @@
 #include <sys/time.h>
 #include <signal.h>
 #include <errno.h>
+#include <stdint.h>
 
 /* Forward declaration: dispatch a command string and capture output */
 extern int nfield_dispatch(const char *cmdline, char *outbuf, size_t outbuf_size);
@@ -45,6 +46,20 @@ typedef struct {
 } work_queue_t;
 
 static work_queue_t queue;
+
+static int write_all(int fd, const char *buffer, size_t length) {
+    while (length > 0) {
+        ssize_t written = write(fd, buffer, length);
+        if (written < 0) {
+            if (errno == EINTR) continue;
+            return -1;
+        }
+        if (written == 0) return -1;
+        buffer += written;
+        length -= (size_t)written;
+    }
+    return 0;
+}
 
 static void queue_init(void) {
     queue.head = queue.tail = queue.count = 0;
@@ -85,7 +100,7 @@ static int queue_pop(int *fd) {
 /* ── JSON helpers ────────────────────────────────────── */
 
 static const char *json_extract_cmd(const char *json, char *cmd, size_t cmd_size) {
-    /* Simple extraction of "cmd" field from {"cmd":"..."} */
+    /* Bounded extraction of the JSON string in {"cmd":"..."}. */
     const char *start = strstr(json, "\"cmd\"");
     if (!start) return NULL;
     start = strchr(start + 4, ':');
@@ -95,10 +110,23 @@ static const char *json_extract_cmd(const char *json, char *cmd, size_t cmd_size
     if (*start != '"') return NULL;
     start++;
     size_t i = 0;
-    while (*start && *start != '"' && i < cmd_size - 1) {
-        if (*start == '\\' && *(start + 1)) { start++; }
-        cmd[i++] = *start++;
+    while (*start && *start != '"') {
+        unsigned char decoded = (unsigned char)*start++;
+        if (decoded == '\\') {
+            unsigned char escaped = (unsigned char)*start++;
+            if (escaped == '"' || escaped == '\\' || escaped == '/')
+                decoded = escaped;
+            else if (escaped == 'b') decoded = '\b';
+            else if (escaped == 'f') decoded = '\f';
+            else if (escaped == 'n') decoded = '\n';
+            else if (escaped == 'r') decoded = '\r';
+            else if (escaped == 't') decoded = '\t';
+            else return NULL;
+        }
+        if (decoded < 32 || i >= cmd_size - 1) return NULL;
+        cmd[i++] = (char)decoded;
     }
+    if (*start != '"') return NULL;
     cmd[i] = '\0';
     return cmd;
 }
@@ -127,11 +155,11 @@ static void *worker_thread(void *arg) {
         /* Read the command line */
         char buf[MAX_CMD_LEN];
         ssize_t n = 0;
-        ssize_t total = 0;
-        while (total < (ssize_t)sizeof(buf) - 1) {
+        size_t total = 0;
+        while (total < sizeof(buf) - 1) {
             n = read(fd, buf + total, sizeof(buf) - 1 - total);
             if (n <= 0) break;
-            total += n;
+            total += (size_t)n;
             if (memchr(buf, '\n', total)) break;
         }
         buf[total] = '\0';
@@ -145,7 +173,7 @@ static void *worker_thread(void *arg) {
         const char *extracted = json_extract_cmd(buf, cmd, sizeof(cmd));
         if (!extracted) {
             const char *err = "{\"error\":\"invalid request\"}\n";
-            write(fd, err, strlen(err));
+            (void)write_all(fd, err, strlen(err));
             close(fd);
             continue;
         }
@@ -154,7 +182,7 @@ static void *worker_thread(void *arg) {
         char *outbuf = malloc(MAX_OUTPUT);
         if (!outbuf) {
             const char *err = "{\"error\":\"out of memory\"}\n";
-            write(fd, err, strlen(err));
+            (void)write_all(fd, err, strlen(err));
             close(fd);
             continue;
         }
@@ -166,7 +194,7 @@ static void *worker_thread(void *arg) {
         if (!escaped) {
             free(outbuf);
             const char *err = "{\"error\":\"out of memory\"}\n";
-            write(fd, err, strlen(err));
+            (void)write_all(fd, err, strlen(err));
             close(fd);
             continue;
         }
@@ -177,7 +205,8 @@ static void *worker_thread(void *arg) {
         if (response) {
             int len = snprintf(response, MAX_OUTPUT * 2 + 64,
                 "{\"output\":\"%s\"}\n", escaped);
-            write(fd, response, len);
+            if (len > 0)
+                (void)write_all(fd, response, (size_t)len);
             free(response);
         }
 
@@ -213,7 +242,7 @@ int daemon_main(int port, int num_threads) {
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK); /* localhost only */
-    addr.sin_port = htons(port);
+    addr.sin_port = htons((uint16_t)port);
 
     if (bind(server_fd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
         perror("bind");
@@ -232,9 +261,28 @@ int daemon_main(int port, int num_threads) {
 
     /* Init queue and start workers */
     queue_init();
-    pthread_t *threads = malloc(num_threads * sizeof(pthread_t));
+    pthread_t *threads = malloc((size_t)num_threads * sizeof(*threads));
+    if (!threads) {
+        close(server_fd);
+        fprintf(stderr, "unable to allocate daemon thread table\n");
+        return 1;
+    }
+    int started_threads = 0;
     for (int i = 0; i < num_threads; i++) {
-        pthread_create(&threads[i], NULL, worker_thread, NULL);
+        if (pthread_create(&threads[i], NULL, worker_thread, NULL) != 0) {
+            pthread_mutex_lock(&queue.lock);
+            queue.shutdown = 1;
+            pthread_cond_broadcast(&queue.not_empty);
+            pthread_cond_broadcast(&queue.not_full);
+            pthread_mutex_unlock(&queue.lock);
+            for (int joined = 0; joined < started_threads; joined++)
+                pthread_join(threads[joined], NULL);
+            free(threads);
+            close(server_fd);
+            fprintf(stderr, "unable to start daemon worker thread\n");
+            return 1;
+        }
+        started_threads++;
     }
 
     /* Accept loop */

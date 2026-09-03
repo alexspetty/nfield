@@ -1,13 +1,27 @@
 /*
- * verify.c: Verification of published theorems.
- *
- * Verifies the computational claims in:
+ * verify.c: Exact and finite verifier dispatch for nfield tools.
  *
  * Usage:
  *   nfield verify <theorem>
  *   nfield verify all
  *
  * Theorem names:
+ *   digit-partition    Exact finite checks for synchronized alignment
+ *   alignment-limit    Coset correction, limits, and sharp bound
+ *   three-tier        Composite rough parts and forbidden interval
+ *   deficit-lattice   Alignment deficit, ratios, and musical lattices
+ *   coherence-decomposition Synchronized reference/pairwise decomposition
+ *   cross-alignment    Synchronized matrix, Fourier, and block structure
+ *   spectral-power     Additive digit-bin power and overlap transform
+ *   autocorrelation    Same-bin cross-spectrum and multiplicative slices
+ *   phase-gate         Ramanujan slice, gate bounds, and fixed-lag density
+ *   bin-derangements   Bin conjugation, zero gate, sum, mean, and zero lags
+ *   collision-coordinate Exact coordinate formula, parity, and zero gate
+ *   finite-determination All-lag residue table and optimal base power
+ *   reflection-identity Exact pair law and grand mean
+ *   half-group          Wrapping-set complement and cardinality
+ *   collision-characters Finite residue-stream and character decomposition
+ *   silent-primes     Silent-prime recipe and exact collision variance
  *   gate-width         Exactly b-1 deranging multipliers
  *   mobius-family       Deranging set = {-u/(b-u) mod p}
  *   sum-rule           Sum of C(g) = S(p,b)
@@ -284,7 +298,16 @@ static int verify_finite_det(void)
             }
         }
 
-        int ok = (varies == 0);
+        int classes_seen = 0;
+        int unit_classes = 0;
+        for (int cls = 1; cls < m; cls++) {
+            int ga = cls, ha = m;
+            while (ha) { int t = ha; ha = ga % ha; ga = t; }
+            if (ga != 1) continue;
+            unit_classes++;
+            if (s_seen[cls]) classes_seen++;
+        }
+        int ok = (varies == 0 && classes_seen == unit_classes);
 
         /* Show a few example classes with their S values */
         int shown = 0;
@@ -309,7 +332,7 @@ static int verify_finite_det(void)
         }
 
         printf("  base %2d, mod %3d: %d classes, all determined  %s\n",
-               b, m, shown > 0 ? (int)(m * 0.4) : 0,
+               b, m, classes_seen,
                ok ? "PASS" : "FAIL");
         if (!ok) all_ok = 0;
     }
@@ -674,15 +697,15 @@ static int verify_even_killed(void)
         int b = bases[bi];
         int m = b * b;
         int phi_m = m;
-        { int tmp = m, p = b;
+        {
+          int remaining = m;
           /* phi(b^2) for prime b: b^2-b. For composite: approximate */
-          phi_m = m;
-          for (int f = 2; f * f <= m; f++) {
-              if (m % f == 0) { phi_m = phi_m / f * (f-1);
-                  while (m % f == 0) m /= f; }
+          for (int f = 2; f * f <= remaining; f++) {
+              if (remaining % f == 0) { phi_m = phi_m / f * (f-1);
+                  while (remaining % f == 0) remaining /= f; }
           }
-          if (m > 1) phi_m = phi_m / m * (m-1);
-          m = b * b;
+          if (remaining > 1)
+              phi_m = phi_m / remaining * (remaining - 1);
         }
 
         int s_val[256], s_known[256];
@@ -775,7 +798,6 @@ static int verify_decomposition(void)
     /* At base 10, m=100: compute S_hat for each odd primitive chi,
        check factorization into Bernoulli and diagonal sum */
     int b = 10, m = 100;
-    int phi_m = 40; /* phi(100) = 40 */
 
     int s_val[256], s_known[256];
     memset(s_known, 0, sizeof(s_known));
@@ -829,7 +851,6 @@ static int verify_general_lag_det(void)
     for (int lag = 1; lag <= 3; lag++) {
         int m = 1;
         for (int i = 0; i <= lag; i++) m *= b;
-        int g = power_mod(b, lag, m * b); /* b^lag, but we need mod p */
 
         int s_first[2200], s_seen[2200];
         memset(s_seen, 0, sizeof(s_seen));
@@ -859,128 +880,83 @@ static int verify_general_lag_det(void)
     return all_ok;
 }
 
-/* ── Chiral Symmetry ───────────────────────── */
-
-static int verify_chiral(void)
-{
-    printf("Chiral Spectral Symmetry\n");
-    printf("  Claim: eigenvalues of H pair as (lambda, -lambda)\n\n");
-
-    /* Build the polarity Hamiltonian H = -Delta + V on (Z/mZ)*
-       for small prime bases and verify eigenvalue pairing */
-    int bases[] = {3, 5, 7};
-    int nb = 3;
-    int all_ok = 1;
-
-    for (int bi = 0; bi < nb; bi++) {
-        int b = bases[bi];
-        int m = b * b;
-        int phi_m = m - m/b; /* phi(p^2) = p^2-p for prime p */
-
-        /* Build adjacency + potential matrices, compute H,
-           check eigenvalue pairing. This requires eigenvalue
-           computation which is complex. Do a simpler check:
-           verify Tr(H) = 0 and Tr(H^3) = 0 (odd traces vanish
-           iff eigenvalues pair as +/-). */
-
-        /* Build H as phi_m x phi_m matrix */
-        int *units = calloc(phi_m, sizeof(int));
-        int *unit_idx = calloc(m, sizeof(int));
-        int nu = 0;
-        for (int a = 1; a < m; a++) {
-            int ga = a, ha = m;
-            while (ha) { int t = ha; ha = ga % ha; ga = t; }
-            if (ga != 1) continue;
-            unit_idx[a] = nu;
-            units[nu++] = a;
-        }
-
-        double *H = calloc(nu * nu, sizeof(double));
-
-        /* Adjacency: a -> a+1, a-1 (mod m) if coprime */
-        for (int i = 0; i < nu; i++) {
-            int a = units[i];
-            int ap = (a + 1) % m, am = (a - 1 + m) % m;
-            int gap = ap, hap = m;
-            while (hap) { int t = hap; hap = gap % hap; gap = t; }
-            if (gap == 1) { int j = unit_idx[ap]; H[i*nu+j] -= 1; H[j*nu+i] -= 1; }
-            int gam = am, ham = m;
-            while (ham) { int t = ham; ham = gam % ham; gam = t; }
-            if (gam == 1) { int j = unit_idx[am]; H[i*nu+j] -= 1; H[j*nu+i] -= 1; }
-        }
-        /* Remove double counting */
-        for (int i = 0; i < nu*nu; i++) H[i] /= 2;
-
-        /* Potential: V(a) = S_centered(a) on diagonal */
-        int s_val[256], s_known[256];
-        memset(s_known, 0, sizeof(s_known));
-        for (int p = m + 1; p <= 5000; p++) {
-            if (!is_prime(p) || p % b == 0) continue;
-            int cls = p % m;
-            if (s_known[cls]) continue;
-            int C = collision_count(power_mod(b, 1, p), p, b);
-            s_val[cls] = C - (p - 1) / b;
-            s_known[cls] = 1;
-        }
-        /* Center: subtract mean (-1/2) */
-        for (int i = 0; i < nu; i++)
-            if (s_known[units[i]])
-                H[i*nu+i] += s_val[units[i]] + 0.5;
-
-        /* Chiral symmetry UH = -HU means eigenvalues pair.
-           Check: for each unit a, the complement is m-a.
-           The chiral operator U maps a -> m-a (with sign).
-           Verify UH + HU = 0 directly. */
-        int ok = 1;
-        double max_err = 0;
-        for (int i = 0; i < nu; i++) {
-            /* find complement index: m - units[i] */
-            int comp = m - units[i];
-            if (comp <= 0) comp += m;
-            int ci = unit_idx[comp];
-            for (int j = 0; j < nu; j++) {
-                int compj = m - units[j];
-                if (compj <= 0) compj += m;
-                int cj = unit_idx[compj];
-                /* (UH + HU)_{i,j} = H_{ci,j} + H_{i,cj} */
-                double val = H[ci*nu+j] + H[i*nu+cj];
-                if (fabs(val) > max_err) max_err = fabs(val);
-            }
-        }
-        ok = (max_err < 0.01);
-        printf("  base %d: max |UH+HU| = %.6f  %s\n",
-               b, max_err, ok ? "PASS" : "FAIL");
-        if (!ok) all_ok = 0;
-
-        free(units); free(unit_idx); free(H);
-    }
-    return all_ok;
-}
-
 /* ── Dispatch ─────────────────────────────────────────── */
 
-static void usage(void)
+void verify_help(void)
 {
     printf(
-        "nfield verify: verify published theorems\n\n"
-        "Usage: nfield verify <theorem>\n\n"
-        "Theorems:\n"
-        "  gate-width      Exactly b-1 deranging multipliers\n"
-        "  mobius-family    Deranging set = {-u/(b-u) mod p}\n"
-        "  sum-rule         Sum of C(g) = S(p,b)\n"
-        "  mean-formula     Mean collision count formula\n"
-        "  finite-det       S depends only on p mod b^2\n"
-        "  antisymmetry     S(a) + S(b^2-a) = -1\n"
-        "  mean-half        Mean of S over units = -1/2\n"
-        "  palindrome       d_{m-1-n}(a) = d_n(a) for interior n\n"
-        "  full-range       f_full(a) = 1 for all coprime a\n"
-        "  middle-balance   f^{B_1}(a) = 0\n"
-        "  inversion        f_j(a) = f_j(a^{-1})\n"
-        "  centered-antisym S_c(a)+S_c(m-a)=0\n"
-        "  even-killed      S_c_hat(chi)=0 for even chi\n"
-        "  decomposition    Parseval moment identity\n"
-        "  general-lag-det  S_ell depends on p mod b^{ell+1}\n"
-        "  all              Run all verifications\n"
+        "nfield verifier index\n\n"
+        "Usage:\n"
+        "  nfield verify                 List verifiers without running them\n"
+        "  nfield verify <name>          Run one named verifier\n"
+        "  nfield verify all             Run every verifier; this is the long path\n"
+        "  nfield help verify\n\n"
+        "Tool verifiers:\n"
+        "  reciprocal-square-selection  Alignment, cubic, and golden remainder\n"
+        "  weighted-reference-profile   Integer-modulus weights and golden branches\n"
+        "  digit-partition          Synchronized alignment and clearing depth\n"
+        "  alignment-limit          Coset correction, limits, and sharp 3/5 bound\n"
+        "  three-tier              Composite rough parts and forbidden interval\n"
+        "  deficit-lattice          Exact deficit ratios and lattice fixtures\n"
+        "  coherence-decomposition  Synchronized reference/pairwise decomposition\n"
+        "  cross-alignment          Exact matrix, Fourier, and block structure\n"
+        "  spectral-structure       Finite rank, nullity, and spectral branches\n"
+        "  spectral-power           Additive digit-bin power and overlap transform\n"
+        "  autocorrelation           Same-bin spectrum and multiplier slices\n"
+        "  phase-gate                Ramanujan slice, bounds, and fixed-lag density\n"
+        "  bin-derangements          Exact zero gate, sum, mean, and zero lags\n"
+        "  collision-characters      Residue streams and finite character transform\n"
+        "  silent-primes             Finite silence recipe and exact variance ledger\n"
+        "  collision-fluctuation     Finite table and constructive fluctuation sum\n"
+        "  collision-centering       General-lag fiber centering and spectral gate\n"
+        "  collision-table           Exact fingerprints, extrema, and sign balance\n"
+        "  collision-transform       Centered gate and declared prime windows\n"
+        "  residue-three-neutrality  True mod-three channels and exact neutrality\n"
+        "  compatible-residue-channels    Prime and squarefree channels plus character data\n\n"
+        "  centered-collision-table       Exact reflections and fiber centering\n"
+        "  finite-character-pairing       Higher-lag finite assignment ledger\n"
+        "  coprime-base-orthogonality     Exact factored-CRT orthogonality\n"
+        "  natural-prime-sum-window       Finite base-boundary and common-tail sums\n\n"
+    );
+    printf(
+        "  primitive-odd-sector           Centered gate and sector factorization\n"
+        "  conjugate-pair-relabeling      Exact null law and finite underlap ledger\n"
+        "  additive-reflection-well       Exact cyclic convolution identities\n"
+        "  reflected-prime-pair-sign      Exact nonpositive prime-pair weights\n\n"
+        "  collision-spectrum-factorization  Diagonal and Bernoulli product identity\n"
+        "  special-value-moment              Exact weighted L(1) Parseval moment\n"
+        "  base-five-cyclotomic-identity     Exact polynomial and fourth moment\n"
+        "  short-sum-bernoulli-correlation   Exhaustive finite correlation ledger\n\n"
+        "  terminal-collision-conductor-ledger Exact prime-power and base-15 ledger\n\n"
+        "  primitive-character-cancellation  Prime-power congruence-fiber sums\n"
+        "  periodic-zeta-factorization       Model sum and centered transform\n"
+        "  collision-boundary-recovery       Left recovery and right Gauss value\n"
+        "  active-collision-channel          Finite gate for zero visibility\n\n"
+        "  collision-coordinate              Coordinate formula, parity, and zero gate\n"
+        "  finite-determination              All-lag finite table and optimal modulus\n"
+        "  reflection-identity               Exact pair law and grand mean\n"
+        "  half-group                        Wrapping-set half-group cardinality\n"
+        "  all-prime-collision-label         Unit-table and base-prime label cases\n"
+        "  finite-spectral-quotient          Block quotient, bulk, and heat trace\n\n"
+        "  finite-prefix-slice               Cylinder count and exact carry slice\n"
+        "  oriented-digit-comparison         Unit silence and ramified response\n"
+        "  boundary-bernoulli-factorization  Visible flux and floor response\n"
+        "  boundary-conductor-ledger         Exact pushdowns and conductor moment\n\n"
+        "  finite-state-orbit-boundary       Lifted cycle and predecessor boundary\n"
+        "  full-orbit-energy                 Prime-power thickness energy law\n"
+        "  quadratic-orbit-energy            Exact index-two mod-eight law\n"
+        "  subgroup-jacobi-expansion         Resonance and Jacobi-type flux\n\n"
+        "  prime-base-collision-energy       Carry, Dedekind, and pole dictionary\n"
+        "  arithmetic-boundary-defect        Exact finite secondary residual\n"
+        "  carry-completed-carrier           Cyclic tower, seam, and product Gram\n\n"
+        "Legacy research verifiers retained for compatibility:\n"
+        "  gate-width  mobius-family  sum-rule  mean-formula  finite-det\n"
+        "  antisymmetry  mean-half  palindrome  full-range  middle-balance\n"
+        "  inversion  centered-antisym  even-killed  decomposition\n"
+        "  general-lag-det\n\n"
+        "Each verifier reports its finite range and whether it uses exact integer\n"
+        "or numerical arithmetic. A passing finite sweep certifies only its stated\n"
+        "range; it does not establish a universal or analytic theorem.\n"
     );
 }
 
@@ -988,8 +964,74 @@ int verify_dispatch(const char *name)
 {
     int total = 0, passed = 0;
 
+    if (strcmp(name, "centered-collision") == 0)
+        name = "collision-centering";
+    if (strcmp(name, "collision-periodic-table") == 0)
+        name = "collision-table";
+    if (strcmp(name, "neutrality-theorem") == 0)
+        name = "residue-three-neutrality";
+    if (strcmp(name, "general-neutrality") == 0)
+        name = "compatible-residue-channels";
+    if (strcmp(name, "goldbach-obstruction") == 0)
+        name = "reflected-prime-pair-sign";
+
     typedef struct { const char *name; int (*fn)(void); } entry;
     entry tests[] = {
+        {"reciprocal-square-selection", reciprocal_square_selection_verify},
+        {"weighted-reference-profile", weighted_reference_profile_verify},
+        {"digit-partition", digit_partition_verify},
+        {"alignment-limit", alignment_limit_verify},
+        {"three-tier",     three_tier_verify},
+        {"deficit-lattice", deficit_lattice_verify},
+        {"coherence-decomposition", coherence_decomposition_verify},
+        {"cross-alignment", cross_alignment_verify},
+        {"spectral-structure", spectral_structure_verify},
+        {"spectral-power", spectral_power_verify},
+        {"autocorrelation", autocorrelation_formula_verify},
+        {"phase-gate",    phase_gate_verify},
+        {"bin-derangements", bin_derangements_verify},
+        {"collision-characters", collision_characters_verify},
+        {"silent-primes", silent_primes_verify},
+        {"collision-fluctuation", collision_fluctuation_verify},
+        {"collision-centering", centered_collision_verify},
+        {"collision-table", collision_periodic_verify},
+        {"collision-transform", collision_transform_verify},
+        {"residue-three-neutrality", residue_three_neutrality_verify},
+        {"compatible-residue-channels", compatible_residue_channels_verify},
+        {"centered-collision-table", centered_collision_table_verify},
+        {"finite-character-pairing", finite_character_pairing_verify},
+        {"coprime-base-orthogonality", coprime_base_orthogonality_verify},
+        {"natural-prime-sum-window", natural_prime_sum_window_verify},
+        {"primitive-odd-sector", primitive_odd_sector_verify},
+        {"conjugate-pair-relabeling", conjugate_pair_relabeling_verify},
+        {"additive-reflection-well", additive_reflection_well_verify},
+        {"reflected-prime-pair-sign", reflected_prime_pair_sign_verify},
+        {"collision-spectrum-factorization", collision_spectrum_factorization_verify},
+        {"special-value-moment", special_value_moment_verify},
+        {"base-five-cyclotomic-identity", base_five_cyclotomic_identity_verify},
+        {"short-sum-bernoulli-correlation", short_sum_bernoulli_correlation_verify},
+        {"terminal-collision-conductor-ledger", terminal_collision_conductor_ledger_verify},
+        {"primitive-character-cancellation", primitive_character_cancellation_verify},
+        {"periodic-zeta-factorization", periodic_zeta_factorization_verify},
+        {"collision-boundary-recovery", collision_boundary_recovery_verify},
+        {"active-collision-channel", active_collision_channel_verify},
+        {"collision-coordinate", collision_coordinate_verify},
+        {"finite-determination", finite_determination_verify},
+        {"reflection-identity", reflection_identity_verify},
+        {"half-group", half_group_verify},
+        {"all-prime-collision-label", all_prime_collision_label_verify},
+        {"finite-spectral-quotient", finite_spectral_quotient_verify},
+        {"finite-prefix-slice", finite_prefix_slice_verify},
+        {"oriented-digit-comparison", oriented_digit_comparison_verify},
+        {"boundary-bernoulli-factorization", boundary_bernoulli_factorization_verify},
+        {"boundary-conductor-ledger", boundary_conductor_ledger_verify},
+        {"finite-state-orbit-boundary", finite_state_orbit_boundary_verify},
+        {"full-orbit-energy", full_orbit_energy_verify},
+        {"quadratic-orbit-energy", quadratic_orbit_energy_verify},
+        {"subgroup-jacobi-expansion", subgroup_jacobi_expansion_verify},
+        {"prime-base-collision-energy", prime_base_collision_energy_verify},
+        {"arithmetic-boundary-defect", arithmetic_boundary_defect_verify},
+        {"carry-completed-carrier", carry_completed_carrier_verify},
         {"gate-width",    verify_gate_width},
         {"mobius-family",  verify_mobius_family},
         {"sum-rule",      verify_sum_rule},
@@ -1022,7 +1064,7 @@ int verify_dispatch(const char *name)
     }
 
     if (total == 0) {
-        usage();
+        verify_help();
         return 1;
     }
 

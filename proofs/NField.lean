@@ -1,0 +1,36 @@
+/-
+Author: Alexander S. Petty
+-/
+
+import NField.Papers.GoldenRatioSelectsPrimeThree
+import NField.Papers.DigitPartitionPrimes
+import NField.Papers.AlignmentLimit
+import NField.Papers.ThreeTierTheorem
+import NField.Papers.AlignmentDeficitLattice
+import NField.Papers.CoherenceDecomposition
+import NField.Papers.CrossAlignmentMatrix
+import NField.Papers.SpectralStructure
+import NField.Papers.SpectralPower
+import NField.Papers.AutocorrelationFormula
+import NField.Papers.PhaseFilteredRamanujan
+import NField.Papers.BinDerangements
+import NField.Papers.CollisionCharacterStructure
+import NField.Papers.SilentPrimes
+import NField.Papers.CollisionFluctuationSum
+import NField.Papers.CenteredCollisionSum
+import NField.Papers.CollisionPeriodicTable
+import NField.Papers.CollisionTransformStrip
+import NField.Papers.NeutralityTheorem
+import NField.Papers.GeneralNeutrality
+import NField.Papers.DoubleTransversality
+import NField.Papers.SpectralRepulsion
+import NField.Papers.CollisionSpectrumLandscape
+import NField.Papers.AnalyticCollisionTransform
+import NField.Papers.CollisionInvariant
+import NField.Papers.CollisionTransform
+import NField.Papers.TheCollisionSpectrum
+import NField.Papers.TheStructureThatSurvives
+import NField.Papers.CarryBoundariesAndBernoulliSpectra
+import NField.Papers.AdditiveBoundariesAndConductorEnergiesOfPeriodicRemainderOrbits
+import NField.Papers.TheCubicLawForDigitCollisionEnergy
+import NField.Papers.TheSecondaryTermInDigitCollisionEnergy

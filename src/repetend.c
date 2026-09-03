@@ -149,6 +149,22 @@ Repetend repetend_compute(int k, int n, int base)
 
 #endif /* NFIELD_GMP */
 
+int repetend_digit_at(const Repetend *r, int position)
+{
+    if (!r || position < 0)
+        return 0;
+
+    if (position < r->len)
+        return r->digits[position];
+
+    if (r->cycle_len > 0 && position >= r->cycle_start) {
+        int offset = (position - r->cycle_start) % r->cycle_len;
+        return r->digits[r->cycle_start + offset];
+    }
+
+    return 0;
+}
+
 void repetend_free(Repetend *r)
 {
     free(r->digits);

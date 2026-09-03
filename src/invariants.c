@@ -162,10 +162,16 @@ int mult_order(int base, int p)
 int is_b_smooth(int n, int base)
 {
     if (n <= 1) return 1;
-    int primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31};
-    for (int i = 0; i < 11; i++)
-        if (base % primes[i] == 0)
-            while (n % primes[i] == 0)
-                n /= primes[i];
-    return n == 1;
+    if (base < 2) return 0;
+    while (n > 1) {
+        int a = n, b = base;
+        while (b) {
+            int t = b;
+            b = a % b;
+            a = t;
+        }
+        if (a == 1) return 0;
+        n /= a;
+    }
+    return 1;
 }

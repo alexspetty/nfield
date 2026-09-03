@@ -316,41 +316,14 @@ void survey_range(int n_min, int n_max, int base, int csv)
     free(results);
 }
 
-/* ── table 1 reproduction ────────────────────────────────── */
-
-void table1(void)
-{
-    double phi = (1.0 + sqrt(5.0)) / 2.0;
-    double tau = 1.0 / phi;
-
-    printf("Table 1: Repetend alignment for n = 3m (10-smooth m)\n");
-    printf("  1/phi = %.6f\n\n", tau);
-    printf("%5s %5s %12s %12s %12s %5s\n",
-           "m", "n", "alpha", "predicted", "delta", ">=1/phi");
-
-    for (int i = 0; i < 60; i++) putchar('-');
-    putchar('\n');
-
-    int ms[] = {1, 2, 4, 5, 8, 10, 16, 20, 25, 32, 40, 50, 64, 100, 128, 200, 256};
-    int nms = sizeof(ms) / sizeof(ms[0]);
-
-    for (int i = 0; i < nms; i++) {
-        int m = ms[i];
-        int n = 3 * m;
-        double computed  = alignment_exact(n, 10);
-        double predicted = alignment_formula(m, 3);
-        double delta     = computed - tau;
-        int above        = computed >= tau;
-        printf("%5d %5d %12.6f %12.6f %+12.6f %5s\n",
-               m, n, computed, predicted, delta, above ? "yes" : "no");
-    }
-}
-
-/* ── paper 5: coherence decomposition ────────────────────── */
+/* ── coherence decomposition ────────────────────── */
 
 double sigma_exact(int n, int base)
 {
+    if (n < 3 || base < 2) return NAN;
     Field f = field_build(n, base);
+    int depth = f.base_rep.cycle_start;
+    int L = f.base_rep.cycle_len;
 
     double total = 0.0;
     long count = 0;
@@ -363,15 +336,13 @@ double sigma_exact(int n, int base)
             if (ri->rep.cycle_len == 0 && rj->rep.cycle_len == 0) {
                 total += 1.0;
             } else if (ri->rep.cycle_len > 0 && rj->rep.cycle_len > 0
-                       && ri->rep.cycle_len == rj->rep.cycle_len) {
-                int cL = ri->rep.cycle_len;
-                int *ci = ri->rep.digits + ri->rep.cycle_start;
-                int *cj = rj->rep.digits + rj->rep.cycle_start;
+                       && L > 0) {
                 int matches = 0;
-                for (int pos = 0; pos < cL; pos++)
-                    if (ci[pos] == cj[pos])
+                for (int pos = 0; pos < L; pos++)
+                    if (repetend_digit_at(&ri->rep, depth + pos)
+                        == repetend_digit_at(&rj->rep, depth + pos))
                         matches++;
-                total += (double)matches / cL;
+                total += (double)matches / L;
             }
             count++;
         }
@@ -381,8 +352,17 @@ double sigma_exact(int n, int base)
     return count > 0 ? total / count : 0.0;
 }
 
-void decompose_print(int n, int base)
+int decompose_print(int n, int base)
 {
+    if (n < 3) {
+        fprintf(stderr,
+                "n must be at least 3; F(2) has no distinct unordered pair\n");
+        return 1;
+    }
+    if (base < 2) {
+        fprintf(stderr, "base must be at least 2\n");
+        return 1;
+    }
     double phi = (1.0 + sqrt(5.0)) / 2.0;
     double tau = 1.0 / phi;
 
@@ -392,9 +372,9 @@ void decompose_print(int n, int base)
 
     printf("n            = %d\n", n);
     printf("base         = %d\n", base);
-    printf("alpha        = %.6f  (total coherence)\n", alpha);
-    printf("sigma        = %.6f  (diffuse coherence)\n", sigma);
-    printf("F            = %.6f  (focused coherence)\n", F);
+    printf("alpha        = %.6f  (reference alignment)\n", alpha);
+    printf("sigma        = %.6f  (symmetric pairwise alignment)\n", sigma);
+    printf("F            = %.6f  (signed residual alpha - sigma)\n", F);
 
     if (sigma > 1e-12)
         printf("alpha/sigma  = %.4f\n", alpha / sigma);
@@ -405,64 +385,5 @@ void decompose_print(int n, int base)
         printf("1/phi in gap = no (alpha below threshold)\n");
     else
         printf("1/phi in gap = no (F above threshold)\n");
-}
-
-/* ── paper 8: spectral power ─────────────────────────────── */
-
-void spectral_print(int p, int base)
-{
-    /* compute bin sizes */
-    int bins[256] = {0};
-    for (int r = 1; r < p; r++)
-        bins[(base * r) / p]++;
-
-    /* multiplicative order */
-    int L = mult_order(base, p);
-
-    printf("n = %d, base = %d, L = %d\n\n", p, base, L);
-    printf("Spectral power Phi(k):\n");
-    printf("%5s %12s\n", "k", "Phi(k)");
-
-    for (int k = 0; k < p; k++) {
-        double phi_k = 0.0;
-        if (k == 0) {
-            for (int d = 0; d < base; d++)
-                phi_k += (double)bins[d] * bins[d];
-        } else {
-            for (int d = 0; d < base; d++) {
-                int nd = bins[d];
-                if (nd == 0) continue;
-                double num = sin(M_PI * k * nd / (double)p);
-                double den = sin(M_PI * k / (double)p);
-                phi_k += (num / den) * (num / den);
-            }
-        }
-        printf("%5d %12.4f\n", k, phi_k);
-    }
-
-    /* also show autocorrelation R(ell) for verification */
-    int *orbit = malloc(L * sizeof(int));
-    int r = 1;
-    for (int j = 0; j < L; j++) {
-        orbit[j] = r;
-        r = (r * base) % p;
-    }
-
-    /* compute repetend */
-    int *rep = malloc(L * sizeof(int));
-    for (int j = 0; j < L; j++)
-        rep[j] = (base * orbit[j]) / p;
-
-    printf("\nAutocorrelation R(ell):\n");
-    printf("%5s %8s\n", "ell", "R(ell)");
-    for (int ell = 0; ell < L; ell++) {
-        int R = 0;
-        for (int j = 0; j < L; j++)
-            if (rep[j] == rep[(j + ell) % L])
-                R++;
-        printf("%5d %8d\n", ell, R);
-    }
-
-    free(orbit);
-    free(rep);
+    return 0;
 }

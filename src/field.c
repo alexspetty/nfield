@@ -48,14 +48,16 @@ static int find_rotation(const int *base, const int *target, int L)
     return -1;
 }
 
-static double position_alignment(const int *a, const int *b, int L)
+static double synchronized_alignment(const Repetend *a, const Repetend *b,
+                                     int depth, int L)
 {
     if (L == 0)
         return 1.0;
 
     int match = 0;
     for (int i = 0; i < L; i++)
-        if (a[i] == b[i])
+        if (repetend_digit_at(a, depth + i)
+            == repetend_digit_at(b, depth + i))
             match++;
 
     return (double)match / L;
@@ -85,12 +87,13 @@ Field field_build(int n, int base)
         int  rL    = row->rep.cycle_len;
         const int *rc = cycle_ptr(&row->rep);
 
-        if (rL == L && L > 0) {
-            row->rot_index = find_rotation(bc, rc, L);
-            row->alignment = position_alignment(rc, bc, L);
-        } else if (rL == 0) {
+        if (rL == 0) {
             row->rot_index = 0;
             row->alignment = 1.0;   /* terminating = aligned */
+        } else if (L > 0) {
+            row->rot_index = (rL == L) ? find_rotation(bc, rc, L) : -1;
+            row->alignment = synchronized_alignment(
+                &f.base_rep, &row->rep, f.base_rep.cycle_start, L);
         } else {
             row->rot_index = -1;
             row->alignment = 0.0;

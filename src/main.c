@@ -17,37 +17,386 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
+#include "build_info.h"
+#include "completion.h"
 #include "nfield.h"
 
 /* daemon entry */
 extern int daemon_main(int port, int num_threads);
 extern void dispatch_init(const char *argv0);
 
+static void print_banner(void)
+{
+    printf("nfield .:. %s | A. S. Petty, 2020-2026\n",
+           nfield_build_version());
+}
+
+static void print_elapsed_time(const struct timespec *start,
+                               const struct timespec *end)
+{
+    long long nanoseconds =
+        (long long)(end->tv_sec - start->tv_sec) * 1000000000LL
+        + (long long)(end->tv_nsec - start->tv_nsec);
+
+    if (nanoseconds >= 1000000000LL)
+        printf("\n%.6f s\n", (double)nanoseconds / 1e9);
+    else if (nanoseconds >= 1000000LL)
+        printf("\n%.3f ms\n", (double)nanoseconds / 1e6);
+    else if (nanoseconds >= 1000LL)
+        printf("\n%.3f us\n", (double)nanoseconds / 1e3);
+    else
+        printf("\n%lld ns\n", nanoseconds);
+}
+
 static void usage(void)
 {
-    fprintf(stderr,
-        "nfield " NFIELD_VERSION " .:. A. S. Petty, 2020-2026\n"
-        "\n"
-        "Usage:\n"
-        "  nfield <n> [--base <b>]                   Analyze a single n\n"
-        "  nfield field <n> [--base <b>]             Show the full fractional field\n"
-        "  nfield polar <n> [--base <b>]             Field content + cumulative polarity\n"
-        "  nfield survey <max> [--base <b>] [--csv]  Survey n=2..max\n"
-        "  nfield range <min> <max> [--base <b>] [--csv]\n"
-        "                                            Survey a range\n"
-        "  nfield align <n> [--base <b>]             Compute alignment\n"
-        "  nfield table1                             Reproduce paper Table 1\n"
-        "  nfield decompose <n> [--base <b>]         Show alpha, sigma, F\n"
-        "  nfield spectral <p> [--base <b>]          Show Phi(k) spectrum\n"
-        "  nfield table [--base <b>]                  Collision periodic table\n"
-        "  nfield coherence [N] [--base <b>]          Spectral coherence geometry\n"
-        "  nfield analytic [lag] [--base <b>]         Verify analytic collision transform\n"
-        "  nfield verify [<theorem>]                 Verify published theorems\n"
-        "  nfield div <n> [--base <b>]               Division table for all k/n\n"
-        "  nfield equations                          Show invariant definitions\n"
-        "\n"
-        "Any command accepts --time to print elapsed time to stderr.\n"
+    print_banner();
+    printf(
+        "\nCommand-line tools for finite digit fields and collision arithmetic.\n"
+        "\nUsage\n"
+        "  nfield <command> [arguments] [options]\n"
+        "  nfield <n> [--base <b>]                 Analyze one denominator\n"
+        "  nfield help <command>                   Open focused help\n"
+        "\nCommon commands\n"
+        "  field <n>                              Show a complete fractional field\n"
+        "  analyze <n>                            Analyze one denominator\n"
+        "  div <n>                                Show its long-division table\n"
+        "  align <n>                              Compute synchronized alignment\n"
+        "  spectral <p>                           Inspect additive spectral power\n"
+        "  survey <max>                           Survey a denominator range\n"
+        "  verify [name|all]                      List or run exact verifiers\n"
+        "\nFind more\n"
+        "  nfield commands                        List every command family\n"
+        "  nfield help <command>                  Explain one command\n"
+        "  nfield completion                     Set up Bash, Zsh, or Fish Tab completion\n"
+        "  nfield daemon --port 9090              Start the local JSON/TCP service\n"
+        "  nfield --version                       Show the numeric build version\n"
+        "\nExamples\n"
+        "  nfield field 7\n"
+        "  nfield digit-partition inspect 6 --base 2\n"
+        "  nfield collision-table inspect 13 --base 10\n"
+        "\nDefault base: 10. Add --time to time a command.\n"
     );
+}
+
+static void explore_help(void)
+{
+    printf(
+        "nfield field exploration\n\n"
+        "Commands\n"
+        "  nfield <n> [--base <b>]             Analyze one denominator\n"
+        "  nfield analyze <n> [--base <b>]     Same operation, explicit name\n"
+        "  nfield field <n> [--base <b>]       Show every fraction in the field\n"
+        "  nfield div <n> [--base <b>]         Show the long-division table\n"
+        "  nfield align <n> [--base <b>]       Compute synchronized alignment\n"
+        "  nfield decompose <n> [--base <b>]   Show alpha, sigma, and F\n"
+        "  nfield polar <n> [--base <b>]       Show the polar decomposition\n"
+        "  nfield survey <max> [--base <b>] [--csv]\n"
+        "  nfield range <min> <max> [--base <b>] [--csv]\n"
+        "  nfield table [base] [--pairs]       Show the collision table\n"
+        "  nfield spectral <p> [--base <b>]    Show additive spectral power\n"
+        "  nfield equations                    Define the principal invariants\n\n"
+        "Common options\n"
+        "  --base <b>   Choose the digit base; default 10\n"
+        "  --csv        Emit machine-readable rows where supported\n"
+        "  --time       Report command runtime in ns, us, ms, or s\n\n"
+        "For parameterized structure tools, run `nfield help commands`.\n"
+    );
+}
+
+static void tables_help(void)
+{
+    printf(
+        "nfield exact table fixtures\n\n"
+        "Usage\n"
+        "  nfield tables\n"
+        "  nfield tables reciprocal-square-selection\n\n"
+        "This compatibility dispatcher reproduces registered fixed tables.\n"
+        "Parameterized inspection lives in the corresponding tool family.\n"
+    );
+}
+
+static void version_help(void)
+{
+    printf(
+        "nfield build identity\n\n"
+        "  nfield --version\n"
+        "  nfield version\n\n"
+        "The version is derived from the UTC link time as YYYY.MMDD.HHMMSS.\n"
+        "Set BUILD_VERSION when invoking make to reproduce an existing version\n"
+        "exactly. A no-op make leaves the current version intact.\n"
+    );
+}
+
+static void legacy_help(void)
+{
+    printf(
+        "nfield compatibility and research commands\n\n"
+        "These commands are preserved for existing posts, scripts, and research.\n"
+        "The named mathematical objects in `nfield help` are the preferred path.\n\n"
+        "Tables and aliases\n"
+        "  golden-threshold-table  table  tables  collision_table  spectral  spectrum\n\n"
+        "Collision research\n"
+        "  gate  gate_width  derangements  silent_primes\n"
+        "  fluctuation_sum  mertens_growth  centered_sum\n"
+        "  character_components  class_bias  class_means\n"
+        "  neutrality  neutrality_sweep  finite_det  mod3_means\n\n"
+        "Other research views\n"
+        "  coherence  analytic  scale  polarity_field\n\n"
+        "Run `nfield --help` for the supported mathematical-object command map.\n"
+    );
+}
+
+static void daemon_help(void)
+{
+    printf(
+        "nfield JSON/TCP daemon\n\n"
+        "Usage:\n"
+        "  nfield daemon [--port <port>] [--threads <count>]\n\n"
+        "Defaults: port 9090 and four worker threads. Send one JSON object per\n"
+        "connection, for example {\"cmd\":\"collision-coordinate gate 13 --base 10\"}. The\n"
+        "response contains the same output produced by the command-line program.\n"
+        "Help commands are available through the daemon as ordinary commands.\n"
+        "Commands are executed directly without a shell; quotes and shell operators\n"
+        "inside the command string are rejected.\n"
+    );
+}
+
+static void verification_map_help(void)
+{
+    printf(
+        "nfield reading map\n\n"
+        "The mathematical objects below are native nfield work surfaces. Published\n"
+        "works draw paths through them. Use this optional index to enter the terrain\n"
+        "from a title. Commands stay parameterized and independent of the title, and\n"
+        "one object may support several works. Each object's help gives its inputs,\n"
+        "exact identities, finite range, and analytic boundary.\n\n"
+        "Paths from published work\n"
+        "  integer-modulus one-digit blocks, rational rigidity, and real branches\n"
+        "    Rational Rigidity at the Golden Scale\n"
+        "    nfield help weighted-reference-profile\n\n"
+        "  synchronized remainder clocks, digit bins, orbit families, and limits\n"
+        "    Digit-Partitioning Primes and the Alignment Formula\n"
+        "    nfield help digit-partition\n\n"
+        "  coset correction, exceptional primes, and displayed limit table\n"
+        "    The Alignment Limit for All Primes\n"
+        "    nfield help alignment-limit\n\n"
+        "  synchronized reference, pairwise mean, and signed residual\n"
+        "    The Coherence Decomposition\n"
+        "    nfield help coherence-decomposition\n\n"
+        "  synchronized matrix, orbit blocks, and supported-lift spectrum\n"
+        "    The Cross-Alignment Matrix\n"
+        "    nfield help cross-alignment\n\n"
+        "  multiplicative orbit-frequency fibers, rank laws, and spectral excess\n"
+        "    The Spectral Structure of Fractional Fields\n"
+        "    nfield help spectral-structure\n\n"
+        "  additive digit-bin power, interval kernels, and overlap profiles\n"
+        "    The Spectral Power of the Digit Function\n"
+        "    nfield help spectral-power\n\n"
+        "  same-bin cross-spectrum, multiplicative slices, and orbit harmonics\n"
+        "    The Autocorrelation Formula\n"
+        "    nfield help autocorrelation\n\n"
+        "  Ramanujan selector, spectral line, phase gate, and Euclidean cells\n"
+        "    Phase-Filtered Ramanujan Sums and the Spectral Gate\n"
+        "    nfield help phase-gate\n\n"
+        "  digit-bin conjugation, complete zero family, collision mass, and lags\n"
+        "    Bin Derangements and the Gate Width Theorem\n"
+        "    nfield help bin-derangements\n\n"
+        "  finite character decomposition and published cutoff snapshot\n"
+        "    The Character Structure of the Collision Fluctuation\n"
+        "    nfield help collision-characters\n\n"
+        "  silent-prime examples and exact variance tables\n"
+        "    Silent Primes and the Variance of the Collision Count\n"
+        "    nfield help silent-primes\n\n"
+        "  finite fluctuation table, class means, and published sums\n"
+        "    The Collision Fluctuation Sum\n"
+        "    nfield help collision-fluctuation\n\n"
+        "  all-lag centered tables and published prime sums\n"
+        "    The Centered Collision Sum\n"
+        "    nfield help collision-centering\n\n"
+        "  complete finite periodic table and selected-base summaries\n"
+        "    The Collision Periodic Table\n"
+        "    nfield help collision-table\n\n"
+        "  reduction fibers, direct comparisons, and declared prime windows\n"
+        "    The Collision Transform and the Critical Strip\n"
+        "    The Collision Transform\n"
+        "    nfield help collision-transform\n\n"
+        "  quotient carry, true residue channels, and decimal window\n"
+        "    The Neutrality Theorem\n"
+        "    nfield help residue-three-neutrality\n\n"
+        "  compatible prime channels, squarefree coordinates, and character data\n"
+        "    The General Neutrality Theorem\n"
+        "    nfield help compatible-residue-channels\n\n"
+        "  centered tables, finite character pairing, and exact CRT orthogonality\n"
+        "    The Double Transversality\n"
+        "    nfield help centered-collision-table\n"
+        "    nfield help finite-character-pairing\n"
+        "    nfield help coprime-base-orthogonality\n\n"
+    );
+    printf(
+        "  finite determination, primitive odd sector, pair relabeling, additive\n"
+        "  reflection well, and reflected prime-pair sign\n"
+        "    The Spectral Repulsion\n"
+        "    nfield help finite-determination\n"
+        "    nfield help primitive-odd-sector\n"
+        "    nfield help conjugate-pair-relabeling\n"
+        "    nfield help additive-reflection-well\n"
+        "    nfield help reflected-prime-pair-sign\n\n"
+        "  centered collision table, finite determination, primitive odd gate,\n"
+        "  fiber cancellation, Bernoulli factorization, moments, and correlation\n"
+        "    The Collision Spectrum and the L-Function Landscape\n"
+        "    The Collision Spectrum\n"
+        "    nfield help centered-collision-table\n"
+        "    nfield help finite-determination\n"
+        "    nfield help primitive-odd-sector\n"
+        "    nfield help primitive-character-cancellation\n"
+        "    nfield help collision-spectrum-factorization\n"
+        "    nfield help special-value-moment\n"
+        "    nfield help base-five-cyclotomic-identity\n"
+        "    nfield help short-sum-bernoulli-correlation\n\n"
+        "  primitive-character cancellation, periodic-zeta factorization,\n"
+        "  boundary recovery, and active-channel classification\n"
+        "    The Analytic Collision Transform\n"
+        "    nfield help primitive-character-cancellation\n"
+        "    nfield help periodic-zeta-factorization\n"
+        "    nfield help collision-boundary-recovery\n"
+        "    nfield help active-collision-channel\n\n"
+        "  collision coordinate, finite determination, reflection, and wrapping\n"
+        "  half-group cardinality\n"
+        "    The Collision Invariant\n"
+        "    nfield help bin-derangements\n"
+        "    nfield help collision-coordinate\n"
+        "    nfield help finite-determination\n"
+        "    nfield help reflection-identity\n"
+        "    nfield help half-group\n\n"
+        "  finite table, reflection and parity gates, all-prime labels, finite\n"
+        "  block quotient, exact bulk multiplicity, and heat-trace bounds\n"
+        "    The Structure That Survives\n"
+        "    nfield help finite-determination\n"
+        "    nfield help reflection-identity\n"
+        "    nfield help primitive-odd-sector\n"
+        "    nfield help collision-spectrum-factorization\n"
+        "    nfield help all-prime-collision-label\n"
+        "    nfield help finite-spectral-quotient\n\n"
+        "  finite-prefix slice identity, primitive and induced boundary\n"
+        "  spectra, unit inversion, sawtooth correlations, and conductor ledger\n"
+        "    Carry Boundaries and Bernoulli Spectra in Long Division\n"
+        "    nfield help finite-prefix-slice\n"
+        "    nfield help boundary-bernoulli-factorization\n"
+        "    nfield help boundary-conductor-ledger\n"
+        "    nfield help terminal-collision-conductor-ledger\n\n"
+        "  oriented two-digit boundary, divisor response, and ramified energy\n"
+        "    Oriented Digit Comparison and Ramified Response\n"
+        "    nfield help oriented-digit-comparison\n\n"
+        "  exact conductor spectrum, finite-state lift, full prime-power orbit\n"
+        "  energy, index-two law, and higher-index Jacobi expansion\n"
+        "    Additive Boundaries and Conductor Energies of Periodic Remainder Orbits\n"
+        "    nfield help boundary-conductor-ledger\n"
+        "    nfield help finite-state-orbit-boundary\n"
+        "    nfield help full-orbit-energy\n"
+        "    nfield help quadratic-orbit-energy\n"
+        "    nfield help subgroup-jacobi-expansion\n\n"
+        "  exact carry-table energy dictionary and finite pole split\n"
+        "    The Cubic Law for Digit-Collision Energy\n"
+        "    nfield help prime-base-collision-energy\n"
+        "\n"
+        "  exact finite residual and the proved all-prime secondary coefficient\n"
+        "    The Secondary Term in Digit-Collision Energy\n"
+        "    nfield help arithmetic-boundary-defect\n\n"
+        "Each object has focused help, exploratory inputs, an exact verifier, CLI\n"
+        "regression tests, and JSON/TCP API tests. Fixed tables are fixtures inside\n"
+        "the larger mathematical surface.\n"
+    );
+}
+
+static int print_help_topic(const char *topic)
+{
+    if (strcmp(topic, "explore") == 0 || strcmp(topic, "analyze") == 0 ||
+        strcmp(topic, "field") == 0 || strcmp(topic, "align") == 0 ||
+        strcmp(topic, "div") == 0 || strcmp(topic, "decompose") == 0 ||
+        strcmp(topic, "polar") == 0 || strcmp(topic, "survey") == 0 ||
+        strcmp(topic, "range") == 0 || strcmp(topic, "table") == 0 ||
+        strcmp(topic, "spectral") == 0 || strcmp(topic, "equations") == 0)
+        explore_help();
+    else if (strcmp(topic, "commands") == 0) nfield_commands_help();
+    else if (strcmp(topic, "completion") == 0) nfield_completion_help();
+    else if (strcmp(topic, "version") == 0) version_help();
+    else if (strcmp(topic, "tables") == 0) tables_help();
+    else if (strcmp(topic, "reciprocal-square-selection") == 0)
+        reciprocal_square_selection_help();
+    else if (strcmp(topic, "weighted-reference-profile") == 0)
+        weighted_reference_profile_help();
+    else if (strcmp(topic, "digit-partition") == 0) digit_partition_help();
+    else if (strcmp(topic, "alignment-limit") == 0) alignment_limit_help();
+    else if (strcmp(topic, "three-tier") == 0) three_tier_help();
+    else if (strcmp(topic, "deficit-lattice") == 0) deficit_lattice_help();
+    else if (strcmp(topic, "coherence-decomposition") == 0) coherence_decomposition_help();
+    else if (strcmp(topic, "cross-alignment") == 0) cross_alignment_help();
+    else if (strcmp(topic, "spectral-structure") == 0) spectral_structure_help();
+    else if (strcmp(topic, "spectral-power") == 0) spectral_power_help();
+    else if (strcmp(topic, "autocorrelation") == 0) autocorrelation_formula_help();
+    else if (strcmp(topic, "phase-gate") == 0) phase_gate_help();
+    else if (strcmp(topic, "bin-derangements") == 0) bin_derangements_help();
+    else if (strcmp(topic, "collision-characters") == 0) collision_characters_help();
+    else if (strcmp(topic, "silent-primes") == 0) silent_primes_help();
+    else if (strcmp(topic, "collision-fluctuation") == 0) collision_fluctuation_help();
+    else if (strcmp(topic, "collision-centering") == 0
+             || strcmp(topic, "centered-collision") == 0)
+        centered_collision_help();
+    else if (strcmp(topic, "collision-table") == 0 ||
+             strcmp(topic, "collision-periodic-table") == 0)
+        collision_periodic_help();
+    else if (strcmp(topic, "collision-transform") == 0) collision_transform_help();
+    else if (strcmp(topic, "residue-three-neutrality") == 0 ||
+             strcmp(topic, "neutrality-theorem") == 0)
+        residue_three_neutrality_help();
+    else if (strcmp(topic, "compatible-residue-channels") == 0 ||
+             strcmp(topic, "general-neutrality") == 0)
+        compatible_residue_channels_help();
+    else if (strcmp(topic, "centered-collision-table") == 0) centered_collision_table_help();
+    else if (strcmp(topic, "finite-character-pairing") == 0) finite_character_pairing_help();
+    else if (strcmp(topic, "coprime-base-orthogonality") == 0) coprime_base_orthogonality_help();
+    else if (strcmp(topic, "natural-prime-sum-window") == 0) natural_prime_sum_window_help();
+    else if (strcmp(topic, "primitive-odd-sector") == 0) primitive_odd_sector_help();
+    else if (strcmp(topic, "conjugate-pair-relabeling") == 0) conjugate_pair_relabeling_help();
+    else if (strcmp(topic, "additive-reflection-well") == 0) additive_reflection_well_help();
+    else if (strcmp(topic, "reflected-prime-pair-sign") == 0 ||
+             strcmp(topic, "goldbach-obstruction") == 0)
+        reflected_prime_pair_sign_help();
+    else if (strcmp(topic, "collision-spectrum-factorization") == 0) collision_spectrum_factorization_help();
+    else if (strcmp(topic, "special-value-moment") == 0) special_value_moment_help();
+    else if (strcmp(topic, "base-five-cyclotomic-identity") == 0) base_five_cyclotomic_identity_help();
+    else if (strcmp(topic, "short-sum-bernoulli-correlation") == 0) short_sum_bernoulli_correlation_help();
+    else if (strcmp(topic, "primitive-character-cancellation") == 0) primitive_character_cancellation_help();
+    else if (strcmp(topic, "periodic-zeta-factorization") == 0) periodic_zeta_factorization_help();
+    else if (strcmp(topic, "collision-boundary-recovery") == 0) collision_boundary_recovery_help();
+    else if (strcmp(topic, "active-collision-channel") == 0) active_collision_channel_help();
+    else if (strcmp(topic, "collision-coordinate") == 0) collision_coordinate_help();
+    else if (strcmp(topic, "finite-determination") == 0) finite_determination_help();
+    else if (strcmp(topic, "reflection-identity") == 0) reflection_identity_help();
+    else if (strcmp(topic, "half-group") == 0) half_group_help();
+    else if (strcmp(topic, "all-prime-collision-label") == 0) all_prime_collision_label_help();
+    else if (strcmp(topic, "finite-spectral-quotient") == 0) finite_spectral_quotient_help();
+    else if (strcmp(topic, "finite-prefix-slice") == 0) finite_prefix_slice_help();
+    else if (strcmp(topic, "oriented-digit-comparison") == 0) oriented_digit_comparison_help();
+    else if (strcmp(topic, "boundary-bernoulli-factorization") == 0) boundary_bernoulli_factorization_help();
+    else if (strcmp(topic, "boundary-conductor-ledger") == 0) boundary_conductor_ledger_help();
+    else if (strcmp(topic, "finite-state-orbit-boundary") == 0) finite_state_orbit_boundary_help();
+    else if (strcmp(topic, "full-orbit-energy") == 0) full_orbit_energy_help();
+    else if (strcmp(topic, "quadratic-orbit-energy") == 0) quadratic_orbit_energy_help();
+    else if (strcmp(topic, "subgroup-jacobi-expansion") == 0) subgroup_jacobi_expansion_help();
+    else if (strcmp(topic, "prime-base-collision-energy") == 0) prime_base_collision_energy_help();
+    else if (strcmp(topic, "arithmetic-boundary-defect") == 0) arithmetic_boundary_defect_help();
+    else if (strcmp(topic, "carry-completed-carrier") == 0) carry_completed_carrier_help();
+    else if (strcmp(topic, "terminal-collision-conductor-ledger") == 0) terminal_collision_conductor_ledger_help();
+    else if (strcmp(topic, "reading-map") == 0
+             || strcmp(topic, "verification-map") == 0)
+        verification_map_help();
+    else if (strcmp(topic, "verify") == 0) verify_help();
+    else if (strcmp(topic, "legacy") == 0) legacy_help();
+    else if (strcmp(topic, "daemon") == 0) daemon_help();
+    else return 0;
+    return 1;
 }
 
 static int parse_base(int argc, char **argv, int start)
@@ -74,6 +423,34 @@ static int has_flag(int argc, char **argv, const char *flag)
         if (strcmp(argv[i], flag) == 0)
             return 1;
     return 0;
+}
+
+static int parse_int_option(int argc, char **argv, const char *option,
+                            int fallback)
+{
+    for (int i = 1; i < argc - 1; i++)
+        if (strcmp(argv[i], option) == 0)
+            return atoi(argv[i + 1]);
+    return fallback;
+}
+
+static const char *parse_string_option(int argc, char **argv,
+                                       const char *option)
+{
+    for (int i = 1; i < argc - 1; i++)
+        if (strcmp(argv[i], option) == 0)
+            return argv[i + 1];
+    return NULL;
+}
+
+static long double parse_long_double_option(int argc, char **argv,
+                                            const char *option,
+                                            long double fallback)
+{
+    for (int i = 1; i < argc - 1; i++)
+        if (strcmp(argv[i], option) == 0)
+            return strtold(argv[i + 1], NULL);
+    return fallback;
 }
 
 /* ── Shared arithmetic helpers ──────────────────────────── */
@@ -468,72 +845,20 @@ static void spectrum_print(int p, int base)
         }
         free(R);
     } else {
-        /* General case: compute A directly, use power iteration or known structure */
-        int n_orbits = n / L;
-
-        if (n_orbits == 2) {
-            /* Two-coset case: find cross-orbit match count m */
-            int *orbit1 = malloc(L * sizeof(int));
-            orbit1[0] = 1;
-            for (int j = 1; j < L; j++)
-                orbit1[j] = (int)(((long long)orbit1[j-1] * base) % p);
-
-            /* Find a member of orbit 2 */
-            int rep2 = 0;
-            for (int r = 1; r < p; r++) {
-                int in_o1 = 0;
-                for (int j = 0; j < L; j++) if (orbit1[j] == r) { in_o1 = 1; break; }
-                if (!in_o1) { rep2 = r; break; }
-            }
-
-            /* Count cross-orbit matches between 1/p and rep2/p */
-            /* Compare digit sequences: for 1/p, digits are d[base^j mod p] for j=0..L-1 */
-            /* For rep2/p, digits are d[(rep2 * base^j) mod p] */
-            int m = 0;
-            for (int j = 0; j < L; j++) {
-                int r1 = power_mod_local(base, j, p);
-                int r2 = (int)(((long long)rep2 * power_mod_local(base, j, p)) % p);
-                if (d[r1] == d[r2]) m++;
-            }
-
-            /* If m == 0, check other orbit-2 members */
-            if (m == 0) {
-                int *orbit2 = malloc(L * sizeof(int));
-                orbit2[0] = rep2;
-                for (int j = 1; j < L; j++)
-                    orbit2[j] = (int)(((long long)orbit2[j-1] * base) % p);
-                for (int oi = 0; oi < L && m == 0; oi++) {
-                    m = 0;
-                    for (int j = 0; j < L; j++) {
-                        int r1 = power_mod_local(base, j, p);
-                        int r2 = (int)(((long long)orbit2[oi] * power_mod_local(base, j, p)) % p);
-                        if (d[r1] == d[r2]) m++;
-                    }
-                    if (m > 0) break;
-                }
-                free(orbit2);
-            }
-
-            for (int k = 0; k < L; k++) eigenvals[k] = 1.0 + (double)m / L;
-            for (int k = L; k < n; k++) eigenvals[k] = 1.0 - (double)m / L;
-            free(orbit1);
-        } else {
-            /* Multi-orbit: compute directly from autocorrelation per orbit */
-            /* Simplified: report Phi(k)/L as approximate eigenvalues */
-            for (int k = 0; k < n; k++) {
-                double val = 0;
-                for (int ell = 0; ell < L; ell++) {
-                    int g = power_mod_local(base, ell, p);
-                    int count = 0;
-                    for (int r = 1; r < p; r++) {
-                        int gr = (int)(((long long)g * r) % p);
-                        if (gr == 0) continue;
-                        if (d[r] == d[gr]) count++;
-                    }
-                    val += count * cos(2.0 * M_PI * (k % L) * ell / L);
-                }
-                eigenvals[k] = val / (double)L;
-            }
+        /* General case: diagonalize the exact synchronized matrix.  The old
+           shortcut treated every two-coset case as a two-level spectrum and
+           used an autocorrelation approximation for more cosets; neither is
+           valid in general. */
+        int exact_count = 0, exact_order = 0, exact_cosets = 0;
+        if (!cross_alignment_eigenvalues(p, base, eigenvals, n,
+                                         &exact_count, &exact_order,
+                                         &exact_cosets)
+            || exact_count != n || exact_order != L
+            || exact_cosets != n / L) {
+            fprintf(stderr, "Exact cross-alignment eigensolver failed.\n");
+            free(d);
+            free(eigenvals);
+            return;
         }
     }
 
@@ -575,7 +900,7 @@ static void spectrum_print(int p, int base)
     { double prev = -999; for (int k = 0; k < n; k++) if (fabs(eigenvals[k] - prev) > 0.001) { n_distinct++; prev = eigenvals[k]; } }
 
     if (n_distinct == 1) printf("  flat spectrum (digit-partitioning prime)\n");
-    else if (n_distinct == 2) printf("  two-coset prime, two-level spectrum\n");
+    else if (n_distinct == 2) printf("  two distinct spectral levels\n");
     else printf("  %d distinct values, full spectrum\n", n_distinct);
 
     free(d); free(eigenvals);
@@ -687,43 +1012,6 @@ static void class_bias_print(int base, int max_p)
     }
 
     free(sum_delta); free(count);
-}
-
-/* autocorrelation: R(ell) with formula verification */
-static void autocorrelation_print(int p, int base)
-{
-    if (p < 2 || !is_prime_local(p) || p % base == 0) {
-        printf("Need a prime p > base, coprime to base.\n"); return;
-    }
-    int L = 0;
-    { int r = 1; do { r = (r * base) % p; L++; } while (r != 1); }
-
-    /* Compute digits d[n] = floor(base * n / p) for n = 0..p-1 */
-    int *d = malloc(p * sizeof(int));
-    for (int n = 0; n < p; n++) d[n] = (base * n) / p;
-
-    /* R(ell) = number of r in 1..p-1 where d[r] == d[(r * base^ell) % p] */
-    printf("Autocorrelation for p = %d, base %d, cycle length %d\n\n", p, base, L);
-    int all_zero = 1;
-    for (int ell = 0; ell < L; ell++) {
-        int g = power_mod_local(base, ell, p);
-        int R = 0;
-        for (int r = 1; r < p; r++) {
-            int gr = (int)(((long long)g * r) % p);
-            if (gr == 0) continue;
-            if (d[r] == d[gr]) R++;
-        }
-        if (ell == 0) {
-            printf("  R(0) = %d\n", R);
-        } else {
-            printf("  R(%d) = %d\n", ell, R);
-            if (R != 0) all_zero = 0;
-        }
-    }
-    if (all_zero && L > 1)
-        printf("\n  All nonzero lags vanish (silent prime at this base).\n");
-    printf("  Formula matches direct count: yes\n");
-    free(d);
 }
 
 /* derangements: list deranging multipliers, verify mean formula */
@@ -962,57 +1250,24 @@ static void polarity_field_print(int base)
     free(S_tab); free(seen);
 }
 
-/* ── Paper tables ──────────────────────────────────────── */
+/* ── Object-table compatibility dispatcher ───────────────── */
 
-static void tables_paper1(void)
+static int object_tables_dispatch(const char *object)
 {
-    printf("Paper 1: Why the Golden Ratio Selects the Prime Three\n");
-    printf("Table 1: Alignment alpha_10(3m) for 10-smooth m\n\n");
-    printf("  %5s   %5s   %-12s  %s\n", "m", "n=3m", "alpha_10(n)", "decimal");
-    printf("  %5s   %5s   %-12s  %s\n", "-----", "-----", "----------", "-------");
-
-    int ms[] = {1, 2, 4, 5, 8, 10, 16, 32, 100, 256};
-    int nm = 10;
-
-    for (int i = 0; i < nm; i++) {
-        int m = ms[i];
-        int n = 3 * m;
-        int num = 2 * m - 1;
-        int den = 3 * m - 1;
-        double val = (double)num / den;
-        printf("  %5d   %5d   %d/%d", m, n, num, den);
-        /* pad */
-        int len = 0;
-        { int a = num, b = den; while (a > 0) { a /= 10; len++; } while (b > 0) { b /= 10; len++; } len++; }
-        for (int j = len; j < 12; j++) printf(" ");
-        printf("  %.4f\n", val);
+    if (object == NULL) {
+        printf("Usage: nfield tables <object-name>\n\n");
+        printf("Available exact object-table reproductions:\n\n");
+        printf("  reciprocal-square-selection\n");
+        return 0;
     }
 
-    double phi = (1.0 + sqrt(5.0)) / 2.0;
-    printf("\n  1/phi = %.6f\n", 1.0 / phi);
-    printf("  2/3   = %.6f  (limit as m -> infinity)\n", 2.0 / 3.0);
-    printf("\n  Alignment crosses 1/phi at m=4 (n=12).\n");
-}
+    if (strcmp(object, "reciprocal-square-selection") == 0)
+        return reciprocal_square_selection_table();
 
-static void tables_dispatch(int paper)
-{
-    if (paper == 0) {
-        printf("Usage: nfield tables <paper>\n\n");
-        printf("Reproduce tables from the research papers.\n\n");
-        printf("  Paper  Title\n");
-        printf("  -----  -----\n");
-        printf("  1      Why the Golden Ratio Selects the Prime Three\n");
-        printf("\n  Only Paper 1 table reproduction is included in this build.\n");
-        return;
-    }
-
-    switch (paper) {
-        case 1: tables_paper1(); break;
-        default:
-            printf("Paper %d table reproduction is not included in this build.\n", paper);
-            printf("Run 'tables' with no argument to see available papers.\n");
-            break;
-    }
+    fprintf(stderr, "No table reproduction is registered for object '%s'.\n",
+            object);
+    fprintf(stderr, "Run 'tables' with no argument to see object names.\n");
+    return 1;
 }
 
 /* ── Neutrality / mod-3 class means ────────────────────── */
@@ -1213,8 +1468,45 @@ int main(int argc, char **argv)
 
     if (argc < 2) {
         usage();
+        return 0;
+    }
+
+    if (strcmp(argv[1], "--version") == 0 ||
+        (strcmp(argv[1], "version") == 0 && argc == 2)) {
+        print_banner();
+        return 0;
+    }
+
+    if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0) {
+        usage();
+        return 0;
+    }
+
+    if (argc >= 3 &&
+        (strcmp(argv[2], "--help") == 0 || strcmp(argv[2], "-h") == 0)) {
+        if (strcmp(argv[1], "help") == 0) {
+            usage();
+            return 0;
+        }
+        if (print_help_topic(argv[1])) return 0;
+        fprintf(stderr, "No focused help is available for command: %s\n", argv[1]);
         return 1;
     }
+
+    if (strcmp(argv[1], "__complete") == 0)
+        return nfield_completion_candidates(argc - 2, argv + 2);
+
+    if (strcmp(argv[1], "commands") == 0) {
+        if (argc != 2) {
+            fprintf(stderr, "Usage: nfield commands\n");
+            return 1;
+        }
+        nfield_commands_help();
+        return 0;
+    }
+
+    if (strcmp(argv[1], "completion") == 0)
+        return nfield_completion_command(argc - 2, argv + 2);
 
     /* Daemon mode */
     if (strcmp(argv[1], "daemon") == 0) {
@@ -1222,6 +1514,11 @@ int main(int argc, char **argv)
         for (int i = 2; i < argc - 1; i++) {
             if (strcmp(argv[i], "--port") == 0) port = atoi(argv[i+1]);
             if (strcmp(argv[i], "--threads") == 0) threads = atoi(argv[i+1]);
+        }
+        if (port < 1 || port > 65535 || threads < 1 || threads > 64) {
+            fprintf(stderr,
+                    "daemon requires 1<=port<=65535 and 1<=threads<=64\n");
+            return 1;
         }
         return daemon_main(port, threads);
     }
@@ -1281,8 +1578,8 @@ int main(int argc, char **argv)
 
         survey_range(min, max, base, csv);
 
-    } else if (strcmp(cmd, "table1") == 0) {
-        table1();
+    } else if (strcmp(cmd, "golden-threshold-table") == 0) {
+        if (reciprocal_square_selection_table() != 0) return 1;
 
     } else if (strcmp(cmd, "align") == 0 && argc >= 3) {
         int n    = atoi(argv[2]);
@@ -1294,12 +1591,12 @@ int main(int argc, char **argv)
     } else if (strcmp(cmd, "spectral") == 0 && argc >= 3) {
         int p    = atoi(argv[2]);
         int base = parse_base(argc, argv, 3);
-        spectral_print(p, base);
+        if (spectral_power_inspect(p, base) != 0) return 1;
 
     } else if (strcmp(cmd, "decompose") == 0 && argc >= 3) {
         int n    = atoi(argv[2]);
         int base = parse_base(argc, argv, 3);
-        decompose_print(n, base);
+        if (decompose_print(n, base) != 0) return 1;
 
     } else if (strcmp(cmd, "div") == 0 && argc >= 3) {
         int n    = atoi(argv[2]);
@@ -1386,16 +1683,253 @@ int main(int argc, char **argv)
         coherence_print(base, N);
 
     } else if (strcmp(cmd, "tables") == 0) {
-        int paper = 0;
-        if (argc >= 3 && argv[2][0] >= '0' && argv[2][0] <= '9')
-            paper = atoi(argv[2]);
-        tables_dispatch(paper);
+        const char *object = argc >= 3 ? argv[2] : NULL;
+        if (object_tables_dispatch(object) != 0) return 1;
 
     } else if (strcmp(cmd, "verify") == 0) {
-        const char *theorem = "all";
-        for (int i = 2; i < argc; i++)
-            if (argv[i][0] != '-') { theorem = argv[i]; break; }
-        verify_dispatch(theorem);
+        if (argc < 3) {
+            verify_help();
+            goto done;
+        }
+        const char *theorem = NULL;
+        for (int i = 2; i < argc; i++) {
+            if (argv[i][0] != '-') {
+                theorem = argv[i];
+                break;
+            }
+        }
+        if (!theorem) {
+            verify_help();
+            goto done;
+        }
+        int verify_status = verify_dispatch(theorem);
+        if (verify_status != 0) return verify_status;
+
+    } else if (strcmp(cmd, "digit-partition") == 0) {
+        if (argc < 3) {
+            digit_partition_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (digit_partition_inspect(n, base, depth) != 0) return 1;
+        } else if (argv[2][0] >= '0' && argv[2][0] <= '9') {
+            int n = atoi(argv[2]);
+            int base = parse_base(argc, argv, 3);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (digit_partition_inspect(n, base, depth) != 0) return 1;
+        } else if (strcmp(argv[2], "primes") == 0) {
+            int base = parse_base(argc, argv, 3);
+            digit_partition_primes(base);
+        } else if (strcmp(argv[2], "table") == 0) {
+            digit_partition_table();
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!digit_partition_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown digit-partition action: %s\n", argv[2]);
+            digit_partition_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "alignment-limit") == 0) {
+        if (argc < 3) {
+            alignment_limit_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            int p = atoi(argv[3]);
+            int m = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (alignment_limit_inspect(p, m, base, depth) != 0) return 1;
+        } else if (strcmp(argv[2], "cosets") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (alignment_limit_cosets(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "table") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int max_prime = parse_int_option(argc, argv, "--max-prime", 61);
+            if (alignment_limit_table(base, max_prime) != 0) return 1;
+        } else if (strcmp(argv[2], "sharpness") == 0) {
+            int steps = parse_int_option(argc, argv, "--steps", 10);
+            if (alignment_limit_sharpness(steps) != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!alignment_limit_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown alignment-limit action: %s\n", argv[2]);
+            alignment_limit_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "three-tier") == 0) {
+        if (argc < 3) {
+            three_tier_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (three_tier_inspect(n, base, depth) != 0) return 1;
+        } else if (strcmp(argv[2], "classify") == 0 && argc >= 4) {
+            int maximum = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (three_tier_classify(maximum, base) != 0) return 1;
+        } else if (strcmp(argv[2], "scan") == 0 && argc >= 4) {
+            int maximum = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (three_tier_scan(maximum, base) != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!three_tier_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown three-tier action: %s\n", argv[2]);
+            three_tier_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "deficit-lattice") == 0) {
+        if (argc < 3) {
+            deficit_lattice_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            int p = atoi(argv[3]);
+            long long m = atoll(argv[4]);
+            int base = parse_int_option(argc, argv, "--base", 30);
+            if (deficit_lattice_inspect(p, m, base) != 0) return 1;
+        } else if (strcmp(argv[2], "ratio") == 0 && argc >= 6) {
+            int p = atoi(argv[3]);
+            long long u = atoll(argv[4]);
+            long long v = atoll(argv[5]);
+            int base = parse_int_option(argc, argv, "--base", 30);
+            long long factor = parse_int_option(argc, argv, "--factor", 1);
+            if (deficit_lattice_ratio(p, u, v, base, factor) != 0) return 1;
+        } else if (strcmp(argv[2], "pythagorean") == 0) {
+            long long factor = parse_int_option(argc, argv, "--factor", 1);
+            if (deficit_lattice_pythagorean(factor) != 0) return 1;
+        } else if (strcmp(argv[2], "major-scale") == 0) {
+            long long factor = parse_int_option(argc, argv, "--factor", 1);
+            if (deficit_lattice_major_scale(factor) != 0) return 1;
+        } else if (strcmp(argv[2], "chromatic-scale") == 0) {
+            long long factor = parse_int_option(argc, argv, "--factor", 1);
+            if (deficit_lattice_chromatic_scale(factor) != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!deficit_lattice_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown deficit-lattice action: %s\n", argv[2]);
+            deficit_lattice_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "coherence-decomposition") == 0) {
+        if (argc < 3) {
+            coherence_decomposition_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (coherence_decomposition_inspect(n, base, depth) != 0) return 1;
+        } else if (strcmp(argv[2], "prime-core") == 0 && argc >= 5) {
+            int p = atoi(argv[3]);
+            int supported = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (coherence_decomposition_prime_core(p, supported, base, depth) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "pairs") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (coherence_decomposition_pairs(n, base, depth) != 0) return 1;
+        } else if (strcmp(argv[2], "sigma-zero") == 0 && argc >= 4) {
+            int maximum_prime = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (coherence_decomposition_sigma_zero(maximum_prime, base) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "golden-gap") == 0) {
+            int base = parse_base(argc, argv, 3);
+            if (coherence_decomposition_golden_gap(base) != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!coherence_decomposition_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown coherence-decomposition action: %s\n",
+                    argv[2]);
+            coherence_decomposition_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "cross-alignment") == 0) {
+        if (argc < 3) {
+            cross_alignment_help();
+        } else if (strcmp(argv[2], "matrix") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (cross_alignment_matrix_print(n, base, depth) != 0) return 1;
+        } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (cross_alignment_prime_print(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "fourier") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (cross_alignment_fourier_print(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "block") == 0 && argc >= 5) {
+            int p = atoi(argv[3]);
+            int supported = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            int depth = parse_int_option(argc, argv, "--depth", -1);
+            if (cross_alignment_block_print(p, supported, base, depth) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (cross_alignment_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!cross_alignment_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown cross-alignment action: %s\n", argv[2]);
+            cross_alignment_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "spectral-structure") == 0) {
+        if (argc < 3) {
+            spectral_structure_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (spectral_structure_inspect(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "two-coset") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (spectral_structure_two_coset(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "character") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (spectral_structure_character_energy(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (spectral_structure_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!spectral_structure_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown spectral-structure action: %s\n", argv[2]);
+            spectral_structure_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "spectral-power") == 0) {
+        if (argc < 3) {
+            spectral_power_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (spectral_power_inspect(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "overlap") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (spectral_power_overlap(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (spectral_power_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!spectral_power_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown spectral-power action: %s\n", argv[2]);
+            spectral_power_help();
+            return 1;
+        }
 
     } else if (strcmp(cmd, "equations") == 0) {
         printf(
@@ -1477,9 +2011,1198 @@ int main(int argc, char **argv)
         return verify_dispatch("gate-width");
 
     } else if (strcmp(cmd, "autocorrelation") == 0) {
-        int p = (argc >= 3) ? atoi(argv[2]) : 7;
-        int base = parse_base(argc, argv, 3);
-        autocorrelation_print(p, base);
+        if (argc < 3) {
+            autocorrelation_formula_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (autocorrelation_inspect(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "slice") == 0 && argc >= 5) {
+            int p = atoi(argv[3]);
+            int multiplier = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            if (autocorrelation_slice(p, multiplier, base) != 0) return 1;
+        } else if (strcmp(argv[2], "orbit") == 0 && argc >= 5) {
+            int p = atoi(argv[3]);
+            int coset = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            if (autocorrelation_orbit(p, coset, base) != 0) return 1;
+        } else if (strcmp(argv[2], "harmonics") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int coset = 1;
+            for (int i = 4; i < argc - 1; i++)
+                if (strcmp(argv[i], "--coset") == 0) coset = atoi(argv[i + 1]);
+            if (autocorrelation_harmonics(p, coset, base) != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (autocorrelation_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!autocorrelation_formula_verify()) return 1;
+        } else if (argv[2][0] >= '0' && argv[2][0] <= '9') {
+            int p = atoi(argv[2]);
+            int base = parse_base(argc, argv, 3);
+            if (autocorrelation_inspect(p, base) != 0) return 1;
+        } else {
+            fprintf(stderr, "Unknown autocorrelation action: %s\n", argv[2]);
+            autocorrelation_formula_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "phase-gate") == 0) {
+        if (argc < 3) {
+            phase_gate_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            int p = atoi(argv[3]);
+            int multiplier = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            if (phase_gate_inspect(p, multiplier, base) != 0) return 1;
+        } else if (strcmp(argv[2], "multipliers") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (phase_gate_multipliers(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "bin-word") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (phase_gate_bin_word(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "density") == 0 && argc >= 4) {
+            int multiplier = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int max_prime = parse_int_option(argc, argv, "--max-prime", 997);
+            if (phase_gate_density(multiplier, base, max_prime) != 0) return 1;
+        } else if (strcmp(argv[2], "power-lag") == 0 && argc >= 4) {
+            int lag = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int max_prime = parse_int_option(argc, argv, "--max-prime", 997);
+            if (phase_gate_power_lag(lag, base, max_prime) != 0) return 1;
+        } else if (strcmp(argv[2], "prime-sum") == 0 && argc >= 4) {
+            int lag = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int max_prime = parse_int_option(argc, argv, "--max-prime", 997);
+            if (phase_gate_prime_sum(lag, base, max_prime) != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (phase_gate_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!phase_gate_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown phase-gate action: %s\n", argv[2]);
+            phase_gate_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "bin-derangements") == 0) {
+        if (argc < 3) {
+            bin_derangements_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (bin_derangements_inspect(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "family") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (bin_derangements_family(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "mean") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (bin_derangements_mean(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "lags") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (bin_derangements_lags(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (bin_derangements_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!bin_derangements_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown bin-derangements action: %s\n", argv[2]);
+            bin_derangements_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "collision-characters") == 0) {
+        if (argc < 3) {
+            collision_characters_help();
+        } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (collision_characters_prime(p, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int cutoff = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            long double sigma = parse_long_double_option(
+                argc, argv, "--sigma", 1.0L);
+            long double tau = parse_long_double_option(
+                argc, argv, "--tau", 0.0L);
+            if (collision_characters_inspect(
+                    cutoff, base, lag, sigma, tau) != 0) return 1;
+        } else if (strcmp(argv[2], "snapshot") == 0) {
+            if (collision_characters_snapshot() != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (collision_characters_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!collision_characters_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown collision-characters action: %s\n", argv[2]);
+            collision_characters_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "silent-primes") == 0) {
+        if (argc < 3) {
+            silent_primes_help();
+        } else if (strcmp(argv[2], "recipe") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (silent_primes_recipe(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (silent_primes_prime(p, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "variance") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (silent_primes_variance(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "snapshot") == 0) {
+            if (silent_primes_snapshot() != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (silent_primes_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!silent_primes_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown silent-primes action: %s\n", argv[2]);
+            silent_primes_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "collision-fluctuation") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            collision_fluctuation_help();
+        } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
+            int p = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (collision_fluctuation_prime(p, base) != 0) return 1;
+        } else if (strcmp(argv[2], "table") == 0) {
+            int base = parse_base(argc, argv, 3);
+            if (collision_fluctuation_table(base) != 0) return 1;
+        } else if (strcmp(argv[2], "classes") == 0) {
+            int base = parse_base(argc, argv, 3);
+            if (collision_fluctuation_classes(base) != 0) return 1;
+        } else if (strcmp(argv[2], "sum") == 0 && argc >= 4) {
+            int cutoff = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (collision_fluctuation_sum(cutoff, base) != 0) return 1;
+        } else if (strcmp(argv[2], "snapshot") == 0) {
+            if (collision_fluctuation_snapshot() != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (collision_fluctuation_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!collision_fluctuation_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown collision-fluctuation action: %s\n", argv[2]);
+            collision_fluctuation_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "collision-centering") == 0 ||
+               strcmp(cmd, "centered-collision") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            centered_collision_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (centered_collision_inspect(n, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "table") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (centered_collision_table(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "fibers") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (centered_collision_fibers(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "gate") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (centered_collision_gate(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "sum") == 0 && argc >= 4) {
+            int cutoff = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (centered_collision_sum(cutoff, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "snapshot") == 0) {
+            if (centered_collision_snapshot() != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (centered_collision_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!centered_collision_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown collision-centering action: %s\n", argv[2]);
+            centered_collision_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "collision-table") == 0 ||
+               strcmp(cmd, "collision-periodic-table") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            collision_periodic_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            if (collision_periodic_inspect(n, base) != 0) return 1;
+        } else if (strcmp(argv[2], "compare") == 0 && argc >= 5) {
+            int first = atoi(argv[3]);
+            int second = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            if (collision_periodic_compare(first, second, base) != 0) return 1;
+        } else if (strcmp(argv[2], "table") == 0) {
+            int base = parse_base(argc, argv, 3);
+            if (collision_periodic_table(base) != 0) return 1;
+        } else if (strcmp(argv[2], "summary") == 0) {
+            int base = parse_base(argc, argv, 3);
+            if (collision_periodic_summary(base) != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (collision_periodic_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!collision_periodic_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown collision-table action: %s\n", argv[2]);
+            collision_periodic_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "collision-transform") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            collision_transform_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (collision_transform_inspect(n, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "table") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (collision_transform_table(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "gate") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (collision_transform_gate(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "spectrum") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (collision_transform_spectrum(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "window") == 0 && argc >= 5) {
+            int lower = atoi(argv[3]);
+            int upper = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            long double sigma = parse_long_double_option(
+                argc, argv, "--sigma", 1.0L);
+            if (collision_transform_window(
+                    lower, upper, base, lag, sigma) != 0) return 1;
+        } else if (strcmp(argv[2], "snapshot") == 0) {
+            if (collision_transform_snapshot() != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (collision_transform_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!collision_transform_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown collision-transform action: %s\n", argv[2]);
+            collision_transform_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "residue-three-neutrality") == 0 ||
+               strcmp(cmd, "neutrality-theorem") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            residue_three_neutrality_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int n = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (residue_three_neutrality_inspect(n, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "canonical") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (residue_three_neutrality_canonical(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "channels") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (residue_three_neutrality_channels(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "split") == 0 && argc >= 5) {
+            int lower = atoi(argv[3]);
+            int upper = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            long double sigma = parse_long_double_option(
+                argc, argv, "--sigma", 1.0L);
+            if (residue_three_neutrality_split(
+                    lower, upper, base, lag, sigma) != 0) return 1;
+        } else if (strcmp(argv[2], "snapshot") == 0) {
+            if (residue_three_neutrality_snapshot() != 0) return 1;
+        } else if (strcmp(argv[2], "examples") == 0) {
+            if (residue_three_neutrality_examples() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!residue_three_neutrality_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown residue-three-neutrality action: %s\n",
+                    argv[2]);
+            residue_three_neutrality_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "compatible-residue-channels") == 0 ||
+               strcmp(cmd, "general-neutrality") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            compatible_residue_channels_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            int integer = atoi(argv[3]);
+            int prime = atoi(argv[4]);
+            int base = parse_base(argc, argv, 5);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (compatible_residue_channels_inspect(
+                    integer, prime, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "internal") == 0 && argc >= 4) {
+            int prime = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (compatible_residue_channels_internal(prime, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "channels") == 0 && argc >= 4) {
+            int prime = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (compatible_residue_channels_prime(prime, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "simultaneous") == 0 && argc >= 4) {
+            int squarefree = atoi(argv[3]);
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (compatible_residue_channels_squarefree(
+                    squarefree, base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "character-signs") == 0) {
+            int cutoff = parse_int_option(argc, argv, "--cutoff", 5000000);
+            if (compatible_residue_channels_character_signs(cutoff) != 0) return 1;
+        } else if (strcmp(argv[2], "magnitude-correlations") == 0) {
+            int cutoff = parse_int_option(argc, argv, "--cutoff", 5000000);
+            if (compatible_residue_channels_magnitude_correlations(cutoff) != 0) return 1;
+        } else if (strcmp(argv[2], "assignment-null") == 0) {
+            int cutoff = parse_int_option(argc, argv, "--cutoff", 5000000);
+            if (compatible_residue_channels_assignment_null(cutoff) != 0) return 1;
+        } else if (strcmp(argv[2], "snapshot") == 0) {
+            if (compatible_residue_channels_snapshot() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!compatible_residue_channels_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown compatible-residue-channels action: %s\n",
+                    argv[2]);
+            compatible_residue_channels_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "centered-collision-table") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            centered_collision_table_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            if (centered_collision_table_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "complete") == 0 && argc >= 5) {
+            if (centered_collision_table_complete(
+                    atoi(argv[3]), atoi(argv[4])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!centered_collision_table_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown centered-collision-table action: %s\n",
+                    argv[2]);
+            centered_collision_table_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "finite-character-pairing") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            finite_character_pairing_help();
+        } else if (strcmp(argv[2], "one") == 0 && argc >= 5) {
+            int cutoff = parse_int_option(argc, argv, "--cutoff", 2000000);
+            if (finite_character_pairing_one(
+                    atoi(argv[3]), atoi(argv[4]), cutoff) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "declared-rows") == 0) {
+            int cutoff = parse_int_option(argc, argv, "--cutoff", 2000000);
+            if (finite_character_pairing_declared_rows(cutoff) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "cutoff-trend") == 0) {
+            if (finite_character_pairing_cutoff_trend() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!finite_character_pairing_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown finite-character-pairing action: %s\n",
+                    argv[2]);
+            finite_character_pairing_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "coprime-base-orthogonality") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            coprime_base_orthogonality_help();
+        } else if (strcmp(argv[2], "pair") == 0 && argc >= 7) {
+            if (coprime_base_orthogonality_pair(
+                    atoi(argv[3]), atoi(argv[4]),
+                    atoi(argv[5]), atoi(argv[6])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "common-quotient") == 0 && argc >= 7) {
+            if (coprime_base_common_quotient(
+                    atoi(argv[3]), atoi(argv[4]),
+                    atoi(argv[5]), atoi(argv[6])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "audit") == 0) {
+            if (coprime_base_orthogonality_audit() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!coprime_base_orthogonality_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown coprime-base-orthogonality action: %s\n",
+                    argv[2]);
+            coprime_base_orthogonality_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "natural-prime-sum-window") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            natural_prime_sum_window_help();
+        } else if (strcmp(argv[2], "base-boundaries") == 0) {
+            int cutoff = parse_int_option(argc, argv, "--cutoff", 0);
+            if (natural_prime_sum_window_base_boundaries(cutoff) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "common-tail") == 0) {
+            int lower = parse_int_option(argc, argv, "--lower", 997);
+            int cutoff = parse_int_option(argc, argv, "--cutoff", 2000000);
+            if (natural_prime_sum_window_common_tail(lower, cutoff) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!natural_prime_sum_window_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown natural-prime-sum-window action: %s\n",
+                    argv[2]);
+            natural_prime_sum_window_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "primitive-odd-sector") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            primitive_odd_sector_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int cutoff = parse_int_option(argc, argv, "--cutoff", 2000000);
+            if (primitive_odd_sector_inspect(atoi(argv[3]), cutoff) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!primitive_odd_sector_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown primitive-odd-sector action: %s\n",
+                    argv[2]);
+            primitive_odd_sector_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "conjugate-pair-relabeling") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            conjugate_pair_relabeling_help();
+        } else if (strcmp(argv[2], "exact-law") == 0) {
+            if (conjugate_pair_relabeling_exact_law() != 0) return 1;
+        } else if (strcmp(argv[2], "ledger") == 0) {
+            if (conjugate_pair_relabeling_ledger() != 0) return 1;
+        } else if (strcmp(argv[2], "cutoffs") == 0) {
+            if (conjugate_pair_relabeling_cutoffs() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!conjugate_pair_relabeling_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown conjugate-pair-relabeling action: %s\n",
+                    argv[2]);
+            conjugate_pair_relabeling_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "additive-reflection-well") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            additive_reflection_well_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            if (additive_reflection_well_inspect(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!additive_reflection_well_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown additive-reflection-well action: %s\n",
+                    argv[2]);
+            additive_reflection_well_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "reflected-prime-pair-sign") == 0 ||
+               strcmp(cmd, "goldbach-obstruction") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            reflected_prime_pair_sign_help();
+        } else if (strcmp(argv[2], "sweep") == 0 && argc >= 4) {
+            int maximum_even = parse_int_option(
+                argc, argv, "--max-even", 100000);
+            if (reflected_prime_pair_sign_sweep(
+                    atoi(argv[3]), maximum_even) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!reflected_prime_pair_sign_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown reflected-prime-pair-sign action: %s\n",
+                    argv[2]);
+            reflected_prime_pair_sign_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "collision-spectrum-factorization") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            collision_spectrum_factorization_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            if (collision_spectrum_factorization_inspect(
+                    atoi(argv[3]), atoi(argv[4])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "transform") == 0 && argc >= 6) {
+            if (collision_spectrum_factorization_transform(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!collision_spectrum_factorization_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown collision-spectrum-factorization action: %s\n",
+                    argv[2]);
+            collision_spectrum_factorization_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "special-value-moment") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            special_value_moment_help();
+        } else if (strcmp(argv[2], "ledger") == 0) {
+            if (special_value_moment_ledger() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!special_value_moment_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown special-value-moment action: %s\n",
+                    argv[2]);
+            special_value_moment_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "base-five-cyclotomic-identity") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            base_five_cyclotomic_identity_help();
+        } else if (strcmp(argv[2], "audit") == 0) {
+            if (base_five_cyclotomic_identity_audit() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!base_five_cyclotomic_identity_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown base-five-cyclotomic-identity action: %s\n",
+                    argv[2]);
+            base_five_cyclotomic_identity_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "short-sum-bernoulli-correlation") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            short_sum_bernoulli_correlation_help();
+        } else if (strcmp(argv[2], "ledger") == 0) {
+            if (short_sum_bernoulli_correlation_ledger() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!short_sum_bernoulli_correlation_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown short-sum-bernoulli-correlation action: %s\n",
+                    argv[2]);
+            short_sum_bernoulli_correlation_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "primitive-character-cancellation") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            primitive_character_cancellation_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            if (primitive_character_cancellation_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!primitive_character_cancellation_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown primitive-character-cancellation action: %s\n",
+                    argv[2]);
+            primitive_character_cancellation_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "periodic-zeta-factorization") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            periodic_zeta_factorization_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            long double sigma = parse_long_double_option(
+                argc, argv, "--sigma", 0.5L);
+            long double tau = parse_long_double_option(
+                argc, argv, "--tau", 0.0L);
+            if (periodic_zeta_factorization_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),
+                    sigma, tau) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!periodic_zeta_factorization_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown periodic-zeta-factorization action: %s\n",
+                    argv[2]);
+            periodic_zeta_factorization_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "collision-boundary-recovery") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            collision_boundary_recovery_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            if (collision_boundary_recovery_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!collision_boundary_recovery_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown collision-boundary-recovery action: %s\n",
+                    argv[2]);
+            collision_boundary_recovery_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "active-collision-channel") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            active_collision_channel_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            if (active_collision_channel_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "census") == 0 && argc >= 5) {
+            if (active_collision_channel_census(
+                    atoi(argv[3]), atoi(argv[4])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!active_collision_channel_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown active-collision-channel action: %s\n",
+                    argv[2]);
+            active_collision_channel_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "collision-coordinate") == 0) {
+        if (argc < 3) {
+            collision_coordinate_help();
+        } else if (strcmp(argv[2], "conjugation") == 0 && argc >= 5) {
+            int base = parse_base(argc, argv, 5);
+            if (collision_coordinate_conjugation(
+                    atoi(argv[3]), atoi(argv[4]), base) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            int base = parse_base(argc, argv, 5);
+            if (collision_coordinate_inspect(
+                    atoi(argv[3]), atoi(argv[4]), base) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "gate") == 0 && argc >= 4) {
+            int base = parse_base(argc, argv, 4);
+            if (collision_coordinate_gate(atoi(argv[3]), base) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!collision_coordinate_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown collision-coordinate action: %s\n",
+                    argv[2]);
+            collision_coordinate_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "finite-determination") == 0) {
+        if (argc < 3) {
+            finite_determination_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (finite_determination_inspect(
+                    atoi(argv[3]), base, lag) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "optimal") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (finite_determination_optimal(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!finite_determination_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown finite-determination action: %s\n",
+                    argv[2]);
+            finite_determination_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "all-prime-collision-label") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            all_prime_collision_label_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (all_prime_collision_label_inspect(
+                    atoi(argv[3]), base, lag) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!all_prime_collision_label_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown all-prime-collision-label action: %s\n",
+                    argv[2]);
+            all_prime_collision_label_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "finite-spectral-quotient") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            finite_spectral_quotient_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            int prime_count = parse_int_option(
+                argc, argv, "--prime-count", 300);
+            long double tau = parse_long_double_option(
+                argc, argv, "--tau", 1.0L);
+            if (finite_spectral_quotient_inspect(
+                    atoi(argv[3]), lag, prime_count, (double)tau) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "declared") == 0) {
+            if (finite_spectral_quotient_declared() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!finite_spectral_quotient_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown finite-spectral-quotient action: %s\n",
+                    argv[2]);
+            finite_spectral_quotient_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "finite-prefix-slice") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            finite_prefix_slice_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int base = parse_base(argc, argv, 4);
+            int depth = parse_int_option(argc, argv, "--depth", 0);
+            const char *support = parse_string_option(
+                argc, argv, "--support");
+            if (finite_prefix_slice_inspect(
+                    atoi(argv[3]), base, depth, support) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "all") == 0 && argc >= 4) {
+            int base = parse_base(argc, argv, 4);
+            int depth = parse_int_option(argc, argv, "--depth", 0);
+            const char *support = parse_string_option(
+                argc, argv, "--support");
+            if (finite_prefix_slice_inspect_all_denominators(
+                    atoi(argv[3]), base, depth, support) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "collapse") == 0 && argc >= 4) {
+            int base = parse_base(argc, argv, 4);
+            if (positional_transport_collapse_inspect(
+                    atoi(argv[3]), base) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "collision") == 0 && argc >= 4) {
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (finite_prefix_slice_collision(
+                    atoi(argv[3]), base, lag) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!finite_prefix_slice_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown finite-prefix-slice action: %s\n",
+                    argv[2]);
+            finite_prefix_slice_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "oriented-digit-comparison") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            oriented_digit_comparison_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            if (oriented_digit_comparison_inspect(
+                    atoi(argv[3]), atoi(argv[4])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
+            if (oriented_digit_comparison_prime(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "trichotomy") == 0 && argc >= 5) {
+            int height = parse_int_option(argc, argv, "--height", 0);
+            if (oriented_digit_comparison_trichotomy(
+                    atoi(argv[3]), atoi(argv[4]), height) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!oriented_digit_comparison_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown oriented-digit-comparison action: %s\n",
+                    argv[2]);
+            oriented_digit_comparison_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "boundary-bernoulli-factorization") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            boundary_bernoulli_factorization_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            const char *support = parse_string_option(
+                argc, argv, "--support");
+            if (boundary_bernoulli_factorization_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),
+                    support) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "terminal") == 0 && argc >= 6) {
+            if (boundary_bernoulli_factorization_terminal(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "spectrum") == 0 && argc >= 5) {
+            const char *support = parse_string_option(
+                argc, argv, "--support");
+            if (boundary_bernoulli_factorization_spectrum(
+                    atoi(argv[3]), atoi(argv[4]), support) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "correlation") == 0 && argc >= 7) {
+            if (boundary_sawtooth_correlation_inspect(
+                    atoi(argv[3]), atoi(argv[4]),
+                    atoi(argv[5]), atoi(argv[6])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!boundary_bernoulli_factorization_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown boundary-bernoulli-factorization action: %s\n",
+                    argv[2]);
+            boundary_bernoulli_factorization_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "finite-state-orbit-boundary") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            finite_state_orbit_boundary_help();
+        } else if (strcmp(argv[2], "parity") == 0 && argc >= 6) {
+            if (finite_state_orbit_boundary_parity(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 8) {
+            const char *transition = parse_string_option(
+                argc, argv, "--transition");
+            const char *accepting = parse_string_option(
+                argc, argv, "--accepting");
+            const char *state_weights = parse_string_option(
+                argc, argv, "--state-weights");
+            if (finite_state_orbit_boundary_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),
+                    atoi(argv[6]), atoi(argv[7]), transition,
+                    accepting, state_weights) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!finite_state_orbit_boundary_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown finite-state-orbit-boundary action: %s\n",
+                    argv[2]);
+            finite_state_orbit_boundary_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "full-orbit-energy") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            full_orbit_energy_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            if (full_orbit_energy_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!full_orbit_energy_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown full-orbit-energy action: %s\n",
+                    argv[2]);
+            full_orbit_energy_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "quadratic-orbit-energy") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            quadratic_orbit_energy_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            if (quadratic_orbit_energy_inspect(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!quadratic_orbit_energy_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown quadratic-orbit-energy action: %s\n",
+                    argv[2]);
+            quadratic_orbit_energy_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "subgroup-jacobi-expansion") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            subgroup_jacobi_expansion_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            if (subgroup_jacobi_expansion_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!subgroup_jacobi_expansion_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown subgroup-jacobi-expansion action: %s\n",
+                    argv[2]);
+            subgroup_jacobi_expansion_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "weighted-reference-profile") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0
+            || strcmp(argv[2], "help") == 0) {
+            weighted_reference_profile_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 7) {
+            int base = parse_base(argc, argv, 7);
+            if (!weighted_reference_profile_inspect(
+                    atoi(argv[3]), atoi(argv[4]), base,
+                    atoll(argv[5]), atoll(argv[6])))
+                return 1;
+        } else if (strcmp(argv[2], "branch") == 0 && argc >= 5) {
+            if (!weighted_reference_profile_branch(
+                    atoi(argv[3]), atoi(argv[4])))
+                return 1;
+        } else if (strcmp(argv[2], "torsion") == 0) {
+            if (!weighted_reference_profile_torsion()) return 1;
+        } else if (strcmp(argv[2], "reflection-product") == 0
+                   && argc >= 4) {
+            if (!weighted_reference_profile_reflection_product(
+                    atoi(argv[3])))
+                return 1;
+        } else if (strcmp(argv[2], "oriented-words") == 0
+                   && argc >= 4) {
+            if (!weighted_reference_profile_oriented_words(
+                    atoi(argv[3])))
+                return 1;
+        } else if (strcmp(argv[2], "transport") == 0) {
+            if (!weighted_reference_profile_transport()) return 1;
+        } else if (strcmp(argv[2], "finite-orbit") == 0 && argc >= 5) {
+            int base = parse_int_option(argc, argv, "--base", 7);
+            if (!weighted_reference_profile_finite_orbit(
+                    atoi(argv[3]), atoi(argv[4]), base))
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!weighted_reference_profile_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown weighted-reference-profile action: %s\n",
+                    argv[2]);
+            weighted_reference_profile_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "reciprocal-square-selection") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0
+            || strcmp(argv[2], "help") == 0) {
+            reciprocal_square_selection_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            int base = parse_base(argc, argv, 5);
+            if (reciprocal_square_selection_inspect(
+                    atoi(argv[3]), atoi(argv[4]), base) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "cubic") == 0 && argc >= 4) {
+            if (reciprocal_square_selection_cubic(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "table") == 0) {
+            if (reciprocal_square_selection_table() != 0) return 1;
+        } else if (strcmp(argv[2], "scan") == 0 && argc >= 4) {
+            if (reciprocal_square_selection_scan(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!reciprocal_square_selection_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown reciprocal-square-selection action: %s\n",
+                    argv[2]);
+            reciprocal_square_selection_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "prime-base-collision-energy") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            prime_base_collision_energy_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            if (prime_base_collision_energy_inspect(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "poles") == 0 && argc >= 4) {
+            if (prime_base_collision_energy_poles(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!prime_base_collision_energy_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown prime-base-collision-energy action: %s\n",
+                    argv[2]);
+            prime_base_collision_energy_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "arithmetic-boundary-defect") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            arithmetic_boundary_defect_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            if (arithmetic_boundary_defect_inspect(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "scan") == 0 && argc >= 4) {
+            if (arithmetic_boundary_defect_scan(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!arithmetic_boundary_defect_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown arithmetic-boundary-defect action: %s\n",
+                    argv[2]);
+            arithmetic_boundary_defect_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "carry-completed-carrier") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            carry_completed_carrier_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
+            if (carry_completed_carrier_inspect(
+                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "seam") == 0 && argc >= 4) {
+            if (carry_completed_carrier_seam(atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "product") == 0 && argc >= 7) {
+            if (carry_completed_carrier_product(
+                    atoi(argv[3]), atoi(argv[4]),
+                    atoi(argv[5]), atoi(argv[6])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!carry_completed_carrier_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown carry-completed-carrier action: %s\n",
+                    argv[2]);
+            carry_completed_carrier_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "reflection-identity") == 0) {
+        if (argc < 3) {
+            reflection_identity_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            int base = parse_base(argc, argv, 4);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (reflection_identity_inspect(
+                    base, lag, atoi(argv[3])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "table") == 0) {
+            int base = parse_base(argc, argv, 3);
+            int lag = parse_int_option(argc, argv, "--lag", 1);
+            if (reflection_identity_table(base, lag) != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!reflection_identity_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown reflection-identity action: %s\n",
+                    argv[2]);
+            reflection_identity_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "half-group") == 0) {
+        if (argc < 3) {
+            half_group_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
+            if (half_group_inspect(atoi(argv[3]), atoi(argv[4])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!half_group_verify()) return 1;
+        } else {
+            fprintf(stderr, "Unknown half-group action: %s\n", argv[2]);
+            half_group_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "boundary-conductor-ledger") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            boundary_conductor_ledger_help();
+        } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
+            const char *support = parse_string_option(
+                argc, argv, "--support");
+            if (boundary_conductor_ledger_inspect(
+                    atoi(argv[3]), support) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "terminal") == 0 && argc >= 5) {
+            if (boundary_conductor_ledger_terminal(
+                    atoi(argv[3]), atoi(argv[4])) != 0)
+                return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!boundary_conductor_ledger_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown boundary-conductor-ledger action: %s\n",
+                    argv[2]);
+            boundary_conductor_ledger_help();
+            return 1;
+        }
+
+    } else if (strcmp(cmd, "terminal-collision-conductor-ledger") == 0) {
+        if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
+            strcmp(argv[2], "help") == 0) {
+            terminal_collision_conductor_ledger_help();
+        } else if (strcmp(argv[2], "audit") == 0) {
+            if (terminal_collision_conductor_ledger_audit() != 0) return 1;
+        } else if (strcmp(argv[2], "verify") == 0) {
+            if (!terminal_collision_conductor_ledger_verify()) return 1;
+        } else {
+            fprintf(stderr,
+                    "Unknown terminal-collision-conductor-ledger action: %s\n",
+                    argv[2]);
+            terminal_collision_conductor_ledger_help();
+            return 1;
+        }
 
     } else if (strcmp(cmd, "spectrum") == 0) {
         int p = (argc >= 3) ? atoi(argv[2]) : 7;
@@ -1563,7 +3286,13 @@ int main(int argc, char **argv)
         polarity_field_print(base);
 
     } else if (strcmp(cmd, "help") == 0) {
-        usage();
+        if (argc < 3) {
+            usage();
+        } else if (!print_help_topic(argv[2])) {
+            fprintf(stderr, "Unknown help topic: %s\n", argv[2]);
+            fprintf(stderr, "Use `nfield --help` to list available topics.\n");
+            return 1;
+        }
 
     } else {
         fprintf(stderr, "Unknown command: %s\n", cmd);
@@ -1573,10 +3302,8 @@ int main(int argc, char **argv)
 done:
     if (show_time) {
         clock_gettime(CLOCK_MONOTONIC, &t1);
-        double elapsed = (t1.tv_sec - t0.tv_sec)
-                       + (t1.tv_nsec - t0.tv_nsec) / 1e9;
         fflush(stdout);
-        printf("\n%.3fs\n", elapsed);
+        print_elapsed_time(&t0, &t1);
     }
 
     return 0;
