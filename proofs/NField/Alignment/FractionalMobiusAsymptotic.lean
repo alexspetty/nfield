@@ -1,4 +1,6 @@
 /-
+Copyright 2020-2026 Alexander S. Petty.
+SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 

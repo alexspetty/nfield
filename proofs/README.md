@@ -2,8 +2,9 @@
 
 This directory contains the public Lean side of `nfield`.
 
-These proofs are authored by Alexander S. Petty. They are not covered by the
-`nfield` software license.
+These proofs are authored by Alexander S. Petty and are open source under the
+[Apache License 2.0](LICENSE). You may use, change, and redistribute the Lean
+source under those terms, including in commercial work.
 
 The root module imports the formal paper maps in reading order, ending with
 *The Secondary Term in Digit-Collision Energy*. The reusable definitions and

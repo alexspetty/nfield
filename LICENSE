@@ -10,7 +10,8 @@ https://polyformproject.org/licenses/noncommercial/1.0.0
 This license applies to the software in `src/`, `verify/`, and `test/`, and to
 the software build files at the repository root.
 
-It does not apply to the Lean proofs in `proofs/`.
+The Lean source in `proofs/` is separately licensed under the Apache License
+2.0. See `proofs/LICENSE`.
 
 Commercial licensing and current information:
 

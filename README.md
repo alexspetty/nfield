@@ -240,13 +240,14 @@ paper number. Papers and draft manuscripts are not part of this repository.
 Copyright 2020-2026 Alexander S. Petty.
 
 The `nfield` software is available under the
-[PolyForm Noncommercial License 1.0.0](LICENSE). Commercial use, resale, paid
-distribution, or inclusion in a commercial product or service requires a
-separate written license from me. See
+[PolyForm Noncommercial License 1.0.0](LICENSE). Use it as much as you want for
+research, study, education, and personal work. If you are using it to make
+money, or building it into something that makes money, let's talk about a
+commercial license. See
 [commercial licensing](COMMERCIAL-LICENSING.md).
 
-The Lean proofs in `proofs/` are authored by Alexander S. Petty. They are not
-covered by the `nfield` software license.
+The Lean source in `proofs/` is authored by Alexander S. Petty and is open
+source under the [Apache License 2.0](proofs/LICENSE).
 
 Alexander S. Petty<br>
 [alexpetty.com](https://alexpetty.com)
