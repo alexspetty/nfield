@@ -1,0 +1,3034 @@
+{
+  "schema": 1,
+  "paper_title": "Conservation and Profinite Dynamics in Digit-Collision Energy",
+  "paper_sha256": "e39c57be99c089fc7569480bdda40cfaaef38efbf36573fb839c8ab45e1dd71d",
+  "reviewed_matrix_sha256": "a430f25e099c7f8e82044856053727f23a1473336ce57f3037b8e62fa8b1e2c2",
+  "scope": "Portable computational correspondence only. The separate full formal bundle was checked before export and is not included or newly certified by this software package.",
+  "objects": {
+    "weights": {
+      "title": "Primitive harmonic weights and reciprocal budget",
+      "normalization": "w_k = k^-2 sum_{1<=a<k,(a,k)=1} 1/a; a_k=k*w_k; w_0=w_1=0.",
+      "admitted_domain": "Exact weight/inverse/mass indices 0..240; reciprocal budgets 1..240. The zero/one embeddings vanish. Omissions use the proved full unit normalization. Multiple initialized outputs must be distinct; failures preserve every output. The separate long-double API has the same index cap and returns NaN outside it.",
+      "arithmetic": "Exact GMP rational finite values and full-mass complements justified by the separate unit-mass theorem. The optional long-double weight comparison is numerical at 1e-16*(1+abs(reference)), not a rounding enclosure.",
+      "independent_check": "17,014 independent assertions, 4,319 API records, 210 C edge/alias checks and 83 CLI cases. Direct lattice squares and address masses, triangular weight budgets, signed Mobius inverses, all admitted weight-multiple inequalities and energy-derived deficit bounds. Isolated ASan/UBSan/LSan run passes 16,830 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state weight k",
+        "nfield weighted-remainder-state budget n",
+        "nfield weighted-remainder-state mass M",
+        "C API weighted_remainder_weight_q(out,k)",
+        "C API weighted_remainder_budget_q(out,n)",
+        "C API weighted_remainder_weight_inverse_q(out,k)",
+        "C API weighted_remainder_mass_q(retained,omitted,M)",
+        "C API weighted_remainder_mass_budget_q(retained,omitted,weighted_mass,deficit_upper,M)"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_budget_q",
+        "weighted_remainder_weight_inverse_q",
+        "weighted_remainder_mass_q",
+        "weighted_remainder_mass_budget_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_primitive.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_state.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_primitive.py",
+          "sha256": "086f387291167aaffbd57d34bafa6132f7a16ee6904750776afb56816bf15ab3",
+          "checks": 17014,
+          "domain": "All weight/inverse/mass indices 0..240 and budgets 1..240; all d>=2,m>=1 with d*m<=240; node coordinates 1..40 squared plus {1,119,120,238,239,240} squared; tree cutoffs 1..80,120,180,239,240; 4319 API records, 210 C edge/alias checks, 83 CLI cases.",
+          "independence": "The Fraction oracle enumerates direct coprime lattice squares instead of production tree traversal. Triangular harmonic budgets reconstruct weights independently of production coprime sums and Mobius factorization. Direct gcd boundary energies check the deficit bound. No production code is imported.",
+          "included": true
+        }
+      ]
+    },
+    "capacity": {
+      "title": "Continuous capacity, completed deficit and exact reset",
+      "normalization": "J_N = (1/3) sum_{1<=r,s<=N} gcd(r,s)^2/(r*s); D_N=N-J_N; infinite omitted mass retained in completion.",
+      "admitted_domain": "Exact capacity/deficit 0<=N<=240; exact full divisor reset 1<=N<=240. The separate long-double inspect interface retains its stated cutoff/resource limits.",
+      "arithmetic": "Exact GMP rational gcd capacity, completed deficit N-J_N, and full positive-integer reset retaining the total unit mass.",
+      "independent_check": "The 18,024-check oracle compares actual affine boundary energy with canonical capacity through N=24; the 1,936-check pairing oracle compares every reset through 240 with energy Gram increments and checks direct affine increments through 24.",
+      "interfaces": [
+        "nfield weighted-remainder-state boundary N",
+        "nfield weighted-remainder-state reset N",
+        "C API weighted_remainder_capacity_q",
+        "C API weighted_remainder_reset_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_capacity_q",
+        "weighted_remainder_exact_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_pairing.c",
+        "src/weighted_remainder_exact.h",
+        "src/weighted_remainder_pairing.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_exact.py",
+          "sha256": "4dc3714ad3ecdce440bec2e82d15fd852cf634be0c221ad0c2bc95b07a293d06",
+          "checks": 18024,
+          "domain": "weights 0..240; direct energy and source enumeration N=0..24; overlaps r,s=1..32 and (239,240); periods 0..12 and rational phases numerator -13..13, denominator 1..13; invalid domains, CLI and aliasing",
+          "independence": "The oracle imports no production code. It uses Python Fraction, triangular harmonic budgets, unreduced rational address counters and nonuniform-cell integration rather than the canonical GMP/LCM-cell routines.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_pairing.py",
+          "sha256": "e6ee0261f776e7d04b1bd917fd23035163ffac89eae5d9e3a5860551d80ec778",
+          "checks": 1936,
+          "domain": "positive increments 1..240; four complex table families over periods 1,2,3,4,6,7,12,31,239,240; eight sample lengths and cutoffs including endpoints; invalid domains and all output collisions; input/output aliasing; CLI",
+          "independence": "The oracle computes energy Gram increments and actual affine boundary energies, recovers weights by triangular budgets, and enumerates complete-cycle visits. Production uses divisor-reset sums and CRT filtering of residue labels. No production code is imported by the oracle.",
+          "included": true
+        }
+      ]
+    },
+    "midpoint_response": {
+      "title": "Midpoint sawtooth and continuous response",
+      "normalization": "saw(t)=fract(t)-1/2 off integers and 0 on integers; B_N(t)=2 sum_{r<=N} saw(r*t).",
+      "admitted_domain": "1<=r,s<=240 for the overlap; 0<=N,r<=240 for response/row evaluation; arbitrary canonical signed GMP rational phase; initialized output required.",
+      "arithmetic": "exact GMP rational arithmetic; no floating approximation or omitted tail in these finite objects",
+      "independent_check": "The separate Python Fraction oracle reconstructs unreduced addresses, nonuniform jump cells and primitive weights by triangular budgets. It checks 18,024 exact identities/interfaces, including amplitude enclosures, signed phases, midpoint jumps and error cases.",
+      "interfaces": [
+        "nfield weighted-remainder-state ramp r s",
+        "C API weighted_remainder_midpoint_q(out,r,phase)",
+        "C API weighted_remainder_response_q(out,N,phase)"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_midpoint_q",
+        "weighted_remainder_response_q",
+        "weighted_remainder_ramp_overlap_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_exact.py",
+          "sha256": "4dc3714ad3ecdce440bec2e82d15fd852cf634be0c221ad0c2bc95b07a293d06",
+          "checks": 18024,
+          "domain": "weights 0..240; direct energy and source enumeration N=0..24; overlaps r,s=1..32 and (239,240); periods 0..12 and rational phases numerator -13..13, denominator 1..13; invalid domains, CLI and aliasing",
+          "independence": "The oracle imports no production code. It uses Python Fraction, triangular harmonic budgets, unreduced rational address counters and nonuniform-cell integration rather than the canonical GMP/LCM-cell routines.",
+          "included": true
+        }
+      ]
+    },
+    "floor_response": {
+      "title": "Prime-square centered floor response and straightening",
+      "normalization": "F_p(a)=sum_{0<=d<p}(floor(((d(p+1)+1)a)/p^2)-floor(d(p+1)a/p^2))-a/p, at the residue [(1-p)A]_(p^2).",
+      "admitted_domain": "Every prime 2..239; arbitrary signed 64-bit address reduced modulo p squared before multiplication. Nonunits and midpoint jumps are included. Initialized rational outputs are unchanged on failure; the two-output API requires distinct objects. The universal Lean theorem also covers prime two, extending the paper's stated odd-prime domain.",
+      "arithmetic": "Exact unsigned 64-bit floor-list products after canonical residue reduction and GMP rational drift. The straightening output separately evaluates the original floors and the midpoint response at resolution p-1; no floating approximation or omitted tail.",
+      "independent_check": "132,233 exact checks over 17,798 API records, 959 C edge assertions and 136 CLI cases. Python Fraction literal floors, inverse-address midpoint reconstruction, exhaustive small-prime residues, all nonunits at every admitted prime and signed extremes. ASan/UBSan/LSan passes 131,719 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state floor p a",
+        "nfield weighted-remainder-state straighten p A",
+        "C API weighted_remainder_floor_q(out,p,address)",
+        "C API weighted_remainder_straightening_q(floor_value,midpoint_value,p,address)"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_floor_q",
+        "weighted_remainder_straightening_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_floor.c",
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_floor.py",
+          "sha256": "e175757d939cabcd7a1ef8e35a088db5e1ed64789ef77241c5007949058f291a",
+          "checks": 132233,
+          "domain": "Every address for primes through 43; every nonunit for all primes 2..239; 64 deterministic additional phases per prime, signed extremes, original and transformed addresses, reflection, invalid/composite/overflowing inputs and output preservation.",
+          "independence": "The oracle uses Python arbitrary-size integers and Fraction, imports no production helpers, and compares the original floor lists with a separate inverse-address midpoint reconstruction. The production straightening API computes both sides independently; C records contain values only.",
+          "included": true
+        }
+      ]
+    },
+    "boundary_measure": {
+      "title": "Primitive rational boundary measure",
+      "normalization": "M_N=sum_{r=1}^N sum_{j=0}^{r-1} delta_(j/r); denominator k has multiplicity floor(N/k), including U_1={0}.",
+      "admitted_domain": "0<=N<=240; callback sees each reduced atom once, in denominator/numerator order; returning zero stops enumeration.",
+      "arithmetic": "exact GMP rational arithmetic; no floating approximation or omitted tail in these finite objects",
+      "independent_check": "The separate Python Fraction oracle reconstructs unreduced addresses, nonuniform jump cells and primitive weights by triangular budgets. It checks 18,024 exact identities/interfaces, including amplitude enclosures, signed phases, midpoint jumps and error cases.",
+      "interfaces": [
+        "nfield weighted-remainder-state boundary N",
+        "C API weighted_remainder_boundary_visit(N,visit,context)"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_boundary_visit"
+      ],
+      "sources": [
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_exact.py",
+          "sha256": "4dc3714ad3ecdce440bec2e82d15fd852cf634be0c221ad0c2bc95b07a293d06",
+          "checks": 18024,
+          "domain": "weights 0..240; direct energy and source enumeration N=0..24; overlaps r,s=1..32 and (239,240); periods 0..12 and rational phases numerator -13..13, denominator 1..13; invalid domains, CLI and aliasing",
+          "independence": "The oracle imports no production code. It uses Python Fraction, triangular harmonic budgets, unreduced rational address counters and nonuniform-cell integration rather than the canonical GMP/LCM-cell routines.",
+          "included": true
+        }
+      ]
+    },
+    "primitive_tree": {
+      "title": "Primitive-pair normalization and outgoing mass",
+      "normalization": "Q(a,b)=(a+b)/(a^2*b^2); child subtraction is 1/(a*b*(a+b)); finite box sum is 2 minus outgoing mass.",
+      "admitted_domain": "Positive node coordinates and square cutoffs 1..240. Local nodes may be noncoprime. Box traversal visits exactly the primitive positive square; node_count is optional. Multiple initialized rational outputs must be distinct; failure preserves all outputs.",
+      "arithmetic": "Exact GMP rational finite values and full-mass complements justified by the separate unit-mass theorem. The optional long-double weight comparison is numerical at 1e-16*(1+abs(reference)), not a rounding enclosure.",
+      "independent_check": "17,014 independent assertions, 4,319 API records, 210 C edge/alias checks and 83 CLI cases. Direct lattice squares and address masses, triangular weight budgets, signed Mobius inverses, all admitted weight-multiple inequalities and energy-derived deficit bounds. Isolated ASan/UBSan/LSan run passes 16,830 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state tree M",
+        "nfield weighted-remainder-state tree-node a b",
+        "C API weighted_remainder_tree_node_q(potential,left,right,loss,a,b)",
+        "C API weighted_remainder_tree_address_q(out,a,b)",
+        "C API weighted_remainder_tree_box_q(mass,frontier,upper,M,node_count)"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_tree_node_q",
+        "weighted_remainder_tree_address_q",
+        "weighted_remainder_tree_box_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_primitive.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_primitive.py",
+          "sha256": "086f387291167aaffbd57d34bafa6132f7a16ee6904750776afb56816bf15ab3",
+          "checks": 17014,
+          "domain": "All weight/inverse/mass indices 0..240 and budgets 1..240; all d>=2,m>=1 with d*m<=240; node coordinates 1..40 squared plus {1,119,120,238,239,240} squared; tree cutoffs 1..80,120,180,239,240; 4319 API records, 210 C edge/alias checks, 83 CLI cases.",
+          "independence": "The Fraction oracle enumerates direct coprime lattice squares instead of production tree traversal. Triangular harmonic budgets reconstruct weights independently of production coprime sums and Mobius factorization. Direct gcd boundary energies check the deficit bound. No production code is imported.",
+          "included": true
+        }
+      ]
+    },
+    "clock_state": {
+      "title": "Remainder phases and finite centered age",
+      "normalization": "E_k(n)=(n mod k)-(k-1)/2; Y_M(n)=(2/3)sum_{2<=k<=M} w_k E_k(n).",
+      "admitted_domain": "Cutoffs 2..240, arbitrary signed GMP addresses. Whole-period laws require lcm(1..M)<=50000, admitting M=2..12; equal rational values keep their combined multiplicities. Initialized outputs are preserved on invalid input, and GMP address/output-limb overlap is allowed.",
+      "arithmetic": "Exact GMP rational retained/omitted mass, raw age, stationary mean, centered age and finite retained-mass increment; exact complete-period pushforward law with multiplicity/period probabilities.",
+      "independent_check": "112,457 independent checks: 36,043 API records, 537 C edge assertions and 276 CLI cases. Exact weights from triangular budgets, full residue windows/laws/covariances, harmonic-pair enumeration, invalid domains and alias contracts. ASan/UBSan/LSan passes 90,687 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state clock M address",
+        "nfield weighted-remainder-state clock-law M",
+        "GMP API weighted_remainder_clock_compute",
+        "GMP visitor API weighted_remainder_clock_law"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_clock_compute",
+        "weighted_remainder_clock_law"
+      ],
+      "sources": [
+        "src/weighted_remainder_clock.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_state.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_clock.py",
+          "sha256": "8d92c73d734c6689bf28f893961221d2537543ca47e9cb90fb7dfe8b89e97e21",
+          "checks": 112457,
+          "domain": "Cutoffs 2..240, arbitrary signed GMP addresses with large examples; whole laws 2..12; periods 2..240 and exact Cesaro endpoints including 0; harmonic budgets 0..240; all covariance pairs through 48 plus boundary pairs through 240. Includes 36,043 API records, 537 C edge assertions and 276 CLI cases.",
+          "independence": "The oracle recovers weights from triangular divisor budgets instead of coprime harmonic sums; enumerates small observation windows, every residue discrepancy, complete laws and covariance cycles; and compares the Mobius harmonic budget with literal harmonic pairs and direct weighted first moments. It imports no production helpers. Floating comparisons have an explicit tolerance and are not enclosures.",
+          "included": true
+        }
+      ]
+    },
+    "stationary_age": {
+      "title": "Cycle probability and stationary mean age",
+      "normalization": "pi_N(k,r)=w_k*1_(r=N mod k), T(k,r)=(k,r+1 mod k); D_*(M)=(1/3)sum_{k<=M} w_k(k-1).",
+      "admitted_domain": "Clock/TV cutoffs and cycle periods 2..240; residue 0..k-1; signed GMP address and nonnegative GMP last. Cesaro observations are exactly 0..last with denominator last+1. Harmonic budgets admit M=0..240. Distinct initialized rational outputs, preserved on invalid input; cycle/TV inputs may alias output limbs.",
+      "arithmetic": "Exact rational cycle orbit/stationary/Cesaro masses, transition, cycle mass and its complement; stationary truncated mean; harmonic cross sum and Mobius first moment. Exact full-TV enclosure uses the omitted unit mass and its Lean bound, with no renormalization.",
+      "independent_check": "112,457 independent checks: 36,043 API records, 537 C edge assertions and 276 CLI cases. Exact weights from triangular budgets, full residue windows/laws/covariances, harmonic-pair enumeration, invalid domains and alias contracts. ASan/UBSan/LSan passes 90,687 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state clock M address",
+        "nfield weighted-remainder-state cycle k r address last",
+        "nfield weighted-remainder-state cycle-tv M last",
+        "nfield weighted-remainder-state age-budget M",
+        "GMP APIs weighted_remainder_cycle_q, weighted_remainder_cycle_tv_q, weighted_remainder_age_budget_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_clock_compute",
+        "weighted_remainder_cycle_q",
+        "weighted_remainder_cycle_tv_q",
+        "weighted_remainder_age_budget_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_clock.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_state.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_clock.py",
+          "sha256": "8d92c73d734c6689bf28f893961221d2537543ca47e9cb90fb7dfe8b89e97e21",
+          "checks": 112457,
+          "domain": "Cutoffs 2..240, arbitrary signed GMP addresses with large examples; whole laws 2..12; periods 2..240 and exact Cesaro endpoints including 0; harmonic budgets 0..240; all covariance pairs through 48 plus boundary pairs through 240. Includes 36,043 API records, 537 C edge assertions and 276 CLI cases.",
+          "independence": "The oracle recovers weights from triangular divisor budgets instead of coprime harmonic sums; enumerates small observation windows, every residue discrepancy, complete laws and covariance cycles; and compares the Mobius harmonic budget with literal harmonic pairs and direct weighted first moments. It imports no production helpers. Floating comparisons have an explicit tolerance and are not enclosures.",
+          "included": true
+        }
+      ]
+    },
+    "remainder_covariance": {
+      "title": "Complete-period remainder covariance",
+      "normalization": "E(E_k*E_l)=(gcd(k,l)^2-1)/12 under normalized Haar, also the exact average over one lcm cycle.",
+      "admitted_domain": "Every pair of periods 1..240, including common factors, diagonal pairs and the zero row at period one. Invalid input preserves the initialized GMP output; the floating API returns NaN outside its domain.",
+      "arithmetic": "Exact GMP value (gcd(k,l)^2-1)/12. Independent whole-cycle products also compare the existing floating API; the floating result carries no rounding enclosure.",
+      "independent_check": "112,457 independent checks: 36,043 API records, 537 C edge assertions and 276 CLI cases. Exact weights from triangular budgets, full residue windows/laws/covariances, harmonic-pair enumeration, invalid domains and alias contracts. ASan/UBSan/LSan passes 90,687 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state covariance k l",
+        "GMP API weighted_remainder_clock_covariance_q",
+        "long-double API weighted_remainder_covariance"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_clock_covariance_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_clock.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_state.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_clock.py",
+          "sha256": "8d92c73d734c6689bf28f893961221d2537543ca47e9cb90fb7dfe8b89e97e21",
+          "checks": 112457,
+          "domain": "Cutoffs 2..240, arbitrary signed GMP addresses with large examples; whole laws 2..12; periods 2..240 and exact Cesaro endpoints including 0; harmonic budgets 0..240; all covariance pairs through 48 plus boundary pairs through 240. Includes 36,043 API records, 537 C edge assertions and 276 CLI cases.",
+          "independence": "The oracle recovers weights from triangular divisor budgets instead of coprime harmonic sums; enumerates small observation windows, every residue discrepancy, complete laws and covariance cycles; and compares the Mobius harmonic budget with literal harmonic pairs and direct weighted first moments. It imports no production helpers. Floating comparisons have an explicit tolerance and are not enclosures.",
+          "included": true
+        }
+      ]
+    },
+    "potential_variance": {
+      "title": "Finite Haar variance and infinite potential cutoff",
+      "normalization": "Var(Y_M)=(1/27)sum_{q=2}^M J2(q)*eta(q,M)^2; infinite variance uses full eta_q.",
+      "admitted_domain": "Collision cutoffs 2..240. Four distinct initialized rational outputs and a nonnull exponent output, preserved on invalid input. The exact lcm quotient is a GMP integer; its full residue table is not enumerated. Old floating variance is independently compared within its declared domain.",
+      "arithmetic": "Exact finite Gram/Jordan variance V. The proved squared L2 cutoff error is E=256*(b+1)^2/M with 2*M<=2^b. Exact integer square roots give u>=0 with u^2>=V*E, rounded upward on a 1/M^2 grid. The full Haar variance lies in [V,V+2*u+E]. The same E bounds squared error of the full lcm-cylinder projection. No floating rounding supplies containment.",
+      "independent_check": "46,057 independent checks: 41 profiles, 10,844 API records, 272 C edge assertions and 186 CLI cases. Literal full-period covariance, whole finite observable squares, triangular-budget weights, exact interval arithmetic, perturbed deficits, invalid domains and aliases. ASan/UBSan/LSan passes 42,410 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state variance M",
+        "nfield weighted-remainder-state finite-weights address [period:weight ...]",
+        "GMP API weighted_remainder_collision_variance_q",
+        "long-double API weighted_remainder_state_compute"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_weights_compute",
+        "weighted_remainder_collision_variance_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_state.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_weights.py",
+          "sha256": "c8acbd9a463c6ea2867a10693d5167876d1c61beb928680af7d0802fcebf082c",
+          "checks": 46057,
+          "domain": "41 finite profiles, 10,844 API records, 272 C edge assertions and 186 CLI cases. Literal complete-cycle references for every pair 2..240; all collision variance cutoffs 2..240; signed arrays, sparse unit masses, period-twelve perturbations and exact full deficits within their domain.",
+          "independence": "The C reference finds complete periods by repeated addition and sums actual centered-residue products, without a gcd covariance or Jordan formula. Python Fraction builds expected energies and whole observable squares from those samples, recovers collision weights from triangular budgets, and checks exact integer/rational variance-certificate inequalities. The full deficit oracle uses completed remainder mass instead of the production gcd-capacity box.",
+          "included": true
+        }
+      ]
+    },
+    "general_weights": {
+      "title": "General admissible period weights",
+      "normalization": "Nonnegative unit masses v_k, their divisor forcing, finite potentials and Jordan energy; no collision-specific coefficients substituted.",
+      "admitted_domain": "Canonical rational arrays through cutoff 2..240, with inactive periods 0/1. Signed arrays are admitted for finite algebra; nonnegativity and unit mass are separate flags, and no input is normalized. The completed-energy API additionally requires nonnegative unit weights and a nonnegative GMP resolution. Periodic readouts accept signed GMP addresses. Invalid inputs preserve initialized outputs.",
+      "arithmetic": "Exact supplied mass, first moment, raw/stationary/centered ages, divisor forcing, finite retained-mass increment, finite amplitudes, Gram variance, Jordan variance and guarded completed unit-mass energy.",
+      "independent_check": "46,057 independent checks: 41 profiles, 10,844 API records, 272 C edge assertions and 186 CLI cases. Literal full-period covariance, whole finite observable squares, triangular-budget weights, exact interval arithmetic, perturbed deficits, invalid domains and aliases. ASan/UBSan/LSan passes 42,410 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state finite-weights address [period:weight ...]",
+        "GMP APIs weighted_remainder_weights_compute, weighted_remainder_weights_amplitude_q, weighted_remainder_weights_energy_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_weights_compute",
+        "weighted_remainder_weights_amplitude_q",
+        "weighted_remainder_weights_energy_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_state.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_weights.py",
+          "sha256": "c8acbd9a463c6ea2867a10693d5167876d1c61beb928680af7d0802fcebf082c",
+          "checks": 46057,
+          "domain": "41 finite profiles, 10,844 API records, 272 C edge assertions and 186 CLI cases. Literal complete-cycle references for every pair 2..240; all collision variance cutoffs 2..240; signed arrays, sparse unit masses, period-twelve perturbations and exact full deficits within their domain.",
+          "independence": "The C reference finds complete periods by repeated addition and sums actual centered-residue products, without a gcd covariance or Jordan formula. Python Fraction builds expected energies and whole observable squares from those samples, recovers collision weights from triangular budgets, and checks exact integer/rational variance-certificate inequalities. The full deficit oracle uses completed remainder mass instead of the production gcd-capacity box.",
+          "included": true
+        }
+      ]
+    },
+    "perturbation": {
+      "title": "Period-twelve mass perturbation",
+      "normalization": "v=w+epsilon*(1_2-2*1_3+1_4), 0<abs(epsilon)<1/24; Z=(2/3)(E2-2E3+E4), mean 0, squared norm 56/27.",
+      "admitted_domain": "Cutoffs 4..240 and canonical rational epsilon with 0<abs(epsilon)<1/24. Signed GMP periodic readouts; full deficit changes at nonnegative GMP addresses, and absolute full original/perturbed deficits at resolutions 0..240. The omitted collision tail is unchanged. Initialized outputs are preserved on failure; the deficit outputs must be distinct and epsilon may alias an output.",
+      "arithmetic": "Exact modified weights, finite states, unchanged mass/stationary mean, signed Z and epsilon*Z, computed norm 56/27, and full deficit readouts using the exact capacity algorithm. Finite prefix mass is distinguished from the full unit mass.",
+      "independent_check": "46,057 independent checks: 41 profiles, 10,844 API records, 272 C edge assertions and 186 CLI cases. Literal full-period covariance, whole finite observable squares, triangular-budget weights, exact interval arithmetic, perturbed deficits, invalid domains and aliases. ASan/UBSan/LSan passes 42,410 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state perturbation M address epsilon",
+        "GMP APIs weighted_remainder_perturbed_weights_q, weighted_remainder_perturbed_deficit_q, weighted_remainder_weights_compute"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_perturbed_weights_q",
+        "weighted_remainder_perturbed_deficit_q",
+        "weighted_remainder_weights_compute"
+      ],
+      "sources": [
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_state.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_weights.py",
+          "sha256": "c8acbd9a463c6ea2867a10693d5167876d1c61beb928680af7d0802fcebf082c",
+          "checks": 46057,
+          "domain": "41 finite profiles, 10,844 API records, 272 C edge assertions and 186 CLI cases. Literal complete-cycle references for every pair 2..240; all collision variance cutoffs 2..240; signed arrays, sparse unit masses, period-twelve perturbations and exact full deficits within their domain.",
+          "independence": "The C reference finds complete periods by repeated addition and sums actual centered-residue products, without a gcd covariance or Jordan formula. Python Fraction builds expected energies and whole observable squares from those samples, recovers collision weights from triangular budgets, and checks exact integer/rational variance-certificate inequalities. The full deficit oracle uses completed remainder mass instead of the production gcd-capacity box.",
+          "included": true
+        }
+      ]
+    },
+    "reset_blocks": {
+      "title": "Divisor forcing and fixed block compensation",
+      "normalization": "f=sum k*w_k*1_(k|x), g=(2/3)(1-f); finite g_M uses retained mass; sum_{j=1}^H g_M(n+j)=Y_M(n+H)-Y_M(n).",
+      "admitted_domain": "Full integer f/g at N=1..240; exact deficit blocks n,H>=0 with n+H<=240; H=0 returns zero. Existing finite retained-mass inspect remains separately available with cutoff 2..240. Initialized output required; invalid calls preserve it.",
+      "arithmetic": "Exact GMP rational finite moments and block differences; GMP integer lcms and canonical CRT residues. Incompatibility returns exact zero. Cutoff Haar moments are finite positive CRT partial sums; omitted infinite tails and finite-to-limit error intervals are not included.",
+      "independent_check": "20,764 exact oracle/interface checks compare complete-period probabilities and cutoff moments, energy-derived integer moments and deficit blocks, empty and incompatible cases, large exact lcms, resource boundaries and output aliasing. The separate sanitizer driver passes the same 4,926 API queries and 36 edge cases.",
+      "interfaces": [
+        "nfield weighted-remainder-state forcing N",
+        "nfield weighted-remainder-state reset N",
+        "nfield weighted-remainder-state block n H",
+        "C API weighted_remainder_forcing_q",
+        "C API weighted_remainder_block_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_forcing_q",
+        "weighted_remainder_block_q",
+        "weighted_remainder_empirical_moment_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_joint.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_pairing.c",
+        "src/weighted_remainder_joint.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_joint.py",
+          "sha256": "83150431a782def18d1042656e63623b44197221f563da33a9d45cf12184b6fb",
+          "checks": 20764,
+          "domain": "4,926 queries: all period pairs 2..14 and longer lists through eight entries; exact large lcms; all forcing 1..240; endpoint deficit blocks; f/g moments through total degree 16; complete-cycle cutoff moments M=2..12, maximum 65,536 tuples and one-coordinate M=240; 36 direct API edge checks and malformed CLI inputs.",
+          "independence": "Python Fraction oracle enumerates actual complete cycles, derives increments and deficits from the boundary-energy Gram matrix, and reconstructs weights by triangular harmonic budgets. Production uses modular CRT inverses, divisor forcing and tuple expansion. The oracle imports no production code.",
+          "included": true
+        }
+      ]
+    },
+    "increment_covariance": {
+      "title": "Arithmetic and Ramanujan increment covariance",
+      "normalization": "K(h)=(4/9)sum a_k*a_l*(1_(gcd|h)/lcm-1/(k*l))=(4/9)sum eta_q^2*c_q(h).",
+      "admitted_domain": "Cutoffs 2..240, arbitrary signed GMP shifts; general finite signed canonical rational arrays with inactive indices zero and one. Four scalar covariance outputs must be distinct; initialized outputs are preserved on failure and documented input/output aliases are admitted. The lcm is an arbitrary-precision integer; large whole periods are not enumerated by production.",
+      "arithmetic": "Exact finite arithmetic and Ramanujan covariances, zero/one correlations and actual lcm return. With E the proved rational squared potential cutoff error, increment error squared is at most 4E. A rational u on grid 1/M^2 satisfies u^2>=finite_zero*4E; the full covariance lies within 2*u+4E of its finite value uniformly for all shifts. The full potential return error squared is at most 4E, and full covariance return loss lies in [0,8E]. No floating rounding supplies these conservative enclosures.",
+      "independent_check": "262,639 independent checks, including all period-pair reset cycles, full age-difference correlations for feasible active periods, exact arithmetic certificates, signed and GMP lcm shifts, invalid domains, aliasing and CLI errors.",
+      "interfaces": [
+        "nfield weighted-remainder-state increment-covariance M shift",
+        "nfield weighted-remainder-state increment-recurrence M",
+        "GMP APIs weighted_remainder_increment_covariance_q and weighted_remainder_increment_compute"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_increment_covariance_q",
+        "weighted_remainder_increment_compute",
+        "weighted_remainder_increment_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_increment.c",
+        "src/weighted_remainder_increment.h",
+        "src/weighted_remainder_rows.c",
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_increment.py",
+          "sha256": "888d1ea87d2f28206ab0c4c311166d63b0d91b7f8bd9687adfeea4c13a62a3d2",
+          "checks": 262639,
+          "domain": "Every collision cutoff 2..240 and its actual GMP lcm return; 37 finite signed/nonnegative/zero profiles, 818 API records, 258120 complete-cycle reset-pair references over all period pairs 2..240 and nine signed/large shifts; 208 C edge assertions and 334 CLI cases.",
+          "independence": "The reference finds complete periods by repeated addition and counts actual joint reset visits without gcd or Ramanujan formulas. It reconstructs collision weights from triangular budgets and forms literal backward differences of complete finite age cycles when the active period is at most 60000. Exact rational square-root certificates and interval endpoints are checked separately; full containment and recurrence remain universal Lean proofs.",
+          "included": true
+        }
+      ]
+    },
+    "empirical_laws": {
+      "title": "Fixed integer shifts, moments and joint CRT law",
+      "normalization": "Fixed finite shift list and moments; generalized CRT compatibility retains every pairwise gcd condition. Limits are Cesaro as X tends to infinity.",
+      "admitted_domain": "At most 8 entries; CRT periods 2..240, shifts 0..240; empirical N>=1 and N+each shift<=240, total degree<=16; Haar cutoff 2..240 and (M-1)^dimension<=65536. Empty products equal one. CRT output storage must be initialized and disjoint; all invalid calls preserve outputs.",
+      "arithmetic": "Exact GMP rational finite moments and block differences; GMP integer lcms and canonical CRT residues. Incompatibility returns exact zero. Cutoff Haar moments are finite positive CRT partial sums; omitted infinite tails and finite-to-limit error intervals are not included.",
+      "independent_check": "20,764 exact oracle/interface checks compare complete-period probabilities and cutoff moments, energy-derived integer moments and deficit blocks, empty and incompatible cases, large exact lcms, resource boundaries and output aliasing. The separate sanitizer driver passes the same 4,926 API queries and 36 edge cases.",
+      "interfaces": [
+        "nfield weighted-remainder-state crt [period:shift ...]",
+        "nfield weighted-remainder-state moment N f|g [shift:power ...]",
+        "nfield weighted-remainder-state haar-moment M [shift ...]",
+        "C API weighted_remainder_joint_crt_q",
+        "C API weighted_remainder_empirical_moment_q",
+        "C API weighted_remainder_cutoff_joint_moment_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_joint_crt_q",
+        "weighted_remainder_empirical_moment_q",
+        "weighted_remainder_cutoff_joint_moment_q",
+        "weighted_remainder_joint_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_joint.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_pairing.c",
+        "src/weighted_remainder_joint.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_joint.py",
+          "sha256": "83150431a782def18d1042656e63623b44197221f563da33a9d45cf12184b6fb",
+          "checks": 20764,
+          "domain": "4,926 queries: all period pairs 2..14 and longer lists through eight entries; exact large lcms; all forcing 1..240; endpoint deficit blocks; f/g moments through total degree 16; complete-cycle cutoff moments M=2..12, maximum 65,536 tuples and one-coordinate M=240; 36 direct API edge checks and malformed CLI inputs.",
+          "independence": "Python Fraction oracle enumerates actual complete cycles, derives increments and deficits from the boundary-energy Gram matrix, and reconstructs weights by triangular harmonic budgets. Production uses modular CRT inverses, divisor forcing and tuple expansion. The oracle imports no production code.",
+          "included": true
+        }
+      ]
+    },
+    "intrinsic_tests": {
+      "title": "Boundary increments tested on residue cylinders",
+      "normalization": "d_partial(n)=(n-J(n))-((n-1)-J(n-1)); weak Haar testing equals the Cesaro boundary average for every locally constant test.",
+      "admitted_domain": "1<=N,L<=240, 0<=a<L, 2<=M<=240; arbitrary initialized canonical complex rational tables of length L; distinct initialized outputs; output/table aliasing allowed; invalid inputs preserve outputs.",
+      "arithmetic": "GMP exact finite boundary averages and CRT Haar centers; separate exact component radii (2/3)*max_abs_component*(1-sum_{2<=k<=M}w_k). The full constant mass is retained. Infinite containment and convergence are proved in Lean.",
+      "independent_check": "1,936 independent exact checks use boundary-energy increments and complete-cycle Haar visits; signed complex conjugation, noncoprime periods, endpoints, invalid domains and aliasing are covered. Separate sanitizer and canonical CLI/API regressions pass.",
+      "interfaces": [
+        "nfield weighted-remainder-state reset N",
+        "nfield weighted-remainder-state pairing N L a M",
+        "C API weighted_remainder_boundary_test_q",
+        "C API weighted_remainder_haar_test_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_reset_q",
+        "weighted_remainder_boundary_test_q",
+        "weighted_remainder_haar_test_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_pairing.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_pairing.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_pairing.py",
+          "sha256": "e6ee0261f776e7d04b1bd917fd23035163ffac89eae5d9e3a5860551d80ec778",
+          "checks": 1936,
+          "domain": "positive increments 1..240; four complex table families over periods 1,2,3,4,6,7,12,31,239,240; eight sample lengths and cutoffs including endpoints; invalid domains and all output collisions; input/output aliasing; CLI",
+          "independence": "The oracle computes energy Gram increments and actual affine boundary energies, recovers weights by triangular budgets, and enumerates complete-cycle visits. Production uses divisor-reset sums and CRT filtering of residue labels. No production code is imported by the oracle.",
+          "included": true
+        }
+      ]
+    },
+    "conductor_rows": {
+      "title": "Primitive age, odd and Ramanujan rows",
+      "normalization": "P_q=sum_{d|q} mu(q/d)E_d; R_q=sum mu(q/d)d*saw(r_d/d); P_q=R_q-c_q/2.",
+      "admitted_domain": "Every conductor 2..240; all residues or an arbitrary signed GMP address. Squared norms use normalized complete-period averages. The radical is the product of all distinct prime factors, not only a prime-power special case. Initialized output is preserved on failure; address may occupy any rational output limb. Conductor one is excluded from the P=R-c/2 contract.",
+      "arithmetic": "Exact GMP rational P/R/c values, all three norms and radical descent. Midpoint odd values remain zero at jumps. The conductor-six fixture and finite potential/carrier/increment reconstruction are independently checked from actual API rows and amplitudes. Numerical additive transforms are supplemental tests, not rigorous transcendental intervals.",
+      "independent_check": "382,617 independent checks, including all finite primitive rows, complete-period pair products, direct additive transforms, arbitrary finite inverse profiles and exact full-recovery certificates. Actual source and validation scope are recorded in the correspondence review.",
+      "interfaces": [
+        "nfield weighted-remainder-state rows q [address]",
+        "GMP API weighted_remainder_rows_compute",
+        "GMP APIs weighted_remainder_weights_amplitude_q and weighted_remainder_weights_compute compose finite conductor reconstructions"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_rows_compute",
+        "weighted_remainder_rows_init",
+        "weighted_remainder_rows_clear"
+      ],
+      "sources": [
+        "src/weighted_remainder_rows.c",
+        "src/weighted_remainder_rows.h",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_weights.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_rows.py",
+          "sha256": "2a4c6f3bd2c2da258ad9e87ed9990c6f090eb1311cd8ba89f6f0031de1c10aed",
+          "checks": 382617,
+          "domain": "Every conductor 2..240 and every residue, signed and large GMP addresses; all 28,680 unordered conductor pairs; 42 signed, nonnegative and arbitrary-amplitude profiles; raw full inverse intervals across conductor/period cutoffs 2..240; 47,684 API records, 134 C edge assertions and 422 CLI cases.",
+          "independence": "Proper-divisor subtraction builds P/R/c without production Mobius formulas; literal complete periods give exact norms and all cross products. Direct additive exponentials and DFTs check primitive support and cosecant sums with tolerance 5e-12 after scaling by 1+q (maximum 1.698e-12). Descending subtraction inverts finite amplitudes without Mobius; collision weights come from triangular budgets. Full inverse containment is a separate Lean theorem, not inferred from later partial sums.",
+          "included": true
+        }
+      ]
+    },
+    "fourier_spectra": {
+      "title": "Primitive Fourier coefficients and spectral measures",
+      "normalization": "For primitive a/q, ghat=-2*eta_q/3 and Yhat=-2*eta_q/(3*(1-exp(-2*pi*i*a/q))); spectral measures use squared moduli, not finite eta mislabeled as full.",
+      "admitted_domain": "Independent cutoffs and conductors 2..240, arbitrary signed GMP frequencies reduced modulo q. Primitive coefficient APIs require a unit residue; the trigonometric kernel also admits nonunits away from zero. Signed canonical finite weights and supplied amplitude intervals are supported. Invalid inputs preserve initialized outputs, scalar row outputs must be distinct, and documented input/output aliases are allowed.",
+      "arithmetic": "All endpoints are exact rationals. Sine/cosine use the proved degree-23 quarter-angle polynomial and pi bracket, rounded outward to grid 10^-18. Subsequent signed interval arithmetic is exact and division requires positive sine lower bound. Half-period values are exact. Finite xi and full eta bounds have explicit separate modes; coefficients retain the manuscript signs and spectral masses are squared moduli.",
+      "independent_check": "712,296 independent checks with full finite transforms, high-precision and rational polynomial references, exact Parseval/cosecant checks, general finite profiles, invalid domains, aliases and CLI errors.",
+      "interfaces": [
+        "nfield weighted-remainder-state fourier q frequency M finite|full",
+        "GMP trigonometric, supplied-amplitude, finite-weight, collision-amplitude and row-coefficient APIs in weighted_remainder_fourier.h"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_trig_compute",
+        "weighted_remainder_fourier_interval_compute",
+        "weighted_remainder_fourier_finite_compute",
+        "weighted_remainder_fourier_collision_compute",
+        "weighted_remainder_row_fourier_q",
+        "weighted_remainder_fourier_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_fourier.c",
+        "src/weighted_remainder_fourier.h",
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_fourier.py",
+          "sha256": "72632353cb2be7ef45ef69740c08d8883d70d394bcd605b7f686811bb7b08e06",
+          "checks": 712296,
+          "domain": "69069 API records, 28707 trigonometric intervals covering every interior angle for q=2..240 and extra signed GMP phases, all 239 complete conductor tables, 309 complete finite cycle transforms up to period 57360, 361 C edge assertions, 55 CLI cases.",
+          "independence": "An independent Machin pi computation and full-angle series at 100 decimal precision check every trigonometric enclosure. Direct even/odd rational power sums and an expanded fourth power check outward-grid endpoints independently of C recurrence/squaring. Actual API conductor tables are transformed over whole periods, with exact rational Parseval/cosecant enclosures. Finite potentials are independently constructed from literal centered ages and backward differences, with collision masses recovered from triangular harmonic budgets. Floating phases are reduced modulo q exactly before evaluation; scaled tolerance stays 5e-11 and measured maximum is 4.011e-15. Universal infinite containment is separately proved in Lean.",
+          "included": true
+        }
+      ]
+    },
+    "mass_inverse": {
+      "title": "Recovery of period masses from amplitudes",
+      "normalization": "v_k=sum_{j>=1} mu(j)*xi_(k*j), with absolute convergence from the Jordan condition.",
+      "admitted_domain": "Finite canonical rational amplitude arrays [0..M], inactive indices 0 and 1, 2<=M,k<=240 and signed entries admitted; k>M returns zero. Full recovery: 2<=d<=Q<=240 and 2<=M<=240, with Q the inverse-conductor cutoff and M the period cutoff. Invalid calls preserve initialized output; finite input/output aliasing is supported.",
+      "arithmetic": "Exact finite inverse over multiples, distinct from reciprocal-budget inversion. Raw signed full-amplitude prefix intervals are expanded by E=4*(b_d+2*b_J+3)/(d^2*J), J=floor(Q/d), using minimal integers with 2*d<=2^b_d and 2*J<=2^b_J. The full mass lies in [max(0,beta_lower-E),beta_upper+E]. The target mass is not used to tighten its own recovery interval; all arithmetic is exact and the enclosure can be conservative.",
+      "independent_check": "382,617 independent checks, including all finite primitive rows, complete-period pair products, direct additive transforms, arbitrary finite inverse profiles and exact full-recovery certificates. Actual source and validation scope are recorded in the correspondence review.",
+      "interfaces": [
+        "nfield weighted-remainder-state mass-inverse M k [q:amplitude ...]",
+        "nfield weighted-remainder-state mass-recovery d Q M",
+        "GMP APIs weighted_remainder_mass_inverse_q and weighted_remainder_mass_recovery_compute"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_mass_inverse_q",
+        "weighted_remainder_mass_recovery_compute"
+      ],
+      "sources": [
+        "src/weighted_remainder_rows.c",
+        "src/weighted_remainder_rows.h",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_weights.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_rows.py",
+          "sha256": "2a4c6f3bd2c2da258ad9e87ed9990c6f090eb1311cd8ba89f6f0031de1c10aed",
+          "checks": 382617,
+          "domain": "Every conductor 2..240 and every residue, signed and large GMP addresses; all 28,680 unordered conductor pairs; 42 signed, nonnegative and arbitrary-amplitude profiles; raw full inverse intervals across conductor/period cutoffs 2..240; 47,684 API records, 134 C edge assertions and 422 CLI cases.",
+          "independence": "Proper-divisor subtraction builds P/R/c without production Mobius formulas; literal complete periods give exact norms and all cross products. Direct additive exponentials and DFTs check primitive support and cosecant sums with tolerance 5e-12 after scaling by 1+q (maximum 1.698e-12). Descending subtraction inverts finite amplitudes without Mobius; collision weights come from triangular budgets. Full inverse containment is a separate Lean theorem, not inferred from later partial sums.",
+          "included": true
+        }
+      ]
+    },
+    "dedekind_gram": {
+      "title": "Sloped sawtooth Gram and Dedekind sums",
+      "normalization": "E B_(d,a) B_(e,b) = gcd(d,e)/(d*e) * s(b*inverse(a),gcd(d,e)) under the manuscript coprimality assumptions.",
+      "admitted_domain": "Periods 1..240, arbitrary signed 64-bit slopes and residue labels, including both endpoints. Slopes must be units at the original periods. Period one and arbitrary common factors are included. Cylinder period q must divide row period d. Initialized rational outputs are preserved on failure.",
+      "arithmetic": "Exact GMP rationals, with integer midpoint products and a Euclidean unit inverse on the gcd. No floating arithmetic, cutoff tail or numerical inference of a Haar theorem.",
+      "independent_check": "187,199 independent assertions over 95,812 API records, 2,432 C domain/failure-preservation checks and 108 CLI cases. Literal floor fractions, complete lcm-cycle products, enumerated conditional fibers and a Euclidean-reciprocity Dedekind oracle. Isolated ASan/UBSan/LSan passes 187,074 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state sawtooth d a r",
+        "nfield weighted-remainder-state dedekind d a",
+        "nfield weighted-remainder-state gram d a e b",
+        "nfield weighted-remainder-state sawtooth-mean d a q t",
+        "C API weighted_remainder_sawtooth_q(out,d,a,r)",
+        "C API weighted_remainder_dedekind_q(out,d,a)",
+        "C API weighted_remainder_sawtooth_gram_q(out,d,a,e,b)",
+        "C API weighted_remainder_sawtooth_mean_q(out,d,a,q,t)"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_sawtooth_q",
+        "weighted_remainder_dedekind_q",
+        "weighted_remainder_sawtooth_gram_q",
+        "weighted_remainder_sawtooth_mean_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_sawtooth.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_sawtooth.py",
+          "sha256": "532dd64156a10cdea5fc88e61ce7f50d884d6ed9bc1360734d7106b9b3976672",
+          "checks": 187199,
+          "domain": "All unit Dedekind arguments at periods 1..240 and signed representatives; all unit Gram pairs at periods 1..16, selected pairs through 240, divisor cylinders throughout 1..240, original-period nonunits, zero endpoints, signed 64-bit extremes and malformed CLI input.",
+          "independence": "Production evaluates the Gram on the gcd using Dedekind products. The oracle enumerates the full lcm cycle, enumerates conditional fibers and evaluates Dedekind sums by reciprocity independently checked against exact floor fractions. It imports no production code.",
+          "included": true
+        }
+      ]
+    },
+    "full_amplitudes": {
+      "title": "Infinite collision amplitudes and harmonic seed",
+      "normalization": "eta_q=sum_{q|k}w_k; F(q)=sum_{m>=1}H_(qm-1)/(qm)^2; Delta(q)=product_{p|q}(1-p^-3); exact divisor refinement retains zeta(3).",
+      "admitted_domain": "q=1..240, independent retained period M=2..240, cubic zeta N=1..240 and unrestricted Mobius D=1..240. The scalar seed-prefix API also admits M=0 and M=1. q=1 keeps full eta_1=1 separate from retained mass; q>M is admitted. Scalar paired outputs must be distinct; invalid calls preserve initialized outputs, including the entire refinement structure.",
+      "arithmetic": "All endpoints are exact GMP rationals. Delta and J3 use exact prime factors. Initial full amplitudes intersect positive retained masses plus omitted unit mass, a proved period-specific tail (2*b_M+3)/(q*M), and the binary conductor bound 4*(1+b_q)/q^2. Positive cubic sums have tail 1/(2*N^2). The actual Jordan budget propagates these independent starting bounds to full harmonic seeds; literal seed prefixes and their tail upper bounds remain separate. Finite divisor refinement and the unrestricted Mobius prefix retain signed numerator intervals; the latter has absolute tail zeta_upper/(2*D^2). Positive interval division retains zeta(3), Delta and q powers. The prime specialization explicitly retains F(1).",
+      "independent_check": "387,268 independent exact arithmetic, longer-series consistency, invalid-domain, output-preservation and CLI checks. All admitted scalar seed prefixes are compared to literal positive-pair sums. No finite check supplies an infinite proof.",
+      "interfaces": [
+        "nfield weighted-remainder-state amplitude-refinement q M N D",
+        "GMP factor, zeta, harmonic-seed and full-refinement APIs in weighted_remainder_amplitude.h",
+        "nfield weighted-remainder-state amplitude q M (original basic enclosure)"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_amplitude_factors_q",
+        "weighted_remainder_zeta_three_interval_q",
+        "weighted_remainder_harmonic_seed_prefix_q",
+        "weighted_remainder_amplitude_refinement_compute",
+        "weighted_remainder_amplitude_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_amplitude.c",
+        "src/weighted_remainder_amplitude.h",
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_amplitude.py",
+          "sha256": "041fbef3f5ff4f7412eaa17e44292a5c2a062819cda1b12e4f10d1586c04f946",
+          "checks": 387268,
+          "domain": "62643 API records; 64 C edge assertions; 28680 literal positive-pair visits; 216225 primitive-triple visits; 4308 full refinement cases; 43 CLI cases. All conductor and seed-cutoff pairs through 240, all cubic cutoffs through 240, and independent full-value reference series through 1024.",
+          "independence": "Literal positive pairs supply harmonic kernels, with a coprime restriction supplying period masses. Proper-divisor subtraction supplies Jordan counts and Mobius values independently of production prime factors; actual primitive triples check small Jordan counts. Every exact endpoint is compared with these independent data, including period-specific tails and raw signed refinement numerators. Longer harmonic and triangular-budget mass series check interval consistency and later omitted masses. The full identities and universal containments are separately proved in Lean; interval overlap is finite consistency evidence only.",
+          "included": true
+        }
+      ]
+    },
+    "amplitude_expansion": {
+      "title": "Uniform amplitude expansion and explicit remainder",
+      "normalization": "eta_q=A0*rho(q)/q^2*(log q+kappa0+nu(q))+epsilon_q with the literal zeta(4)/(12*zeta(3)*q^4*Delta(q))*product(p+1) bound.",
+      "admitted_domain": "q=1..240 and independent constant cutoff N=1..240, shared by three constant approximations. Harmonic expansion admits q=1; uniform amplitude requires q>=2. Dirichlet: canonical rational 1<s<=6, 255-bit components, N=1..240. Power helper: n=1..240 and 0<=s<=12 with 256-bit components. CLI exponents use at most 160 characters of digits or digits/digits. Invalid calls preserve initialized outputs; paired outputs are distinct and may alias the exponent, including every Dirichlet output field.",
+      "arithmetic": "Exact GMP endpoints. Positive binary logarithm series, the proved pi bracket, cubic zeta tails, harmonic gamma bounds and a positive logarithmic moment supply A0 and kappa0. rho/nu and both finite Mobius identities retain exact factors and signed endpoints. Seed and uniform amplitude expansions retain the literal remainders and prime-power exponents. Rational negative powers use degree-23 exp intervals after division by 128 and seven squarings, with outward grids 10^-24 and final 10^-48. Positive Dirichlet prefixes, zeta integral tails and raw signed formula bounds remain separate; A(2) and A(3/2) specializations retain the strict universal constants and weighted 3979/8000 diagnostic.",
+      "independent_check": "225999 independent checks across four canonical oracles, 11851 API records, 198 C edges and 96 CLI cases. References use literal totient counts, Mobius/divisor inversion, direct rational polynomial powers, Decimal exp/log, Machin pi, squared half-integer checks and longer positive series. Finite consistency does not prove universal containment.",
+      "interfaces": [
+        "nfield weighted-remainder-state expansion-constants N",
+        "nfield weighted-remainder-state harmonic-expansion q N",
+        "nfield weighted-remainder-state amplitude-expansion q N",
+        "nfield weighted-remainder-state deficit-series s N",
+        "nfield weighted-remainder-state deficit-diagnostic N",
+        "Reusable exact GMP constant, expansion, power, coefficient and Dirichlet APIs"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_expansion_compute"
+      ],
+      "sources": [
+        "src/weighted_remainder_expansion.c",
+        "src/weighted_remainder_constants.c",
+        "src/weighted_remainder_power.c",
+        "src/weighted_remainder_dirichlet.c",
+        "src/weighted_remainder_expansion_command.c",
+        "src/weighted_remainder_constants.h",
+        "src/weighted_remainder_expansion.h",
+        "src/weighted_remainder_power.h",
+        "src/weighted_remainder_dirichlet.h",
+        "src/weighted_remainder_amplitude.c",
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_constants.py",
+          "sha256": "64352346b6b35ee70b2f214d9b7f8c09e47f81a07adf22fa3494568ff938929d",
+          "checks": 13407,
+          "domain": "484 API records, 21 C edge assertions, 1363 logarithm products and 14 CLI cases; all cutoffs and logarithms through 240.",
+          "independence": "Independent Machin pi and Decimal logarithms; direct rational odd powers and outward grids; longer positive harmonic, cubic and logarithmic-moment sums through 4096.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_expansion.py",
+          "sha256": "72120b33b1637fc880117f86e7dbbd1239dfa45b1b6119fab77df2e4ca789dc2",
+          "checks": 107091,
+          "domain": "2380 API records, 56 C edge assertions, 972 prime-power cases and 39 CLI cases; every conductor and constant cutoff through 240 across the declared cases.",
+          "independence": "Literal totient counts and proper-divisor inversion supply local factors and signed Mobius sums. Separate positive mass and harmonic series through 1024 check full-value consistency; actual universal containment is proved in Lean.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_power.py",
+          "sha256": "daff0906bd33412a9b0307c84b5e7ef615f9c546d7f66c329242c06142ababf2",
+          "checks": 55323,
+          "domain": "7704 API records, 29 C edge assertions, 3120 exact integer powers and 3120 exponent-doubling cases; n through 240, general rational exponents, aliases and bit limits.",
+          "independence": "Direct rational powers/factorials avoid the C recurrence. Independent Decimal exp/log and exact squared half-integer comparisons check values; both outward grids are reproduced exactly. Universal containment is separate Lean evidence.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_dirichlet.py",
+          "sha256": "39a96bba115d6c7f9b11d050f3a1aecce4ddabb6b3bde174916189d69d135555",
+          "checks": 50178,
+          "domain": "1283 API records, 92 C edge assertions, 792 series cases, 240 weighted positivity diagnostics and 43 CLI cases; all cutoffs for the principal exponents, general rational and bit-limit cases.",
+          "independence": "Proper-divisor Mobius inversion and squarefree-divisor counts avoid production prime-factor counting. Independent power/grid endpoints, Machin pi and longer positive Decimal series with integral tails through 2048 check consistency. Original infinite identities and strict positivity remain Lean theorems.",
+          "included": true
+        }
+      ]
+    },
+    "spectral_tail": {
+      "title": "Sharp conductor tail and Euler product constant",
+      "normalization": "Tail energy uses full amplitudes and J2 beyond conductor Q. C_sp is the displayed positive Euler product; finite period truncation is a different projection.",
+      "admitted_domain": "Local p prime 2..240; arithmetic n=0..240 with h(0)=c(0)=0 and h(1)=c(1)=1. Mean x canonical rational in [1,240], 255-bit components; CLI digits or digits/digits at most 160 characters. Energy q,M=2..240. Tail 1<=Q<=B<=240, B>=4, independent M=2..240 and P,N=1..240. Scalar outputs are distinct; invalid calls preserve initialized outputs; x may alias any mean output field.",
+      "arithmetic": "Exact GMP endpoints. Csp is enclosed by the prime product and max(0,product-2/P). h and signed c floor sums use floor(x) and divide by x. Nonnegative log intervals propagate both nu moments, with separate prime tails 2*(2*b+3)/P and 16/P. Full amplitudes intersect positive prefixes plus omitted mass, period tails and the logarithmic conductor bound. The weighted remainder is (log_upper(B)^2+2*log_upper(B)+2)/B; the full projection remainder is 32*(log_upper(B)^2+2*log_upper(B)+3)/(27*B). Leading Csp and A0-squared Csp terms are separate asymptotic readouts, not finite tail error bounds.",
+      "independent_check": "189591 checks, 6029 API records and 85 CLI cases across two independent oracles. Shared 191 C edge assertions execute in each runner. Direct finite Fourier projections and independently ordered divisor/floor/prime-pair identities check correspondence; longer finite consistency checks do not prove infinite claims.",
+      "interfaces": [
+        "nfield weighted-remainder-state spectral-product P",
+        "nfield weighted-remainder-state spectral-mean x P",
+        "nfield weighted-remainder-state spectral-energy q M",
+        "nfield weighted-remainder-state spectral-tail Q B M P N",
+        "Reusable GMP local-factor, correction, product, rational-mean, full-energy and full-tail APIs"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_spectral_factors_q",
+        "weighted_remainder_spectral_arithmetic_q",
+        "weighted_remainder_spectral_product_q",
+        "weighted_remainder_spectral_mean_compute"
+      ],
+      "sources": [
+        "src/weighted_remainder_spectral.c",
+        "src/weighted_remainder_spectral_tail.c",
+        "src/weighted_remainder_spectral_command.c",
+        "src/weighted_remainder_spectral.h",
+        "src/weighted_remainder_constants.c",
+        "src/weighted_remainder_constants.h",
+        "src/weighted_remainder_amplitude.c",
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_spectral.py",
+          "sha256": "0004f7c5823d6230a6999bb72dda49315eac21498e6f736f344a19bc1efffa4c",
+          "checks": 137956,
+          "domain": "2652 API records, 191 shared C edge assertions, 1919 admitted rational means and 39 CLI cases; every integer boundary through 240 and 255-bit inputs.",
+          "independence": "Primitive residue-pair and unit counts, signed divisor formulas and proper-divisor inversion provide h and c. Exact rational polynomial references, Decimal logarithms and independent prime-pair LCM counts check both moments; longer finite prime series through 4096 check consistency.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_spectral_tail.py",
+          "sha256": "7392cea582a52f29c039ed253a5029b309329dc9bd977d9ac9d705bc63d5a8c3",
+          "checks": 51635,
+          "domain": "3377 API records, 191 shared C edge assertions, 28 direct finite Fourier projections and 46 CLI cases; conductor, band, period and prime/constant cutoffs across the full admitted domain.",
+          "independence": "Mobius inversion of full harmonic sums supplies weights independently of the C unit loop. Signed divisor sums supply J2; longer finite Decimal series through 2048 check amplitudes and tails. Direct characters applied to actual finite potentials verify conductor energy with maximum difference 5.421e-18 below the fixed 5e-11 tolerance. Infinite containment remains a separate Lean proof.",
+          "included": true
+        }
+      ]
+    },
+    "mixed_moments": {
+      "title": "All odd-character mixed L(1)L(2) moments",
+      "normalization": "Sum over all odd characters modulo q, including induced characters; normalized by zeta(3)*Delta(q)*phi(q).",
+      "admitted_domain": "Phase/root/cotangent/sine q=1..240, phase 0<=a<q; character tables, odd-character and mixed readouts require q>=2. N,K=1..240 independent; cotangent prefix alone permits N=0. Mixed period cutoff M=2..240 independent. Harmonic polylog admits canonical rational complex coordinates with 63-bit components and exact squared norm<=1; coordinates may alias all output fields. CLI rational grammar is signed integer or integer ratio, at most 160 characters. Sine API admits arbitrary signed GMP frequency, CLI at most 1000 decimal characters. Initialized distinct scalar outputs and complete structure preservation on rejection are checked.",
+      "arithmetic": "Exact GMP rational endpoints. Double-angle phases and complete noncyclic unit groups retain induced odd characters and conjugation. Naturally ordered L1 uses its proved finite cotangent coefficient; absolute L2 has norm tail 1/N. Mixed normalization retains zeta(3)*Delta(q)*phi(q), raw imaginary and amplitude intervals, and separate positive-mass intersection. C and unit-C use certified maximum-residue tails; finite gcd/Mobius formulas have induced floor cutoffs. Harmonic, cubic-cosine and quadratic-sine tails are (2*b+3)/N, 1/(2*N^2) and 1/N with 2*N<=2^b. Root and signed-sine endpoints are explicit. Catalan, conductor-three L2 and induced-six 5/4 keep separate finite and full-series formulas.",
+      "independent_check": "404117 checks across six canonical oracles, 34177 API cases, 901 C edge assertions and 90 CLI cases. Independent generic character enumeration, residue progressions, Gaussian powers, root averaging and primitive-pair arithmetic check the implementation and every printed field. Numerical long-series comparisons are finite evidence, separate from the Lean proofs of infinite containment.",
+      "interfaces": [
+        "nfield weighted-remainder-state character-phase q a",
+        "nfield weighted-remainder-state character-table q",
+        "nfield weighted-remainder-state character-l q index N",
+        "nfield weighted-remainder-state mixed-moment q N K M",
+        "nfield weighted-remainder-state cotangent-sums q N K",
+        "nfield weighted-remainder-state harmonic-polylog real imag N",
+        "nfield weighted-remainder-state harmonic-root q a N K",
+        "nfield weighted-remainder-state harmonic-root-average q N",
+        "nfield weighted-remainder-state sine-transform q frequency",
+        "nfield weighted-remainder-state small-amplitudes N K",
+        "Reusable GMP phase, full-unit-group character, L-value, cotangent, harmonic/root, sine and small-conductor APIs"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_character_compute",
+        "weighted_remainder_mixed_moment_compute"
+      ],
+      "sources": [
+        "src/weighted_remainder_character.c",
+        "src/weighted_remainder_complex.c",
+        "src/finite_character_core.c",
+        "src/weighted_remainder_cotangent.c",
+        "src/weighted_remainder_harmonic_root.c",
+        "src/weighted_remainder_small_amplitude.c",
+        "src/weighted_remainder_mixed_command.c",
+        "src/weighted_remainder_complex.h",
+        "src/weighted_remainder_character.h",
+        "src/finite_character_core.h",
+        "src/weighted_remainder_rect_internal.h",
+        "src/weighted_remainder_cotangent.h",
+        "src/weighted_remainder_harmonic_root.h",
+        "src/weighted_remainder_small_amplitude.h",
+        "src/weighted_remainder_fourier.c",
+        "src/weighted_remainder_fourier.h",
+        "src/weighted_remainder_constants.c",
+        "src/weighted_remainder_constants.h",
+        "src/weighted_remainder_amplitude.c",
+        "src/weighted_remainder_amplitude.h",
+        "src/weighted_remainder_exact.c"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_complex.py",
+          "sha256": "7e395db00b92c761e12d176cb1b3e858554cd9911ad676713024ce76d63be17b",
+          "checks": 304720,
+          "domain": "28925 phase cases, 242 table cases, 33 C edges; every admitted q and phase, 17543 characters and 3441 induced odd characters.",
+          "independence": "Exact expanded trigonometric polynomials and separate Decimal full-angle trigonometry. Generic subgroup extension enumerates all characters independently of prime-power/CRT production; reduction-fiber constancy gives the least conductor, and exact root multiplicities check orthogonality.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_character.py",
+          "sha256": "3a76a0ef766f1e202301857b04fde177ddeff02e2ecb43c3567a3dd2cbab9b78",
+          "checks": 66588,
+          "domain": "399 individual odd-character and 281 complete mixed-moment cases, 186 C edges, 210 induced odd cases; all q=2..240 and independent N,K,M.",
+          "independence": "Independent subgroup characters, digamma/trigamma residue progressions for naturally ordered L1 and absolute L2, separate unit-cotangent progressions and literal primitive-pair amplitudes. Exact rectangle replay is paired with fixed-precision numerical consistency checks; neither replaces the actual infinite Lean proofs.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_cotangent.py",
+          "sha256": "70ca06f39a00031b9994919bdb637149cc2289fbf2f5f4294834feb98c6c2a50",
+          "checks": 10751,
+          "domain": "1438 prefix and 302 full-series cases, 256 C edges, including q=1, zero prefix, induced cutoffs and independent zeta cutoffs.",
+          "independence": "Residue-bucket prefixes replace the production n loop; separate trigamma progression references check actual series. Exact divisor and Mobius replay retains floor(N*d/q) and floor(N/d), with 35 witnesses falsifying same-cutoff finite descent.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_harmonic_root.py",
+          "sha256": "cb87646e84bc5717ba6cec26cd721faeab2dcde4f0dce0898c6c527aa5638d9c",
+          "checks": 10124,
+          "domain": "35 rational complex polylogs, 346 root readouts, 260 finite root averages, 1226 signed sine transforms and 281 C edges. Includes boundary disk coordinates, output aliasing and signed 200-digit frequencies.",
+          "independence": "Binary Gaussian powers, residue-bucket root prefixes and n-first all-root averaging differ from production's successive powers/n loop/a-first average. Separate longer Decimal series and direct sine sums check consistency; exact positive selected prefixes and proven tails supply actual enclosures.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_small_amplitude.py",
+          "sha256": "f96b0e636d24b1dff2963959f9ee621fcd186088fd159aeb6719147384a4717f",
+          "checks": 10786,
+          "domain": "723 cases, 145 C edges, all N=1..240 with independent K and 718 finite-cutoff distinctions.",
+          "independence": "Independent progression L-values and Decimal sqrt(3) check the literal conductor-three, Catalan and induced-six characters. The finite identity with floor(N/2) is checked separately from the full-series factor 5/4 and both eta-six formulas.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_mixed_cli.py",
+          "sha256": "9d0d52f094cd261854a11a91c205e22053bf24db945d32bf7517394544bfddfe",
+          "checks": 1148,
+          "domain": "90 calculation/admission cases across ten CLI actions, plus all ten help entries; valid fields, exact spelling and resource/grammar rejection.",
+          "independence": "Every printed field is compared with the independent phase, subgroup, progression, Gaussian-power and positive-mass references. Raw formula and positive-intersection fields remain distinct; no infinite claim is certified by a finite CLI case.",
+          "included": true
+        }
+      ]
+    },
+    "cylinder_means": {
+      "title": "Cylinder means and alignment constant",
+      "normalization": "m_L(a)=(2/3)sum w_k E_gcd(k,L)(a); C_L=(1/3)sum w_k(gcd(k,L)-1), equivalently full-amplitude divisor sums.",
+      "admitted_domain": "1<=L<=240, 2<=M<=240, arbitrary signed GMP integer address reduced modulo L. Finite centers, exact omitted unit mass and full infinite intervals; all initialized outputs distinct and preserved on failure, with documented address aliases.",
+      "arithmetic": "Exact GMP rational centers and enclosing intervals for the full infinite quantities; positive finite alignment bounds justify interval division and probability upper bounds are capped by one. No rounding error or cutoff-renormalized probability is substituted for the full object.",
+      "independent_check": "29,082 independent oracle/interface checks, 6,735 API records and 275 direct C edge checks; complete conditional cycles, normalized gaps and event weights, exact extrema, reflection, periodicity and later finite cutoff containment. Isolated address/undefined-behavior/leak sanitizer run passes 29,006 driver-only checks.",
+      "interfaces": [
+        "nfield weighted-remainder-state cylinder L a M",
+        "C API weighted_remainder_cylinder_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_cylinder_q",
+        "weighted_remainder_cylinder_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_cylinder.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_cylinder.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_cylinder.py",
+          "sha256": "13dbf1965baaf14189b01a410d7b3caa849c8e8fac155deafd3b900ed4253e06",
+          "checks": 29082,
+          "domain": "6,735 API records across moduli 1..240 and cutoffs 2..240, all residues for cylinders 2..16, negative and arbitrarily large addresses, thresholds below zero through above one, periods 0,1 and above cutoff; 275 direct C edge/alias checks and malformed CLI inputs.",
+          "independence": "The Fraction oracle reconstructs collision weights from triangular harmonic budgets and computes conditional coefficients by enumerating actual complete residue fibers. It derives position weights from the negative conditional mean at zero and relative positions from the conditional gap. Production instead uses the gcd remainder formula. Later finite cutoffs supplement, and do not replace, universal Lean containment proofs.",
+          "included": true
+        }
+      ]
+    },
+    "maximal_alignment": {
+      "title": "Maximal alignment, local Euler factors and Mertens constants",
+      "normalization": "f(L_m) and C_(L_m) have distinct sharp log^2(m) constants; prime-power towers remain bounded; local A_p,t_p,K_p,u_p retain v_p(L).",
+      "admitted_domain": "Positive GMP modulus up to 4096 bits; checked prime factors <=239 and valuations <=240. M,k=2..240; m,N,P=1..240. Normalization, LCM equality and tower availability flags are explicit. Rejected API calls preserve initialized outputs, including aliases.",
+      "arithmetic": "Exact GMP local factors, divisor/gcd sums, rational logarithmic and exponential enclosures. Independent cutoffs retain absent-prime tails. The growth wrapper rounds gamma outward before the bounded exponential helper.",
+      "independent_check": "451781 local-factor checks, 97429 alignment checks, 4892 alignment C assertions and 3057 new CLI/growth checks; direct API admission, alias and preservation checks.",
+      "interfaces": [
+        "nfield weighted-remainder-state alignment n M N P",
+        "nfield weighted-remainder-state alignment-local p v",
+        "nfield weighted-remainder-state harmonic-local k N",
+        "nfield weighted-remainder-state alignment-lcm m M N P",
+        "nfield weighted-remainder-state alignment-growth n m M N P"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_alignment_compute",
+        "weighted_remainder_alignment_lcm_z",
+        "weighted_remainder_harmonic_local_compute"
+      ],
+      "sources": [
+        "src/weighted_remainder_alignment.c",
+        "src/weighted_remainder_alignment.h",
+        "src/weighted_remainder_alignment_local.c",
+        "src/weighted_remainder_alignment_local.h",
+        "src/weighted_remainder_alignment_growth.c",
+        "src/weighted_remainder_alignment_growth.h",
+        "src/weighted_remainder_alignment_command.c",
+        "src/weighted_remainder_alignment_command.h",
+        "src/weighted_remainder_constants.c",
+        "src/weighted_remainder_constants.h",
+        "src/weighted_remainder_power.c",
+        "src/weighted_remainder_power.h",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_exact.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_alignment_local.py",
+          "sha256": "cda68c10f258b220bc72e0089e34bf0eea662dd93628bbfcbda25578c393ca4d",
+          "checks": 451781,
+          "domain": "Explicit finite domains, rejection and correspondence cases listed in the oracle and review.",
+          "independence": "Independent defining sums, exact rational/reference arithmetic and separately implemented transcendental evaluations; no finite result proves an asymptotic.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_alignment.py",
+          "sha256": "192968674a332d580298990c07bc2f78ce11f9e82da2faf08fe77e0b18ccba9e",
+          "checks": 97429,
+          "domain": "Explicit finite domains, rejection and correspondence cases listed in the oracle and review.",
+          "independence": "Independent defining sums, exact rational/reference arithmetic and separately implemented transcendental evaluations; no finite result proves an asymptotic.",
+          "included": true
+        },
+        {
+          "source": "test/test_weighted_remainder_alignment_cli.py",
+          "sha256": "9123b1befde3d25bcfbf0cb032b427815e8d6459a8633b6f320c90c8cdca8362",
+          "checks": 3057,
+          "domain": "Explicit finite domains, rejection and correspondence cases listed in the oracle and review.",
+          "independence": "Independent defining sums, exact rational/reference arithmetic and separately implemented transcendental evaluations; no finite result proves an asymptotic.",
+          "included": true
+        }
+      ]
+    },
+    "conductor_extrema": {
+      "title": "Full-amplitude conductor extrema and restricted gap",
+      "normalization": "F_Q=(2/3)sum_{2<=q<=Q}eta_q P_q; beta_d=sum_{j<=Q/d}mu(j)eta_(dj); V_Q=(1/3)sum phi(q)eta_q. Full beta_d>w_d/2 is essential.",
+      "admitted_domain": "2<=Q,M<=240, 2<=d<=Q, any signed GMP integer address; either cutoff may be smaller. Prime candidates require Q>=3 and a prime Q/2<p<=Q. Restricted enumeration requires Q>=3 and lcm(1..Q)<=50000. Initialized distinct outputs, documented address aliases and output preservation on failure; callback side effects are not rolled back.",
+      "arithmetic": "Exact GMP rational intervals enclosing full infinite beta, conductor value, endpoint and gap; arbitrary-precision exact lcm and CRT. Full restricted enumeration yields lower/upper minimum bounds and every possible minimizer. Overlapping intervals are explicitly unresolved; a singleton possible set certifies uniqueness.",
+      "independent_check": "47,063 independent oracle/API checks pass across 4,579 queries. The separate ASan/UBSan run passes 47,038 checks with leak detection enabled. Five queries are byte-identical across all three local wrappers. Universal full-amplitude containment and candidate retention are proved separately in Lean.",
+      "interfaces": [
+        "nfield weighted-remainder-state conductor-full Q a M",
+        "nfield weighted-remainder-state conductor-beta d Q M",
+        "nfield weighted-remainder-state conductor-prime Q p",
+        "nfield weighted-remainder-state conductor-extrema Q M",
+        "nfield weighted-remainder-state conductor-minimizers Q M",
+        "C APIs in weighted_remainder_conductor.h, including optional possible-minimizer visitor"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_conductor_period_z",
+        "weighted_remainder_beta_interval_q",
+        "weighted_remainder_conductor_interval_q",
+        "weighted_remainder_prime_candidate_z",
+        "weighted_remainder_conductor_extrema_q",
+        "weighted_remainder_conductor_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_conductor.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_conductor.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_conductor.py",
+          "sha256": "f8fefd1329fc6c543ba57fb231aeefcbabc7e49c9a0cefc93c7997166305c330",
+          "checks": 47063,
+          "domain": "4,579 queries: Q through 240 and M in 2,7,31,240, signed and 90-digit addresses, every beta row, exact CRT prime candidates, exhaustive restricted periods for Q=3..12, 277 direct API edge/alias checks and 25 CLI cases.",
+          "independence": "The Fraction oracle inverts triangular harmonic divisor budgets for weights, obtains primitive rows from gcd/totient Ramanujan increments, regroups finite values by retained periods and evaluates each restricted residue directly. Production sums primitive reciprocal weights and signed Mobius rows, then enumerates the gap via a GMP integer reset recurrence. Universal Lean containment is separate from this finite comparison.",
+          "included": true
+        }
+      ]
+    },
+    "stability": {
+      "title": "Near-extremal relative position and divisibility",
+      "normalization": "nu_L(k)=w_k*(gcd(k,L)-1)/(3*C_L), a probability on gcd>1; normalized gap is its mean relative residue, not a divisibility assertion.",
+      "admitted_domain": "2<=L<=M<=240, 0<=k<=240 including k>M, arbitrary signed address, arbitrary canonical rational threshold. Full normalized-gap, individual-weight and strict-exceedance intervals, exact relative residue and omitted normalized mass bound. Inputs consumed before outputs change; invalid and aliased outputs rejected.",
+      "arithmetic": "Exact GMP rational centers and enclosing intervals for the full infinite quantities; positive finite alignment bounds justify interval division and probability upper bounds are capped by one. No rounding error or cutoff-renormalized probability is substituted for the full object.",
+      "independent_check": "29,082 independent oracle/interface checks, 6,735 API records and 275 direct C edge checks; complete conditional cycles, normalized gaps and event weights, exact extrema, reflection, periodicity and later finite cutoff containment. Isolated address/undefined-behavior/leak sanitizer run passes 29,006 driver-only checks.",
+      "interfaces": [
+        "nfield weighted-remainder-state position L a M delta",
+        "nfield weighted-remainder-state position-weight L a k M",
+        "C API weighted_remainder_position_q",
+        "C API weighted_remainder_position_weight_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_position_q",
+        "weighted_remainder_position_weight_q",
+        "weighted_remainder_cylinder_q"
+      ],
+      "sources": [
+        "src/weighted_remainder_cylinder.c",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_cylinder.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_cylinder.py",
+          "sha256": "13dbf1965baaf14189b01a410d7b3caa849c8e8fac155deafd3b900ed4253e06",
+          "checks": 29082,
+          "domain": "6,735 API records across moduli 1..240 and cutoffs 2..240, all residues for cylinders 2..16, negative and arbitrarily large addresses, thresholds below zero through above one, periods 0,1 and above cutoff; 275 direct C edge/alias checks and malformed CLI inputs.",
+          "independence": "The Fraction oracle reconstructs collision weights from triangular harmonic budgets and computes conditional coefficients by enumerating actual complete residue fibers. It derives position weights from the negative conditional mean at zero and relative positions from the conditional gap. Production instead uses the gcd remainder formula. Later finite cutoffs supplement, and do not replace, universal Lean containment proofs.",
+          "included": true
+        }
+      ]
+    },
+    "stationary_tails": {
+      "title": "Stationary tail probabilities and finite moments",
+      "normalization": "Haar Y has exp(-c*sqrt(H)) upper tails for c<pi, double-exponential lower tails and all finite moments; finite Y_M is a discrete approximation.",
+      "admitted_domain": "Complete law M=2..12, degree=0..16; tail bounds M=2..240, rational threshold>0 and cylinder modulus=1..240. Rational inputs <=256 bits per component.",
+      "arithmetic": "Exact finite signed and absolute moments; full one-sided tail bounds from the retained cylinder alignment, full variance upper bound, finite clock maximum and proved squared L2 tail budget.",
+      "independent_check": "4094 independent checks for the complete law and related interfaces; exact defining weights, full-period moments, cylinder lower bounds and probability ranges.",
+      "interfaces": [
+        "nfield weighted-remainder-state law-moment M degree",
+        "nfield weighted-remainder-state law-tail-bound M threshold modulus"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_law_compute",
+        "tail_bound"
+      ],
+      "sources": [
+        "src/weighted_remainder_law.c",
+        "src/weighted_remainder_law.h",
+        "src/weighted_remainder_clock.c",
+        "src/weighted_remainder_clock.h",
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_weights.h",
+        "src/weighted_remainder_cylinder.c",
+        "src/weighted_remainder_cylinder.h",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_exact.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_law.py",
+          "sha256": "5b782f5238f3b576626f84f7320c630e79a3112e3f47fb615e1d77668eb7a9a9",
+          "checks": 4094,
+          "domain": "Explicit finite domains, rejection and correspondence cases listed in the oracle and review.",
+          "independence": "Independent defining sums, exact rational/reference arithmetic and separately implemented transcendental evaluations; no finite result proves an asymptotic.",
+          "included": true
+        }
+      ]
+    },
+    "activation": {
+      "title": "Bernoulli activation and antichain bound",
+      "normalization": "Independent Bernoulli coordinates with probabilities <=1/2 and every coordinate increment at least a; intervals shorter than a.",
+      "admitted_domain": "0<=n<=12, n rational probabilities in [0,1/2], exactly 2^n rational values in bit-mask order; a>0, v-u<a and every upward edge increment>=a including zero-probability patterns. Empty intervals/families included. Initialized result; canonical input rationals; all output fields preserved on invalid calls, input aliases allowed.",
+      "arithmetic": "Exact GMP rational product-event probability, full activation mixture, active-count mean/variance and mixture of exact binomial Sperner bounds. Universal squared bound 400/(1+sum b_i) is a rational value with a separate Lean theorem. No floating square root, dimension extrapolation or infinite limiting law.",
+      "independent_check": "8,024 checks across 634 queries, 648 API edge/alias cases and 32 CLI cases. Independent common-denominator integer cube weights, ternary outcomes, literal submask antichains and distribution-derived moments; dimensions 0..12, unequal and zero biases, nonlinear observables and large rationals. Separate sanitizer run passes 7,992 checks with leak detection enabled.",
+      "interfaces": [
+        "nfield weighted-remainder-state activation n a u v probabilities values",
+        "C API weighted_remainder_activation_q"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_activation_init",
+        "weighted_remainder_activation_clear",
+        "weighted_remainder_activation_q",
+        "weighted_remainder_activation_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_activation.c",
+        "src/weighted_remainder_activation.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_activation.py",
+          "sha256": "f8d86bfbd2dae062f3be4c63723225cadb0505699663a2d4b7568f0f9ac54ef1",
+          "checks": 8024,
+          "domain": "634 queries including all bias triples through dimension four and each rank, nonlinear positive-interaction tables through nine, fair/unequal cubes through twelve, empty families and intervals, huge rationals, malformed lists and 648 direct API checks including all scalar output aliases; 32 canonical CLI cases.",
+          "independence": "The oracle imports no production code. It constructs integer cube masses and independently enumerates ternary inactive/active-zero/active-one outcomes. Conditional counts use literal submask enumeration instead of the production zeta transform; moments come from the full active-count distribution instead of summing the production formulas.",
+          "included": true
+        }
+      ]
+    },
+    "concentration": {
+      "title": "Concentration, atomlessness and CDF approximation",
+      "normalization": "Uniform interval probability of Y is O(epsilon^(1/4)); block F_h concentration retains delta<log(P/2)/P; no density claim.",
+      "admitted_domain": "Complete laws M=2..12; canonical rational endpoints, nonnegative widths and positive margins; horizons=1..240. Prime activation P=4..240, length<=floor(P/4), width strictly below all selected prime reset increments.",
+      "arithmetic": "Exact full-period counts, multiplicities and visit-count second moments. Full CDF/window/concentration bounds combine expanded/shrunk events with the proved squared L2 budget divided by margin squared. Prime hit probabilities and conservative activation squared bound are exact.",
+      "independent_check": "4094 independent checks across the law interfaces, including integer-lattice support counts, independent window maxima, literal recurrence squares, strict activation boundaries and admission tests.",
+      "interfaces": [
+        "nfield weighted-remainder-state law-cdf M x margin",
+        "nfield weighted-remainder-state law-window M lower upper margin",
+        "nfield weighted-remainder-state law-concentration M width margin",
+        "nfield weighted-remainder-state law-recurrence M lower upper horizon",
+        "nfield weighted-remainder-state law-activation P length width"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_law_compute",
+        "weighted_remainder_law_recurrence_q",
+        "block_activation"
+      ],
+      "sources": [
+        "src/weighted_remainder_law.c",
+        "src/weighted_remainder_law.h",
+        "src/weighted_remainder_clock.c",
+        "src/weighted_remainder_clock.h",
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_weights.h",
+        "src/weighted_remainder_cylinder.c",
+        "src/weighted_remainder_cylinder.h",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_exact.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_law.py",
+          "sha256": "5b782f5238f3b576626f84f7320c630e79a3112e3f47fb615e1d77668eb7a9a9",
+          "checks": 4094,
+          "domain": "Explicit finite domains, rejection and correspondence cases listed in the oracle and review.",
+          "independence": "Independent defining sums, exact rational/reference arithmetic and separately implemented transcendental evaluations; no finite result proves an asymptotic.",
+          "included": true
+        }
+      ]
+    },
+    "characteristic": {
+      "title": "Characteristic functions of finite quotient laws",
+      "normalization": "Phi_M(t)=(1/L_M)sum_{a mod L_M}exp(i*t*Y_M(a)); error O(abs(t)*log(2M)/sqrt(M)).",
+      "admitted_domain": "Complete quotient M=2..12, exact multiplicities, rational frequency with <=256-bit components. 256-bit directed MPFR and exact rational output endpoints.",
+      "arithmetic": "Cosine intervals include directed function rounding and Lipschitz control of argument conversion. Imaginary part is zero by reflection. Full-law error is an upward rational bound on abs(frequency)*sqrt(squared L2 cutoff budget), separately printed from finite rounding width.",
+      "independent_check": "Independent Decimal Taylor cosines with separately computed Machin pi, signed and large frequencies, exact zero frequency, and full-period weights; included in 4094 law-interface checks.",
+      "interfaces": [
+        "nfield weighted-remainder-state law-characteristic M frequency"
+      ],
+      "implementation_functions": [
+        "weighted_remainder_law_compute",
+        "characteristic"
+      ],
+      "sources": [
+        "src/weighted_remainder_law.c",
+        "src/weighted_remainder_law.h",
+        "src/weighted_remainder_clock.c",
+        "src/weighted_remainder_clock.h",
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_weights.h",
+        "src/weighted_remainder_cylinder.c",
+        "src/weighted_remainder_cylinder.h",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_exact.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_law.py",
+          "sha256": "5b782f5238f3b576626f84f7320c630e79a3112e3f47fb615e1d77668eb7a9a9",
+          "checks": 4094,
+          "domain": "Explicit finite domains, rejection and correspondence cases listed in the oracle and review.",
+          "independence": "Independent defining sums, exact rational/reference arithmetic and separately implemented transcendental evaluations; no finite result proves an asymptotic.",
+          "included": true
+        }
+      ]
+    },
+    "integer_singularity": {
+      "title": "Integer cutoff identity and conserved difference limit",
+      "normalization": "Y_M(n)=D_n-D_*(M)-(2/3)n*sum_{k>M}w_k; D_n is the limit of Y_M(n)-Y_M(0). Negative integers diverge with the opposite sign.",
+      "admitted_domain": "M=2..240 and signed decimal GMP addresses up to 4096 bits. Completion is available when n>=0 with n<=M or n<0 with -n-1<=M; finite differences remain available otherwise.",
+      "arithmetic": "Exact rational clocks, centered values and differences relative to 0 or -1. Signed omitted-mass correction completes D_n or -D_(-n-1), with availability flags; no limiting Haar point value assigned.",
+      "independent_check": "Independent original floor-sum capacity completion, exact signed/reflected clocks, boundary addresses and 100-digit inputs; included in the 4094 law-interface checks.",
+      "interfaces": [
+        "nfield weighted-remainder-state clock M signed-address",
+        "nfield weighted-remainder-state clock-difference M signed-address"
+      ],
+      "implementation_functions": [
+        "cutoff_difference",
+        "weighted_remainder_law_command"
+      ],
+      "sources": [
+        "src/weighted_remainder_law.c",
+        "src/weighted_remainder_law.h",
+        "src/weighted_remainder_clock.c",
+        "src/weighted_remainder_clock.h",
+        "src/weighted_remainder_weights.c",
+        "src/weighted_remainder_weights.h",
+        "src/weighted_remainder_cylinder.c",
+        "src/weighted_remainder_cylinder.h",
+        "src/weighted_remainder_exact.c",
+        "src/weighted_remainder_exact.h"
+      ],
+      "checked_oracles": [
+        {
+          "source": "test/test_weighted_remainder_law.py",
+          "sha256": "5b782f5238f3b576626f84f7320c630e79a3112e3f47fb615e1d77668eb7a9a9",
+          "checks": 4094,
+          "domain": "Explicit finite domains, rejection and correspondence cases listed in the oracle and review.",
+          "independence": "Independent defining sums, exact rational/reference arithmetic and separately implemented transcendental evaluations; no finite result proves an asymptotic.",
+          "included": true
+        }
+      ]
+    }
+  },
+  "rows": [
+    {
+      "id": "result-01",
+      "labels": [
+        "thm:mass"
+      ],
+      "statement_sha256": "bcec5115b4e9b8f902551ac1022894c4ee15403a547ee8c185fe1733c44013fc",
+      "objects": [
+        "weights",
+        "capacity",
+        "boundary_measure",
+        "midpoint_response"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-02",
+      "labels": [
+        "cor:budget"
+      ],
+      "statement_sha256": "23e38dbce4d8abd95d834bab439f5c3848e035b9ed35c8eb25e8717e2be5d1a8",
+      "objects": [
+        "weights",
+        "mass_inverse",
+        "capacity"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-03",
+      "labels": [
+        "cor:leading"
+      ],
+      "statement_sha256": "5149c6a4ea680547abcdc7a6c2b6967a33c176bd88ed1d984a95783c50647957",
+      "objects": [
+        "capacity",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-04",
+      "labels": [
+        "prop:stationary-age"
+      ],
+      "statement_sha256": "f41c8445052aad1558c2cb03e8b38dfe4c02244989c5079e979365c4b8168405",
+      "objects": [
+        "stationary_age"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-05",
+      "labels": [
+        "lem:covariance"
+      ],
+      "statement_sha256": "1157f9e0abb8e89a610fe4675dd135d7bb2f67fa02d3032bbf3ac073761df3a7",
+      "objects": [
+        "remainder_covariance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-06",
+      "labels": [
+        "thm:potential"
+      ],
+      "statement_sha256": "24a9e3576ff90484fa36efb8354801a096e62f6364266d7e49aca33a6c688652",
+      "objects": [
+        "potential_variance",
+        "clock_state"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-07",
+      "labels": [
+        "prop:criterion"
+      ],
+      "statement_sha256": "10952b8bd08d69dff084f3271f97928256fa3da7d20e1d8ae3c06b7d32887233",
+      "objects": [
+        "general_weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-08",
+      "labels": [
+        "prop:perturbation"
+      ],
+      "statement_sha256": "005268e1840eb2d4f0e36090a31ee8d23ad8cbb939f74e0d1db6333207aac828",
+      "objects": [
+        "perturbation"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-09",
+      "labels": [
+        "thm:coboundary"
+      ],
+      "statement_sha256": "c3ea0756f9c28a6676e259274288354e03789a7aeebddd30606eef4077d30327",
+      "objects": [
+        "reset_blocks"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-10",
+      "labels": [
+        "prop:g-cov"
+      ],
+      "statement_sha256": "2b625e7bc8aebd5480a67fde63b0e3667627892ddf11466ccea0eb5eddf9ad92",
+      "objects": [
+        "increment_covariance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-11",
+      "labels": [
+        "thm:integer-g"
+      ],
+      "statement_sha256": "43b695df772e155671514bab1efd44f3c2d0384678175f44f1d6e53bb98c19e8",
+      "objects": [
+        "empirical_laws"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-12",
+      "labels": [
+        "thm:intrinsic"
+      ],
+      "statement_sha256": "949adf4fed414bddf8fd586390ffb1d20a0fb27f0aaf1cb532da9f80701b1c50",
+      "objects": [
+        "intrinsic_tests"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-13",
+      "labels": [
+        "prop:spectrum"
+      ],
+      "statement_sha256": "e02c6bc2b90cf6a87f43c80acb447bac6139b39626a641d62ae7bbbc49884610",
+      "objects": [
+        "conductor_rows",
+        "fourier_spectra"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-14",
+      "labels": [
+        "lem:mass-inverse"
+      ],
+      "statement_sha256": "e4fdd0c30ab8a863d2511e9aee32f1e53a4085ede7b250db6466aca4d28e5a49",
+      "objects": [
+        "mass_inverse"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-15",
+      "labels": [
+        "prop:amplitude-refinement"
+      ],
+      "statement_sha256": "1b4e5fece0b2aa79f5ac15a85d72dc0b65a61f848f3a8d6cb1bd080904b4b25d",
+      "objects": [
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-16",
+      "labels": [
+        "prop:amplitude-expansion"
+      ],
+      "statement_sha256": "dc27ec2c04158a90a0da604abc0256f281e901b074478cc825b7c3f67fd3e559",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-17",
+      "labels": [
+        "thm:spectral-tail"
+      ],
+      "statement_sha256": "bb1a77abceccf50d1e5233d7057311ab3ad22a93f2953c3020f1c60329b04b29",
+      "objects": [
+        "spectral_tail"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-18",
+      "labels": [
+        "thm:mixed-moment"
+      ],
+      "statement_sha256": "a301e39b159a7ea94c72c88099c933eeb65e2a47fcaf945cff44383e86eb2822",
+      "objects": [
+        "mixed_moments"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-19",
+      "labels": [
+        "prop:cylinders"
+      ],
+      "statement_sha256": "310d7070ba2a0ef6344fad5f385005cefd63db3eab6a246afcbba4ae0f1e687a",
+      "objects": [
+        "cylinder_means"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-20",
+      "labels": [
+        "thm:max-order"
+      ],
+      "statement_sha256": "5e31c9ff9fabeb3e27bc2b3e09ac66af016c414bbf814cf9cc6244db90ff62a5",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-21",
+      "labels": [
+        "lem:positive"
+      ],
+      "statement_sha256": "2b1e376cd3183b5b39a0d20a35bbfc80d96c9921297e237be8a38b3946996294",
+      "objects": [
+        "conductor_extrema"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-22",
+      "labels": [
+        "thm:finite"
+      ],
+      "statement_sha256": "340d2228c742e40ccab23d944030964448db87ed775b7048c0f292a9f849a67a",
+      "objects": [
+        "conductor_extrema"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-23",
+      "labels": [
+        "prop:stability"
+      ],
+      "statement_sha256": "50c2f05c30500a6b97357af546c35e93976384798f78ef05218257f2b64dc9e0",
+      "objects": [
+        "stability",
+        "cylinder_means",
+        "conductor_extrema"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-24",
+      "labels": [
+        "thm:tails"
+      ],
+      "statement_sha256": "015f55d8c7dd28e31cb8bc9ea1d03ffb7030c8bd461c5bb208731ab28deaefe4",
+      "objects": [
+        "stationary_tails"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-25",
+      "labels": [
+        "lem:activation"
+      ],
+      "statement_sha256": "bc8cc8c33f82a33779def4b52d1f48a817fe098bdaabc43d7280104b19f17ed1",
+      "objects": [
+        "activation"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-26",
+      "labels": [
+        "thm:concentration"
+      ],
+      "statement_sha256": "474aaf3c3cc21ca372113954dd96101cf7bd169dce88ec9dc8559e33b506d6da",
+      "objects": [
+        "concentration",
+        "characteristic"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "result-27",
+      "labels": [
+        "thm:singularity"
+      ],
+      "statement_sha256": "0a2cbce58ec9b941731193edb7c13383cdc5f7b53c50524bdf7866c2e7cabd59",
+      "objects": [
+        "integer_singularity"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-001",
+      "labels": [
+        "eq:capacity-intro"
+      ],
+      "statement_sha256": "a2f003aec4b2771bb9879385f05dc8513f468f6ea72fa122cf73ce693de8e75b",
+      "objects": [
+        "capacity",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-002",
+      "labels": [
+        "eq:weights"
+      ],
+      "statement_sha256": "31d4d092a8dca9de2a493043bdb8b95befd475289231567de112b46b1720015a",
+      "objects": [
+        "weights",
+        "capacity"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-003",
+      "labels": [
+        "eq:central"
+      ],
+      "statement_sha256": "bb02546a812cf8e07d8723985c327efec02b27017f44d562aa11267fd31ec809",
+      "objects": [
+        "weights",
+        "capacity"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-004",
+      "labels": [
+        "eq:budget-intro"
+      ],
+      "statement_sha256": "8ab39a289d053b054e6591388fc22aeeda2abf47b7a72fc50a70986a8a574bf6",
+      "objects": [
+        "weights",
+        "capacity"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-005",
+      "labels": [
+        "eq:YM"
+      ],
+      "statement_sha256": "ab1e950dcdb40084550129b5f3804365e3bb171af3183112c3c55828027c806c",
+      "objects": [
+        "clock_state"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-006",
+      "labels": [
+        "eq:main-potential"
+      ],
+      "statement_sha256": "9f953a5636879af870d928682dd36bd39b6dff5a84fdccd67c0453a15919e3cf",
+      "objects": [
+        "reset_blocks",
+        "potential_variance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-007",
+      "labels": [],
+      "statement_sha256": "c1036cdd114d826132323d1cd89f21b065c9f0e7afc4934d59f262eff9bb4958",
+      "objects": [
+        "reset_blocks",
+        "potential_variance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-008",
+      "labels": [
+        "eq:variance-intro"
+      ],
+      "statement_sha256": "8fd5129fd4a8fb3bef7c91d31c5cc1a8ee04b380de461af18717b326075d621a",
+      "objects": [
+        "potential_variance",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-009",
+      "labels": [],
+      "statement_sha256": "bc26fbfec7a78580d920da40dfc0e5fdf2685d391d8bdefb9a81421d20543fa8",
+      "objects": [
+        "midpoint_response"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-010",
+      "labels": [],
+      "statement_sha256": "13e125d4aafeb76125208cd0e3c5e47ccf1554b3fc3d42047080707b1d21e252",
+      "objects": [
+        "floor_response"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-011",
+      "labels": [
+        "eq:boundary-straightening"
+      ],
+      "statement_sha256": "3d36866af8259ee42a6282a055e9aea6b93d6d19c0dbc5a208ab90494308deaa",
+      "objects": [
+        "floor_response"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-012",
+      "labels": [
+        "eq:boundary-measure"
+      ],
+      "statement_sha256": "f96e4c46a3751d011152bfc559293647e5f3bff1b48ac365fe9832389bf96365",
+      "objects": [
+        "boundary_measure"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-013",
+      "labels": [
+        "eq:boundary-energy"
+      ],
+      "statement_sha256": "cd2cdf0712337b5be248e415765079fc7ed3f584c49f21e2ca26ed7af9b4fcb3",
+      "objects": [
+        "boundary_measure",
+        "midpoint_response",
+        "capacity"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-014",
+      "labels": [],
+      "statement_sha256": "60554f0a6dccb18cc5f51e50a7599a7c9dbfaa3524b0bf7a17d13a3ca812a29f",
+      "objects": [
+        "midpoint_response"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-015",
+      "labels": [
+        "eq:ramp-gram"
+      ],
+      "statement_sha256": "efb41231d8d04dcd6eb9164140632841b09780613a8bc4b540a2e8d146286f98",
+      "objects": [
+        "midpoint_response"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-016",
+      "labels": [
+        "eq:completed",
+        "eq:readout",
+        "eq:increment"
+      ],
+      "statement_sha256": "75e95960e7fd818d0cd4e14004afb00c362b88dba8bb6fffc15bf878f83a1dde",
+      "objects": [
+        "capacity",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-017",
+      "labels": [],
+      "statement_sha256": "dd8befabd50da46a546bd8074753235db35ac3ad0fa2d41496d410ad19552232",
+      "objects": [
+        "primitive_tree",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-018",
+      "labels": [],
+      "statement_sha256": "09540cf175ba87daa5fd06acdb602d9a51a2f92fcf82dbc29cc183342abbb17a",
+      "objects": [
+        "primitive_tree",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-019",
+      "labels": [],
+      "statement_sha256": "aa203cd771656275cc4df5378a65d88189a593d77f7b889c8080f1ec577f85cc",
+      "objects": [
+        "primitive_tree",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-020",
+      "labels": [],
+      "statement_sha256": "ef0e19c7ae3b4f1573b1066e8dcb0dd832413ca4ded888fdd7d8a9620b73ac19",
+      "objects": [
+        "weights",
+        "capacity"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-021",
+      "labels": [],
+      "statement_sha256": "22742aaa9fcc108d5fcbea88b327326ada1892cf1cd41dad86c0d123217d267d",
+      "objects": [
+        "weights",
+        "capacity"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-022",
+      "labels": [],
+      "statement_sha256": "a53706231c9d0169138c295ab421ae42bfdd3004d00724ac75c35d08a2565265",
+      "objects": [
+        "stationary_age",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-023",
+      "labels": [],
+      "statement_sha256": "d1749674f9e55c40effad408fd5fda0a43e930201322122b6b9a5e62697cfba9",
+      "objects": [
+        "capacity",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-024",
+      "labels": [],
+      "statement_sha256": "98978a713a4d1178e3d504823fffafa59d767b82b235c68481a43e01cbf9d60e",
+      "objects": [
+        "capacity",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-025",
+      "labels": [],
+      "statement_sha256": "00073bcec1052e24c19eca575a7b9d88711c7734f581d2325e8acb9aabea922f",
+      "objects": [
+        "stationary_age",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-026",
+      "labels": [
+        "eq:stationary-age"
+      ],
+      "statement_sha256": "5489205fd0bde4bb84f9d84a54586506e137e6347de6c531f40b9f01d6e89903",
+      "objects": [
+        "stationary_age",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-027",
+      "labels": [],
+      "statement_sha256": "b6c551435a46c24f4bf79044da5ffb14de0a8de97d0111644a7dc4ba20901283",
+      "objects": [
+        "stationary_age",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-028",
+      "labels": [],
+      "statement_sha256": "315b608878082f54452f5debfd33bd3f1c19d6388cee9e8199640735f4003ebc",
+      "objects": [
+        "stationary_age",
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-029",
+      "labels": [
+        "eq:moving"
+      ],
+      "statement_sha256": "a5bf6ff4bba3cc304a45a95925b1e031f1582e05acad95e4b2374d44e2d5807e",
+      "objects": [
+        "integer_singularity",
+        "clock_state"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-030",
+      "labels": [
+        "eq:remainder-cov"
+      ],
+      "statement_sha256": "7246b92eda478415e77faee8da9f62d5e2120b65c5a5932b1f7e72ce8e09058d",
+      "objects": [
+        "remainder_covariance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-031",
+      "labels": [
+        "eq:general-variance"
+      ],
+      "statement_sha256": "99be6d51fc90d11fa740d8e5d6af193b61abf4896098dfe7d1640f6e7161377c",
+      "objects": [
+        "potential_variance",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-032",
+      "labels": [],
+      "statement_sha256": "7877b5db63282b3cf321c40e0c07523cc4431f76e70683ff37a2372dbf7ae540",
+      "objects": [
+        "potential_variance",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-033",
+      "labels": [
+        "eq:tail-mass"
+      ],
+      "statement_sha256": "ac9f472e9d3348a7290f942b85b01d2e741f6e13f7a3c89369233df408bd79a2",
+      "objects": [
+        "potential_variance",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-034",
+      "labels": [],
+      "statement_sha256": "a6eee26f6c398189cd9b014fbbb291260ea1cea7f0987195fbdaba4509e9a6d6",
+      "objects": [
+        "general_weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-035",
+      "labels": [],
+      "statement_sha256": "d0f920b1a5555ec4c4d2cb01bfdd930a853546d990717e84d29fbe8d7ec6f9ce",
+      "objects": [
+        "perturbation"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-036",
+      "labels": [],
+      "statement_sha256": "efb934dd249f374b29bf0018e9282760891e2326ef094970ee51c832f521a5f9",
+      "objects": [
+        "perturbation"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-037",
+      "labels": [],
+      "statement_sha256": "e344109a00cd464da2c60510fe1aadee7936d81ca727ca13c4fac595c645cbf9",
+      "objects": [
+        "reset_blocks",
+        "potential_variance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-038",
+      "labels": [
+        "eq:block"
+      ],
+      "statement_sha256": "dfb393182cbfa26bb44e5aa20317a2f0df4178c9dda017ad793717a1335529b0",
+      "objects": [
+        "reset_blocks",
+        "potential_variance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-039",
+      "labels": [],
+      "statement_sha256": "9910f4df51f2bd650cbba49406c4cf1d4334d46582ff669574bea4b8e17539e4",
+      "objects": [
+        "reset_blocks",
+        "potential_variance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-040",
+      "labels": [
+        "eq:g-cov",
+        "eq:Ram-cov"
+      ],
+      "statement_sha256": "2bc21a5b045fa5ec41f8d5c4352cb109a479f2506d954262e002f2bbac5e3d5f",
+      "objects": [
+        "increment_covariance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-041",
+      "labels": [],
+      "statement_sha256": "79ea93cef8d1ff15b3efcc6c471d5dcd2423061358a611019b9fa6bc3fe09d3c",
+      "objects": [
+        "increment_covariance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-042",
+      "labels": [
+        "eq:CRT"
+      ],
+      "statement_sha256": "4b4a963e2cc8b4aea40c5720a9daad8382e8abf684fe6fa10e5e7b61cc95db96",
+      "objects": [
+        "empirical_laws"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-043",
+      "labels": [
+        "eq:weak-boundary"
+      ],
+      "statement_sha256": "8455635a67e618f0b73821f56f7b9c7e77fe1b5caefb1f865924ba27a5560bc2",
+      "objects": [
+        "intrinsic_tests"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-044",
+      "labels": [
+        "eq:rows"
+      ],
+      "statement_sha256": "6dfbf0248092c38d4aff9ab19a6e9db62af7d1bb37a7bc6a1b13045604ea281e",
+      "objects": [
+        "conductor_rows"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-045",
+      "labels": [
+        "eq:row-split",
+        "eq:carrier"
+      ],
+      "statement_sha256": "5764b4c50f1a05de2fd3ed72f6666a2da821bf7461053aed782434aef5db2e98",
+      "objects": [
+        "conductor_rows"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-046",
+      "labels": [
+        "eq:row-norms",
+        "eq:fourier"
+      ],
+      "statement_sha256": "49be01c4c32febba51996e0730d1640ac9f7c4473ad128cd35c1f3ed648a9f7c",
+      "objects": [
+        "fourier_spectra",
+        "conductor_rows"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-047",
+      "labels": [],
+      "statement_sha256": "d060a53862aa3fc4ac46d0a921e172371cde94b4085bd75a9fc867151391a973",
+      "objects": [
+        "conductor_rows"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-048",
+      "labels": [],
+      "statement_sha256": "5950a44215f10dd6f129613cd89ddd49e70e2f13948e566f07ecc50221c241ae",
+      "objects": [
+        "fourier_spectra",
+        "conductor_rows"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-049",
+      "labels": [],
+      "statement_sha256": "dd2276c4dfe13cbd06176fd933f57b58630c867a7e4055ef07b7ab1b2a315d81",
+      "objects": [
+        "mass_inverse"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-050",
+      "labels": [],
+      "statement_sha256": "6b3d112374fe2baf5ec9f1881d66b142af951b159349364c63b8e1ae32b0ffdc",
+      "objects": [
+        "fourier_spectra",
+        "conductor_rows"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-051",
+      "labels": [
+        "eq:dedekind-gram"
+      ],
+      "statement_sha256": "d0c22838d27e349f7b5d4c829c84d927753a7c0c74984482083ad3e05b673346",
+      "objects": [
+        "dedekind_gram"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-052",
+      "labels": [
+        "eq:amplitude-defs"
+      ],
+      "statement_sha256": "5b522bde9ec2cdbfd3253afb140c3aa5fa74aa2d1aeaef2d4ac173f7ba711b6c",
+      "objects": [
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-053",
+      "labels": [
+        "eq:amplitude-transform",
+        "eq:amplitude-budget"
+      ],
+      "statement_sha256": "79d9d7f5366d3dae674d6f9dd87244562773266c44c515f0ac8ab19836515ac3",
+      "objects": [
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-054",
+      "labels": [],
+      "statement_sha256": "a3f58d7a0dd81dda033066df747b68fd7c9afbbc488f5a46a910c9c6e76d88c2",
+      "objects": [
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-055",
+      "labels": [],
+      "statement_sha256": "5734f0b55ea125cf45a91a79bf069cf7fc916ed3e4a6d4734d15544b08231e3f",
+      "objects": [
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-056",
+      "labels": [],
+      "statement_sha256": "58a2bdef9cc2ed54158ce8666f612acc91dc2cce8e864ff7d1a0272844659088",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-057",
+      "labels": [
+        "eq:eta-uniform"
+      ],
+      "statement_sha256": "73bfed38ba16db03086a58cad48253ebcb8f610759dbfa2d062335c74dcc1c7b",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-058",
+      "labels": [
+        "eq:eta-error"
+      ],
+      "statement_sha256": "9b25a376fcc45189f446130d1a9c2bfea885758add39a9b9ad1f94784813d1fb",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-059",
+      "labels": [],
+      "statement_sha256": "55a2223ee669e8b002b6fb8f71c1d97edfbe215e2147cf99a244d6968a6e1a46",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-060",
+      "labels": [],
+      "statement_sha256": "c75675ebd9b104272ffb444526ec36b0d59eee905e5e010a935701c5d947d998",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-061",
+      "labels": [],
+      "statement_sha256": "9dd56bf794fa4e7faef8fdc01903dae0a4b56001860811ce0493b110e3b78dee",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-062",
+      "labels": [
+        "eq:eta-prime-exact"
+      ],
+      "statement_sha256": "d25492c9923c39d72df752f3098f981cbbf0e27acf941489cafe950c646ea6a9",
+      "objects": [
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-063",
+      "labels": [],
+      "statement_sha256": "a8e020e84acdaa47b07dae1aa58893600366565d8e5b79f94ce2c31a716d2cd6",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-064",
+      "labels": [],
+      "statement_sha256": "83d65278365f53eae8977ecdc7fa9f5d46247dc204620c34d578d69048a70f94",
+      "objects": [
+        "spectral_tail"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-065",
+      "labels": [
+        "eq:sharp-spectral-tail"
+      ],
+      "statement_sha256": "cd0a49d08709cf71498cad09f971a1c6244feb9fa9516ab5106c774f3542d80e",
+      "objects": [
+        "spectral_tail"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-066",
+      "labels": [],
+      "statement_sha256": "5f4a652a7636819b2c7e5a30becc8cb494c5974baa9f6e5c4ee4957aa30a3942",
+      "objects": [
+        "spectral_tail"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-067",
+      "labels": [],
+      "statement_sha256": "92298b4bad9193a8f41feee098e78181912c382d60439532543d837f6d34bd74",
+      "objects": [
+        "spectral_tail"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-068",
+      "labels": [],
+      "statement_sha256": "bb5b7ba62aac2710c0606a192cd02419a988875d6e3ee21d40e74f993667aaa5",
+      "objects": [
+        "spectral_tail"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-069",
+      "labels": [],
+      "statement_sha256": "cd165b3947579f4628d62539a085c5cb5aa9e8356b296cddaf1cb63b378ea0be",
+      "objects": [
+        "spectral_tail"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-070",
+      "labels": [
+        "eq:mixed-moment"
+      ],
+      "statement_sha256": "b5d1d5ea33eeb4eb81b65a78491decb85984ca50fef9532b6ff762ac13e9064e",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-071",
+      "labels": [],
+      "statement_sha256": "4f2c47dad22ca254a14a0e6dac31d684df1b41e8173d727d8c7e361c091de718",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-072",
+      "labels": [
+        "eq:harmonic-root-identity"
+      ],
+      "statement_sha256": "fa480ce4def6ddcc328eb7a851767f413a4ee7d3911b123726d4a425e064ac33",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-073",
+      "labels": [],
+      "statement_sha256": "928aaa727e6b43a865d34bf091a7344a225cbb29be8b2efdd937bd900775721e",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-074",
+      "labels": [],
+      "statement_sha256": "dad66334c5fc8b3db4c463620c5cd7013e150648e141a64c1178da56245b02db",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-075",
+      "labels": [],
+      "statement_sha256": "e9b45f93b5a06bbcf9d31e6366866879fd1fdc19dfb6f15414724f82eaf64d95",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-076",
+      "labels": [
+        "eq:eta-cotangent"
+      ],
+      "statement_sha256": "990b3f50dc8d56ba79d778a233ff8828fc6af3ce809d2e49ab5d5b79473eba0c",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-077",
+      "labels": [],
+      "statement_sha256": "d18b4cbe8584547abd2b60238896d4c7f4292cf61b8e688e23bcd766e50583d0",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-078",
+      "labels": [],
+      "statement_sha256": "f38f117c879da947d5ace1ecd0f8efe1101eaddc0cc00594d860de02e87f4769",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-079",
+      "labels": [],
+      "statement_sha256": "00d29b364ecc91931c60378ab0a055f754e30c6bdbb7554edcd22681328f41cb",
+      "objects": [
+        "mixed_moments",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-080",
+      "labels": [
+        "eq:cylinder",
+        "eq:CL"
+      ],
+      "statement_sha256": "65650d44f63bfa219bfc0fd7d8dd444771df6b6e641ef1f234c29abdfa20edf0",
+      "objects": [
+        "cylinder_means"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-081",
+      "labels": [],
+      "statement_sha256": "d84443bf24480c2d7ddf291a67c8969871fb46388f124ad8a7fb0bbd0da0c62c",
+      "objects": [
+        "cylinder_means",
+        "potential_variance"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-082",
+      "labels": [],
+      "statement_sha256": "21686a7bb4f9ad5befac6a90a23f47663dda5c34a23933027b63c6dce0a9dd8a",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-083",
+      "labels": [],
+      "statement_sha256": "3bdadfaedace9e7fa36f0936b890e03aa956c2b5bfb1778ff81307a74e7bb42b",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-084",
+      "labels": [
+        "eq:harmonic-local"
+      ],
+      "statement_sha256": "42036174f36d3610a55b6347fe15c79ef4f1f52fcc39604b7749ea1b9125494c",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-085",
+      "labels": [],
+      "statement_sha256": "a540cd8e197b9dd22a8b4480f54f4ab4b006f7b95cf2bd255a3608cd1e5ffedd",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-086",
+      "labels": [
+        "eq:f-euler"
+      ],
+      "statement_sha256": "5f59c47c7697c22d38599fc3eb1c620ef17f415b7fda67f9497fd436ac20b164",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-087",
+      "labels": [
+        "eq:mertens"
+      ],
+      "statement_sha256": "11908f98169d0abf8983ec4228bc7ae20c80e94854cbe82bda0169a6e16cde4b",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-088",
+      "labels": [],
+      "statement_sha256": "f5a170f8c68370f64e7e87f268833cebca78b94534d18922e469b73d4e578ea1",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-089",
+      "labels": [],
+      "statement_sha256": "27eb8532e6e7cb8f8b1d11a8d38ba04dceb2b8ef30d92b1c57e5c4d75b5b22da",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-090",
+      "labels": [
+        "eq:C-euler"
+      ],
+      "statement_sha256": "7c7d42774e74e00cd09c70035c12b4bc5f442d6d68a410ecb2b292134766e528",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-091",
+      "labels": [],
+      "statement_sha256": "9ac0550320e86abe49ef1dd42ce66ca691ccb2f32134bb547b37083d4dfd6953",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-092",
+      "labels": [],
+      "statement_sha256": "6ef7489c338862970ff9b0b5445b6fdcbfbc7194b41075367b8aa8682a34d546",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-093",
+      "labels": [],
+      "statement_sha256": "687c8905bd1073be9bd718e3aa28629e99c2ee62fe1d9f6ee7101ebbf1a401aa",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-094",
+      "labels": [],
+      "statement_sha256": "83f80f2f872bdd9fde36da5f391f9422fa1a3e8f74a10929ef8dd04cd7f1d25f",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-095",
+      "labels": [
+        "eq:prime-power"
+      ],
+      "statement_sha256": "24fd835239d925a1faa13f811454fdb3b4f080f8e4acb5588b9eee711de86d3d",
+      "objects": [
+        "maximal_alignment"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-096",
+      "labels": [
+        "eq:FQ"
+      ],
+      "statement_sha256": "3ce7c6cf0b0a4ebe646a6323f2fdac11db3e57c6cf513778082525070c528d50",
+      "objects": [
+        "conductor_extrema",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-097",
+      "labels": [],
+      "statement_sha256": "0e66e0b551353402955abb9359f3fdb05acf15eacc424973405bcc2e6822da04",
+      "objects": [
+        "conductor_extrema",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-098",
+      "labels": [],
+      "statement_sha256": "2e73a056bff57d345c678530c988eac73caf1a3d901a4fd8ae77c88707f250f8",
+      "objects": [
+        "weights"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-099",
+      "labels": [],
+      "statement_sha256": "0ea4e3f0b93a0216556ef2c0ddfd9ef5d0045116754874f33fb9d4ffb0f267d2",
+      "objects": [
+        "conductor_extrema",
+        "full_amplitudes",
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-100",
+      "labels": [],
+      "statement_sha256": "665d2b6bb9d1a9985f822166e8302a5d8e730ac7bf914a12d7578c45525d5994",
+      "objects": [
+        "conductor_extrema",
+        "full_amplitudes",
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-101",
+      "labels": [],
+      "statement_sha256": "b5e8d73d034d86404166db7bdba8f671ef7af818e023085308b3700e231941a9",
+      "objects": [
+        "conductor_extrema",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-102",
+      "labels": [],
+      "statement_sha256": "104b27ad362f18a7e184a8c247a78b6d59d1a437042fb4f3fdbb6b020cd0cb6d",
+      "objects": [
+        "conductor_extrema",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-103",
+      "labels": [
+        "eq:gap"
+      ],
+      "statement_sha256": "f80421d4c8e4c55b6dcc2bd8db916d97c0e9a15db9f359c86a55d2b9793fba5b",
+      "objects": [
+        "conductor_extrema",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-104",
+      "labels": [],
+      "statement_sha256": "e707a906baef72fa0c6628af37f3b89cbcb8e7559f1d476a12e204b9e6a98551",
+      "objects": [
+        "conductor_extrema",
+        "full_amplitudes"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-105",
+      "labels": [
+        "eq:eta-prime"
+      ],
+      "statement_sha256": "4bd852c2135e4bafbfd7c19ee83b16bbfb8349ed99ba0f790d296e5b501bd375",
+      "objects": [
+        "amplitude_expansion"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-106",
+      "labels": [],
+      "statement_sha256": "35ec4db28848bb88299e5246b7c0c017702d68f6a5513352f9e53e9ccc02d86a",
+      "objects": [
+        "conductor_rows"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-107",
+      "labels": [],
+      "statement_sha256": "83a2629ad066f603fdf034a5348666e9ba47b4f248eba8d813aac1d2ef41b5fc",
+      "objects": [
+        "conductor_rows"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-108",
+      "labels": [],
+      "statement_sha256": "939732461270eec255e35ffcaed087514785d38e639fa8880c5bf74c70ec7ce6",
+      "objects": [
+        "stability",
+        "cylinder_means"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-109",
+      "labels": [],
+      "statement_sha256": "23cf113b31013c6aa39836a0b78f212b7df1f7146d74bb0324c048149919c336",
+      "objects": [
+        "stability",
+        "cylinder_means"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-110",
+      "labels": [
+        "eq:near-one",
+        "eq:F-one"
+      ],
+      "statement_sha256": "296060aadf25cacb52d50863d273636c3743ae38521c599b307d49063fc6771c",
+      "objects": [
+        "stability",
+        "cylinder_means",
+        "conductor_extrema"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-111",
+      "labels": [],
+      "statement_sha256": "32b67346aacd4f4d384f8221b5a852a26993c6e84527b2c1f9b7a8084540ecab",
+      "objects": [
+        "cylinder_means"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-112",
+      "labels": [],
+      "statement_sha256": "b436b7fedbe2626faa67275a008246d145d31ba2a220a507948eab527c816382",
+      "objects": [
+        "stationary_tails"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-113",
+      "labels": [],
+      "statement_sha256": "6e34eed3001d99b4d16af1d0338a9b02faf8465d98d497efa994bd7a65a5b8dc",
+      "objects": [
+        "stationary_tails"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-114",
+      "labels": [],
+      "statement_sha256": "529a9841922fbd402d0982e8b67979f18c6a746602c44917fcab6c96672f71c5",
+      "objects": [
+        "stationary_tails"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-115",
+      "labels": [
+        "eq:concentration"
+      ],
+      "statement_sha256": "6dee8ab43eae229f0dfbd15494df67415c3c962e6e686a945c2cf2be31c71555",
+      "objects": [
+        "concentration",
+        "activation"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-116",
+      "labels": [
+        "eq:block-concentration"
+      ],
+      "statement_sha256": "6503ff33517ee4c26630a9acbb2f15cc7d4c9b3aa8d5297744076a53ef353772",
+      "objects": [
+        "concentration",
+        "activation"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-117",
+      "labels": [],
+      "statement_sha256": "7bc6ba6eef11342f21742b4c2503309580da20ac81ff6acbc79967ee75ec2410",
+      "objects": [
+        "concentration",
+        "activation"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-118",
+      "labels": [
+        "eq:characteristic"
+      ],
+      "statement_sha256": "7306c66e040c618836894c5cf20bfd129ac4d50bdf2a591d942d9f4861a16e61",
+      "objects": [
+        "characteristic"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-119",
+      "labels": [],
+      "statement_sha256": "6cd1d0d23b577259132578f3c3e478c62c887ba7f843d05eece9128ed270bc4c",
+      "objects": [
+        "concentration",
+        "activation"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-120",
+      "labels": [
+        "eq:singularity"
+      ],
+      "statement_sha256": "c01de8e027648587650559f830a0267370e76912784dc157c766e3ba044d51d9",
+      "objects": [
+        "integer_singularity",
+        "clock_state"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-121",
+      "labels": [],
+      "statement_sha256": "248a09ae19ee13325d56ad7cfafc56cbb382e9bf4ba47fb20597fd2281a48dd7",
+      "objects": [
+        "integer_singularity",
+        "clock_state"
+      ],
+      "computational_status": "complete"
+    },
+    {
+      "id": "display-122",
+      "labels": [],
+      "statement_sha256": "9f7d753e8f3690d3ed3cf72a1aeaef864c8ba3bcb5c7073433ac2bedb20caa29",
+      "objects": [
+        "integer_singularity",
+        "clock_state"
+      ],
+      "computational_status": "complete"
+    }
+  ],
+  "source_sha256": {
+    "src/weighted_remainder_primitive.c": "01f478411347cf9d6fc98153c75d2f20b592c03d13984dda36056d1fdf1041d3",
+    "src/weighted_remainder_exact.c": "333f53aceb262cfaee9fb36e39d6e802b82142dd24539d60dcab53e2b03d6f43",
+    "src/weighted_remainder_state.c": "14bca8ab89e1b676c3177bfc256d8f476bcfc8e945582d1467cfd35302a2e6ea",
+    "test/test_weighted_remainder_primitive.py": "086f387291167aaffbd57d34bafa6132f7a16ee6904750776afb56816bf15ab3",
+    "src/weighted_remainder_pairing.c": "100c1c437cccb0d436bcf7b59c214c45ab356bd30909515b5f77249193205b5d",
+    "src/weighted_remainder_exact.h": "cd5f0609ed9efbe9d3e0f58e9801367e50763a22d1fdc96cba8402ed417578d9",
+    "src/weighted_remainder_pairing.h": "84a2d6b3253d1ebd9a8d0503838f8c39b75783b72022f502b50c9e89b96bae8c",
+    "test/test_weighted_remainder_exact.py": "4dc3714ad3ecdce440bec2e82d15fd852cf634be0c221ad0c2bc95b07a293d06",
+    "test/test_weighted_remainder_pairing.py": "e6ee0261f776e7d04b1bd917fd23035163ffac89eae5d9e3a5860551d80ec778",
+    "src/weighted_remainder_floor.c": "f6d0ff4d1f1b7926769bf4384847922218a62470d746cac7af5c8ad324b49d97",
+    "test/test_weighted_remainder_floor.py": "e175757d939cabcd7a1ef8e35a088db5e1ed64789ef77241c5007949058f291a",
+    "src/weighted_remainder_clock.c": "1c80028740a9f1b2fd3be1f6a1cabc64a332ed56be0fb50b6f4e3b1b1d1486c1",
+    "test/test_weighted_remainder_clock.py": "8d92c73d734c6689bf28f893961221d2537543ca47e9cb90fb7dfe8b89e97e21",
+    "src/weighted_remainder_weights.c": "6ddaefe0288c2e4c53bc83d45df0ae8cd13f28ee1f13113a9744694c1d8ac18f",
+    "test/test_weighted_remainder_weights.py": "c8acbd9a463c6ea2867a10693d5167876d1c61beb928680af7d0802fcebf082c",
+    "src/weighted_remainder_joint.c": "07bae4b6c85c9ea9afa631665a3ad51e050dea6fd598668904883c684d8b7368",
+    "src/weighted_remainder_joint.h": "89f74d736bcb43cdaf979af1497b17ac0be5427f548ddcf1557a4577086eb586",
+    "test/test_weighted_remainder_joint.py": "83150431a782def18d1042656e63623b44197221f563da33a9d45cf12184b6fb",
+    "src/weighted_remainder_increment.c": "bc4d3c58549aa7d25afe359e8951c179bb37bcb2b7736c08bf5b231fc8ee1073",
+    "src/weighted_remainder_increment.h": "1c3fe33615f8884aa7be943d87c5c986eed953ba1bad7970237d345d28a8df46",
+    "src/weighted_remainder_rows.c": "64e6e98323f8ef9d3b95e4300996f97f071f59a1c0c8bb7eb24eafa60f63e808",
+    "test/test_weighted_remainder_increment.py": "888d1ea87d2f28206ab0c4c311166d63b0d91b7f8bd9687adfeea4c13a62a3d2",
+    "src/weighted_remainder_rows.h": "968362b45b08ecfee35bbd168000d8ae4d59d6863baab2d64cdfa0872a8bd3e1",
+    "test/test_weighted_remainder_rows.py": "2a4c6f3bd2c2da258ad9e87ed9990c6f090eb1311cd8ba89f6f0031de1c10aed",
+    "src/weighted_remainder_fourier.c": "f8e41a3356f4b1630a6ea476bdffdca152a875b17e222f98c9ae6858e7c61969",
+    "src/weighted_remainder_fourier.h": "bcafe470b38e59d8cccfa4ac3a949b6c76e99608693cda70b5415fb20a885b5b",
+    "test/test_weighted_remainder_fourier.py": "72632353cb2be7ef45ef69740c08d8883d70d394bcd605b7f686811bb7b08e06",
+    "src/weighted_remainder_sawtooth.c": "a32e20694c7038ae43a011c32154e147ba1bd98b16240fb18b73a46a4bde3034",
+    "test/test_weighted_remainder_sawtooth.py": "532dd64156a10cdea5fc88e61ce7f50d884d6ed9bc1360734d7106b9b3976672",
+    "src/weighted_remainder_amplitude.c": "40643253b1893bcd691ea087a17acfaf44c4b944b73a79543c3a3b7925bd306e",
+    "src/weighted_remainder_amplitude.h": "2030598b62407ee00056a0f5104ec96e62ff7889b89fca8bcc6efa8173af34d2",
+    "test/test_weighted_remainder_amplitude.py": "041fbef3f5ff4f7412eaa17e44292a5c2a062819cda1b12e4f10d1586c04f946",
+    "src/weighted_remainder_expansion.c": "3f30a22f0f3fe0fd721848e791370bb654dfa50e40aa69409a71f08ae6fee704",
+    "src/weighted_remainder_constants.c": "6b0583932acc8c04c0695c38a3a57a28400c936a145ecc1122672f89af6c8edd",
+    "src/weighted_remainder_power.c": "c0ee56ad61d38eb6177e1275f5a63a4c1a8b37c5614644ce76aa3ad7e4d9cc26",
+    "src/weighted_remainder_dirichlet.c": "5f6e51fbf01780b407ec8f81ba47d826548ff597b46872c8a55433d9cf82b586",
+    "src/weighted_remainder_expansion_command.c": "57fcf1b1627ef13d805a97d131b27b475b03b1fb12b7f79270cbf261aabbefb8",
+    "src/weighted_remainder_constants.h": "85e9af62e0481f543463befeb8168f90a22ad73a44422dfe3d041b66de8d1edd",
+    "src/weighted_remainder_expansion.h": "84c030864b6572c1c3f5dcb5ffa3d079a6c352f7ca6cfda0546971e41d335e07",
+    "src/weighted_remainder_power.h": "aec333a1dffcd2da16d3c0e83f51500f3b8c3f789658cb2844e17f38100be835",
+    "src/weighted_remainder_dirichlet.h": "f9100cf5b0e48790df4e034afcff4c4f61f8b48f0da653412657e3905ca38cdf",
+    "test/test_weighted_remainder_constants.py": "64352346b6b35ee70b2f214d9b7f8c09e47f81a07adf22fa3494568ff938929d",
+    "test/test_weighted_remainder_expansion.py": "72120b33b1637fc880117f86e7dbbd1239dfa45b1b6119fab77df2e4ca789dc2",
+    "test/test_weighted_remainder_power.py": "daff0906bd33412a9b0307c84b5e7ef615f9c546d7f66c329242c06142ababf2",
+    "test/test_weighted_remainder_dirichlet.py": "39a96bba115d6c7f9b11d050f3a1aecce4ddabb6b3bde174916189d69d135555",
+    "src/weighted_remainder_spectral.c": "1936e7e0d0b18f4478fa7736404418c688e1f7319b62d728a5deaf1c2f03d933",
+    "src/weighted_remainder_spectral_tail.c": "b7396bd1f8b20a84d234c774572718101af1180052fb96f64553a7bcae9bda08",
+    "src/weighted_remainder_spectral_command.c": "59fbd37c52af6b133ff0730cbd7b2b1e98f36f1500132f2d36af292583d44955",
+    "src/weighted_remainder_spectral.h": "628adfc84f9ad6c753c7335601671ad28238027a1626e5dc0ed3736e9056cac5",
+    "test/test_weighted_remainder_spectral.py": "0004f7c5823d6230a6999bb72dda49315eac21498e6f736f344a19bc1efffa4c",
+    "test/test_weighted_remainder_spectral_tail.py": "7392cea582a52f29c039ed253a5029b309329dc9bd977d9ac9d705bc63d5a8c3",
+    "src/weighted_remainder_character.c": "20f9b847f60f09c15e9fe28a6f7412e51240aab6776d0e72aa56db76138b59f2",
+    "src/weighted_remainder_complex.c": "a2685886da9aca793f8fa317026df55daf56f08229997ec1b5f4b468eb3d44c6",
+    "src/finite_character_core.c": "38d5027a0265820c3be7eaedfb43e77703f9f90407a7db1508f9cba927101059",
+    "src/weighted_remainder_cotangent.c": "44851aa416ae06104409a0feabef9ce3da7c86b1d971105aeeb90030ad90dc7b",
+    "src/weighted_remainder_harmonic_root.c": "aed17ad343acda2b3b0445704764a7566690b21ec86b0e851715ef8f0cb4026c",
+    "src/weighted_remainder_small_amplitude.c": "da9170b1890fc3416443b144f7da7f21d0861f0ab20c3dcc6d36751b450ae584",
+    "src/weighted_remainder_mixed_command.c": "ca1038c6d5c4cfa7b6f12c33280a78579cdd9631809f2255a7440142d6766dad",
+    "src/weighted_remainder_complex.h": "a31e650c9f61ada1ede16b9b3f5cf5faf14ee853b4f79f57475fbcd163f7cc57",
+    "src/weighted_remainder_character.h": "99c76fa8fd4b84c79cbba1ac54f96f7c4747958cefe54ac60e61f40278d09c9a",
+    "src/finite_character_core.h": "788eb5020b917e76da52e52f7d2a2a439163e954c2c1dc6ca5112ee087219c94",
+    "src/weighted_remainder_rect_internal.h": "047e31991b2b43c60c7ff9f38cb156518401c5fde1e16ce58c3c45b8e5e776d5",
+    "src/weighted_remainder_cotangent.h": "421c9f331a2b5b7af63a4cef93d0060839b100fd5dc24e22653fc1ca886dacf7",
+    "src/weighted_remainder_harmonic_root.h": "f55e87aaf598045b3048f8e64067a738bc1b9b9add202b2e480f71ea60857d78",
+    "src/weighted_remainder_small_amplitude.h": "3487b87f9a5ee08de54777d10d0b8413b69f144b25585a82a9e9714a0876249c",
+    "test/test_weighted_remainder_complex.py": "7e395db00b92c761e12d176cb1b3e858554cd9911ad676713024ce76d63be17b",
+    "test/test_weighted_remainder_character.py": "3a76a0ef766f1e202301857b04fde177ddeff02e2ecb43c3567a3dd2cbab9b78",
+    "test/test_weighted_remainder_cotangent.py": "70ca06f39a00031b9994919bdb637149cc2289fbf2f5f4294834feb98c6c2a50",
+    "test/test_weighted_remainder_harmonic_root.py": "cb87646e84bc5717ba6cec26cd721faeab2dcde4f0dce0898c6c527aa5638d9c",
+    "test/test_weighted_remainder_small_amplitude.py": "f96b0e636d24b1dff2963959f9ee621fcd186088fd159aeb6719147384a4717f",
+    "test/test_weighted_remainder_mixed_cli.py": "9d0d52f094cd261854a11a91c205e22053bf24db945d32bf7517394544bfddfe",
+    "src/weighted_remainder_cylinder.c": "3ffff1f9224fb440f077b264a9110981b587005e3ff09ae02d8af6e4ad5baaae",
+    "src/weighted_remainder_cylinder.h": "f0e8eaf3cbd5521fcebacde16e5975d68e5d1c9df00abbaecb152a12a5ad6134",
+    "test/test_weighted_remainder_cylinder.py": "13dbf1965baaf14189b01a410d7b3caa849c8e8fac155deafd3b900ed4253e06",
+    "src/weighted_remainder_alignment.c": "06aec8053a93b9fc88f4656b773d17a008da821a09a0ef0ff6971071cab79b06",
+    "src/weighted_remainder_alignment.h": "851bfecab7597515a42c915093a502cdf0d71b55be34efd7c3daa21d4ec014eb",
+    "src/weighted_remainder_alignment_local.c": "bdef0c8f82885867c4bc63805225e1461ea7479cc5709fc074d3eada1063f8a0",
+    "src/weighted_remainder_alignment_local.h": "60765ab09ef21038f9073fc559e9e816187e06d4b3c55379f9a0495fbc94b531",
+    "src/weighted_remainder_alignment_growth.c": "4ce8d02c1b417403afd2d9c358d1a27f4d08abe573c262acb8198ff86f097730",
+    "src/weighted_remainder_alignment_growth.h": "bcf571bfef60e2b257b45fd1668473c99868282ba5ea2e704b014abd3407923a",
+    "src/weighted_remainder_alignment_command.c": "129c7b854234ff730050ac84710326c824a742613bbac1b527ede927c176d364",
+    "src/weighted_remainder_alignment_command.h": "527e3d1386ad8394a01e1ca932d6787ac2615f0b6c3c1e6cdb5706ebee53a7f6",
+    "test/test_weighted_remainder_alignment_local.py": "cda68c10f258b220bc72e0089e34bf0eea662dd93628bbfcbda25578c393ca4d",
+    "test/test_weighted_remainder_alignment.py": "192968674a332d580298990c07bc2f78ce11f9e82da2faf08fe77e0b18ccba9e",
+    "test/test_weighted_remainder_alignment_cli.py": "9123b1befde3d25bcfbf0cb032b427815e8d6459a8633b6f320c90c8cdca8362",
+    "src/weighted_remainder_conductor.c": "a74a939f883f0bd7dd4f8d69c4d3ecbf8afa7426020bf1dd8da5a3cfa63a45f8",
+    "src/weighted_remainder_conductor.h": "f4cdb83823162cb440f368566e8d0ea235bff2d42a4ce482557738e0f6fc8d8c",
+    "test/test_weighted_remainder_conductor.py": "f8fefd1329fc6c543ba57fb231aeefcbabc7e49c9a0cefc93c7997166305c330",
+    "src/weighted_remainder_law.c": "6698f69b209eb5dd1db362823d4f3529a9aa1d8b0d27f45819e93c0e088e897e",
+    "src/weighted_remainder_law.h": "9d39f9a2b10ba593a3bcd1d66c430a6e9e1adfa211dc265f9b31c4024b782548",
+    "src/weighted_remainder_clock.h": "f33ab13f2e1c6ae6db4b12f055789b9e05de0ad82e2f587f4d91bbd61a607d85",
+    "src/weighted_remainder_weights.h": "4f66cce14b439860da4b4eb13610776688495d03e4d7b434eb9c2a69d1043210",
+    "test/test_weighted_remainder_law.py": "5b782f5238f3b576626f84f7320c630e79a3112e3f47fb615e1d77668eb7a9a9",
+    "src/weighted_remainder_activation.c": "9eee31895bdbabcf95f148d302f289a1470f3391e1fcee38e0879b4029704103",
+    "src/weighted_remainder_activation.h": "3c6f9829c59c1db66180c125f03a9f47c9cd2b32c2933b1e83c64b4abb2a85d1",
+    "test/test_weighted_remainder_activation.py": "f8d86bfbd2dae062f3be4c63723225cadb0505699663a2d4b7568f0f9ac54ef1"
+  },
+  "canonical_source_sha256": {
+    "src/weighted_remainder_primitive.c": "01f478411347cf9d6fc98153c75d2f20b592c03d13984dda36056d1fdf1041d3",
+    "src/weighted_remainder_exact.c": "333f53aceb262cfaee9fb36e39d6e802b82142dd24539d60dcab53e2b03d6f43",
+    "src/weighted_remainder_state.c": "14bca8ab89e1b676c3177bfc256d8f476bcfc8e945582d1467cfd35302a2e6ea",
+    "test/test_weighted_remainder_primitive.py": "086f387291167aaffbd57d34bafa6132f7a16ee6904750776afb56816bf15ab3",
+    "src/weighted_remainder_pairing.c": "100c1c437cccb0d436bcf7b59c214c45ab356bd30909515b5f77249193205b5d",
+    "src/weighted_remainder_exact.h": "cd5f0609ed9efbe9d3e0f58e9801367e50763a22d1fdc96cba8402ed417578d9",
+    "src/weighted_remainder_pairing.h": "84a2d6b3253d1ebd9a8d0503838f8c39b75783b72022f502b50c9e89b96bae8c",
+    "test/test_weighted_remainder_exact.py": "4dc3714ad3ecdce440bec2e82d15fd852cf634be0c221ad0c2bc95b07a293d06",
+    "test/test_weighted_remainder_pairing.py": "e6ee0261f776e7d04b1bd917fd23035163ffac89eae5d9e3a5860551d80ec778",
+    "src/weighted_remainder_floor.c": "f6d0ff4d1f1b7926769bf4384847922218a62470d746cac7af5c8ad324b49d97",
+    "test/test_weighted_remainder_floor.py": "e175757d939cabcd7a1ef8e35a088db5e1ed64789ef77241c5007949058f291a",
+    "src/weighted_remainder_clock.c": "1c80028740a9f1b2fd3be1f6a1cabc64a332ed56be0fb50b6f4e3b1b1d1486c1",
+    "test/test_weighted_remainder_clock.py": "8d92c73d734c6689bf28f893961221d2537543ca47e9cb90fb7dfe8b89e97e21",
+    "src/weighted_remainder_weights.c": "6ddaefe0288c2e4c53bc83d45df0ae8cd13f28ee1f13113a9744694c1d8ac18f",
+    "test/test_weighted_remainder_weights.py": "c8acbd9a463c6ea2867a10693d5167876d1c61beb928680af7d0802fcebf082c",
+    "src/weighted_remainder_joint.c": "07bae4b6c85c9ea9afa631665a3ad51e050dea6fd598668904883c684d8b7368",
+    "src/weighted_remainder_joint.h": "89f74d736bcb43cdaf979af1497b17ac0be5427f548ddcf1557a4577086eb586",
+    "test/test_weighted_remainder_joint.py": "83150431a782def18d1042656e63623b44197221f563da33a9d45cf12184b6fb",
+    "src/weighted_remainder_increment.c": "bc4d3c58549aa7d25afe359e8951c179bb37bcb2b7736c08bf5b231fc8ee1073",
+    "src/weighted_remainder_increment.h": "1c3fe33615f8884aa7be943d87c5c986eed953ba1bad7970237d345d28a8df46",
+    "src/weighted_remainder_rows.c": "64e6e98323f8ef9d3b95e4300996f97f071f59a1c0c8bb7eb24eafa60f63e808",
+    "test/test_weighted_remainder_increment.py": "888d1ea87d2f28206ab0c4c311166d63b0d91b7f8bd9687adfeea4c13a62a3d2",
+    "src/weighted_remainder_rows.h": "968362b45b08ecfee35bbd168000d8ae4d59d6863baab2d64cdfa0872a8bd3e1",
+    "test/test_weighted_remainder_rows.py": "2a4c6f3bd2c2da258ad9e87ed9990c6f090eb1311cd8ba89f6f0031de1c10aed",
+    "src/weighted_remainder_fourier.c": "f8e41a3356f4b1630a6ea476bdffdca152a875b17e222f98c9ae6858e7c61969",
+    "src/weighted_remainder_fourier.h": "bcafe470b38e59d8cccfa4ac3a949b6c76e99608693cda70b5415fb20a885b5b",
+    "test/test_weighted_remainder_fourier.py": "72632353cb2be7ef45ef69740c08d8883d70d394bcd605b7f686811bb7b08e06",
+    "src/weighted_remainder_sawtooth.c": "a32e20694c7038ae43a011c32154e147ba1bd98b16240fb18b73a46a4bde3034",
+    "test/test_weighted_remainder_sawtooth.py": "532dd64156a10cdea5fc88e61ce7f50d884d6ed9bc1360734d7106b9b3976672",
+    "src/weighted_remainder_amplitude.c": "40643253b1893bcd691ea087a17acfaf44c4b944b73a79543c3a3b7925bd306e",
+    "src/weighted_remainder_amplitude.h": "2030598b62407ee00056a0f5104ec96e62ff7889b89fca8bcc6efa8173af34d2",
+    "test/test_weighted_remainder_amplitude.py": "041fbef3f5ff4f7412eaa17e44292a5c2a062819cda1b12e4f10d1586c04f946",
+    "src/weighted_remainder_expansion.c": "3f30a22f0f3fe0fd721848e791370bb654dfa50e40aa69409a71f08ae6fee704",
+    "src/weighted_remainder_constants.c": "6b0583932acc8c04c0695c38a3a57a28400c936a145ecc1122672f89af6c8edd",
+    "src/weighted_remainder_power.c": "c0ee56ad61d38eb6177e1275f5a63a4c1a8b37c5614644ce76aa3ad7e4d9cc26",
+    "src/weighted_remainder_dirichlet.c": "5f6e51fbf01780b407ec8f81ba47d826548ff597b46872c8a55433d9cf82b586",
+    "src/weighted_remainder_expansion_command.c": "57fcf1b1627ef13d805a97d131b27b475b03b1fb12b7f79270cbf261aabbefb8",
+    "src/weighted_remainder_constants.h": "85e9af62e0481f543463befeb8168f90a22ad73a44422dfe3d041b66de8d1edd",
+    "src/weighted_remainder_expansion.h": "84c030864b6572c1c3f5dcb5ffa3d079a6c352f7ca6cfda0546971e41d335e07",
+    "src/weighted_remainder_power.h": "aec333a1dffcd2da16d3c0e83f51500f3b8c3f789658cb2844e17f38100be835",
+    "src/weighted_remainder_dirichlet.h": "f9100cf5b0e48790df4e034afcff4c4f61f8b48f0da653412657e3905ca38cdf",
+    "test/test_weighted_remainder_constants.py": "64352346b6b35ee70b2f214d9b7f8c09e47f81a07adf22fa3494568ff938929d",
+    "test/test_weighted_remainder_expansion.py": "72120b33b1637fc880117f86e7dbbd1239dfa45b1b6119fab77df2e4ca789dc2",
+    "test/test_weighted_remainder_power.py": "daff0906bd33412a9b0307c84b5e7ef615f9c546d7f66c329242c06142ababf2",
+    "test/test_weighted_remainder_dirichlet.py": "39a96bba115d6c7f9b11d050f3a1aecce4ddabb6b3bde174916189d69d135555",
+    "src/weighted_remainder_spectral.c": "1936e7e0d0b18f4478fa7736404418c688e1f7319b62d728a5deaf1c2f03d933",
+    "src/weighted_remainder_spectral_tail.c": "b7396bd1f8b20a84d234c774572718101af1180052fb96f64553a7bcae9bda08",
+    "src/weighted_remainder_spectral_command.c": "59fbd37c52af6b133ff0730cbd7b2b1e98f36f1500132f2d36af292583d44955",
+    "src/weighted_remainder_spectral.h": "628adfc84f9ad6c753c7335601671ad28238027a1626e5dc0ed3736e9056cac5",
+    "test/test_weighted_remainder_spectral.py": "0004f7c5823d6230a6999bb72dda49315eac21498e6f736f344a19bc1efffa4c",
+    "test/test_weighted_remainder_spectral_tail.py": "7392cea582a52f29c039ed253a5029b309329dc9bd977d9ac9d705bc63d5a8c3",
+    "src/weighted_remainder_character.c": "20f9b847f60f09c15e9fe28a6f7412e51240aab6776d0e72aa56db76138b59f2",
+    "src/weighted_remainder_complex.c": "a2685886da9aca793f8fa317026df55daf56f08229997ec1b5f4b468eb3d44c6",
+    "src/finite_character_core.c": "38d5027a0265820c3be7eaedfb43e77703f9f90407a7db1508f9cba927101059",
+    "src/weighted_remainder_cotangent.c": "44851aa416ae06104409a0feabef9ce3da7c86b1d971105aeeb90030ad90dc7b",
+    "src/weighted_remainder_harmonic_root.c": "aed17ad343acda2b3b0445704764a7566690b21ec86b0e851715ef8f0cb4026c",
+    "src/weighted_remainder_small_amplitude.c": "da9170b1890fc3416443b144f7da7f21d0861f0ab20c3dcc6d36751b450ae584",
+    "src/weighted_remainder_mixed_command.c": "ca1038c6d5c4cfa7b6f12c33280a78579cdd9631809f2255a7440142d6766dad",
+    "src/weighted_remainder_complex.h": "a31e650c9f61ada1ede16b9b3f5cf5faf14ee853b4f79f57475fbcd163f7cc57",
+    "src/weighted_remainder_character.h": "99c76fa8fd4b84c79cbba1ac54f96f7c4747958cefe54ac60e61f40278d09c9a",
+    "src/finite_character_core.h": "788eb5020b917e76da52e52f7d2a2a439163e954c2c1dc6ca5112ee087219c94",
+    "src/weighted_remainder_rect_internal.h": "047e31991b2b43c60c7ff9f38cb156518401c5fde1e16ce58c3c45b8e5e776d5",
+    "src/weighted_remainder_cotangent.h": "421c9f331a2b5b7af63a4cef93d0060839b100fd5dc24e22653fc1ca886dacf7",
+    "src/weighted_remainder_harmonic_root.h": "f55e87aaf598045b3048f8e64067a738bc1b9b9add202b2e480f71ea60857d78",
+    "src/weighted_remainder_small_amplitude.h": "3487b87f9a5ee08de54777d10d0b8413b69f144b25585a82a9e9714a0876249c",
+    "test/test_weighted_remainder_complex.py": "7e395db00b92c761e12d176cb1b3e858554cd9911ad676713024ce76d63be17b",
+    "test/test_weighted_remainder_character.py": "3a76a0ef766f1e202301857b04fde177ddeff02e2ecb43c3567a3dd2cbab9b78",
+    "test/test_weighted_remainder_cotangent.py": "70ca06f39a00031b9994919bdb637149cc2289fbf2f5f4294834feb98c6c2a50",
+    "test/test_weighted_remainder_harmonic_root.py": "cb87646e84bc5717ba6cec26cd721faeab2dcde4f0dce0898c6c527aa5638d9c",
+    "test/test_weighted_remainder_small_amplitude.py": "f96b0e636d24b1dff2963959f9ee621fcd186088fd159aeb6719147384a4717f",
+    "test/test_weighted_remainder_mixed_cli.py": "9d0d52f094cd261854a11a91c205e22053bf24db945d32bf7517394544bfddfe",
+    "src/weighted_remainder_cylinder.c": "3ffff1f9224fb440f077b264a9110981b587005e3ff09ae02d8af6e4ad5baaae",
+    "src/weighted_remainder_cylinder.h": "f0e8eaf3cbd5521fcebacde16e5975d68e5d1c9df00abbaecb152a12a5ad6134",
+    "test/test_weighted_remainder_cylinder.py": "13dbf1965baaf14189b01a410d7b3caa849c8e8fac155deafd3b900ed4253e06",
+    "src/weighted_remainder_alignment.c": "06aec8053a93b9fc88f4656b773d17a008da821a09a0ef0ff6971071cab79b06",
+    "src/weighted_remainder_alignment.h": "851bfecab7597515a42c915093a502cdf0d71b55be34efd7c3daa21d4ec014eb",
+    "src/weighted_remainder_alignment_local.c": "bdef0c8f82885867c4bc63805225e1461ea7479cc5709fc074d3eada1063f8a0",
+    "src/weighted_remainder_alignment_local.h": "60765ab09ef21038f9073fc559e9e816187e06d4b3c55379f9a0495fbc94b531",
+    "src/weighted_remainder_alignment_growth.c": "4ce8d02c1b417403afd2d9c358d1a27f4d08abe573c262acb8198ff86f097730",
+    "src/weighted_remainder_alignment_growth.h": "bcf571bfef60e2b257b45fd1668473c99868282ba5ea2e704b014abd3407923a",
+    "src/weighted_remainder_alignment_command.c": "129c7b854234ff730050ac84710326c824a742613bbac1b527ede927c176d364",
+    "src/weighted_remainder_alignment_command.h": "527e3d1386ad8394a01e1ca932d6787ac2615f0b6c3c1e6cdb5706ebee53a7f6",
+    "test/test_weighted_remainder_alignment_local.py": "cda68c10f258b220bc72e0089e34bf0eea662dd93628bbfcbda25578c393ca4d",
+    "test/test_weighted_remainder_alignment.py": "192968674a332d580298990c07bc2f78ce11f9e82da2faf08fe77e0b18ccba9e",
+    "test/test_weighted_remainder_alignment_cli.py": "9123b1befde3d25bcfbf0cb032b427815e8d6459a8633b6f320c90c8cdca8362",
+    "src/weighted_remainder_conductor.c": "a74a939f883f0bd7dd4f8d69c4d3ecbf8afa7426020bf1dd8da5a3cfa63a45f8",
+    "src/weighted_remainder_conductor.h": "f4cdb83823162cb440f368566e8d0ea235bff2d42a4ce482557738e0f6fc8d8c",
+    "test/test_weighted_remainder_conductor.py": "f8fefd1329fc6c543ba57fb231aeefcbabc7e49c9a0cefc93c7997166305c330",
+    "src/weighted_remainder_law.c": "6698f69b209eb5dd1db362823d4f3529a9aa1d8b0d27f45819e93c0e088e897e",
+    "src/weighted_remainder_law.h": "9d39f9a2b10ba593a3bcd1d66c430a6e9e1adfa211dc265f9b31c4024b782548",
+    "src/weighted_remainder_clock.h": "f33ab13f2e1c6ae6db4b12f055789b9e05de0ad82e2f587f4d91bbd61a607d85",
+    "src/weighted_remainder_weights.h": "4f66cce14b439860da4b4eb13610776688495d03e4d7b434eb9c2a69d1043210",
+    "test/test_weighted_remainder_law.py": "5b782f5238f3b576626f84f7320c630e79a3112e3f47fb615e1d77668eb7a9a9",
+    "src/weighted_remainder_activation.c": "9eee31895bdbabcf95f148d302f289a1470f3391e1fcee38e0879b4029704103",
+    "src/weighted_remainder_activation.h": "3c6f9829c59c1db66180c125f03a9f47c9cd2b32c2933b1e83c64b4abb2a85d1",
+    "test/test_weighted_remainder_activation.py": "f8d86bfbd2dae062f3be4c63723225cadb0505699663a2d4b7568f0f9ac54ef1"
+  }
+}

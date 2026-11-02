@@ -173,7 +173,7 @@ static void verification_map_help(void)
         "exact identities, finite range, and analytic boundary.\n\n"
         "Paths from published work\n"
         "  integer-modulus one-digit blocks, rational rigidity, and real branches\n"
-        "    Rational Rigidity at the Golden Scale\n"
+        "    Repetend Rigidity at the Golden Scale\n"
         "    nfield help weighted-reference-profile\n\n"
         "  synchronized remainder clocks, digit bins, orbit families, and limits\n"
         "    Digit-Partitioning Primes and the Alignment Formula\n"
@@ -303,6 +303,27 @@ static void verification_map_help(void)
         "  exact finite residual and the proved all-prime secondary coefficient\n"
         "    The Secondary Term in Digit-Collision Energy\n"
         "    nfield help arithmetic-boundary-defect\n\n"
+        "  integer and prime-predecessor observations, cutoff boundaries,\n"
+        "  unit phases, finite conductors, and progression means\n"
+        "    The Stationary-to-Diagonal Transition in Collision Capacity\n"
+        "    nfield help capacity-resolution\n\n"
+        "  local carry selection, source labels, primitive ledger and inverse\n"
+        "    Finite Generation of Collision Capacity\n"
+        "    nfield help capacity-generation\n\n"
+        "  conserved primitive mass, alignment factors, finite laws and cutoff bounds\n"
+        "    Conservation and Profinite Dynamics in Digit-Collision Energy\n"
+        "    nfield help weighted-remainder-state\n\n"
+        "  native projection, transported readings and complete signed work\n"
+        "    Unity, Refinement, and Signed Capture\n"
+        "    nfield help native-refinement\n\n"
+        "  shifted sampling, common resets and stopped reciprocal sources\n"
+        "    The Unit Sampling Defect in Digit-Collision Energy\n"
+        "    nfield help collision-sampling\n\n"
+        "  boundary readings, changed observations and invariant energy\n"
+        "    Collision Calculus: Boundary Readings, Energy and Refinement\n"
+        "    nfield help field-observation\n"
+        "    nfield help collision-sampling\n"
+        "    nfield help native-refinement\n\n"
         "Each object has focused help, exploratory inputs, an exact verifier, CLI\n"
         "regression tests, and JSON/TCP API tests. Fixed tables are fixtures inside\n"
         "the larger mathematical surface.\n"
@@ -319,6 +340,8 @@ static int print_help_topic(const char *topic)
         strcmp(topic, "spectral") == 0 || strcmp(topic, "equations") == 0)
         explore_help();
     else if (strcmp(topic, "commands") == 0) nfield_commands_help();
+    else if (strcmp(topic, "native-refinement") == 0) native_refinement_help();
+    else if (strcmp(topic, "field-observation") == 0) field_observation_help();
     else if (strcmp(topic, "completion") == 0) nfield_completion_help();
     else if (strcmp(topic, "version") == 0) version_help();
     else if (strcmp(topic, "tables") == 0) tables_help();
@@ -367,6 +390,11 @@ static int print_help_topic(const char *topic)
     else if (strcmp(topic, "special-value-moment") == 0) special_value_moment_help();
     else if (strcmp(topic, "base-five-cyclotomic-identity") == 0) base_five_cyclotomic_identity_help();
     else if (strcmp(topic, "short-sum-bernoulli-correlation") == 0) short_sum_bernoulli_correlation_help();
+    else if (strcmp(topic, "weighted-remainder-state") == 0) weighted_remainder_state_help();
+    else if (strcmp(topic, "capacity-resolution") == 0) collision_capacity_transition_help();
+    else if (strcmp(topic, "capacity-generation") == 0) collision_capacity_generation_help();
+    else if (strcmp(topic, "collision-sampling") == 0) collision_sampling_help();
+    else if (strcmp(topic, "boundary-spectrum") == 0) boundary_spectrum_help();
     else if (strcmp(topic, "primitive-character-cancellation") == 0) primitive_character_cancellation_help();
     else if (strcmp(topic, "periodic-zeta-factorization") == 0) periodic_zeta_factorization_help();
     else if (strcmp(topic, "collision-boundary-recovery") == 0) collision_boundary_recovery_help();
@@ -1543,7 +1571,13 @@ int main(int argc, char **argv)
         goto done;
     }
 
-    if (strcmp(cmd, "analyze") == 0 && argc >= 3) {
+    if (strcmp(cmd, "native-refinement") == 0) {
+        return native_refinement_command(argc - 2, argv + 2);
+
+    } else if (strcmp(cmd, "field-observation") == 0) {
+        return field_observation_command(argc - 2, argv + 2);
+
+    } else if (strcmp(cmd, "analyze") == 0 && argc >= 3) {
         int n    = atoi(argv[2]);
         int base = parse_base(argc, argv, 3);
 
@@ -2622,12 +2656,147 @@ int main(int argc, char **argv)
             return 1;
         }
 
+    } else if (strcmp(cmd, "weighted-remainder-state") == 0) {
+        if (argc == 2 || (argc == 3 &&
+            (strcmp(argv[2], "--help") == 0 || strcmp(argv[2], "help") == 0))) {
+            weighted_remainder_state_help();
+        } else if (argc == 3 && strcmp(argv[2], "verify") == 0) {
+            if (!weighted_remainder_state_verify()) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "boundary") == 0 ||
+                                 strcmp(argv[2], "ramp") == 0 ||
+                                 strcmp(argv[2], "amplitude") == 0)) {
+            if (weighted_remainder_exact_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "floor") == 0 ||
+                                 strcmp(argv[2], "straighten") == 0)) {
+            if (weighted_remainder_floor_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "clock") == 0 ||
+                                 strcmp(argv[2], "clock-law") == 0 ||
+                                 strcmp(argv[2], "age-budget") == 0 ||
+                                 strcmp(argv[2], "cycle") == 0 ||
+                                 strcmp(argv[2], "cycle-tv") == 0 ||
+                                 strcmp(argv[2], "covariance") == 0)) {
+            if (weighted_remainder_clock_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "variance") == 0 ||
+                                 strcmp(argv[2], "finite-weights") == 0 ||
+                                 strcmp(argv[2], "perturbation") == 0)) {
+            if (weighted_remainder_weights_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "rows") == 0 ||
+                                 strcmp(argv[2], "mass-inverse") == 0 ||
+                                 strcmp(argv[2], "mass-recovery") == 0)) {
+            if (weighted_remainder_rows_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "increment-covariance") == 0 ||
+                                 strcmp(argv[2], "increment-recurrence") == 0)) {
+            if (weighted_remainder_increment_command(argc, argv)) return 1;
+        } else if (argc >= 3 && strcmp(argv[2], "fourier") == 0) {
+            if (weighted_remainder_fourier_command(argc, argv)) return 1;
+        } else if (argc >= 3 && strcmp(argv[2], "amplitude-refinement") == 0) {
+            if (weighted_remainder_amplitude_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "expansion-constants") == 0 ||
+                                 strcmp(argv[2], "harmonic-expansion") == 0 ||
+                                 strcmp(argv[2], "amplitude-expansion") == 0 ||
+                                 strcmp(argv[2], "deficit-series") == 0 ||
+                                 strcmp(argv[2], "deficit-diagnostic") == 0)) {
+            if (weighted_remainder_expansion_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "spectral-product") == 0 ||
+                                 strcmp(argv[2], "spectral-mean") == 0 ||
+                                 strcmp(argv[2], "spectral-energy") == 0 ||
+                                 strcmp(argv[2], "spectral-tail") == 0)) {
+            if (weighted_remainder_spectral_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "character-phase") == 0 ||
+                                 strcmp(argv[2], "character-table") == 0 ||
+                                 strcmp(argv[2], "character-l") == 0 ||
+                                 strcmp(argv[2], "mixed-moment") == 0 ||
+                                 strcmp(argv[2], "cotangent-sums") == 0 ||
+                                 strcmp(argv[2], "harmonic-polylog") == 0 ||
+                                 strcmp(argv[2], "harmonic-root") == 0 ||
+                                 strcmp(argv[2], "harmonic-root-average") == 0 ||
+                                 strcmp(argv[2], "sine-transform") == 0 ||
+                                 strcmp(argv[2], "small-amplitudes") == 0)) {
+            if (weighted_remainder_mixed_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "law-moment") == 0 ||
+                                 strcmp(argv[2], "law-cdf") == 0 ||
+                                 strcmp(argv[2], "law-window") == 0 ||
+                                 strcmp(argv[2], "law-concentration") == 0 ||
+                                 strcmp(argv[2], "law-characteristic") == 0 ||
+                                 strcmp(argv[2], "law-recurrence") == 0 ||
+                                 strcmp(argv[2], "law-tail-bound") == 0 ||
+                                 strcmp(argv[2], "law-activation") == 0 ||
+                                 strcmp(argv[2], "clock-difference") == 0)) {
+            if (weighted_remainder_law_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "alignment") == 0 ||
+                                 strcmp(argv[2], "alignment-local") == 0 ||
+                                 strcmp(argv[2], "harmonic-local") == 0 ||
+                                 strcmp(argv[2], "alignment-lcm") == 0 ||
+                                 strcmp(argv[2], "alignment-growth") == 0)) {
+            if (weighted_remainder_alignment_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "tree") == 0 ||
+                                 strcmp(argv[2], "tree-node") == 0 ||
+                                 strcmp(argv[2], "weight") == 0 ||
+                                 strcmp(argv[2], "budget") == 0 ||
+                                 strcmp(argv[2], "mass") == 0)) {
+            if (weighted_remainder_primitive_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "sawtooth") == 0 ||
+                                 strcmp(argv[2], "dedekind") == 0 ||
+                                 strcmp(argv[2], "gram") == 0 ||
+                                 strcmp(argv[2], "sawtooth-mean") == 0)) {
+            if (weighted_remainder_sawtooth_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "reset") == 0 ||
+                                 strcmp(argv[2], "pairing") == 0)) {
+            if (weighted_remainder_pairing_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "crt") == 0 ||
+                                 strcmp(argv[2], "moment") == 0 ||
+                                 strcmp(argv[2], "haar-moment") == 0 ||
+                                 strcmp(argv[2], "block") == 0 ||
+                                 strcmp(argv[2], "forcing") == 0)) {
+            if (weighted_remainder_joint_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "cylinder") == 0 ||
+                                 strcmp(argv[2], "position") == 0 ||
+                                 strcmp(argv[2], "position-weight") == 0)) {
+            if (weighted_remainder_cylinder_command(argc, argv)) return 1;
+        } else if (argc >= 3 && (strcmp(argv[2], "conductor-full") == 0 ||
+                                 strcmp(argv[2], "conductor-beta") == 0 ||
+                                 strcmp(argv[2], "conductor-prime") == 0 ||
+                                 strcmp(argv[2], "conductor-extrema") == 0 ||
+                                 strcmp(argv[2], "conductor-minimizers") == 0)) {
+            if (weighted_remainder_conductor_command(argc, argv)) return 1;
+        } else if (argc >= 3 && strcmp(argv[2], "activation") == 0) {
+            if (weighted_remainder_activation_command(argc, argv)) return 1;
+        } else if (argc == 5 && (strcmp(argv[2], "inspect") == 0 ||
+                                strcmp(argv[2], "conductor") == 0)) {
+            char *end_first = NULL, *end_cutoff = NULL;
+            long first = strtol(argv[3], &end_first, 10);
+            long cutoff = strtol(argv[4], &end_cutoff, 10);
+            int conductor = strcmp(argv[2], "conductor") == 0;
+            if (end_first == argv[3] || *end_first ||
+                end_cutoff == argv[4] || *end_cutoff || cutoff < 2 || cutoff > 240 ||
+                first < (conductor ? 2 : 0) || first > (conductor ? cutoff : 1000000000L)) {
+                fprintf(stderr, "Provide a valid resolution or conductor and a cutoff from 2 through 240.\n");
+                return 1;
+            }
+            int status = conductor ? weighted_remainder_state_conductor((int)first, (int)cutoff) :
+                weighted_remainder_state_inspect((int)first, (int)cutoff);
+            if (status) return status;
+        } else {
+            fprintf(stderr, "See help weighted-remainder-state for actions and domains.\n");
+            return 1;
+        }
+
     } else if (strcmp(cmd, "short-sum-bernoulli-correlation") == 0) {
         if (argc < 3 || strcmp(argv[2], "--help") == 0 ||
             strcmp(argv[2], "help") == 0) {
             short_sum_bernoulli_correlation_help();
         } else if (strcmp(argv[2], "ledger") == 0) {
             if (short_sum_bernoulli_correlation_ledger() != 0) return 1;
+        } else if (strcmp(argv[2], "moments") == 0) {
+            char *end = NULL;
+            long moment_base = argc == 4 ? strtol(argv[3], &end, 10) : 0;
+            if (argc != 4 || end == argv[3] || !end || *end ||
+                moment_base < 5 || moment_base > 127) {
+                fprintf(stderr, "Provide one odd prime base from 5 through 127.\n");
+                return 1;
+            }
+            if (short_sum_bernoulli_correlation_moments((int)moment_base) != 0)
+                return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!short_sum_bernoulli_correlation_verify()) return 1;
         } else {
@@ -3081,6 +3250,16 @@ int main(int argc, char **argv)
             prime_base_collision_energy_help();
             return 1;
         }
+
+    } else if (strcmp(cmd, "capacity-resolution") == 0) {
+        return collision_capacity_transition_command(argc-2,argv+2);
+    } else if (strcmp(cmd, "capacity-generation") == 0) {
+        return collision_capacity_generation_command(argc-2,argv+2);
+
+    } else if (strcmp(cmd, "collision-sampling") == 0) {
+        return collision_sampling_command(argc-2,argv+2);
+    } else if (strcmp(cmd, "boundary-spectrum") == 0) {
+        return boundary_spectrum_command(argc-2,argv+2);
 
     } else if (strcmp(cmd, "arithmetic-boundary-defect") == 0) {
         if (argc < 3 || strcmp(argv[2], "--help") == 0 ||

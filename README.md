@@ -1,253 +1,185 @@
 # nfield
 
-`nfield` is my command-line tool for digit fields, alignment, collision tables,
+`nfield` is a command-line tool for digit fields, alignment, collision tables,
 finite character transforms, and the arithmetic that grows out of them.
 
-I wrote it to get the calculations out of one-off programs and into something I
-could query, sweep, test, and reuse. It is a tool first. The papers develop the
-mathematics. `nfield` runs the calculations.
+The commands name mathematical objects and operations. Start with a field,
+change its base, inspect a collision table, or follow a reading into its
+boundary terms. Exact integer and rational results, numerical comparisons,
+and directed intervals are identified in the output.
 
-The command-line program is written in C. Integer and rational calculations
-stay exact where the object permits it. Fourier sums and eigenvalue calculations
-use numerical arithmetic and are marked as such in the output. The formal
-proof library is written in Lean.
+## Build and explore
 
-## Build
+You need a C99 compiler, Make, POSIX threads, LAPACK, BLAS, GMP and MPFR.
+On Debian or Ubuntu:
 
-You need a C99 compiler, Make, POSIX threads, LAPACK, and BLAS.
-
-On Debian, Ubuntu, or WSL:
-
-```bash
-sudo apt update
-sudo apt install gcc make liblapack-dev libblas-dev
+```sh
+sudo apt install gcc make liblapack-dev libblas-dev libgmp-dev libmpfr-dev python3
 make
-```
-
-The Makefile normally finds LAPACK and BLAS on its own. If yours live somewhere
-unusual, pass the linker flags directly:
-
-```bash
-make LAPACK_LIBS="-L/path/to/lib -llapack -lblas"
-```
-
-## Start here
-
-```bash
-./nfield --help
 ./nfield field 7
-./nfield align 12
-./nfield spectral 13
+./nfield align 21 --base 2
 ./nfield collision-table inspect 13 --base 10
 ```
 
-The short commands are useful for walking around a fractional field:
+Use `make LAPACK_LIBS="-L/path/to/lib -llapack -lblas"` if the libraries
+are installed elsewhere. `make parallel` builds with OpenMP support.
 
-```text
-field       print the complete field for one denominator
-analyze     compute its main invariants
-div         print the long-division table
-align       compute synchronized alignment
-decompose   split the alignment into its components
-spectral    compute additive spectral power
-survey      scan a range of denominators
-```
-
-Base 10 is the default. Use `--base` to change it:
-
-```bash
-./nfield field 7 --base 3
-./nfield align 21 --base 2
-```
-
-The larger tools use a command family followed by an action:
-
-```bash
-./nfield digit-partition inspect 6 --base 2
-./nfield collision-transform spectrum --base 10 --lag 1
-./nfield prime-base-collision-energy inspect 43
-./nfield carry-completed-carrier seam 30
-```
-
-Run these when you need to find a command:
-
-```bash
+```sh
 ./nfield commands
-./nfield help collision-transform
-./nfield collision-transform --help
+./nfield help collision-table
+./nfield help reading-map
 ```
 
-Most families have an `inspect` action for one object and a `verify` action for
-their fixed checks. Some also have `table`, `scan`, `spectrum`, or `examples`.
-The focused help prints the actual arguments.
+Most command families offer `inspect` and `verify`. Focused help lists the
+actual operations, input conventions and resource bounds. `__complete`
+provides the same command and action registry used by the web reference.
 
-## Main command families
+## Grids, readings and energy
 
-Digit structure and alignment:
+A field's value at a boundary is an input. It can differ from either trace.
+These examples retain the actual readings and the signed interaction between
+components:
 
-```text
-weighted-reference-profile   digit-partition
-alignment-limit              three-tier
-deficit-lattice              coherence-decomposition
-cross-alignment              reciprocal-square-selection
+```sh
+./nfield field-observation clocks 4 0 1,2 0,0 1,-1
+./nfield field-observation segments 4 0 0 0 1 0
+./nfield field-observation pulses 5 0 1/4,1/2 3/4,1 1,1 1,1 0,0
+./nfield field-observation work 1/2,1/2,0 0,1/3,2/3 1,-1,2 0,1,-1
 ```
 
-Collision arithmetic:
+Lists use commas. Fractions stay exact. A complex value uses `real:imag`,
+for example `1/2:-3/4`. `segments` takes boundary locations, right traces,
+slopes and actual boundary readings. It reports the regular curvature term
+as well as the point and jump contributions. `harmonics` evaluates exact
+Fourier aliasing at whole-cell or half-cell offsets.
 
-```text
-bin-derangements             collision-characters
-silent-primes                collision-fluctuation
-collision-centering          collision-table
-collision-transform          finite-determination
-reflection-identity          half-group
+```sh
+./nfield collision-sampling grid 4 25 1/2
+./nfield collision-sampling decomposition 31 2
+./nfield collision-sampling prefix-word 8 3
+./nfield collision-sampling shells 121 10
 ```
 
-Spectra and character sums:
+The sampling tools separate the common reset, signed count sources,
+reciprocity costs and terminal remainders. Larger sampled carry tables use
+`collision-sampling sampled`. These finite readings do not infer a limit or
+a uniform power saving.
 
-```text
-spectral-structure           spectral-power
-autocorrelation              phase-gate
-primitive-odd-sector         finite-character-pairing
-collision-spectrum-factorization
-special-value-moment         periodic-zeta-factorization
+
+## Populations, interactions and reverse readings
+
+```sh
+./nfield collision-sampling prefix-population 5 12
+./nfield collision-sampling stopped-cost 64 2
+./nfield field-observation clocks 4 0 1,2 0,0 1,-1 --matrix
+./nfield field-observation pulses 4 0 0,1/2 1/2,1 1,3 1,1 1,1 --matrix
+./nfield field-observation harmonics 4 0 1,-3 1,0:1 --matrix
+./nfield field-observation shells 1,4,8 --from-prefixes
 ```
 
-Residue channels and boundaries:
+`prefix-population` lists every admissible prefix of length at least two in
+an inclusive denominator range, with its word, matrix and orientation. Both
+orientations are included. Denominators are bounded by 512; wide listings are
+best read locally. `stopped-cost` accepts a modulus through 512 and a threshold
+from one through that modulus. It returns every residue, including nonunits,
+and each signed cyclic jump. Its total variation includes both endpoint jumps.
 
-```text
-residue-three-neutrality     compatible-residue-channels
-coprime-base-orthogonality   primitive-character-cancellation
-collision-boundary-recovery  active-collision-channel
-finite-prefix-slice          boundary-bernoulli-factorization
-boundary-conductor-ledger    finite-state-orbit-boundary
+`--matrix` adds continuous and sampled component Grams and their signed
+matrix difference. Clocks and pulses also expose the point, value-jump and
+derivative-jump matrices. Entries retain complex amplitudes, actual pulse
+endpoint readings and both cross orientations. Matrix indices start at zero.
+Summing every entry recovers the ordinary combined-field output; new component
+coefficients act by the Hermitian quadratic form. The option follows the normal
+arguments of `clocks`, `pulses` or `harmonics`.
+
+`shells` ordinarily starts with primitive contributions. `--from-prefixes`
+reverses that reading: supply square prefixes at cutoffs one through the list
+length, with the zero-cutoff prefix understood to be zero. Recovery retains
+signed rational values and checks the full reconstructed prefix sequence.
+Either mode accepts at most 256 readings and returns the same shell and
+prime-log coefficient format. Finite identities and variation checks do not
+establish an asymptotic rate.
+
+## Native refinement and complete tails
+
+```sh
+./nfield native-refinement detector 4 --json
+./nfield native-refinement probe-transport 2 --json
+./nfield native-refinement mask-capture 20 48 10
+./nfield native-refinement divisor-work 2 64
+./nfield native-refinement parent-credit 51
+./nfield field-observation native-cycle 4 1,0
+./nfield field-observation tail-bound 89 2 3 -1/10
 ```
 
-Energy and carrier calculations:
+`detector` uses complete native inner products with directed intervals.
+Its response retains the signed commutator and terminal pairing.
+`probe-transport` follows the same probes to four times the cutoff, retaining
+the signed response drift and every entry of the old, new and removed cost
+matrices. It admits cutoffs 2 through 8; start with 2 in the web tool.
+`mask-capture` reports numerical rank and capture for masks, address controls
+and their joint span. Those numerical results have a different status from
+interval bounds. `divisor-work` includes the removed shell and a complete
+allowance for the omitted tail. `native-cycle` sums the entire native tail of
+a periodic field. `tail-bound` is conditional on the supplied global envelopes.
 
-```text
-full-orbit-energy            quadratic-orbit-energy
-subgroup-jacobi-expansion    prime-base-collision-energy
-arithmetic-boundary-defect   carry-completed-carrier
+For readings unchanged by permitted additions, `field-observation invariants`
+computes their joint constrained minimum, including overlapping or complex
+rows. Independent rows and positive observation weights are required.
+
+## Conserved states and laws
+
+`weighted-remainder-state` contains primitive mass, rational clock states,
+cutoff and conductor calculations, alignment products and finite laws:
+
+```sh
+./nfield help weighted-remainder-state
+./nfield weighted-remainder-state alignment-local 3 2
+./nfield weighted-remainder-state law-cdf 5 -1/3 1/10
+./nfield weighted-remainder-state law-characteristic 5 1
 ```
 
-This is only a map. `./nfield commands` is the full list.
+The help distinguishes finite laws, rational identities and full enclosures.
+`capacity-resolution`, `capacity-generation` and `boundary-spectrum` provide
+related observation, source and conductor operations.
 
-## Tab completion
+## Web tool and daemon
 
-Completion knows the command families, actions, help topics, verifier names,
-and options.
+The [web tool](https://alexpetty.com/terminal) uses the same public command
+registry and C dispatcher. The site runs bounded commands through its HTTP
+service. The local JSON/TCP daemon is another interface to that dispatcher:
 
-```bash
-# Bash
-source <(./nfield completion bash)
-
-# Zsh
-source <(./nfield completion zsh)
-
-# Fish
-./nfield completion fish | source
+```sh
+./nfield daemon --port 9090 --threads 1
 ```
 
-After that, `nfield fi` followed by Tab will complete or list the matching
-commands. Run `./nfield help completion` for permanent setup.
+Send one JSON object per line, such as `{"cmd":"field 7"}`. The response
+contains the command output. See `nfield help daemon` for the protocol.
+The website limits input components to 10,000, execution to 15 seconds and
+output to 256 KiB. Local help gives each calculation's own limits.
+File output and daemon startup are local operations; JSON results can be
+copied from the web tool.
 
-## Verification
+## Verification and correspondence
 
-```bash
+```sh
 make test
 make verify
 ```
 
-`make test` runs the C unit tests, command-line tests, completion tests, daemon
-tests, and the paper-to-tool coverage check.
+The default suite includes independent rational and high-precision oracles,
+CLI and daemon parity, published numerical fixtures, and frozen correspondence
+gates. Python 3 is needed for the oracles. Daemon tests need loopback sockets.
+`VERIFICATION_COVERAGE.md` connects the companion papers with their objects.
+The files in `coverage/` record version hashes, admitted domains, checks and
+analytic boundaries. Public builds check the frozen maps and code; they do
+not claim to reread manuscript sources that are absent from this package.
 
-`make verify` runs every named verifier. You can run one directly:
-
-```bash
-./nfield verify collision-table
-./nfield verify boundary-conductor-ledger
-```
-
-The output keeps exact finite arithmetic, numerical checks, bounded searches,
-and theorem claims separate. A verifier reports what it has actually checked.
-
-If you came here from one of the papers, use:
-
-```bash
-./nfield help reading-map
-```
-
-The longer title-to-command ledger is in
-[`VERIFICATION_COVERAGE.md`](VERIFICATION_COVERAGE.md).
-
-## Lean proofs
-
-The public Lean library contains the formal companions through *The Secondary
-Term in Digit-Collision Energy*.
-
-```bash
-cd proofs
-lake build
-```
-
-The Lean toolchain and Mathlib revision are pinned in that directory. See
-[`proofs/README.md`](proofs/README.md) for the boundary of the public library.
-
-## Daemon
-
-The website uses the same command dispatcher through a small JSON/TCP daemon:
-
-```bash
-./nfield daemon --port 9090
-```
-
-Send one JSON object per connection:
-
-```json
-{"cmd":"collision-table inspect 13 --base 10"}
-```
-
-The daemon does not invoke a shell. It returns the same text as the command-line
-program.
-
-## Version
-
-```bash
-./nfield --version
-```
-
-The version is the UTC link time written as `YYYY.MMDD.HHMMSS`. A no-op `make`
-keeps the existing version. To reproduce one exactly:
-
-```bash
-make BUILD_VERSION=2026.0902.120000
-```
-
-## Source tree
-
-```text
-src/      arithmetic and command implementations
-verify/   verifier registry and older fixed checks
-test/     unit, CLI, completion, daemon, and coverage tests
-proofs/   Lean definitions, theorems, and public paper maps
-```
-
-Commands and source files are named for the mathematical object, not for a
-paper number. Papers and draft manuscripts are not part of this repository.
+A finite check is not a proof of an infinite theorem. The separate Lean
+library has its own declared scope in `proofs/README.md`.
 
 ## License
 
-Copyright 2020-2026 Alexander S. Petty.
-
-The `nfield` software is available under the
-[PolyForm Noncommercial License 1.0.0](LICENSE). Use it as much as you want for
-research, study, education, and personal work. If you are using it to make
-money, or building it into something that makes money, let's talk about a
-commercial license. See
-[commercial licensing](COMMERCIAL-LICENSING.md).
-
-The Lean source in `proofs/` is authored by Alexander S. Petty and is open
-source under the [Apache License 2.0](proofs/LICENSE).
-
-Alexander S. Petty<br>
-[alexpetty.com](https://alexpetty.com)
+The C program uses [PolyForm Noncommercial 1.0.0](LICENSE).
+See [commercial licensing](COMMERCIAL-LICENSING.md) for other use.
+The Lean proof library uses [Apache-2.0](proofs/LICENSE).

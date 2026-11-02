@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "collision_spectrum_core.h"
+#include "collision_magnitude_moments.h"
 #include "nfield.h"
 
 enum { SHORT_SUM_BASE_COUNT = 18 };
@@ -41,21 +42,21 @@ static int correlation_ledger_audit(int report,
         printf("  b   primitive odd characters   correlation\n");
     }
     for (int index = 0; index < SHORT_SUM_BASE_COUNT; index++) {
-        CollisionSpectrumSummary summary;
+        CollisionMagnitudeMoments summary = collision_magnitude_moments(short_sum_bases[index]);
         long double error;
-        if (!collision_spectrum_base_audit(short_sum_bases[index], &summary)) {
+        if (summary.failures) {
             failures++;
             continue;
         }
-        character_count += summary.primitive_odd_count;
+        character_count += summary.count;
         error = fabsl(summary.correlation - expected_correlations[index]);
         if (error > maximum_error) maximum_error = error;
-        if (summary.primitive_odd_count != short_sum_character_counts[index] ||
+        if (summary.count != short_sum_character_counts[index] ||
             error > 5.0e-12L)
             failures++;
         if (report)
             printf(" %2d          %4d              %.12Lf\n",
-                   summary.base, summary.primitive_odd_count,
+                   summary.base, summary.count,
                    summary.correlation);
     }
     if (report) {
@@ -78,6 +79,41 @@ int short_sum_bernoulli_correlation_ledger(void)
     return correlation_ledger_audit(1, NULL, NULL) == 0 ? 0 : 1;
 }
 
+int short_sum_bernoulli_correlation_moments(int base)
+{
+    CollisionMagnitudeMoments row = collision_magnitude_moments(base);
+    if (row.count == 0) {
+        fprintf(stderr, "Base must be an odd prime from 5 through 127.\n");
+        return 1;
+    }
+    printf("Finite magnitude moments\n\n");
+    printf("Base %d; primitive odd characters %d\n", base, row.count);
+    printf("X = short-sum magnitude / sqrt(base); Y = L(1) magnitude.\n");
+    printf("Both conjugates are counted. Y comes from the finite Bernoulli sum.\n\n");
+    printf("mean X                 %.15Lf\n", row.mean_x);
+    printf("mean Y                 %.15Lf\n", row.mean_y);
+    printf("mean XY                %.15Lf\n", row.mean_xy);
+    printf("mean X^2               %.15Lf\n", row.mean_x2);
+    printf("mean Y^2               %.15Lf\n", row.mean_y2);
+    printf("mean X^2 Y^2           %.15Lf\n", row.mean_x2y2);
+    printf("mean X^(3/2)           %.15Lf\n", row.mean_x_three_halves);
+    printf("mean Y^3               %.15Lf\n", row.mean_y3);
+    printf("mean Y^4               %.15Lf\n", row.mean_y4);
+    printf("mean chi(2)            %.15Lf %+.15Lfi\n",
+           row.mean_chi2_real, row.mean_chi2_imag);
+    printf("mean Y^2 chi(2)        %.15Lf %+.15Lfi\n",
+           row.mean_y2_chi2_real, row.mean_y2_chi2_imag);
+    printf("variance Y - nu/16     %.15Lf\n", row.variance_y_margin);
+    printf("magnitude correlation %.15Lf\n", row.correlation);
+    printf("mixed-square ratio    %.15Lf\n", row.enrichment);
+    printf("maximum identity error %.3Le; tolerance 2.000e-12\n",
+           row.max_identity_error);
+    printf("8 real moment/twist targets, 2 integer doubling sums, 1 variance bound.\n");
+    printf("Result  %s\n", row.failures ? "FAIL" : "PASS");
+    printf("These finite checks do not establish an asymptotic limit.\n");
+    return row.failures ? 1 : 0;
+}
+
 int short_sum_bernoulli_correlation_verify(void)
 {
     int character_count = 0;
@@ -97,6 +133,9 @@ int short_sum_bernoulli_correlation_verify(void)
     printf("\n3/3 verification groups %s.\n",
            ok && character_count == 14372 && maximum_error <= 5.0e-12L
                ? "passed" : "did not pass");
+    printf("  144 moment and twist identity targets          %s\n", ok ? "PASS" : "FAIL");
+    printf("  36 exact integer doubling-sum checks           %s\n", ok ? "PASS" : "FAIL");
+    printf("  18 positive-variance lower bounds              %s\n", ok ? "PASS" : "FAIL");
     printf("Finite evidence  the ledger is exhaustive over the declared character\n");
     printf("families but proves no asymptotic correlation or decay law.\n");
     return ok && character_count == 14372 && maximum_error <= 5.0e-12L;
@@ -109,6 +148,9 @@ void short_sum_bernoulli_correlation_help(void)
         "Commands\n"
         "  nfield short-sum-bernoulli-correlation ledger\n"
         "      Reproduce all 18 correlations from finite Bernoulli sums.\n"
+        "  nfield short-sum-bernoulli-correlation moments <base>\n"
+        "      Inspect normalized moments, the twist at two and variance.\n"
+        "      Any odd prime base from 5 through 127.\n"
         "  nfield short-sum-bernoulli-correlation verify\n"
         "  nfield verify short-sum-bernoulli-correlation\n\n"
         "Scope\n"
@@ -116,6 +158,7 @@ void short_sum_bernoulli_correlation_help(void)
         "                    5 through 71, 14372 characters total.\n"
         "  L-value input     the finite Bernoulli sum; no Euler product, prime\n"
         "                    series, or approximation cutoff.\n"
-        "  open              limiting correlation and decay law.\n"
+        "  analytic scope    limiting correlation and decay require a proof;\n"
+        "                    the finite checks do not establish those limits.\n"
     );
 }

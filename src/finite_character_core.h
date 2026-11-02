@@ -77,4 +77,19 @@ int finite_character_spectrum_compute(
     const CollisionCenteredTable *table, FiniteCharacterSpectrum *spectrum);
 void finite_character_spectrum_free(FiniteCharacterSpectrum *spectrum);
 
+/* Reusable full unit-group table, including noncyclic groups. Phases are
+ * exact integers modulo denominator, with -1 on nonunits. Character index
+ * uses the same mixed-radix CRT coordinates as the collision spectrum.
+ * Build into a zero-initialized table; failure leaves it unchanged. */
+#define FINITE_CHARACTER_TABLE_MAX_MODULUS 512
+typedef struct {
+    int modulus, count, denominator;
+    int *phase, *conductor;
+    unsigned char *odd;
+} FiniteCharacterTable;
+int finite_character_table_build(int modulus, FiniteCharacterTable *out);
+void finite_character_table_free(FiniteCharacterTable *table);
+long double complex finite_character_table_value(const FiniteCharacterTable *table,
+    unsigned character, unsigned residue);
+
 #endif

@@ -41,6 +41,31 @@ api_request() {
 printf 'nfield daemon API regression tests\n'
 printf '==================================================\n\n'
 
+native_refinement="$(api_request 'native-refinement trace 4 8')"
+grep -Fq 'full infinite norm; period=840' <<<"$native_refinement"
+grep -Fq 'uniform lower bound OPEN' <<<"$native_refinement"
+printf '  native refinement through JSON/TCP: PASS\n'
+
+native_refinement_json="$(api_request 'native-refinement trace 4 6 --json')"
+python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); assert data["status"]=="PASS" and data["first"]==4 and data["last"]==6 and data["uniform_lower_bound_proved"] is False' <<<"$native_refinement_json"
+printf '  native refinement interval JSON through JSON/TCP: PASS\n'
+
+native_collision4_json="$(api_request 'native-refinement collision4 --json')"
+python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); assert data["status"]=="PASS" and data["first"]==4 and data["last"]==8 and float(data["capture_fraction"]["hi"])<.001 and float(data["signed_response"]["hi"])<0' <<<"$native_collision4_json"
+printf '  native collision4 calibration through JSON/TCP: PASS\n'
+
+native_collision_families_json="$(api_request 'native-refinement collision-families --json')"
+python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); families={row["modulus"]:row for row in data["families"]}; assert data["status"]=="PASS" and families[9]["finite_orbit_rank"]==2 and families[9]["projected_shell_rank"]==2 and families[25]["finite_orbit_rank"]==8 and families[25]["projected_shell_rank"]==4 and data["combined"]["projected_shell_rank"]==4' <<<"$native_collision_families_json"
+printf '  native translated collision families through JSON/TCP: PASS\n'
+
+native_collision_families_16_json="$(api_request 'native-refinement collision-families 8 16 --json')"
+python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); families={row["modulus"]:row for row in data["families"]}; assert data["status"]=="PASS" and data["first"]==8 and data["last"]==16 and data["complete_period_audit"] is False and families[25]["finite_orbit_rank"]==8 and families[25]["projected_shell_rank"]==8 and families[25]["projected_rank_exact"] is True' <<<"$native_collision_families_16_json"
+printf '  native q25 rank-budget exhaustion through JSON/TCP: PASS\n'
+
+native_collision_tower_49_json="$(api_request 'native-refinement collision-families 4 16 --json')"
+python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); families={row["modulus"]:row for row in data["families"]}; assert data["status"]=="PASS" and data["combined"]["finite_tower_rank"]==11 and data["combined"]["projected_shell_rank"]==11 and data["combined"]["blind_codimension"]==1 and families[49]["finite_orbit_rank"]==18 and families[49]["projected_shell_rank"]==12 and data["extension_49"]["rank_increment"]==1 and float(data["extension_49"]["prior_blind_detection_fraction"]["lo"])>.999999' <<<"$native_collision_tower_49_json"
+printf '  native CRT rank exhaustion and q49 recovery through JSON/TCP: PASS\n'
+
 reciprocal_selection="$(api_request 'reciprocal-square-selection inspect 3 4 --base 10')"
 grep -Fq 'exact alignment alpha_b(pm)=7/11' <<<"$reciprocal_selection"
 grep -Fq 'threshold certificate A^2+A*B-B^2=5' <<<"$reciprocal_selection"
@@ -300,7 +325,7 @@ fi
 printf '  safe verifier index through JSON/TCP: PASS\n'
 
 verification_map="$(api_request 'help reading-map')"
-grep -Fq 'Rational Rigidity at the Golden Scale' <<<"$verification_map"
+grep -Fq 'Repetend Rigidity at the Golden Scale' <<<"$verification_map"
 grep -Fq 'weighted-reference-profile' <<<"$verification_map"
 grep -Fq 'Digit-Partitioning Primes and the Alignment Formula' <<<"$verification_map"
 grep -Fq 'The Coherence Decomposition' <<<"$verification_map"
@@ -632,6 +657,231 @@ grep -Fq '3/3 verification groups passed.' <<<"$short_sum_correlation_verificati
 grep -Fq '1/1 verifications passed.' <<<"$short_sum_correlation_verification"
 printf '  short-sum Bernoulli correlation verifier through JSON/TCP: PASS\n'
 
+remainder_state="$(api_request 'weighted-remainder-state inspect 6 6')"
+grep -Fq 'completed deficit      1.700000000000000' <<<"$remainder_state"
+grep -Fq 'continuous capacity    4.300000000000000' <<<"$remainder_state"
+printf '  weighted remainder state through JSON/TCP: PASS\n'
+
+remainder_boundary="$(api_request 'weighted-remainder-state boundary 6')"
+grep -Fq 'capacity 43/10' <<<"$remainder_boundary"
+grep -Fq 'deficit 17/10' <<<"$remainder_boundary"
+grep -Fq '0/1 6' <<<"$remainder_boundary"
+remainder_ramp="$(api_request 'weighted-remainder-state ramp 6 4')"
+grep -Fq 'integral 1/72' <<<"$remainder_ramp"
+
+remainder_floor="$(api_request 'weighted-remainder-state floor 5 1')"
+grep -Fq 'floor_response 4/5' <<<"$remainder_floor"
+remainder_straighten="$(api_request 'weighted-remainder-state straighten 5 -1')"
+grep -Fq 'floor_response 16/5' <<<"$remainder_straighten"
+grep -Fq 'midpoint_response 16/5' <<<"$remainder_straighten"
+grep -Fq 'difference 0' <<<"$remainder_straighten"
+printf '  exact floor lists and signed midpoint straightening through JSON/TCP: PASS\n'
+remainder_clock="$(api_request 'weighted-remainder-state clock 2 -1')"
+grep -Fq 'centered_age 1/12' <<<"$remainder_clock"
+grep -Fq 'omitted_mass 3/4' <<<"$remainder_clock"
+remainder_cycle="$(api_request 'weighted-remainder-state cycle 3 2 -1 6')"
+grep -Fq 'next_residue 0' <<<"$remainder_cycle"
+grep -Fq 'cesaro_mass 1/21' <<<"$remainder_cycle"
+remainder_tv="$(api_request 'weighted-remainder-state cycle-tv 2 0')"
+grep -Fq 'tv_lower 1/8' <<<"$remainder_tv"
+grep -Fq 'tv_upper 7/8' <<<"$remainder_tv"
+remainder_covariance="$(api_request 'weighted-remainder-state covariance 6 4')"
+grep -Fq 'covariance 1/4' <<<"$remainder_covariance"
+remainder_age_budget="$(api_request 'weighted-remainder-state age-budget 3')"
+grep -Fq 'harmonic_cross_sum 1' <<<"$remainder_age_budget"
+grep -Fq 'first_moment_mobius 1' <<<"$remainder_age_budget"
+printf '  exact clocks, cycle probabilities, total variation and covariance through JSON/TCP: PASS\n'
+remainder_weights="$(api_request 'weighted-remainder-state finite-weights 6 2:1/2 3:1/2')"
+grep -Fq 'admissible_probability_mass 1' <<<"$remainder_weights"
+grep -Fq 'unit_energy 6' <<<"$remainder_weights"
+grep -Fq 'gram_variance 11/108' <<<"$remainder_weights"
+remainder_perturbation="$(api_request 'weighted-remainder-state perturbation 4 6 1/48')"
+grep -Fq 'centered_age_change 1/36' <<<"$remainder_perturbation"
+grep -Fq 'stationary_age_change 0' <<<"$remainder_perturbation"
+grep -Fq 'perturbation_norm_sq 56/27' <<<"$remainder_perturbation"
+printf '  exact finite weights and period-twelve perturbations through JSON/TCP: PASS\n'
+remainder_variance="$(api_request 'weighted-remainder-state variance 2')"
+grep -Fq 'finite_variance 1/144' <<<"$remainder_variance"
+grep -Fq 'potential_error_squared_upper 1152' <<<"$remainder_variance"
+grep -Fq 'cross_upper 3' <<<"$remainder_variance"
+grep -Fq 'full_variance_upper 166753/144' <<<"$remainder_variance"
+printf '  proved rational variance enclosure through JSON/TCP: PASS\n'
+remainder_rows="$(api_request 'weighted-remainder-state rows 6 -1')"
+grep -Fq 'primitive_norm_squared=2' <<<"$remainder_rows"
+grep -Fq 'row 5 1 3/2 1 1' <<<"$remainder_rows"
+remainder_inverse="$(api_request 'weighted-remainder-state mass-inverse 6 2 2:3/4 3:1/4 6:1/4')"
+grep -Fq 'recovered_mass=1/2' <<<"$remainder_inverse"
+remainder_recovery="$(api_request 'weighted-remainder-state mass-recovery 2 2 2')"
+grep -Fq 'beta_lower=1/4' <<<"$remainder_recovery"
+grep -Fq 'inverse_tail_error=7' <<<"$remainder_recovery"
+grep -Fq 'mass_upper=8' <<<"$remainder_recovery"
+printf '  exact primitive rows and finite/full mass recovery through JSON/TCP: PASS\n'
+remainder_increment="$(api_request 'weighted-remainder-state increment-covariance 2 1')"
+grep -Fq 'finite_arithmetic=-1/36' <<<"$remainder_increment"
+grep -Fq 'finite_ramanujan=-1/36' <<<"$remainder_increment"
+grep -Fq 'cross_upper=23/2' <<<"$remainder_increment"
+grep -Fq 'covariance_error=4631' <<<"$remainder_increment"
+remainder_recurrence="$(api_request 'weighted-remainder-state increment-recurrence 12')"
+grep -Fq 'cutoff_period=27720' <<<"$remainder_recurrence"
+grep -Fq 'finite_return_equals_zero=1' <<<"$remainder_recurrence"
+printf '  exact increment covariance and proved recurrence enclosure through JSON/TCP: PASS\n'
+remainder_fourier="$(api_request 'weighted-remainder-state fourier 2 -1 2 finite')"
+grep -Fq 'mode=finite' <<<"$remainder_fourier"
+grep -Fq 'residue=1' <<<"$remainder_fourier"
+grep -Fq 'g_lower=-1/6' <<<"$remainder_fourier"
+grep -Fq 'y_real_lower=-1/12' <<<"$remainder_fourier"
+grep -Fq 'y_imag_lower=0' <<<"$remainder_fourier"
+grep -Fq 'y_mass_lower=1/144' <<<"$remainder_fourier"
+remainder_full_fourier="$(api_request 'weighted-remainder-state fourier 2 1 2 full')"
+grep -Fq 'mode=full' <<<"$remainder_full_fourier"
+grep -Fq 'amplitude_upper=1' <<<"$remainder_full_fourier"
+grep -Fq 'g_lower=-2/3' <<<"$remainder_full_fourier"
+printf '  rational finite/full primitive Fourier intervals through JSON/TCP: PASS\n'
+printf '  exact boundary and ramp through JSON/TCP: PASS\n'
+
+remainder_amplitude="$(api_request 'weighted-remainder-state amplitude 2 2')"
+grep -Fq 'lower 1/4' <<<"$remainder_amplitude"
+grep -Fq 'upper 1' <<<"$remainder_amplitude"
+grep -Fq 'width 3/4' <<<"$remainder_amplitude"
+printf '  exact amplitude enclosure through JSON/TCP: PASS\n'
+
+remainder_refinement="$(api_request 'weighted-remainder-state amplitude-refinement 2 2 1 1')"
+grep -Fq 'delta=7/8' <<<"$remainder_refinement"
+grep -Fq 'jordan_three=7' <<<"$remainder_refinement"
+grep -Fq 'seed_prefix=1/4' <<<"$remainder_refinement"
+grep -Fq 'refinement_lower=5/42' <<<"$remainder_refinement"
+grep -Fq 'refinement_upper=11/7' <<<"$remainder_refinement"
+grep -Fq 'mobius_lower=-13/32' <<<"$remainder_refinement"
+remainder_unit_refinement="$(api_request 'weighted-remainder-state amplitude-refinement 1 2 1 1')"
+grep -Fq 'retained_amplitude=1/4' <<<"$remainder_unit_refinement"
+grep -Fq 'amplitude_lower=1' <<<"$remainder_unit_refinement"
+grep -Fq 'amplitude_upper=1' <<<"$remainder_unit_refinement"
+printf '  exact harmonic seed and full amplitude refinement through JSON/TCP: PASS\n'
+
+remainder_constants="$(api_request 'weighted-remainder-state expansion-constants 1')"
+grep -Fq 'gamma_lower=1/2' <<<"$remainder_constants"
+grep -Fq 'gamma_upper=7/12' <<<"$remainder_constants"
+remainder_harmonic_expansion="$(api_request 'weighted-remainder-state harmonic-expansion 1 1')"
+grep -Fq 'amplitude_expansion_available=0' <<<"$remainder_harmonic_expansion"
+grep -Fq 'harmonic_prefix=0' <<<"$remainder_harmonic_expansion"
+remainder_uniform_expansion="$(api_request 'weighted-remainder-state amplitude-expansion 8 12')"
+grep -Fq 'prime_base=2' <<<"$remainder_uniform_expansion"
+grep -Fq 'prime_exponent=3' <<<"$remainder_uniform_expansion"
+grep -Fq 'rho=4/7' <<<"$remainder_uniform_expansion"
+remainder_dirichlet="$(api_request 'weighted-remainder-state deficit-series 2 6')"
+grep -Fq 'prefix_lower=1/36' <<<"$remainder_dirichlet"
+grep -Fq 'prefix_upper=1/36' <<<"$remainder_dirichlet"
+remainder_deficit_diagnostic="$(api_request 'weighted-remainder-state deficit-diagnostic 1')"
+grep -Fq 'literal_loss_bound=3979/8000' <<<"$remainder_deficit_diagnostic"
+grep -Fq 'literal_margin=4021/8000' <<<"$remainder_deficit_diagnostic"
+printf '  rational expansion constants, prime powers and Dirichlet diagnostics through JSON/TCP: PASS\n'
+
+remainder_spectral_product="$(api_request 'weighted-remainder-state spectral-product 2')"
+grep -Fq 'product_upper=61/98' <<<"$remainder_spectral_product"
+remainder_spectral_mean="$(api_request 'weighted-remainder-state spectral-mean 5/2 2')"
+grep -Fq 'h_sum=61/49' <<<"$remainder_spectral_mean"
+grep -Fq 'correction_floor_mean=122/245' <<<"$remainder_spectral_mean"
+remainder_spectral_energy="$(api_request 'weighted-remainder-state spectral-energy 2 2')"
+grep -Fq 'energy_lower=1/144' <<<"$remainder_spectral_energy"
+remainder_spectral_tail="$(api_request 'weighted-remainder-state spectral-tail 4 4 2 1 1')"
+grep -Fq 'energy_band_upper=0' <<<"$remainder_spectral_tail"
+grep -Fq 'projection_tail_lower=0' <<<"$remainder_spectral_tail"
+printf '  spectral product, signed mean, energy and full tail through JSON/TCP: PASS\n'
+
+remainder_character_phase="$(api_request 'weighted-remainder-state character-phase 2 1')"
+grep -Fq 'phase_real_lower=-1' <<<"$remainder_character_phase"
+grep -Fq 'phase_imag_upper=0' <<<"$remainder_character_phase"
+remainder_character_table="$(api_request 'weighted-remainder-state character-table 8')"
+grep -Fq 'character_count=4' <<<"$remainder_character_table"
+remainder_character_l="$(api_request 'weighted-remainder-state character-l 6 1 1')"
+grep -Fq 'character_conductor=3' <<<"$remainder_character_l"
+grep -Fq 'l_two_prefix_real_lower=1' <<<"$remainder_character_l"
+remainder_mixed_moment="$(api_request 'weighted-remainder-state mixed-moment 2 1 1 2')"
+grep -Fq 'odd_count=0' <<<"$remainder_mixed_moment"
+grep -Fq 'eta_lower=1/2' <<<"$remainder_mixed_moment"
+remainder_cotangent="$(api_request 'weighted-remainder-state cotangent-sums 1 1 1')"
+grep -Fq 'unit_lower=0' <<<"$remainder_cotangent"
+grep -Fq 'eta_lower=1' <<<"$remainder_cotangent"
+remainder_polylog="$(api_request 'weighted-remainder-state harmonic-polylog 3/5 4/5 2')"
+grep -Fq 'prefix_real_lower=-7/100' <<<"$remainder_polylog"
+grep -Fq 'prefix_imag_upper=6/25' <<<"$remainder_polylog"
+remainder_harmonic_root="$(api_request 'weighted-remainder-state harmonic-root 2 1 2 2')"
+grep -Fq 'harmonic_prefix_real_lower=1/4' <<<"$remainder_harmonic_root"
+grep -Fq 'cubic_prefix_lower=-7/8' <<<"$remainder_harmonic_root"
+remainder_root_average="$(api_request 'weighted-remainder-state harmonic-root-average 2 2')"
+grep -Fq 'selected_prefix=1/4' <<<"$remainder_root_average"
+remainder_sine_transform="$(api_request 'weighted-remainder-state sine-transform 3 -6')"
+grep -Fq 'frequency=-6' <<<"$remainder_sine_transform"
+grep -Fq 'cotangent_rhs_upper=0' <<<"$remainder_sine_transform"
+remainder_small_amplitudes="$(api_request 'weighted-remainder-state small-amplitudes 1 1')"
+grep -Fq 'induced_factor=5/4' <<<"$remainder_small_amplitudes"
+grep -Fq 'induced_prefix_rhs=1' <<<"$remainder_small_amplitudes"
+printf '  character, mixed-moment, cotangent, harmonic-root and small-conductor readouts through JSON/TCP: PASS\n'
+
+primitive_tree="$(api_request 'weighted-remainder-state tree 1')"
+grep -Fq 'primitive_pair_mass 1/2' <<<"$primitive_tree"
+grep -Fq 'outgoing_mass 3/2' <<<"$primitive_tree"
+grep -Fq 'harmonic_upper_bound 4' <<<"$primitive_tree"
+grep -Fq 'primitive_address_mass 1/4' <<<"$primitive_tree"
+primitive_node="$(api_request 'weighted-remainder-state tree-node 2 3')"
+grep -Fq 'potential 5/36' <<<"$primitive_node"
+grep -Fq 'loss 1/30' <<<"$primitive_node"
+grep -Fq 'address_mass 1/50' <<<"$primitive_node"
+primitive_weight="$(api_request 'weighted-remainder-state weight 2')"
+grep -Fq 'weight 1/4' <<<"$primitive_weight"
+grep -Fq 'budget_inverse 1/4' <<<"$primitive_weight"
+primitive_budget="$(api_request 'weighted-remainder-state budget 2')"
+grep -Fq 'budget 2' <<<"$primitive_budget"
+primitive_mass="$(api_request 'weighted-remainder-state mass 2')"
+grep -Fq 'retained_mass 1/4' <<<"$primitive_mass"
+grep -Fq 'omitted_mass 3/4' <<<"$primitive_mass"
+grep -Fq 'weighted_mass 1/2' <<<"$primitive_mass"
+grep -Fq 'deficit_upper_bound 4/3' <<<"$primitive_mass"
+printf '  exact primitive tree, weights, budget and mass through JSON/TCP: PASS\n'
+
+sawtooth_row="$(api_request 'weighted-remainder-state sawtooth 5 2 1')"
+grep -Fq 'value -1/10' <<<"$sawtooth_row"
+sawtooth_dedekind="$(api_request 'weighted-remainder-state dedekind 5 1')"
+grep -Fq 'dedekind_sum 1/5' <<<"$sawtooth_dedekind"
+sawtooth_gram="$(api_request 'weighted-remainder-state gram 6 1 9 1')"
+grep -Fq 'haar_pairing 1/324' <<<"$sawtooth_gram"
+sawtooth_mean="$(api_request 'weighted-remainder-state sawtooth-mean 6 1 3 1')"
+grep -Fq 'conditional_mean -1/12' <<<"$sawtooth_mean"
+printf '  exact sawtooth, Dedekind, Haar pairing and conditional mean through JSON/TCP: PASS\n'
+
+remainder_pairing="$(api_request 'weighted-remainder-state pairing 6 2 0 2')"
+grep -Fq 'finite average 7/135' <<<"$remainder_pairing"
+grep -Fq 'Haar lower -1/3' <<<"$remainder_pairing"
+grep -Fq 'Haar upper 2/3' <<<"$remainder_pairing"
+printf '  exact boundary pairing through JSON/TCP: PASS\n'
+
+remainder_crt="$(api_request 'weighted-remainder-state crt 4:0 6:2')"
+grep -Fq 'haar_probability=1/12' <<<"$remainder_crt"
+grep -Fq 'residue=4' <<<"$remainder_crt"
+remainder_moment="$(api_request 'weighted-remainder-state moment 6 g 0:1 1:2')"
+grep -Fq 'finite_moment=41519/2187000' <<<"$remainder_moment"
+remainder_haar_moment="$(api_request 'weighted-remainder-state haar-moment 4 0 1')"
+grep -Fq 'finite_haar_reset_moment=1/9' <<<"$remainder_haar_moment"
+remainder_block="$(api_request 'weighted-remainder-state block 6 4')"
+grep -Fq 'deficit_difference=1979/3780' <<<"$remainder_block"
+remainder_forcing="$(api_request 'weighted-remainder-state forcing 6')"
+grep -Fq 'full_reset_forcing=6/5' <<<"$remainder_forcing"
+printf '  exact joint CRT, moments and blocks through JSON/TCP: PASS\n'
+
+remainder_cylinder="$(api_request 'weighted-remainder-state cylinder 2 -1 2')"
+grep -Fq 'finite_mean=1/12' <<<"$remainder_cylinder"
+grep -Fq 'mean_radius=1/4' <<<"$remainder_cylinder"
+remainder_position="$(api_request 'weighted-remainder-state position 2 1 2 1/2')"
+grep -Fq 'exceedance_lower=1/4' <<<"$remainder_position"
+remainder_weight="$(api_request 'weighted-remainder-state position-weight 2 1 2 2')"
+grep -Fq 'probability_upper=1' <<<"$remainder_weight"
+printf '  exact cylinder and position intervals through JSON/TCP: PASS\n'
+
+remainder_verification="$(api_request 'verify weighted-remainder-state')"
+grep -Fq '10/10 verification groups passed.' <<<"$remainder_verification"
+grep -Fq '1/1 verifications passed.' <<<"$remainder_verification"
+printf '  weighted remainder verifier through JSON/TCP: PASS\n'
+
 fiber_cancellation="$(api_request 'primitive-character-cancellation inspect 5 1 1')"
 grep -Fq 'conductor witnesses and exact fiber sizes  PASS' <<<"$fiber_cancellation"
 grep -Fq 'Result  PASS' <<<"$fiber_cancellation"
@@ -891,4 +1141,4 @@ grep -Fq 'analysis mass=9 collision=1 orientation=4' <<<"$oriented_trichotomy"
 grep -Fq 'Result  PASS' <<<"$oriented_trichotomy"
 printf '  oriented comparison trichotomy through JSON/TCP: PASS\n'
 
-printf '\n127 API tests: 127 passed, 0 failed\n'
+printf '\nAll API regression checks passed.\n'

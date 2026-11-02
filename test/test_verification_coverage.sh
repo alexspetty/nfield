@@ -40,10 +40,14 @@ while IFS=$'\t' read -r title status; do
 done <"$titles_file"
 
 last_title="$(tail -n 1 "$titles_file" | cut -f 1)"
-if [ "$last_title" != "The Secondary Term in Digit-Collision Energy" ]; then
+if [ "$last_title" != "Collision Calculus: Boundary Readings, Energy and Refinement" ]; then
     printf 'public ledger has an unexpected final title: %s\n' "$last_title" >&2
     failures=$((failures + 1))
 fi
+
+
+python3 test/test_conservation_coverage.py
+python3 test/test_published_extensions.py
 
 unpublished_title="The Arithmetic"" Scalar"
 if grep -Fqi "$unpublished_title" "$LEDGER"; then

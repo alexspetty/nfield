@@ -49,12 +49,13 @@ Reader-facing theorem map for the Lean companion to
 
 ## Formalization boundary
 
-Every named finite algebraic definition, lemma, proposition, theorem, and
-corollary in the manuscript has a corresponding checked Lean construction or
-theorem.  Historical discussion, literature attribution, and the final
-open-ended comparison between orbit size and arithmetic conductor depth are
-exposition rather than additional propositions.  No unchecked declaration is
-used, and the formalization exposed no contradiction in the manuscript.
+The fifty-one checked results cover the main finite theorem stack. The
+pushdown-vanishing implication, its modulus-25 converse witness, and the
+general CRT reduction to the coprime periodic component are not assembled as
+title-facing theorems. The claim and equation ledgers record these remaining
+formalization obligations separately from the open higher-index energy
+question. A checked declaration does not certify every clause of nearby
+exposition. No unchecked declaration is used in the listed theorem stack.
 -/
 
 namespace NField.Papers.AdditiveBoundariesAndConductorEnergiesOfPeriodicRemainderOrbits

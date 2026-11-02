@@ -892,6 +892,8 @@ void verify_help(void)
         "  nfield verify all             Run every verifier; this is the long path\n"
         "  nfield help verify\n\n"
         "Tool verifiers:\n"
+        "  native-refinement                Complete native norm and signed origin trace\n"
+        "  field-observation                Exact grids, point readings and weighted work\n"
         "  reciprocal-square-selection  Alignment, cubic, and golden remainder\n"
         "  weighted-reference-profile   Integer-modulus weights and golden branches\n"
         "  digit-partition          Synchronized alignment and clearing depth\n"
@@ -926,7 +928,9 @@ void verify_help(void)
         "  collision-spectrum-factorization  Diagonal and Bernoulli product identity\n"
         "  special-value-moment              Exact weighted L(1) Parseval moment\n"
         "  base-five-cyclotomic-identity     Exact polynomial and fourth moment\n"
-        "  short-sum-bernoulli-correlation   Exhaustive finite correlation ledger\n\n"
+        "  short-sum-bernoulli-correlation   Exhaustive finite correlation ledger\n"
+        "  weighted-remainder-state          Conserved clocks and finite conductor rows\n\n"
+        "  capacity-resolution     Diagonal, prime phases and finite cutoffs\n"
         "  terminal-collision-conductor-ledger Exact prime-power and base-15 ledger\n\n"
         "  primitive-character-cancellation  Prime-power congruence-fiber sums\n"
         "  periodic-zeta-factorization       Model sum and centered transform\n"
@@ -948,6 +952,8 @@ void verify_help(void)
         "  subgroup-jacobi-expansion         Resonance and Jacobi-type flux\n\n"
         "  prime-base-collision-energy       Carry, Dedekind, and pole dictionary\n"
         "  arithmetic-boundary-defect        Exact finite secondary residual\n"
+        "  collision-sampling               Exact sampling, carrier and switching ledgers\n"
+        "  boundary-spectrum                General finite unit-group boundary transforms\n"
         "  carry-completed-carrier           Cyclic tower, seam, and product Gram\n\n"
         "Legacy research verifiers retained for compatibility:\n"
         "  gate-width  mobius-family  sum-rule  mean-formula  finite-det\n"
@@ -977,6 +983,8 @@ int verify_dispatch(const char *name)
 
     typedef struct { const char *name; int (*fn)(void); } entry;
     entry tests[] = {
+        {"native-refinement", native_refinement_verify},
+        {"field-observation", field_observation_verify},
         {"reciprocal-square-selection", reciprocal_square_selection_verify},
         {"weighted-reference-profile", weighted_reference_profile_verify},
         {"digit-partition", digit_partition_verify},
@@ -1010,6 +1018,9 @@ int verify_dispatch(const char *name)
         {"special-value-moment", special_value_moment_verify},
         {"base-five-cyclotomic-identity", base_five_cyclotomic_identity_verify},
         {"short-sum-bernoulli-correlation", short_sum_bernoulli_correlation_verify},
+        {"weighted-remainder-state", weighted_remainder_state_verify},
+        {"capacity-resolution", collision_capacity_transition_verify},
+        {"capacity-generation", collision_capacity_generation_verify},
         {"terminal-collision-conductor-ledger", terminal_collision_conductor_ledger_verify},
         {"primitive-character-cancellation", primitive_character_cancellation_verify},
         {"periodic-zeta-factorization", periodic_zeta_factorization_verify},
@@ -1031,6 +1042,8 @@ int verify_dispatch(const char *name)
         {"subgroup-jacobi-expansion", subgroup_jacobi_expansion_verify},
         {"prime-base-collision-energy", prime_base_collision_energy_verify},
         {"arithmetic-boundary-defect", arithmetic_boundary_defect_verify},
+        {"collision-sampling", collision_sampling_verify},
+        {"boundary-spectrum", boundary_spectrum_verify},
         {"carry-completed-carrier", carry_completed_carrier_verify},
         {"gate-width",    verify_gate_width},
         {"mobius-family",  verify_mobius_family},

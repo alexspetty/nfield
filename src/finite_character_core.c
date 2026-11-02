@@ -555,6 +555,53 @@ static int finite_group_factors_through(
     return 1;
 }
 
+void finite_character_table_free(FiniteCharacterTable *table)
+{
+    if(!table) return;
+    free(table->phase); free(table->conductor); free(table->odd);
+    memset(table,0,sizeof *table);
+}
+int finite_character_table_build(int modulus,FiniteCharacterTable *out)
+{
+    if(!out || out->phase || out->conductor || out->odd || modulus<2 ||
+       modulus>FINITE_CHARACTER_TABLE_MAX_MODULUS) return 0;
+    FiniteCharacterGroup group={0}; FiniteCharacterTable table={0};
+    if(!finite_group_build(modulus,&group)) return 0;
+    table.modulus=modulus; table.count=group.unit_count;
+    table.denominator=(int)finite_group_phase_denominator(&group);
+    table.phase=malloc((size_t)table.count*modulus*sizeof *table.phase);
+    table.conductor=calloc((size_t)table.count,sizeof *table.conductor);
+    table.odd=calloc((size_t)table.count,sizeof *table.odd);
+    if(!table.phase || !table.conductor || !table.odd) goto fail;
+    for(int ch=0;ch<table.count;ch++) {
+        int index=ch,coordinates[FINITE_CHARACTER_MAX_FACTORS]={0};
+        for(int f=0;f<group.factor_count;f++) {
+            coordinates[f]=index%group.factors[f].order; index/=group.factors[f].order;
+        }
+        for(int r=0;r<modulus;r++) table.phase[(size_t)ch*modulus+r]=
+            collision_table_gcd(r,modulus)==1?(int)finite_group_phase_numerator(
+                &group,coordinates,r,table.denominator):-1;
+        table.odd[ch]=table.phase[(size_t)ch*modulus+modulus-1]!=0;
+        for(int q=1;q<=modulus;q++) if(modulus%q==0 &&
+           finite_group_factors_through(&group,coordinates,q,table.denominator)) {
+            table.conductor[ch]=q; break;
+        }
+        if(!table.conductor[ch]) goto fail;
+    }
+    finite_group_free(&group); *out=table; return 1;
+fail:
+    finite_group_free(&group); finite_character_table_free(&table); return 0;
+}
+long double complex finite_character_table_value(const FiniteCharacterTable *table,
+    unsigned ch,unsigned residue)
+{
+    if(!table || !table->phase || ch>=(unsigned)table->count) return 0;
+    int phase=table->phase[(size_t)ch*table->modulus+residue%table->modulus];
+    if(phase<0) return 0;
+    long double angle=2*acosl(-1.0L)*phase/table->denominator;
+    return cosl(angle)+I*sinl(angle);
+}
+
 void finite_character_spectrum_free(FiniteCharacterSpectrum *spectrum)
 {
     if (!spectrum) return;

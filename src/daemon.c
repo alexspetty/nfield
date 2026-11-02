@@ -27,7 +27,7 @@
 extern int nfield_dispatch(const char *cmdline, char *outbuf, size_t outbuf_size);
 
 #define MAX_CMD_LEN 4096
-#define MAX_OUTPUT  (256 * 1024)
+#define MAX_OUTPUT  (1024 * 1024)
 #define MAX_QUEUE   256
 
 /* ── Work queue ──────────────────────────────────────── */

@@ -25,7 +25,10 @@ typedef struct {
 static const CommandSpec command_specs[] = {
     {"analyze", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
     {"field", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
+    {"native-refinement", "detector transport probe-transport packet copy-cost kernel mask-capture trace collision4 collision-families carry detail polarity stable-correction divisor-family divisor-work parent-credit verify", "--json --output --help",
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"align", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
+    {"field-observation", "clocks pulses harmonics segments native-cycle tail-bound work native-boundary native-variation invariants register shells verify", "--matrix --from-prefixes --help", COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"div", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
     {"decompose", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
     {"polar", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
@@ -114,7 +117,17 @@ static const CommandSpec command_specs[] = {
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"base-five-cyclotomic-identity", "audit verify", "--time --help",
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
-    {"short-sum-bernoulli-correlation", "ledger verify", "--time --help",
+    {"weighted-remainder-state", "inspect conductor boundary ramp floor straighten clock clock-law age-budget finite-weights variance rows increment-covariance increment-recurrence fourier amplitude-refinement expansion-constants harmonic-expansion amplitude-expansion deficit-series deficit-diagnostic spectral-product spectral-mean spectral-energy spectral-tail character-phase character-table character-l mixed-moment cotangent-sums harmonic-polylog harmonic-root harmonic-root-average sine-transform small-amplitudes alignment alignment-local harmonic-local alignment-lcm alignment-growth law-moment law-cdf law-window law-concentration law-characteristic law-recurrence law-tail-bound law-activation clock-difference mass-inverse mass-recovery perturbation cycle cycle-tv covariance amplitude tree tree-node weight budget mass sawtooth dedekind gram sawtooth-mean reset pairing forcing block crt moment haar-moment cylinder position position-weight conductor-full conductor-beta conductor-prime conductor-extrema conductor-minimizers activation verify", "--time --help",
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+    {"capacity-resolution", "constants inspect window sample unit spectrum progression verify", "--time --help",
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+    {"capacity-generation", "source carry measurement ledger refine control current seed profile lattice verify", "--time --help",
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+    {"collision-sampling", "inspect sampled carrier poles collar prefix correlation state switching convolution capacity dedekind transform inverse grid source decomposition descent prefix-word prefix-population stopped-cost fold folded-source rectangle cubic dedekind-mass phase-sum completion kernel shells reciprocal interior verify", "--carriers --time --help",
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+    {"boundary-spectrum", "inspect channel verify", "--support --weights --time --help",
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+    {"short-sum-bernoulli-correlation", "ledger moments verify", "--time --help",
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"primitive-character-cancellation", "inspect verify", "--time --help",
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
@@ -241,10 +254,10 @@ static int option_takes_value(const char *option)
 {
     static const char *value_options[] = {
         "--accepting", "--alpha", "--base", "--beta", "--coset",
-        "--cutoff", "--depth", "--factor", "--height", "--lag", "--lower",
-        "--max-even", "--max-prime", "--port", "--prime-count", "--primes",
+        "--cutoff", "--block-length", "--depth", "--factor", "--height", "--lag", "--lower",
+        "--max-even", "--max-prime", "--port", "--prime-count", "--primes", "--radial",
         "--sigma", "--state-weights", "--steps", "--support", "--tau",
-        "--threads", "--transition", "-N"
+        "--threads", "--transition", "--output", "-N"
     };
     const size_t count = sizeof(value_options) / sizeof(value_options[0]);
     for (size_t index = 0; index < count; index++)
@@ -387,7 +400,8 @@ void nfield_commands_help(void)
         "nfield command catalog\n\n"
         "Field exploration\n"
         "  analyze  field  align  div  decompose  polar  survey  range\n"
-        "  table  spectral  equations\n\n"
+        "  table  spectral  equations\n"
+        "\n"
         "Digit structure and alignment\n"
         "  reciprocal-square-selection  weighted-reference-profile\n"
         "  digit-partition  alignment-limit  three-tier  deficit-lattice\n"
@@ -416,7 +430,11 @@ void nfield_commands_help(void)
         "  terminal-collision-conductor-ledger  finite-state-orbit-boundary\n"
         "  full-orbit-energy  quadratic-orbit-energy\n"
         "  subgroup-jacobi-expansion  prime-base-collision-energy\n"
-        "  arithmetic-boundary-defect  carry-completed-carrier\n\n"
+        "  arithmetic-boundary-defect  carry-completed-carrier\n"
+        "  capacity-resolution  capacity-generation\n\n"
+        "Clocks, sampling, and native energy\n"
+        "  weighted-remainder-state  collision-sampling  boundary-spectrum\n"
+        "  field-observation  native-refinement\n\n"
         "Operations\n"
         "  commands  verify  tables  daemon  completion  version  help\n\n"
         "Use `nfield help <tool>` for actions and scope.\n"

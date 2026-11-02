@@ -10,7 +10,7 @@ import NField.Alignment.SynchronizedPeriodAlignment
 import NField.Golden.SelfReferentialThreshold
 
 /-!
-# Three and the Golden Ratio
+# Why the Golden Ratio Selects the Prime Three
 
 This is the manuscript-facing theorem manifest.  Every declaration below
 restates a proof-bearing manuscript claim and discharges it from reusable

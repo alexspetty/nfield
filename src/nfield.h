@@ -18,6 +18,35 @@
 #define NFIELD_H
 
 #include <stddef.h>
+#include <stdint.h>
+#include "weighted_remainder_state.h"
+#include "collision_capacity_transition.h"
+#include "collision_capacity_generation.h"
+#include "weighted_remainder_exact.h"
+#include "weighted_remainder_floor.h"
+#include "weighted_remainder_clock.h"
+#include "weighted_remainder_weights.h"
+#include "weighted_remainder_rows.h"
+#include "weighted_remainder_increment.h"
+#include "weighted_remainder_fourier.h"
+#include "weighted_remainder_amplitude.h"
+#include "weighted_remainder_expansion.h"
+#include "weighted_remainder_spectral.h"
+#include "weighted_remainder_character.h"
+#include "weighted_remainder_cotangent.h"
+#include "weighted_remainder_harmonic_root.h"
+#include "weighted_remainder_small_amplitude.h"
+#include "weighted_remainder_dirichlet.h"
+#include "weighted_remainder_primitive.h"
+#include "weighted_remainder_sawtooth.h"
+#include "weighted_remainder_pairing.h"
+#include "weighted_remainder_joint.h"
+#include "weighted_remainder_cylinder.h"
+#include "weighted_remainder_conductor.h"
+#include "weighted_remainder_activation.h"
+#include "weighted_remainder_alignment_command.h"
+#include "weighted_remainder_alignment_growth.h"
+#include "weighted_remainder_law.h"
 
 #ifdef NFIELD_GMP
 #include <gmp.h>
@@ -40,6 +69,10 @@ typedef long long nf_int;
 #define nf_set(x,v)       ((x) = (long long)(v))
 #define nf_get_si(x)      (x)
 #endif
+
+/* Certified finite native refinement; public declarations in its own header. */
+#include "native_refinement.h"
+#include "field_observation.h"
 
 /* ── Repetend ────────────────────────────────────────────── */
 
@@ -426,6 +459,7 @@ int    base_five_cyclotomic_identity_verify(void);
 void   base_five_cyclotomic_identity_help(void);
 
 int    short_sum_bernoulli_correlation_ledger(void);
+int    short_sum_bernoulli_correlation_moments(int base);
 int    short_sum_bernoulli_correlation_verify(void);
 void   short_sum_bernoulli_correlation_help(void);
 
@@ -773,6 +807,13 @@ int    arithmetic_boundary_defect_inspect(int base);
 int    arithmetic_boundary_defect_scan(int maximum_base);
 int    arithmetic_boundary_defect_verify(void);
 void   arithmetic_boundary_defect_help(void);
+
+int    collision_sampling_command(int argc, char **argv);
+int    collision_sampling_verify(void);
+void   collision_sampling_help(void);
+int    boundary_spectrum_command(int argc, char **argv);
+int    boundary_spectrum_verify(void);
+void   boundary_spectrum_help(void);
 
 /* -- carry-completed cyclic carriers and coherent product Grams -- */
 

@@ -1,0 +1,2433 @@
+{
+  "schema": 1,
+  "date": "2026-09-12",
+  "scope": "Complete local finite computational coverage in the stated resource ranges; no universal proof, Lean or public-release certification.",
+  "papers": [
+    {
+      "key": "the_structure_that_survives",
+      "manuscript": "external-sources/the_structure_that_survives.tex",
+      "sha256": "4232b602649c3ef9d22408f7f543b16d88fa8df3cb2b8d8bd5ad1eca74ad3a30",
+      "expected_family_count": 17,
+      "labels": [
+        "eq:deviation",
+        "thm:finite-table",
+        "eq:finite-table",
+        "cor:all-primes",
+        "prop:reflection",
+        "cor:parity-gate",
+        "eq:hamiltonian",
+        "thm:quotient",
+        "eq:quotient",
+        "cor:heat-trace",
+        "cor:fixed-complexity"
+      ],
+      "result_environment_count": 7,
+      "families": [
+        {
+          "id": "1",
+          "name": "Digit-bin map, direct collision count, and centered deviation",
+          "location": "opening section and `eq:deviation`",
+          "objects": [
+            "fd"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "2",
+          "name": "Powers `B`, `m`, and the diagonal set `G_(b,ell)`",
+          "location": "opening of `The All-Prime Table`",
+          "objects": [
+            "fd"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "3",
+          "name": "Slice coordinate, endpoint correction, and finite table formula",
+          "location": "`thm:finite-table` and its proof",
+          "objects": [
+            "fd"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "4",
+          "name": "Piecewise all-prime label",
+          "location": "`cor:all-primes`",
+          "objects": [
+            "label"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "5",
+          "name": "Reflection sum and half-centered odd table",
+          "location": "`prop:reflection`",
+          "objects": [
+            "reflection"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "6",
+          "name": "Character coefficient and even-character vanishing",
+          "location": "`cor:parity-gate`",
+          "objects": [
+            "odd",
+            "factor"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "7",
+          "name": "Label states, block populations, exponential kernel, degrees, `A`, `L`, and `H`",
+          "location": "opening of `The Finite Quotient` and `eq:hamiltonian`",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "8",
+          "name": "Abstract quotient action and block lift",
+          "location": "first half of `thm:quotient` proof",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "9",
+          "name": "Concrete quotient entries and spectral disjoint union",
+          "location": "`eq:quotient` and `thm:quotient`",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "10",
+          "name": "Adjacent ratios, product formula for `E`, and tridiagonal inverse quadratic form",
+          "location": "middle of `thm:quotient` proof",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "11",
+          "name": "Positive simple quotient spectrum, Perron vector, and distinct `H` modes",
+          "location": "end of `thm:quotient` proof",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "12",
+          "name": "Exact multiplicity and heat-trace identity and bounds",
+          "location": "`thm:quotient` and `cor:heat-trace`",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "13",
+          "name": "Label count `q_(b,ell)`, eventual occurrence, exact bulk, and vanishing mode proportion",
+          "location": "`cor:fixed-complexity`",
+          "objects": [
+            "fd",
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Eventual prime occurrence and limiting mode proportion are written statements."
+        },
+        {
+          "id": "14",
+          "name": "Three twelve-value label sets",
+          "location": "displayed table in `Exact Compression`",
+          "objects": [
+            "label"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "15",
+          "name": "First 300 primes and exact `q=12`, `N-q=288` examples",
+          "location": "paragraph after the displayed table",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "16",
+          "name": "`tau=1` and numerical tolerance `5e-10`",
+          "location": "finite-evaluation paragraph",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "17",
+          "name": "Asymptotic universality beyond finite compression",
+          "location": "heat-trace discussion",
+          "objects": [
+            "quotient"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Universality beyond finite compression remains open."
+        }
+      ]
+    },
+    {
+      "key": "carry_boundaries_and_bernoulli_spectra",
+      "manuscript": "external-sources/carry_boundaries_and_bernoulli_spectra.tex",
+      "sha256": "8ee0f291eeb2d3f538f6fb8f1f7322adb0a3a42fd6498f04adff2919114b96f0",
+      "expected_family_count": 23,
+      "labels": [
+        "sec:reduction",
+        "lem:locality",
+        "prop:finite-prefix",
+        "ex:base-nine-slice",
+        "thm:cylinder-reduction",
+        "cor:weighted-cylinder",
+        "cor:collision-reduction",
+        "cor:three-point-reduction",
+        "cor:specializations",
+        "sec:carry-boundary",
+        "def:carry-boundary",
+        "def:signed-chain",
+        "def:formal-boundary",
+        "lem:endpoint",
+        "cor:endpoint-invisible",
+        "sec:sawtooth",
+        "lem:bern",
+        "sec:main",
+        "lem:gauss-separation",
+        "lem:twist",
+        "thm:main",
+        "cor:constant",
+        "cor:finite-prefix-spectrum",
+        "sec:visible",
+        "lem:interval-stokes",
+        "thm:boundary-image-kernel",
+        "cor:no-visible",
+        "sec:worked-example",
+        "sec:collision",
+        "cor:collision",
+        "cor:three",
+        "sec:conductor",
+        "def:eta",
+        "thm:conductor-twist",
+        "thm:conductor-boundary",
+        "thm:native-conductor",
+        "cor:lag-stratification",
+        "sec:meanlaw",
+        "def:mean-admissible",
+        "thm:mean-criterion",
+        "thm:terminal-collision-mean",
+        "thm:conductor-ledger",
+        "cor:leakage",
+        "prop:composite-terminal-obstruction",
+        "cor:dichotomy",
+        "sec:energy",
+        "thm:energy",
+        "sec:significance",
+        "sec:outlook"
+      ],
+      "result_environment_count": 37,
+      "families": [
+        {
+          "id": "1",
+          "name": "Long-division map, greedy digit formula, and prefix readout",
+          "location": "`The Carry Under the Digit` and `Digit locality`",
+          "objects": [
+            "prefix"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "2",
+          "name": "Weighted slice count, carry sum, bulk term, endpoint, and centered identity",
+          "location": "`Finite-prefix slice identity`",
+          "objects": [
+            "prefix"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "3",
+          "name": "Cylinder support and collision, agreement, transition, and block specializations",
+          "location": "`Cylinder-to-Carry Reduction` and its corollaries",
+          "objects": [
+            "prefix"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "4",
+          "name": "Carry observable, carry step, signed boundary chain, flux, and formal boundary",
+          "location": "`Carry-Boundary Observables`",
+          "objects": [
+            "spectrum",
+            "bernoulli"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "5",
+          "name": "Terminal support size, formal boundary, and cyclic cancellation",
+          "location": "end of `Carry-Boundary Observables`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "6",
+          "name": "Endpoint normalization and spectral invisibility of the constant discrepancy",
+          "location": "`Endpoint normalization` and its corollary",
+          "objects": [
+            "prefix",
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "7",
+          "name": "Centered sawtooth, oddness, generalized Bernoulli transform, and even vanishing",
+          "location": "`The Floor Potential`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "8",
+          "name": "Primitive Gauss separation, twisted sawtooth, carry factorization, and constant-weight zero",
+          "location": "`The Carry-Boundary Factorization`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "9",
+          "name": "Interval Stokes endpoint formula",
+          "location": "`The Unit-Boundary Flux`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "10",
+          "name": "Ordinary unit inversion, determinacy, subfamily orthogonality, and nonunit invisibility",
+          "location": "`Unit-boundary image and kernel`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "11",
+          "name": "Modulus-six support, zero ordinary flux, and induced transform one third",
+          "location": "end of `The Unit-Boundary Flux`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "12",
+          "name": "Modulus-nine support, boundary, carry table, flux, Bernoulli value, transform, and energy `16/3`",
+          "location": "`The Base-Three Test Case` and `The Quadratic Edge`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "13",
+          "name": "Collision and three-point support formulas",
+          "location": "`Collision Supports and the Three-Point Hierarchy`",
+          "objects": [
+            "prefix",
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "14",
+          "name": "Conductor-depth weight, induced twisted sawtooth, carry pairing, and boundary pairing",
+          "location": "`Conductor Stratification`",
+          "objects": [
+            "bernoulli",
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "15",
+          "name": "Lifted boundary pushforward, higher primitive invisibility, and leading-lag conductor",
+          "location": "lifted-support theorem and corollary",
+          "objects": [
+            "bernoulli",
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "16",
+          "name": "Primitive-odd kernel, character population, Boundary Mean Criterion, and mean formula",
+          "location": "`The Boundary Mean Law`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "17",
+          "name": "Terminal endpoints, norm, balance, antipodal pairing, RMS, and mean twice formal boundary",
+          "location": "terminal-collision theorem",
+          "objects": [
+            "ledger",
+            "terminal"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "18",
+          "name": "General conductor pushdowns, M\u00f6bius ledger, and proper-leakage criterion",
+          "location": "conductor-ledger theorem and corollary",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "19",
+          "name": "Base-fifteen rows, moment 896, population 32, mean 28, and boundary 30",
+          "location": "composite-obstruction proposition",
+          "objects": [
+            "ledger",
+            "terminal"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "20",
+          "name": "Parseval energy and complete prime-power conductor decomposition",
+          "location": "`The Quadratic Edge` and `Prime-power energy decomposition`",
+          "objects": [
+            "spectrum",
+            "bernoulli"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "21",
+          "name": "Unit sawtooth correlation and finite M\u00f6bius-Dedekind combination",
+          "location": "quadratic-layer remark",
+          "objects": [
+            "bernoulli",
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "22",
+          "name": "Primitive Bernoulli and `L(1)` magnitude relation",
+          "location": "final quadratic-layer paragraph",
+          "objects": [
+            "moment"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The primitive Bernoulli/L(1) relation imports the functional equation; finite moments test only its finite algebra."
+        },
+        {
+          "id": "23",
+          "name": "Higher-agreement mean and whole-orbit boundary",
+          "location": "`Beyond Finite Windows`",
+          "objects": [
+            "prefix",
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Higher-agreement mean and whole-orbit extensions remain open."
+        }
+      ]
+    },
+    {
+      "key": "additive_boundaries_and_conductor_energies_of_periodic_remainder_orbits",
+      "manuscript": "external-sources/additive_boundaries_and_conductor_energies_of_periodic_remainder_orbits.tex",
+      "sha256": "e4ff6f8883ffcb4522642783e7bc9cff77705cc1bbebe4b653a3faf493b4cd47",
+      "expected_family_count": 21,
+      "labels": [
+        "sec:factor",
+        "lem:twist",
+        "thm:universal",
+        "cor:digits",
+        "thm:visible",
+        "sec:ledger",
+        "lem:odd-kernel",
+        "lem:kernel",
+        "thm:ledger",
+        "thm:decomp",
+        "cor:clean",
+        "sec:base-fifteen",
+        "prop:base-fifteen-spectrum",
+        "sec:periodic",
+        "thm:fullorbit",
+        "ex:fullorbit",
+        "thm:higher-index-expansion",
+        "sec:index-two",
+        "lem:index-two-endpoint",
+        "thm:index2",
+        "ex:index2",
+        "thm:automaton-lift"
+      ],
+      "result_environment_count": 16,
+      "families": [
+        {
+          "id": "1",
+          "name": "Orbit boundary, carry observable, transform, signed chain, and flux",
+          "location": "`Remainder Orbits and Their Edges` and opening of `Boundary Flux`",
+          "objects": [
+            "spectrum",
+            "orbit"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "2",
+          "name": "Centered sawtooth, finite Fourier expansion, primitive Gauss separation, and twisted Bernoulli value",
+          "location": "`Twisted sawtooth evaluation`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "3",
+          "name": "Primitive odd boundary factorization, even vanishing, and finite-digit specialization",
+          "location": "`Boundary flux factorization` and `Finite digit conditions`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "4",
+          "name": "Unit-visible reconstruction and equality criterion",
+          "location": "`Dirichlet-visible boundary`",
+          "objects": [
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "5",
+          "name": "Pushdown, lifted primitive flux, exact-conductor energy, and top flux",
+          "location": "opening of `Energy by Exact Conductor`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "6",
+          "name": "Full odd and primitive-odd character kernels",
+          "location": "`Odd character kernel` and `Primitive-odd kernel`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "7",
+          "name": "Conductor ledger with diagonal and antipodal pushdown terms",
+          "location": "`Conductor ledger`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "8",
+          "name": "Nonnegative energy decomposition, proper/top split, and concentration criterion",
+          "location": "`Energy decomposition` and `Top-conductor concentration`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "9",
+          "name": "Increasing base-5 cells, unit boundary, even pushdown and energies `P_5=0`, `P_25=40`",
+          "location": "explicit paragraph after the top-conductor remark",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "10",
+          "name": "Base-fifteen support, endpoints, unit-visible chain, antipodal involution, and zero low-level pushdowns",
+          "location": "first half of `The Base-Fifteen Spectrum`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "11",
+          "name": "Base-fifteen endpoint reductions and complete `Delta_e`, `A_e`, and `Q_e` ledger",
+          "location": "middle of `The Base-Fifteen Spectrum`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "12",
+          "name": "Base-fifteen exact energies `24,240,360,400,896`, proper/top split `1024+896`, full energy `1920`, and signed corrections",
+          "location": "end of `The Base-Fifteen Spectrum`",
+          "objects": [
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "13",
+          "name": "CRT removal of the terminating component, multiplicative orbit `R_0<b>`, period, and full odd orbit energy definition",
+          "location": "opening of `Periodic Remainder Orbits`",
+          "objects": [
+            "orbit",
+            "full"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "General CRT and eventual-period reduction are written finite theorems; computation evaluates bounded instances."
+        },
+        {
+          "id": "14",
+          "name": "Full prime-power boundary, reduction-one kernel, primitive-source flux, exact support at conductor `p`, and energy `(p-1)p^(2e-2)/2`",
+          "location": "`Prime-level support of a full orbit`",
+          "objects": [
+            "full",
+            "ledger"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "15",
+          "name": "Base-two cycle modulo nine, visible boundary, conductor-three flux `-3`, and energy `9`",
+          "location": "first periodic-orbit example",
+          "objects": [
+            "full"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "16",
+          "name": "Resonant/off-resonant split, quotient indicator average, shifted Jacobi sum, and principal-product correction",
+          "location": "end of `Periodic Remainder Orbits` and `Higher-index Jacobi expansion`",
+          "objects": [
+            "jacobi"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "17",
+          "name": "Quadratic subgroup indicator, endpoint correction, and flux `(J-1)/2`",
+          "location": "`Index-two endpoint reduction`",
+          "objects": [
+            "quadratic",
+            "jacobi"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "18",
+          "name": "Shifted Jacobi norm, off-resonance population, first moment `Sigma`, second moment, supplementary values, and four modulus-eight branches",
+          "location": "`Index-two off-resonance law` and `The Modulus-Eight Split`",
+          "objects": [
+            "quadratic"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "19",
+          "name": "Prime-seven subgroup, two off-resonance channels, `Sigma=4`, and energy `2`",
+          "location": "index-two example",
+          "objects": [
+            "quadratic"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "20",
+          "name": "Emitted digit, lifted transition, eventual cycle, Boolean predecessor boundary, general weighted boundary, and zero total mass",
+          "location": "`Finite-State Orbit Boundaries`",
+          "objects": [
+            "orbit"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "21",
+          "name": "Full-residue extension and additive shift `w(x-1)-w(x)`",
+          "location": "paragraph after `Finite-state lift`",
+          "objects": [
+            "orbit",
+            "spectrum"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        }
+      ]
+    },
+    {
+      "key": "the_cubic_law_for_digit_collision_energy",
+      "manuscript": "external-sources/the_cubic_law_for_digit_collision_energy.tex",
+      "sha256": "7da0e9eab940dd0bc970c14c0ea7a3fdf0a0564e254cc047760c8bbdd122d156",
+      "expected_family_count": 18,
+      "labels": [
+        "rem:diagonal-support",
+        "lem:sawtooth-chars",
+        "prop:imprimitive-vanishing",
+        "lem:parseval-mass",
+        "lem:lagone-diagonal-character",
+        "sec:carry-table",
+        "lem:column-means",
+        "def:scirc",
+        "lem:floor-transform",
+        "thm:lagone-factor",
+        "lem:carry-reflection",
+        "cor:lagone-energy",
+        "thm:threshold",
+        "def:dedekind",
+        "def:weight",
+        "thm:weighted",
+        "cor:energy-dictionary",
+        "prop:doublesum",
+        "lem:reduced",
+        "prop:diagonal-offdiagonal-split",
+        "lem:euler",
+        "lem:rademacher",
+        "prop:fourway",
+        "lem:offdiag-main",
+        "lem:R0",
+        "lem:a-modulus-cancellation",
+        "lem:dedekind-first-moment",
+        "prop:k-modulus-remainder",
+        "thm:cubic",
+        "rem:status",
+        "rem:poles",
+        "prop:collision-spectral-form",
+        "cor:l1-window-moment",
+        "prop:spectral-poles"
+      ],
+      "result_environment_count": 31,
+      "families": [
+        {
+          "id": "1",
+          "name": "Collision diagonal, centered sawtooth, and odd character expansion",
+          "location": "opening sections and `Odd sawtooth expansion`",
+          "objects": [
+            "bernoulli",
+            "factor"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "2",
+          "name": "Prime-square imprimitive vanishing and phase-sensitive short-window reduction",
+          "location": "`The Collision Spectrum`",
+          "objects": [
+            "cancellation",
+            "factor"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "3",
+          "name": "Threshold carry table, column law, class means, and reflection",
+          "location": "`Prime-Base Carry Table`",
+          "objects": [
+            "energy"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "4",
+          "name": "Raw threshold variance, half-centered square mass, and centered energy",
+          "location": "`thm:threshold`",
+          "objects": [
+            "energy"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "5",
+          "name": "Primitive floor transform and Bernoulli coefficient",
+          "location": "`Primitive odd factorization`",
+          "objects": [
+            "factor"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "6",
+          "name": "Primitive collision factorization and finite Parseval",
+          "location": "`Primitive odd factorization` and `cor:lagone-energy`",
+          "objects": [
+            "factor",
+            "moment"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "7",
+          "name": "Dedekind sawtooth definition, negation, inversion, and exact ratio-one value",
+          "location": "Dedekind Compression",
+          "objects": [
+            "energy",
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "8",
+          "name": "Weighted Dedekind identity and vanishing modulus-base correction",
+          "location": "`thm:weighted` and `cor:energy-dictionary`",
+          "objects": [
+            "energy"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "9",
+          "name": "Collision weights and the weight-free double sum",
+          "location": "`prop:doublesum`",
+          "objects": [
+            "energy"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "10",
+          "name": "Reduced-ratio invariance, diagonal/off-diagonal split, and closed diagonal",
+          "location": "`lem:reduced` and `prop:diagonal-offdiagonal-split`",
+          "objects": [
+            "energy",
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "11",
+          "name": "GCD grouping and the floor-weighted primitive-ratio triangle",
+          "location": "`lem:reduced` and `prop:diagonal-offdiagonal-split`",
+          "objects": [
+            "energy"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "12",
+          "name": "Coprime Euler mass",
+          "location": "`lem:euler`",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The infinite coprime Euler normalization is proved in the manuscript, not inferred from finite mass."
+        },
+        {
+          "id": "13",
+          "name": "Rademacher three-term reduction and four-way off-diagonal identity",
+          "location": "`lem:rademacher` and `prop:fourway`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "14",
+          "name": "Elementary remainder, zero `a`-modulus contribution, and surviving `k`-modulus bound",
+          "location": "`lem:R0`, `lem:a-modulus-cancellation`, `lem:dedekind-first-moment`, `prop:k-modulus-remainder`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Uniform first-moment and surviving-remainder bounds use named analytic estimates."
+        },
+        {
+          "id": "15",
+          "name": "Off-diagonal two-thirds pole and full cubic law",
+          "location": "`lem:offdiag-main` and `thm:cubic`",
+          "objects": [
+            "energy",
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The cubic asymptotic requires Rademacher/Euler and analytic remainder estimates."
+        },
+        {
+          "id": "16",
+          "name": "Exact weighted `L(1)` character moment and cubic-scale moment estimate",
+          "location": "`Character-Moment Form`",
+          "objects": [
+            "moment"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The L-value interpretation and asymptotic use the written functional-equation input."
+        },
+        {
+          "id": "17",
+          "name": "Spectral window diagonal and off-diagonal poles",
+          "location": "`Spectral pole split`",
+          "objects": [
+            "moment",
+            "energy"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "18",
+          "name": "Floor-defect and lower-modulus residual below cubic scale",
+          "location": "`rem:status` and The Cubic Law",
+          "objects": [
+            "defect",
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Lower-order asymptotics are outside the cubic theorem."
+        }
+      ]
+    },
+    {
+      "key": "the_secondary_term_in_digit_collision_energy",
+      "manuscript": "external-sources/the_secondary_term_in_digit_collision_energy.tex",
+      "sha256": "6991e8266215148465f52d7284478ed958bc57de663a6883b4576981ff13e9ff",
+      "expected_family_count": 22,
+      "labels": [
+        "lem:floor-fractional",
+        "thm:straightening",
+        "eq:straightening",
+        "eq:sampled-energy",
+        "eq:Ddef",
+        "eq:Jdef",
+        "eq:Sdef",
+        "sec:continuous",
+        "lem:reduced-capacity",
+        "eq:reduced-capacity",
+        "lem:coprime-euler",
+        "eq:coprime-euler",
+        "prop:continuous-ledger",
+        "eq:continuous-ledger",
+        "eq:saffari-vaughan",
+        "lem:weighted-fractions",
+        "eq:weighted-fractions",
+        "eq:fractional-first-moment",
+        "lem:continuous-mobius",
+        "eq:continuous-mobius",
+        "prop:fractional-floor",
+        "eq:fractional-floor",
+        "thm:continuous-defect",
+        "eq:continuous",
+        "cor:gcd-lcm-secondary",
+        "eq:gcd-lcm-square-secondary",
+        "eq:gcd-lcm-triangular-secondary",
+        "eq:slope",
+        "eq:Mks",
+        "eq:Tks",
+        "lem:jumps",
+        "eq:fjumps",
+        "eq:originjump",
+        "lem:alias",
+        "eq:aliaslemma",
+        "eq:Ap",
+        "eq:Cp",
+        "thm:jumpalias",
+        "eq:jumpalias",
+        "prop:curvature",
+        "eq:curvatureexact",
+        "eq:curvaturebound",
+        "eq:aliasreduced",
+        "eq:dedekindinverse",
+        "eq:weight",
+        "eq:X",
+        "eq:Rk",
+        "eq:Rk-slices",
+        "lem:discretepair",
+        "eq:discretepair",
+        "thm:bridge",
+        "eq:bridge",
+        "eq:Xbound",
+        "eq:bridgeasymp",
+        "lem:firstmoment",
+        "eq:firstmoment",
+        "lem:one-carrier",
+        "eq:one-carrier",
+        "prop:unconditional",
+        "eq:unconditional",
+        "sec:inverse",
+        "eq:extended-dedekind",
+        "eq:full-dedekind-transform",
+        "eq:unit-dedekind-transform",
+        "eq:inverse-saw-series",
+        "lem:exact-additive-transform",
+        "eq:full-transform-series",
+        "eq:unit-full-mobius",
+        "eq:dedekind-scaling",
+        "lem:numerator-descent",
+        "eq:numerator-descent",
+        "eq:numerator-descent-bound",
+        "lem:completed-inverse-prefix",
+        "eq:completed-inverse-prefix",
+        "lem:inverse-harmonic",
+        "eq:inverse-harmonic-bound",
+        "eq:korolev-range",
+        "prop:uniform-transform",
+        "eq:uniform-transform",
+        "lem:reciprocal-divisor-moment",
+        "eq:reciprocal-divisor-moment",
+        "thm:all-prime-damping",
+        "eq:all-prime-reservoir",
+        "eq:all-prime-sampling",
+        "eq:carrier-prefix-loglog",
+        "eq:one-carrier-loglog",
+        "eq:square-lock-displacement",
+        "eq:collar-prefix",
+        "eq:carrier-cadence",
+        "eq:small-displacement-mass",
+        "eq:small-displacement-reservoir-bridge",
+        "thm:square-lock-localization",
+        "eq:small-displacement-bound",
+        "eq:divisor-lock",
+        "eq:signed-displacement-count",
+        "cor:remaining-strip",
+        "eq:state-burden",
+        "eq:fresh-burden",
+        "eq:cadence-dwell",
+        "prop:switching-ledger",
+        "eq:fresh-collision-sum",
+        "eq:switching-linear",
+        "eq:switching-energy",
+        "eq:charge-release",
+        "eq:burden-variance",
+        "eq:reduced-harmonic",
+        "eq:partition-packet",
+        "prop:complementary-partition",
+        "eq:complementary-partition",
+        "eq:dedekind-gram",
+        "cor:primitive-convolution",
+        "eq:primitive-convolution",
+        "eq:primitive-convolution-inversion",
+        "eq:triangular-convolution",
+        "prop:live-sector-damping",
+        "eq:fresh-live-target",
+        "prob:signed",
+        "eq:signed",
+        "thm:conditional",
+        "eq:Slog",
+        "eq:V",
+        "prop:ladder",
+        "eq:limitconj",
+        "eq:secondarysplit",
+        "cor:inherit",
+        "eq:secondaryinherit",
+        "eq:jordan",
+        "tab:data"
+      ],
+      "result_environment_count": 37,
+      "families": [
+        {
+          "id": "1",
+          "name": "Lag-one diagonal, floor response, and centered energy",
+          "location": "`The finite secondary problem`",
+          "objects": [
+            "energy"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "2",
+          "name": "Bernoulli straightening and sampled energy",
+          "location": "`The finite secondary problem`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "3",
+          "name": "Continuous capacity and normalized sampling defect",
+          "location": "opening and `The continuous secondary coefficient`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "4",
+          "name": "Coprime Euler mass and floor-defect ledger",
+          "location": "`The continuous secondary coefficient`",
+          "objects": [
+            "generation",
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "5",
+          "name": "Continuous `-3/pi^2` coefficient and GCD/LCM transfers",
+          "location": "`The continuous secondary coefficient`",
+          "objects": [
+            "defect",
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The continuous secondary coefficient uses the named fractional-part theorem."
+        },
+        {
+          "id": "6",
+          "name": "Straightened slope, carrier weights, cyclic prefixes, and jump data",
+          "location": "`The jump geometry of the straightened response`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "7",
+          "name": "Periodic aliasing and endpoint-reservoir formula",
+          "location": "`Exact carrier-grid aliasing`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "8",
+          "name": "Bernoulli curvature",
+          "location": "`Exact carrier-grid aliasing`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "9",
+          "name": "Dedekind sum, inversion, pair correlation, and Rademacher bridge",
+          "location": "`Exact Rademacher-reservoir bridge`",
+          "objects": [
+            "energy",
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "10",
+          "name": "First absolute moment, one-carrier estimate, and baseline sampling bound",
+          "location": "`The absolute-moment baseline`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Uniform Dedekind moment and carrier inequalities require their analytic estimates."
+        },
+        {
+          "id": "11",
+          "name": "Full and unit additive transforms",
+          "location": "`Inverse-residue damping`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "12",
+          "name": "Nonunit numerator descent and completed prefixes",
+          "location": "`Inverse-residue damping`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "13",
+          "name": "Inverse-residue harmonic estimate and uniform transform bound",
+          "location": "`Inverse-residue damping`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The Korolev/completion bound is external analytic input; finite inverse prefixes have a separately justified elementary tail budget."
+        },
+        {
+          "id": "14",
+          "name": "Reciprocal-divisor moments and all-prime carrier damping",
+          "location": "`Inverse-residue damping`",
+          "objects": [
+            "sampling",
+            "defect"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Uniform divisor moments and all-prime damping are written estimates, not finite-window conclusions."
+        },
+        {
+          "id": "15",
+          "name": "Square-lock displacement, collar mass, and two localization scales",
+          "location": "`Small square-lock displacements cannot carry the secondary term`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The uniform square-lock counting estimate is not certified by finite collars."
+        },
+        {
+          "id": "16",
+          "name": "State burden, fresh increments, dwell, linear ledger, and energy ledger",
+          "location": "`The floor-state switching ledger`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "17",
+          "name": "Stored-burden variance and charge-release criterion",
+          "location": "`The floor-state switching ledger`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "18",
+          "name": "Complementary partition and primitive additive convolution",
+          "location": "`The floor-state switching ledger`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "19",
+          "name": "Live-sector bound and cyclic correlation ladder",
+          "location": "`The live sector and sharper targets`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Uniform live-sector bounds remain written conditional estimates."
+        },
+        {
+          "id": "20",
+          "name": "Finite secondary coefficient",
+          "location": "`The finite secondary term`",
+          "objects": [
+            "sampling",
+            "defect"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite secondary asymptotic combines analytic coefficient and sampling estimates."
+        },
+        {
+          "id": "21",
+          "name": "Exact Jordan evaluation and manuscript table",
+          "location": "`Exact computation`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The sampled action reproduces all26 checkpoints and the12 printed rows through10007. Its energy is exact and capacity numerical. The full exact carrier ledger is bounded by251; historical bridge checks through2003 remain in the tracked C reference verifier."
+        },
+        {
+          "id": "22",
+          "name": "Signed damping and stronger sampling scales",
+          "location": "`The live sector and sharper targets`",
+          "objects": [
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The O(log p), O(1), and S_p to1 sampling targets remain open."
+        }
+      ]
+    },
+    {
+      "key": "the_stationary_to_diagonal_transition_in_collision_capacity",
+      "manuscript": "external-sources/the_stationary_to_diagonal_transition_in_collision_capacity.tex",
+      "sha256": "a30820e4543ea3a12ccd3a138887fad384740048f1d3e49ad565e58ea999d6f2",
+      "expected_family_count": 22,
+      "labels": [
+        "eq:definitions",
+        "eq:age",
+        "eq:main-diagonal",
+        "sec:inputs",
+        "eq:P",
+        "prop:input",
+        "eq:input-weights",
+        "eq:input-capacity",
+        "eq:input-L2",
+        "eq:input-Fourier",
+        "eq:input-mean",
+        "eq:input-tails",
+        "eq:input-extrema",
+        "sec:constants",
+        "eq:beta",
+        "lem:weight",
+        "eq:weight",
+        "eq:integrals",
+        "eq:bc",
+        "prop:exact",
+        "eq:y-psi",
+        "eq:y-mobius",
+        "eq:y-total",
+        "sec:tail",
+        "lem:tail",
+        "eq:tail-integral",
+        "eq:uniform",
+        "sec:transfer",
+        "lem:Schur",
+        "eq:Schur",
+        "eq:block-Haar",
+        "lem:periodic",
+        "eq:periodic-first",
+        "eq:periodic-second",
+        "thm:diagonal",
+        "eq:mean",
+        "eq:second",
+        "eq:weighted-mean",
+        "eq:raw-mean",
+        "eq:raw-second",
+        "sec:capacity",
+        "eq:capacity-tail",
+        "eq:capacity-stationary",
+        "eq:BC",
+        "cor:capacity",
+        "eq:residual",
+        "sec:primes",
+        "eq:unit-odd",
+        "prop:unit-law",
+        "eq:unit-tail",
+        "eq:unit-variance",
+        "eq:unit-chi3",
+        "lem:prime-small",
+        "eq:prime-small",
+        "thm:prime-diagonal",
+        "eq:prime-law",
+        "eq:prime-mean",
+        "eq:prime-second",
+        "eq:prime-approx",
+        "sec:cutoff",
+        "lem:boundary",
+        "eq:boundary",
+        "thm:cutoff",
+        "eq:critical-law",
+        "eq:critical-second",
+        "eq:endpoint",
+        "sec:conductors",
+        "eq:finite-spectrum",
+        "eq:coefficient-replacement",
+        "thm:conductors",
+        "eq:low-conductors",
+        "eq:high-conductors",
+        "sec:progressions",
+        "thm:progression",
+        "eq:progression",
+        "cor:extremes",
+        "eq:signed-lower",
+        "sec:mass-perturbation",
+        "cor:mass-perturbation",
+        "eq:h-conditions",
+        "eq:perturbed-identities",
+        "sec:exceptions",
+        "thm:exceptional",
+        "eq:exceptional",
+        "eq:all-moments",
+        "sec:translated",
+        "eq:U",
+        "lem:endpoints",
+        "eq:endpoints",
+        "lem:rough",
+        "thm:translated",
+        "sec:obstruction",
+        "eq:tail-decomposition",
+        "thm:obstruction",
+        "eq:tail-positive",
+        "eq:tail-negative",
+        "sec:numerical",
+        "tab:finite-windows"
+      ],
+      "result_environment_count": 22,
+      "families": [
+        {
+          "id": "1",
+          "name": "1 `prop:input`",
+          "location": "1 `prop:input`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "2",
+          "name": "2 `lem:weight`",
+          "location": "2 `lem:weight`",
+          "objects": [
+            "resolution",
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "3",
+          "name": "3 `prop:exact`",
+          "location": "3 `prop:exact`",
+          "objects": [
+            "resolution",
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "4",
+          "name": "4 `lem:tail`",
+          "location": "4 `lem:tail`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "5",
+          "name": "5 `lem:Schur`",
+          "location": "5 `lem:Schur`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "6",
+          "name": "6 `lem:periodic`",
+          "location": "6 `lem:periodic`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "7",
+          "name": "7 `thm:diagonal`",
+          "location": "7 `thm:diagonal`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "8",
+          "name": "8 `cor:capacity`",
+          "location": "8 `cor:capacity`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "9",
+          "name": "9 `prop:unit-law`",
+          "location": "9 `prop:unit-law`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "10",
+          "name": "10 `lem:prime-small`",
+          "location": "10 `lem:prime-small`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "11",
+          "name": "11 `thm:prime-diagonal`",
+          "location": "11 `thm:prime-diagonal`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "12",
+          "name": "12 `lem:boundary`",
+          "location": "12 `lem:boundary`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "13",
+          "name": "13 `thm:cutoff`",
+          "location": "13 `thm:cutoff`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "14",
+          "name": "14 `thm:conductors`",
+          "location": "14 `thm:conductors`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "15",
+          "name": "15 `thm:progression`",
+          "location": "15 `thm:progression`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "16",
+          "name": "16 `cor:extremes`",
+          "location": "16 `cor:extremes`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "17",
+          "name": "17 `cor:mass-perturbation`",
+          "location": "17 `cor:mass-perturbation`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "18",
+          "name": "18 `thm:exceptional`",
+          "location": "18 `thm:exceptional`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "19",
+          "name": "19 `lem:endpoints`",
+          "location": "19 `lem:endpoints`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "20",
+          "name": "20 `lem:rough`",
+          "location": "20 `lem:rough`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "21",
+          "name": "21 `thm:translated`",
+          "location": "21 `thm:translated`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        },
+        {
+          "id": "22",
+          "name": "22 `thm:obstruction`",
+          "location": "22 `thm:obstruction`",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The finite observable is implemented; the corresponding limit, uniform rate or imported infinite theorem remains the written claim described in the result ledger."
+        }
+      ]
+    },
+    {
+      "key": "finite_generation_of_collision_capacity",
+      "manuscript": "external-sources/finite_generation_of_collision_capacity.tex",
+      "sha256": "e68df29a87feb36d524343c7e3bf0b94013aae8ab47f15ac3e992cff12e2fcb0",
+      "expected_family_count": 20,
+      "labels": [
+        "eq:Jintro",
+        "thm:organizing",
+        "eq:Kintro",
+        "eq:wintro",
+        "eq:Dintro",
+        "eq:Yintro",
+        "sec:addition",
+        "lem:section",
+        "prop:carry",
+        "eq:carry-cov",
+        "thm:energy",
+        "eq:energy-refinement",
+        "rem:nonlocal",
+        "sec:source",
+        "eq:table",
+        "thm:straightening",
+        "eq:straightening",
+        "cor:trailing",
+        "eq:sample",
+        "prop:endpoint",
+        "eq:endpoint-defect",
+        "sec:kernel",
+        "lem:Gram",
+        "eq:Gram",
+        "eq:affine-refinement",
+        "prop:ledger",
+        "eq:ledger",
+        "prop:mass",
+        "eq:budget",
+        "eq:capacity",
+        "eq:deficit",
+        "sec:refinement",
+        "thm:refinement",
+        "eq:refine",
+        "sec:potential",
+        "prop:potential",
+        "eq:L2tail",
+        "eq:L2norm",
+        "eq:Fourier",
+        "eq:coboundary",
+        "eq:integer-readout",
+        "sec:inverse",
+        "thm:inverse",
+        "eq:mass-inverse",
+        "eq:grid",
+        "eq:capacity-inverse",
+        "prop:prefix",
+        "sec:readouts",
+        "eq:carrier",
+        "prop:seed",
+        "eq:seed",
+        "eq:eta-seed",
+        "eq:seed-inverse",
+        "eq:mixed",
+        "cor:selectors",
+        "sec:current",
+        "eq:angular-current",
+        "eq:resolution-current",
+        "eq:prime-current",
+        "thm:current",
+        "eq:selected-current",
+        "eq:current-inverse",
+        "lem:current-norm",
+        "eq:mass-norm",
+        "eq:row-norm",
+        "eq:increment-norm",
+        "thm:amplification",
+        "eq:first-address",
+        "eq:current-bound",
+        "eq:perturbed-rows",
+        "eq:perturbed-masses",
+        "eq:perturbed-norm",
+        "sec:scope"
+      ],
+      "result_environment_count": 20,
+      "families": [
+        {
+          "id": "1",
+          "name": "1. Organizing theorem",
+          "location": "1. Organizing theorem",
+          "objects": [
+            "generation",
+            "readout",
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Infinite composition and uniqueness are written proofs, not recovered from finitely many observations."
+        },
+        {
+          "id": "2",
+          "name": "2. Residue section",
+          "location": "2. Residue section",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The section classification concerns all sections, not a finite enumeration."
+        },
+        {
+          "id": "3",
+          "name": "3. Carry variance",
+          "location": "3. Carry variance",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "4",
+          "name": "4. Local energy rigidity",
+          "location": "4. Local energy rigidity",
+          "objects": [
+            "readout"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "All real amplitudes, unbounded moduli, continuity and dense scaling are proof requirements."
+        },
+        {
+          "id": "5",
+          "name": "5. Nonlocal controls",
+          "location": "5. Nonlocal controls",
+          "objects": [
+            "readout"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite local powers and nonlocal quartic controls are executable; classification of invariant forms remains written."
+        },
+        {
+          "id": "6",
+          "name": "6. General straightening",
+          "location": "6. General straightening",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "7",
+          "name": "7. Trailing digits",
+          "location": "7. Trailing digits",
+          "objects": [
+            "prefix"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "8",
+          "name": "8. Endpoint defect",
+          "location": "8. Endpoint defect",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "9",
+          "name": "9. Gram and boundary",
+          "location": "9. Gram and boundary",
+          "objects": [
+            "generation",
+            "sampling"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "The continuous integral Gram identity is a proof, distinct from finite residue computations."
+        },
+        {
+          "id": "10",
+          "name": "10. Primitive ledger",
+          "location": "10. Primitive ledger",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite formulas are computed within the documented domain. Universal validity belongs to the written proof; numerical agreement does not establish it."
+        },
+        {
+          "id": "11",
+          "name": "11. Unit mass",
+          "location": "11. Unit mass",
+          "objects": [
+            "generation",
+            "readout"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Unit mass is an infinite normalization proved by telescoping."
+        },
+        {
+          "id": "12",
+          "name": "12. Refinement selection",
+          "location": "12. Refinement selection",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Regularity and the maximum principle are substantive analytic hypotheses."
+        },
+        {
+          "id": "13",
+          "name": "13. Potential",
+          "location": "13. Potential",
+          "objects": [
+            "resolution"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Haar L2 convergence, infinite variance, sharp tails and uniqueness are Conservation imports under separate proof coverage."
+        },
+        {
+          "id": "14",
+          "name": "14. Inverse",
+          "location": "14. Inverse",
+          "objects": [
+            "generation",
+            "readout"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite capacities determine finite masses; recovery of an arbitrary normalized C3 angular kernel needs the full infinite sequence. Polynomial profiles are explicit finite probes."
+        },
+        {
+          "id": "15",
+          "name": "15. Prefix control",
+          "location": "15. Prefix control",
+          "objects": [
+            "generation",
+            "readout"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite changes are exact; global positivity/smoothness and infinite normalization are proved separately."
+        },
+        {
+          "id": "16",
+          "name": "16. Seed and quotient",
+          "location": "16. Seed and quotient",
+          "objects": [
+            "readout"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Positive lattice tails have analytic enclosures. Mellin/Dirichlet continuation and all-conductor identities are not certified by finite overlap."
+        },
+        {
+          "id": "17",
+          "name": "17. Equivalent selectors",
+          "location": "17. Equivalent selectors",
+          "objects": [
+            "readout"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Equivalent all-conductor selectors require the identified published mixed-moment theorem."
+        },
+        {
+          "id": "18",
+          "name": "18. Signed recognition",
+          "location": "18. Signed recognition",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "All-address recognition is proved from the finite coefficient law; no prime-distribution estimate follows."
+        },
+        {
+          "id": "19",
+          "name": "19. Norm bounds",
+          "location": "19. Norm bounds",
+          "objects": [
+            "resolution",
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Hilbert-space norm inequalities are written theorems, not finite cutoff identities."
+        },
+        {
+          "id": "20",
+          "name": "20. Sharp sensitivity",
+          "location": "20. Sharp sensitivity",
+          "objects": [
+            "generation"
+          ],
+          "computational_status": "implemented_with_declared_limits",
+          "proof_boundary": "Finite first-change coefficients are exact; uniform bounds and asymptotic sharpness require the written estimates."
+        }
+      ]
+    }
+  ],
+  "objects": {
+    "fd": {
+      "command": "finite-determination",
+      "sources": [
+        "src/finite_determination.c"
+      ],
+      "functions": [
+        "finite_determination_compare",
+        "finite_determination_slice_values",
+        "finite_determination_inspect",
+        "finite_determination_optimal",
+        "finite_determination_verify",
+        "finite_determination_help"
+      ],
+      "domain": "Exact integer floor tables; documented modulus and model limits.",
+      "validation": [
+        "verify finite-determination"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "reflection": {
+      "command": "reflection-identity",
+      "sources": [
+        "src/reflection_identity.c"
+      ],
+      "functions": [
+        "reflection_identity_local_values",
+        "reflection_identity_pair_values",
+        "reflection_identity_inspect",
+        "reflection_identity_table",
+        "reflection_identity_verify",
+        "reflection_identity_help"
+      ],
+      "domain": "Exact finite residue identities; supported bases and lags from focused help.",
+      "validation": [
+        "verify reflection-identity"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "odd": {
+      "command": "primitive-odd-sector",
+      "sources": [
+        "src/primitive_odd_sector.c"
+      ],
+      "functions": [
+        "primitive_odd_sector_inspect",
+        "primitive_odd_sector_verify",
+        "primitive_odd_sector_help"
+      ],
+      "domain": "Exact character coordinates and long-double complex transforms in the supported finite family.",
+      "validation": [
+        "verify primitive-odd-sector"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "factor": {
+      "command": "collision-spectrum-factorization",
+      "sources": [
+        "src/collision_spectrum_factorization.c"
+      ],
+      "functions": [
+        "collision_spectrum_factorization_inspect",
+        "collision_spectrum_factorization_transform",
+        "collision_spectrum_factorization_verify",
+        "collision_spectrum_factorization_help"
+      ],
+      "domain": "Long-double complex finite character algebra; declared numerical tolerance, not analytic continuation.",
+      "validation": [
+        "verify collision-spectrum-factorization"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "label": {
+      "command": "all-prime-collision-label",
+      "sources": [
+        "src/all_prime_collision_label.c"
+      ],
+      "functions": [
+        "all_prime_collision_label_value",
+        "all_prime_collision_label_inspect",
+        "all_prime_collision_label_verify",
+        "all_prime_collision_label_help"
+      ],
+      "domain": "Exact integer labels, including primes dividing the base, within declared table limits.",
+      "validation": [
+        "verify all-prime-collision-label"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "quotient": {
+      "command": "finite-spectral-quotient",
+      "sources": [
+        "src/finite_spectral_quotient.c"
+      ],
+      "functions": [
+        "finite_spectral_quotient_metrics",
+        "finite_spectral_quotient_inspect",
+        "finite_spectral_quotient_declared",
+        "finite_spectral_quotient_verify",
+        "finite_spectral_quotient_help"
+      ],
+      "domain": "Exact populations and dimensions; finite matrices at printed tolerance 5e-10. Continuous spectral statements are written proofs.",
+      "validation": [
+        "verify finite-spectral-quotient"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "prefix": {
+      "command": "finite-prefix-slice",
+      "sources": [
+        "src/finite_prefix_slice.c"
+      ],
+      "functions": [
+        "finite_prefix_slice_identity",
+        "finite_prefix_slice_identity_all_denominators",
+        "positional_transport_collapse",
+        "finite_prefix_slice_inspect",
+        "finite_prefix_slice_inspect_all_denominators",
+        "positional_transport_collapse_inspect",
+        "finite_prefix_slice_collision",
+        "finite_prefix_slice_verify",
+        "finite_prefix_slice_help"
+      ],
+      "domain": "Exact integer weighted cells, all-denominator floor/ceiling slices and endpoint corrections within declared product limits.",
+      "validation": [
+        "verify finite-prefix-slice"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "bernoulli": {
+      "command": "boundary-bernoulli-factorization",
+      "sources": [
+        "src/boundary_bernoulli_factorization.c"
+      ],
+      "functions": [
+        "boundary_bernoulli_factorization_compare",
+        "boundary_bernoulli_conductor_spectrum",
+        "boundary_sawtooth_correlation",
+        "boundary_bernoulli_factorization_inspect",
+        "boundary_bernoulli_factorization_spectrum",
+        "boundary_sawtooth_correlation_inspect",
+        "boundary_bernoulli_factorization_terminal",
+        "boundary_bernoulli_factorization_verify",
+        "boundary_bernoulli_factorization_help"
+      ],
+      "domain": "Cyclic odd prime powers in the existing explorer; long-double character and Dedekind calculations. General moduli use boundary-spectrum.",
+      "validation": [
+        "verify boundary-bernoulli-factorization"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "ledger": {
+      "command": "boundary-conductor-ledger",
+      "sources": [
+        "src/terminal_collision_conductor_ledger.c"
+      ],
+      "functions": [
+        "nfield_terminal_collision_conductor_ledger_run",
+        "boundary_conductor_ledger_compute",
+        "boundary_conductor_ledger_inspect",
+        "boundary_conductor_ledger_terminal",
+        "boundary_conductor_ledger_verify",
+        "boundary_conductor_ledger_help",
+        "terminal_collision_conductor_ledger_audit",
+        "terminal_collision_conductor_ledger_verify",
+        "terminal_collision_conductor_ledger_help"
+      ],
+      "domain": "Integer boundary/pushdown and exact conductor ledger; moduli through 200000 and bounded integer cell weights.",
+      "validation": [
+        "verify boundary-conductor-ledger"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "terminal": {
+      "command": "terminal-collision-conductor-ledger",
+      "sources": [
+        "src/terminal_collision_conductor_ledger.c"
+      ],
+      "functions": [
+        "nfield_terminal_collision_conductor_ledger_run",
+        "boundary_conductor_ledger_compute",
+        "boundary_conductor_ledger_inspect",
+        "boundary_conductor_ledger_terminal",
+        "boundary_conductor_ledger_verify",
+        "boundary_conductor_ledger_help",
+        "terminal_collision_conductor_ledger_audit",
+        "terminal_collision_conductor_ledger_verify",
+        "terminal_collision_conductor_ledger_help"
+      ],
+      "domain": "Exact fixed terminal-boundary compatibility checks and the reusable general ledger.",
+      "validation": [
+        "verify terminal-collision-conductor-ledger"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "moment": {
+      "command": "special-value-moment",
+      "sources": [
+        "src/special_value_moment.c"
+      ],
+      "functions": [
+        "special_value_moment_ledger",
+        "special_value_moment_verify",
+        "special_value_moment_help"
+      ],
+      "domain": "Finite Bernoulli and character moments, numerical at documented precision. Infinite L-value identities retain their classical analytic input.",
+      "validation": [
+        "verify special-value-moment"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "orbit": {
+      "command": "finite-state-orbit-boundary",
+      "sources": [
+        "src/finite_state_orbit_boundary.c"
+      ],
+      "functions": [
+        "finite_state_orbit_boundary_compute",
+        "finite_state_orbit_boundary_inspect",
+        "finite_state_orbit_boundary_parity",
+        "finite_state_orbit_boundary_verify",
+        "finite_state_orbit_boundary_help"
+      ],
+      "domain": "Exact orbit/preperiod/state and additive boundary construction, subject to advertised finite state-count limits.",
+      "validation": [
+        "verify finite-state-orbit-boundary"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "full": {
+      "command": "full-orbit-energy",
+      "sources": [
+        "src/full_orbit_energy.c"
+      ],
+      "functions": [
+        "full_orbit_energy_values",
+        "full_orbit_energy_inspect",
+        "full_orbit_energy_verify",
+        "full_orbit_energy_help"
+      ],
+      "domain": "Exact prime-power orbit and conductor arithmetic within the declared modulus limit.",
+      "validation": [
+        "verify full-orbit-energy"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "quadratic": {
+      "command": "quadratic-orbit-energy",
+      "sources": [
+        "src/quadratic_orbit_energy.c"
+      ],
+      "functions": [
+        "quadratic_orbit_energy_values",
+        "quadratic_orbit_energy_inspect",
+        "quadratic_orbit_energy_verify",
+        "quadratic_orbit_energy_help"
+      ],
+      "domain": "Exact index-two populations and four residue-class formulas; complex direct comparisons at declared tolerance.",
+      "validation": [
+        "verify quadratic-orbit-energy"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "jacobi": {
+      "command": "subgroup-jacobi-expansion",
+      "sources": [
+        "src/subgroup_jacobi_expansion.c"
+      ],
+      "functions": [
+        "subgroup_jacobi_expansion_compare",
+        "subgroup_jacobi_expansion_inspect",
+        "subgroup_jacobi_expansion_verify",
+        "subgroup_jacobi_expansion_help"
+      ],
+      "domain": "Direct finite subgroup sums and shifted Jacobi expansions with long-double comparison.",
+      "validation": [
+        "verify subgroup-jacobi-expansion"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "energy": {
+      "command": "prime-base-collision-energy",
+      "sources": [
+        "src/prime_base_collision_energy.c"
+      ],
+      "functions": [
+        "prime_base_collision_energy_dedekind",
+        "prime_base_collision_energy_values",
+        "prime_base_collision_energy_inspect",
+        "prime_base_collision_energy_poles",
+        "prime_base_collision_energy_verify",
+        "prime_base_collision_energy_help"
+      ],
+      "domain": "Exact finite carry tables, integer-scaled Dedekind sums and pole decomposition in supported prime bases.",
+      "validation": [
+        "verify prime-base-collision-energy"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "cancellation": {
+      "command": "primitive-character-cancellation",
+      "sources": [
+        "src/primitive_character_cancellation.c"
+      ],
+      "functions": [
+        "primitive_character_cancellation_inspect",
+        "primitive_character_cancellation_verify",
+        "primitive_character_cancellation_help"
+      ],
+      "domain": "Exact finite prime-power fiber cancellation and numerical primitive/induced channel comparisons.",
+      "validation": [
+        "verify primitive-character-cancellation"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "defect": {
+      "command": "arithmetic-boundary-defect",
+      "sources": [
+        "src/arithmetic_boundary_defect.c"
+      ],
+      "functions": [
+        "arithmetic_boundary_defect_metrics",
+        "arithmetic_boundary_defect_inspect",
+        "arithmetic_boundary_defect_scan",
+        "arithmetic_boundary_defect_verify",
+        "arithmetic_boundary_defect_help"
+      ],
+      "domain": "53 exact energy instances through prime 251; normalized residual is numerical. No fitted or proved asymptotic constant from a scan.",
+      "validation": [
+        "verify arithmetic-boundary-defect"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "sampling": {
+      "command": "collision-sampling",
+      "sources": [
+        "src/collision_sampling.c",
+        "src/collision_sampling.h",
+        "verify/collision_sampling_verify.c"
+      ],
+      "functions": [
+        "collision_sampling_dedekind_q",
+        "collision_sampling_init",
+        "collision_sampling_clear",
+        "collision_switching_init",
+        "collision_switching_clear",
+        "collision_poles_init",
+        "collision_poles_clear",
+        "collision_sampling_capacity_q",
+        "collision_sampling_correlation_q",
+        "collision_sampling_carrier_q",
+        "collision_sampling_prefix_q",
+        "collision_sampling_q",
+        "collision_sampling_energy_q",
+        "collision_sampling_poles_q",
+        "collision_sampling_collar_q",
+        "collision_sampling_state_q",
+        "collision_sampling_convolution_q",
+        "collision_sampling_switching_q",
+        "collision_sampling_transform",
+        "collision_sampling_inverse_q",
+        "collision_sampling_help",
+        "collision_sampling_command"
+      ],
+      "domain": "GMP rational sampling, carriers, prefixes and switching for odd primes 3..251; capacity cutoff<=250; Dedekind modulus<=63001. The sampled action evaluates exact E_p/p^2 through prime10007, with a long-double capacity/defect readout. Additive transforms and correlations use moduli<=512; inverse prefix<=4096. Transforms are numerical, rational terms exact.",
+      "validation": [
+        "verify collision-sampling",
+        "python3 test/test_sampling_reference.py",
+        "make test-recent-paper-computations",
+        "make test-recent-paper-transport"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "spectrum": {
+      "command": "boundary-spectrum",
+      "sources": [
+        "src/boundary_spectrum.c",
+        "src/boundary_spectrum.h",
+        "verify/boundary_spectrum_verify.c"
+      ],
+      "functions": [
+        "boundary_spectrum_free",
+        "boundary_spectrum_build",
+        "boundary_spectrum_help",
+        "boundary_spectrum_command"
+      ],
+      "domain": "All moduli 2..512, including noncyclic groups and powers of two; arbitrary complex cell weights of magnitude<=1000. Exact character phases/conductors; long-double transforms, 5e-9 scaled verifier tolerance. General composite induced transforms are direct, not falsely factorized.",
+      "validation": [
+        "verify boundary-spectrum",
+        "make test-recent-paper-computations",
+        "make test-recent-paper-transport"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "resolution": {
+      "command": "capacity-resolution",
+      "sources": [
+        "src/collision_capacity_transition.c",
+        "src/collision_capacity_transition.h",
+        "verify/collision_capacity_transition_verify.c"
+      ],
+      "functions": [
+        "collision_transition_clear",
+        "collision_transition_init",
+        "collision_transition_cutoff",
+        "collision_transition_centered",
+        "collision_transition_residual",
+        "collision_capacity_transition_help",
+        "collision_capacity_transition_command"
+      ],
+      "domain": "Finite windows through 2000000, unit cutoffs<=60, conductor cutoffs<=2000 and bounded sample costs. Long-double recurrence independently checked against exact GMP identities. Limiting laws are written theorems.",
+      "validation": [
+        "verify capacity-resolution",
+        "make test-capacity-resolution"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "generation": {
+      "command": "capacity-generation",
+      "sources": [
+        "src/collision_capacity_generation.c",
+        "src/collision_capacity_generation.h",
+        "verify/collision_capacity_generation_verify.c"
+      ],
+      "functions": [
+        "collision_generation_source_q",
+        "collision_generation_carry_q",
+        "collision_generation_recover_q",
+        "collision_generation_control_q",
+        "collision_generation_current_q",
+        "collision_capacity_generation_help",
+        "collision_capacity_generation_command"
+      ],
+      "domain": "Exact source grid<=4096, odd carry modulus<=1023, ledger/current/control cutoff<=120. Source and finite inverse retain endpoints and labels.",
+      "validation": [
+        "verify capacity-generation",
+        "make test-capacity-generation"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    },
+    "readout": {
+      "command": "capacity-generation",
+      "sources": [
+        "src/collision_kernel_readout.c",
+        "src/collision_kernel_readout.h"
+      ],
+      "functions": [
+        "collision_measurement_init",
+        "collision_measurement_clear",
+        "collision_kernel_measurement_q",
+        "collision_kernel_seed_init",
+        "collision_kernel_seed_clear",
+        "collision_kernel_seed_q",
+        "collision_kernel_profile_q",
+        "collision_kernel_readout_command",
+        "collision_kernel_lattice_q"
+      ],
+      "domain": "Exact measurement for odd m<=127, even powers2..12 and rational amplitude; raw symmetric polynomial profiles through period120 with<=9 coefficients; rational seed enclosures for q*length<=240; positive rational lattice with square cutoff<=64. Infinite reconstruction and selectors remain written proofs.",
+      "validation": [
+        "verify capacity-generation",
+        "make test-recent-paper-computations"
+      ],
+      "arithmetic": "See domain for exact versus floating arithmetic"
+    }
+  }
+}

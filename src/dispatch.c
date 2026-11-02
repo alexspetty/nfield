@@ -76,6 +76,11 @@ static int dispatch_timeout_seconds(const char *command)
         dispatch_starts_with(command, "special-value-moment") ||
         dispatch_starts_with(command, "base-five-cyclotomic-identity") ||
         dispatch_starts_with(command, "short-sum-bernoulli-correlation") ||
+        dispatch_starts_with(command, "weighted-remainder-state") ||
+        dispatch_starts_with(command, "capacity-resolution") ||
+        dispatch_starts_with(command, "capacity-generation") ||
+        dispatch_starts_with(command, "collision-sampling") ||
+        dispatch_starts_with(command, "boundary-spectrum") ||
         dispatch_starts_with(command, "primitive-character-cancellation") ||
         dispatch_starts_with(command, "periodic-zeta-factorization") ||
         dispatch_starts_with(command, "collision-boundary-recovery") ||
@@ -98,6 +103,8 @@ static int dispatch_timeout_seconds(const char *command)
         dispatch_starts_with(command, "arithmetic-boundary-defect") ||
         dispatch_starts_with(command, "carry-completed-carrier"))
         timeout = 60;
+    if (dispatch_starts_with(command, "native-refinement"))
+        timeout = 180;
     if (strcmp(command, "verify") == 0 ||
         dispatch_starts_with(command, "verify "))
         timeout = 60;
