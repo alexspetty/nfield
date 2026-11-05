@@ -1,0 +1,2763 @@
+/-
+Copyright 2020-2026 Alexander S. Petty.
+SPDX-License-Identifier: Apache-2.0
+Author: Alexander S. Petty
+-/
+
+import NField.Alignment.CollisionCycleTruncation
+import NField.Alignment.CollisionHarmonicRootAverage
+import NField.Alignment.CollisionAmplitudeCotangent
+import NField.Alignment.CollisionCotangentPositivity
+import NField.Alignment.CollisionMixedMomentCharacterization
+import NField.Alignment.CollisionSmallConductorCharacters
+import NField.Alignment.CollisionSmallConductorAmplitudes
+import NField.Alignment.CollisionHarmonicRootSeries
+import NField.Alignment.CollisionDirichletBoundary
+import NField.Alignment.CollisionHarmonicLogBoundary
+import NField.Alignment.CollisionClausenDerivative
+import NField.Alignment.CollisionHarmonicCoefficients
+import NField.Alignment.CollisionHarmonicInterior
+import NField.Alignment.CollisionHarmonicAbelBoundary
+import NField.Alignment.CollisionHarmonicBoundaryDerivative
+import NField.Alignment.CollisionHarmonicRootIdentity
+import NField.Alignment.CollisionActivationArithmetic
+import NField.Alignment.CollisionResidueIndependence
+import NField.Alignment.CollisionPrimeHit
+import NField.Alignment.CollisionHitConditioning
+import NField.Alignment.CollisionBernoulliCertificate
+import NField.Alignment.CollisionActivationSperner
+import NField.Alignment.CollisionBernoulliProduct
+import NField.Alignment.CollisionBernoulliMoments
+import NField.Alignment.CollisionActivationRestriction
+import NField.Alignment.CollisionBernoulliActivationFinite
+import NField.Alignment.CollisionBernoulliActivation
+import NField.Alignment.CollisionStraighteningDisplay
+import NField.Alignment.CollisionRadicalRows
+import NField.Alignment.CollisionMultipleTailDisplay
+import NField.Alignment.CollisionPrimitiveMassDisplays
+import NField.Alignment.CollisionElementaryDisplays
+import NField.Alignment.CollisionClockDynamics
+import NField.Alignment.CollisionMassDisplays
+import NField.Alignment.CollisionConductorEnclosure
+import NField.Alignment.CollisionLargestPrime
+import NField.Alignment.CollisionRestrictedGapAsymptotic
+import NField.Alignment.CollisionConductorExtremaTheorem
+import NField.Alignment.CollisionCandidateScale
+import NField.Alignment.CollisionMinimizerClassification
+import NField.Alignment.CollisionConductorCosts
+import NField.Alignment.CollisionMertensInput
+import NField.Alignment.CollisionPrimeDistribution
+import NField.Alignment.CollisionRestrictedGap
+import NField.Alignment.CollisionPrimeCandidate
+import NField.Alignment.CollisionPrimeAmplitudeAsymptotic
+import NField.Alignment.CollisionConductorExtrema
+import NField.Alignment.CollisionInverseRemainder
+import NField.Alignment.CollisionConductorEndpoint
+import NField.Alignment.CollisionMobiusDeficit
+import NField.Alignment.CollisionDivisorSeries
+import NField.Alignment.CollisionPositiveConstants
+import NField.Alignment.CollisionPositiveRegrouping
+import NField.Alignment.CollisionFiniteRegrouping
+import NField.Alignment.CollisionWeightMultiples
+import NField.Alignment.CollisionCylinderProjection
+import NField.Alignment.CollisionWeightedEnclosure
+import NField.Alignment.CollisionCylinderEnclosure
+import NField.Alignment.CollisionPositionEnclosure
+import NField.Alignment.CollisionAmplitudeTail
+import NField.Alignment.CollisionPositionStability
+import NField.Alignment.CollisionCylinderOne
+import NField.Alignment.CollisionConductorOne
+import NField.Alignment.CollisionPositionTheorem
+import NField.Alignment.CollisionPositiveLogTail
+import NField.Alignment.CollisionSpectralLowerMoments
+import NField.Alignment.CollisionSpectralEnergyError
+import NField.Alignment.CollisionSharpSpectralTail
+import NField.Alignment.CollisionSpectralErrorBound
+import NField.Alignment.CollisionLogTailKernel
+import NField.Alignment.CollisionSpectralAbel
+import NField.Alignment.CollisionSpectralTailMean
+import NField.Alignment.CollisionConductorProjection
+import NField.Alignment.CollisionConductorFourierSpace
+import NField.Alignment.CollisionSpectralArithmetic
+import NField.Alignment.CollisionSpectralEuler
+import NField.Alignment.CollisionSpectralMean
+import NField.Alignment.CollisionSpectralPrimeMoments
+import NField.Alignment.CollisionSpectralNuBounds
+import NField.Alignment.CollisionPrimePowerAmplitude
+import NField.Alignment.CollisionIntegerJointLaw
+import NField.Alignment.CollisionIntegerLawTests
+import NField.Alignment.CollisionIntegerLawApproximation
+import NField.Alignment.CollisionIntegerIncrementMoments
+import NField.Alignment.CollisionIntegerJointMoments
+import NField.Alignment.CollisionJointMoments
+import NField.Alignment.CollisionJointCRT
+import NField.Alignment.CollisionHaarTestEnclosure
+import NField.Alignment.CollisionBoundaryTesting
+import NField.Alignment.ProfinitePeriodicTesting
+import NField.Alignment.CollisionAmplitudeEnclosure
+import NField.Alignment.CollisionBoundaryMeasure
+import NField.Alignment.CollisionRampEnergy
+import NField.Alignment.CollisionCosecantIdentity
+import NField.Alignment.CollisionPrimitiveFourier
+import NField.Alignment.CollisionParityRows
+import NField.Alignment.CollisionCylinderMeans
+import NField.Alignment.CollisionConductorRows
+import NField.Alignment.CollisionStationaryAgeAsymptotic
+import NField.Alignment.CollisionCycleStationarity
+import NField.Alignment.CollisionCoboundaryCriterion
+import NField.Alignment.CollisionStationaryAgeDivergence
+import NField.Alignment.CollisionPotentialRecovery
+import NField.Alignment.CollisionRamanujanCovariance
+import NField.Alignment.CollisionDivisibilityCovariance
+import NField.Alignment.CollisionOdometerRecurrence
+import NField.Alignment.CollisionGeneralWeightCriterion
+import NField.Alignment.CollisionIntegerSingularity
+import NField.Alignment.CollisionMassPerturbation
+import NField.Alignment.CollisionReciprocalBudget
+import NField.Alignment.ProfiniteOdometerErgodic
+import NField.Alignment.CollisionPotentialTheorem
+import NField.Alignment.CollisionResolutionLaw
+import NField.Alignment.CollisionPotentialCoboundary
+import NField.Alignment.CollisionAmplitudeArithmetic
+import NField.Alignment.CollisionHarmonicSeed
+import NField.Alignment.CollisionAmplitudeRefinement
+import NField.Alignment.CollisionAmplitudeMobiusSeries
+import NField.Alignment.CollisionPrimitivePairAmplitude
+import NField.Alignment.CollisionLogQuadrature
+import NField.Alignment.CollisionHarmonicRemainder
+import NField.Alignment.CollisionZetaMoments
+import NField.Alignment.CollisionHarmonicSeedExpansion
+import NField.Alignment.CollisionSquarefreeEuler
+import NField.Alignment.CollisionConductorArithmetic
+import NField.Alignment.CollisionUniformAmplitude
+import NField.Alignment.CollisionFiniteActivationMixture
+import NField.Alignment.CollisionActivationCRT
+import NField.Alignment.CollisionActivationSubfamily
+import NField.Alignment.CollisionActivationQuotient
+import NField.Alignment.CollisionConcentrationLimit
+import NField.Alignment.CollisionPrimeSetConcentration
+import NField.Alignment.CollisionPrimeBlockAtomless
+import NField.Alignment.CollisionPotentialAtomless
+import NField.Alignment.CollisionDyadicPrimeMass
+import NField.Alignment.CollisionDyadicBlockConcentration
+import NField.Alignment.CollisionReturnPairCounting
+import NField.Alignment.CollisionReturnTimeMoments
+import NField.Alignment.CollisionRootSumBounds
+import NField.Alignment.CollisionReturnConcentration
+import NField.Alignment.CollisionConcentrationScales
+import NField.Alignment.CollisionPotentialConcentration
+import NField.Alignment.CollisionDistributionComparison
+import NField.Alignment.CollisionDistributionApproximation
+import NField.Alignment.CollisionPotentialTailBounds
+import NField.Alignment.CollisionTailProbability
+import NField.Alignment.CollisionTailCutoffScales
+import NField.Alignment.CollisionUpperTails
+import NField.Alignment.CollisionExponentialMoments
+import NField.Alignment.CollisionRootTails
+import NField.Alignment.CollisionPotentialMoments
+import NField.Alignment.CollisionMomentNormBounds
+import NField.Alignment.CollisionPotentialLpConvergence
+import NField.Alignment.CollisionCharacteristicLaw
+import NField.Alignment.CollisionCharacteristicCycles
+import NField.Alignment.CollisionCharacteristicApproximation
+import NField.Alignment.CollisionCylinderTailLowerBound
+import NField.Alignment.CollisionPotentialSupport
+import NField.Alignment.CollisionResetLocalFactors
+import NField.Alignment.CollisionAlignmentLocalSeries
+import NField.Alignment.CollisionAlignmentLocalBounds
+import NField.Alignment.CollisionAlignmentPrimeMass
+import NField.Alignment.CollisionHarmonicLocalExpansion
+import NField.Alignment.CollisionHarmonicLocalSummability
+import NField.Alignment.CollisionHarmonicObservableApproximation
+import NField.Alignment.CollisionFiniteEulerMoments
+import NField.Alignment.CollisionResetEulerProduct
+import NField.Alignment.CollisionAlignmentEulerJet
+import NField.Alignment.CollisionAlignmentEulerLocalSums
+import NField.Alignment.CollisionAlignmentPrimeLogSum
+import NField.Alignment.CollisionAlignmentEulerProduct
+import NField.Alignment.CollisionLargePrimeFactors
+import NField.Alignment.CollisionIntegerPrimeTailMajorants
+import NField.Alignment.CollisionAbsentPrimeSums
+import NField.Alignment.CollisionAbsentPrimeProducts
+import NField.Alignment.CollisionLocalFactorLosses
+import NField.Alignment.CollisionLcmPrimeLosses
+import NField.Alignment.CollisionSqrtPrimeSplit
+import NField.Alignment.CollisionLcmFactorErrors
+import NField.Alignment.CollisionLimitingPrimeProduct
+import NField.Alignment.CollisionLimitingPrimeLogSum
+import NField.Alignment.CollisionFiniteProductDeficit
+import NField.Alignment.CollisionLcmFiniteProducts
+import NField.Alignment.CollisionLcmFiniteLogSums
+import NField.Alignment.CollisionLcmAlignmentTailSplit
+import NField.Alignment.CollisionLcmAlignmentEulerAsymptotic
+import NField.Alignment.CollisionLogSquareAsymptotic
+import NField.Alignment.CollisionLcmSharpOrders
+import NField.Alignment.CollisionExponentialFloorScale
+import NField.Alignment.CollisionLowerTailCutoffAlignment
+import NField.Alignment.CollisionDoubleExponentialComparison
+import NField.Alignment.CollisionDoubleExponentialLowerTails
+import NField.Alignment.CollisionStationaryTailTheorem
+import NField.Alignment.CollisionPrimeDivisorEnvelopes
+import NField.Alignment.CollisionResetGlobalEnvelope
+import NField.Alignment.CollisionLogLogEnvelopes
+import NField.Alignment.CollisionResetSharpUpper
+import NField.Alignment.CollisionAlignmentEnvelopeSet
+import NField.Alignment.CollisionLcmLogLogScale
+import NField.Alignment.CollisionAlignmentGlobalSplit
+import NField.Alignment.CollisionAlignmentGlobalEnvelope
+import NField.Alignment.CollisionAlignmentSharpUpper
+import NField.Alignment.CollisionSharpLimsupTransfer
+import NField.Alignment.CollisionSharpMaximalOrders
+import NField.Alignment.CollisionMaximalOrderTheorem
+import NField.Alignment.CollisionGcdResetDisplay
+import NField.Alignment.CollisionPrimePowerMajorant
+import NField.Alignment.CollisionPrimePowerBoundDisplay
+import NField.Alignment.CollisionPrimitiveSquareTree
+import NField.Alignment.CollisionPrimitiveSquareBoundary
+import NField.Alignment.CollisionSawtoothDistribution
+import NField.Alignment.CollisionResiduePairing
+import NField.Alignment.CollisionDedekindPairing
+import NField.Alignment.CollisionDedekindConditioning
+import NField.Alignment.CollisionSpectralMomentRecurrence
+import NField.Alignment.CollisionSpectralWeights
+import NField.Alignment.CollisionAtomicSpectra
+import NField.Alignment.CollisionPotentialSpectralMoments
+import NField.Alignment.CollisionSpectralSupport
+import NField.Alignment.CollisionTranslationSubspace
+import NField.Alignment.CollisionCharacterEigenvectors
+import NField.Alignment.CollisionCharacterPairing
+import NField.Alignment.CollisionCyclicCharacters
+import NField.Alignment.ProfiniteResidueTestDensity
+import NField.Alignment.CollisionCyclicResidues
+import NField.Alignment.CollisionIncrementCyclicity
+import NField.Alignment.CollisionComplexCyclicity
+import NField.Alignment.CollisionSpectralMeasures
+import NField.Alignment.CollisionFiniteSineTransform
+import NField.Alignment.CollisionCotangentSeries
+import NField.Alignment.CollisionPeriodicLValue
+import NField.Alignment.CollisionCotangentLValue
+import NField.Alignment.CollisionCotangentMixedMoment
+
+
+
+/-!
+# Conservation and profinite dynamics in digit-collision energy
+
+This companion formalizes all 27 numbered results and all 122 displayed
+blocks of the September 11, 2026 manuscript. It includes the original
+positive collision mass and exact readout, the profinite Haar potential
+and coboundary, conductor and mixed L-value identities, maximal orders,
+finite extrema, stationary tails, concentration and the integer-orbit
+singularity. The title claim and equation inventories record the exact
+statement correspondence and validation evidence.
+
+The stationary probability statements retain their Haar or almost-everywhere
+scope. They do not assert pointwise control on the exceptional integer orbit
+or an RH/GRH theorem. Formal proof coverage and the nfield software's finite
+computational coverage have separate validation records. Checking a Lean
+statement and reviewing its correspondence with the manuscript are distinct
+steps in publication.
+-/
+
+namespace NField.Papers.ConservationAndProfiniteDynamicsInDigitCollisionEnergy
+
+alias collisionWeight_nonneg := NField.Alignment.CollisionRemainderDynamics.collisionWeight_nonneg
+alias collisionWeight_pos := NField.Alignment.CollisionRemainderDynamics.collisionWeight_pos
+alias collisionWeight_two := NField.Alignment.CollisionRemainderDynamics.collisionWeight_two
+alias collisionWeight_three := NField.Alignment.CollisionRemainderDynamics.collisionWeight_three
+alias collisionWeight_four := NField.Alignment.CollisionRemainderDynamics.collisionWeight_four
+alias collision_mass_limit := NField.Alignment.CollisionRemainderDynamics.collision_mass_limit
+alias remainder_step := NField.Alignment.CollisionRemainderDynamics.remainder_step
+alias centered_remainder_step := NField.Alignment.CollisionRemainderDynamics.centered_remainder_step
+alias finite_age_step := NField.Alignment.CollisionRemainderDynamics.finite_age_step
+alias finite_age_block := NField.Alignment.CollisionRemainderDynamics.finite_age_block
+alias finite_age_zero := NField.Alignment.CollisionRemainderDynamics.finite_age_zero
+alias finite_age_gap := NField.Alignment.CollisionRemainderDynamics.finite_age_gap
+alias finite_age_lower := NField.Alignment.CollisionRemainderDynamics.finite_age_lower
+alias finite_age_upper := NField.Alignment.CollisionRemainderDynamics.finite_age_upper
+alias finite_age_endpoint_difference := NField.Alignment.CollisionRemainderDynamics.finite_age_endpoint_difference
+alias finite_age_min_iff := NField.Alignment.CollisionRemainderDynamics.finite_age_min_iff
+alias finite_age_gap_at_one := NField.Alignment.CollisionRemainderDynamics.finite_age_gap_at_one
+alias moving_cutoff_ledger := NField.Alignment.CollisionRemainderDynamics.moving_cutoff_ledger
+alias endpoint_split := NField.Alignment.CollisionRemainderDynamics.endpoint_split
+alias centered_cycle_sum := NField.Alignment.CollisionRemainderDynamics.centered_cycle_sum
+alias endpoint_square_bound := NField.Alignment.CollisionRemainderDynamics.endpoint_square_bound
+alias stationary_endpoint_energy := NField.Alignment.CollisionRemainderDynamics.stationary_endpoint_energy
+alias literal_capacity_reduction := NField.Alignment.GcdLcmCapacity.gcdLcmSquareSum_eq_three_continuousCapacity
+alias finite_deficit_ledger := NField.Alignment.SecondaryCapacityLedger.exact_continuous_defect_ledger
+alias finite_primitive_mass := NField.Alignment.SecondaryCapacityLedger.reducedEulerPartialMass_eq_pairWeight_sum
+alias mass_tail_frontier := NField.Alignment.SecondaryCapacityLedger.reducedEulerTailMass_eq_frontier
+alias primitive_tree_normalization := NField.Alignment.CoprimeEulerMass.reducedEulerPairs_weight_sum_eq_one_sub_frontier
+alias mass_tail_bound := NField.Alignment.CoprimeEulerMass.eulerFrontierPotential_le
+alias mass_tail_limit := NField.Alignment.CoprimeEulerMass.tendsto_eulerFrontierPotential_zero
+alias remainder_covariance_sum := NField.Alignment.CollisionRemainderCovariance.remainder_covariance_sum
+alias remainder_covariance := NField.Alignment.CollisionRemainderCovariance.remainder_covariance
+alias residue_integer := NField.Alignment.ProfiniteRemainderMeasure.residue_integer
+alias integral_residue := NField.Alignment.ProfiniteRemainderMeasure.integral_residue
+alias centered_integer := NField.Alignment.ProfiniteRemainderMeasure.centered_integer
+alias haar_remainder_covariance := NField.Alignment.ProfiniteRemainderMeasure.haar_remainder_covariance
+alias haar_centered_mean := NField.Alignment.ProfiniteRemainderMeasure.haar_centered_mean
+alias haar_centered_variance := NField.Alignment.ProfiniteRemainderMeasure.haar_centered_variance
+alias finitePotential_toLp := NField.Alignment.CollisionPotentialHilbert.finitePotential_toLp
+alias potentialMap_integer := NField.Alignment.CollisionPotentialHilbert.potentialMap_integer
+alias finite_potential_norm_sq := NField.Alignment.CollisionPotentialHilbert.finite_potential_norm_sq
+alias positive_gram_converges_iff_bounded := NField.Alignment.CollisionPotentialHilbert.positive_gram_converges_iff_bounded
+alias collisionWeight_hasSum := NField.Alignment.CollisionMassReadout.collisionWeight_hasSum
+alias collisionWeight_tsum := NField.Alignment.CollisionMassReadout.collisionWeight_tsum
+alias remainder_age_summable := NField.Alignment.CollisionMassReadout.remainder_age_summable
+alias remainder_age_tsum := NField.Alignment.CollisionMassReadout.remainder_age_tsum
+alias deficit_eq_capacity := NField.Alignment.CollisionMassReadout.deficit_eq_capacity
+alias deficit_nonneg := NField.Alignment.CollisionMassReadout.deficit_nonneg
+alias deficit_over_resolution_tendsto_zero := NField.Alignment.CollisionMassReadout.deficit_over_resolution_tendsto_zero
+alias capacity_leading_law := NField.Alignment.CollisionMassReadout.capacity_leading_law
+alias deficit_log_bound := NField.Alignment.CollisionMassReadout.deficit_log_bound
+alias deficit_isBigO_log_sq := NField.Alignment.CollisionMassReadout.deficit_isBigO_log_sq
+alias collisionWeight_isBigO_log_div_sq := NField.Alignment.CollisionMassReadout.collisionWeight_isBigO_log_div_sq
+alias completedCapacity_collision := NField.Alignment.CollisionResolutionLaw.completedCapacity_collision
+alias completedCapacity_injective := NField.Alignment.CollisionResolutionLaw.completedCapacity_injective
+alias completedCapacity_tsum := NField.Alignment.CollisionResolutionLaw.completedCapacity_tsum
+alias deficit_reset := NField.Alignment.CollisionResolutionLaw.deficit_reset
+alias gcd_box_bound := NField.Alignment.CollisionPotentialConvergence.gcd_box_bound
+alias block_norm_bound := NField.Alignment.CollisionPotentialConvergence.block_norm_bound
+alias collision_potential_converges := NField.Alignment.CollisionPotentialConvergence.collision_potential_converges
+alias tendsto_collisionPotential := NField.Alignment.CollisionPotentialConvergence.tendsto_collisionPotential
+alias collisionPotential_mean_zero := NField.Alignment.CollisionPotentialConvergence.collisionPotential_mean_zero
+alias collisionPotential_variance_lower := NField.Alignment.CollisionPotentialConvergence.collisionPotential_variance_lower
+alias collisionPotential_ne_zero := NField.Alignment.CollisionPotentialConvergence.collisionPotential_ne_zero
+alias reflection_measurePreserving := NField.Alignment.CollisionPotentialReflection.reflection_measurePreserving
+alias centered_reflection := NField.Alignment.CollisionPotentialReflection.centered_reflection
+alias collisionPotential_reflection_ae := NField.Alignment.CollisionPotentialReflection.collisionPotential_reflection_ae
+alias collisionPotential_law_symmetric := NField.Alignment.CollisionPotentialReflection.collisionPotential_law_symmetric
+alias jordanTwo_euler_product := NField.Alignment.CollisionJordanVariance.jordanTwo_euler_product
+alias jordanTwo_nonneg := NField.Alignment.CollisionJordanVariance.jordanTwo_nonneg
+alias sum_jordanTwo_divisors := NField.Alignment.CollisionJordanVariance.sum_jordanTwo_divisors
+alias finite_potential_conductor_norm_sq := NField.Alignment.CollisionJordanVariance.finite_potential_conductor_norm_sq
+alias amplitude_summable := NField.Alignment.CollisionJordanVariance.amplitude_summable
+alias finiteAmplitude_tendsto := NField.Alignment.CollisionJordanVariance.finiteAmplitude_tendsto
+alias conductorEnergy_hasSum := NField.Alignment.CollisionJordanVariance.conductorEnergy_hasSum
+alias conductorEnergy_summable := NField.Alignment.CollisionJordanVariance.conductorEnergy_summable
+alias collisionPotential_variance := NField.Alignment.CollisionJordanVariance.collisionPotential_variance
+alias collisionPotential_second_moment := NField.Alignment.CollisionJordanVariance.collisionPotential_second_moment
+alias block_norm_log_bound := NField.Alignment.CollisionPotentialCutoff.block_norm_log_bound
+alias collisionPotential_cutoff_bound := NField.Alignment.CollisionPotentialCutoff.collisionPotential_cutoff_bound
+alias collisionPotential_cutoff_isBigO := NField.Alignment.CollisionPotentialCutoff.collisionPotential_cutoff_isBigO
+alias square_integrable_potential := NField.Alignment.CollisionPotentialTheorem.square_integrable_potential
+alias resetSet_measure_real := NField.Alignment.CollisionResetIntegrability.resetSet_measure_real
+alias resetVector_norm_summable := NField.Alignment.CollisionResetIntegrability.resetVector_norm_summable
+alias resetVector_tsum_coe := NField.Alignment.CollisionResetIntegrability.resetVector_tsum_coe
+alias resetFunction_memLp := NField.Alignment.CollisionResetIntegrability.resetFunction_memLp
+alias resetFunction_mean := NField.Alignment.CollisionResetIntegrability.resetFunction_mean
+alias translate_measurePreserving := NField.Alignment.CollisionPotentialCoboundary.translate_measurePreserving
+alias centered_backward_step := NField.Alignment.CollisionPotentialCoboundary.centered_backward_step
+alias finitePotential_backward_step := NField.Alignment.CollisionPotentialCoboundary.finitePotential_backward_step
+alias collisionPotential_coboundary := NField.Alignment.CollisionPotentialCoboundary.collisionPotential_coboundary
+alias increment_coboundary_ae := NField.Alignment.CollisionPotentialCoboundary.increment_coboundary_ae
+alias block_telescope_ae := NField.Alignment.CollisionPotentialCoboundary.block_telescope_ae
+alias block_second_moment := NField.Alignment.CollisionPotentialCoboundary.block_second_moment
+alias exact_compensation := NField.Alignment.CollisionPotentialCoboundary.exact_compensation
+alias perturbation_eq_indicators := NField.Alignment.CollisionMassPerturbation.perturbation_eq_indicators
+alias perturbedWeight_pos := NField.Alignment.CollisionMassPerturbation.perturbedWeight_pos
+alias perturbedWeight_hasSum := NField.Alignment.CollisionMassPerturbation.perturbedWeight_hasSum
+alias finitePotential_perturbed := NField.Alignment.CollisionMassPerturbation.finitePotential_perturbed
+alias perturbed_potential_tendsto := NField.Alignment.CollisionMassPerturbation.perturbed_potential_tendsto
+alias perturbationPotential_mean := NField.Alignment.CollisionMassPerturbation.perturbationPotential_mean
+alias perturbationPotential_variance := NField.Alignment.CollisionMassPerturbation.perturbationPotential_variance
+alias perturbationPotential_coe := NField.Alignment.CollisionMassPerturbation.perturbationPotential_coe
+alias perturbed_stationaryAge := NField.Alignment.CollisionMassPerturbation.perturbed_stationaryAge
+alias perturbed_deficit_eq := NField.Alignment.CollisionMassPerturbation.perturbed_deficit_eq
+alias perturbed_potential_ne := NField.Alignment.CollisionMassPerturbation.perturbed_potential_ne
+alias mass_perturbation := NField.Alignment.CollisionMassPerturbation.mass_perturbation
+alias reciprocal_budget := NField.Alignment.CollisionReciprocalBudget.reciprocal_budget
+alias collisionWeight_moebius_budget := NField.Alignment.CollisionReciprocalBudget.collisionWeight_moebius_budget
+alias reciprocal_characterization := NField.Alignment.CollisionReciprocalBudget.reciprocal_characterization
+alias general_age_reset := NField.Alignment.CollisionReciprocalBudget.general_age_reset
+alias age_characterization := NField.Alignment.CollisionReciprocalBudget.age_characterization
+alias reset_characterization := NField.Alignment.CollisionReciprocalBudget.reset_characterization
+alias integerPhase_dense := NField.Alignment.ProfiniteOdometerErgodic.integerPhase_dense
+alias odometer_ergodic := NField.Alignment.ProfiniteOdometerErgodic.odometer_ergodic
+alias translation_invariant_constant := NField.Alignment.ProfiniteOdometerErgodic.translation_invariant_constant
+alias mean_zero_coboundary_unique := NField.Alignment.ProfiniteOdometerErgodic.mean_zero_coboundary_unique
+alias collisionWeight_lower := NField.Alignment.CollisionIntegerSingularity.collisionWeight_lower
+alias stationaryAge_harmonic_lower := NField.Alignment.CollisionIntegerSingularity.stationaryAge_harmonic_lower
+alias stationaryAge_tendsto_atTop := NField.Alignment.CollisionIntegerSingularity.stationaryAge_tendsto_atTop
+alias tailMass_tendsto_zero := NField.Alignment.CollisionIntegerSingularity.tailMass_tendsto_zero
+alias integer_cutoff_identity := NField.Alignment.CollisionIntegerSingularity.integer_cutoff_identity
+alias nonnegative_integer_cutoff_atBot := NField.Alignment.CollisionIntegerSingularity.nonnegative_integer_cutoff_atBot
+alias negative_phase_cutoff_atTop := NField.Alignment.CollisionIntegerSingularity.negative_phase_cutoff_atTop
+alias integer_difference_tendsto := NField.Alignment.CollisionIntegerSingularity.integer_difference_tendsto
+alias integer_diagonal_identity := NField.Alignment.CollisionIntegerSingularity.integer_diagonal_identity
+alias canonical_cutoff_singularity := NField.Alignment.CollisionIntegerSingularity.canonical_cutoff_singularity
+alias generalEnergy_hasSum_of_limit := NField.Alignment.CollisionGeneralWeightCriterion.generalEnergy_hasSum_of_limit
+alias general_weights_converge_iff := NField.Alignment.CollisionGeneralWeightCriterion.general_weights_converge_iff
+alias finitePotential_periodic := NField.Alignment.CollisionOdometerRecurrence.finitePotential_periodic
+alias potential_recurrence_norm := NField.Alignment.CollisionOdometerRecurrence.potential_recurrence_norm
+alias potential_recurrence_bound := NField.Alignment.CollisionOdometerRecurrence.potential_recurrence_bound
+alias potential_recurrence_isBigO := NField.Alignment.CollisionOdometerRecurrence.potential_recurrence_isBigO
+alias increment_recurrence := NField.Alignment.CollisionOdometerRecurrence.increment_recurrence
+alias incrementCovariance_integral := NField.Alignment.CollisionOdometerRecurrence.incrementCovariance_integral
+alias incrementCovariance_zero_pos := NField.Alignment.CollisionOdometerRecurrence.incrementCovariance_zero_pos
+alias incrementCovariance_recurrence := NField.Alignment.CollisionOdometerRecurrence.incrementCovariance_recurrence
+alias residue_pair_count := NField.Alignment.CollisionDivisibilityCovariance.residue_pair_count
+alias residueEvent_pair_integral := NField.Alignment.CollisionDivisibilityCovariance.residueEvent_pair_integral
+alias reset_pair_integral := NField.Alignment.CollisionDivisibilityCovariance.reset_pair_integral
+alias resetVector_pair_inner := NField.Alignment.CollisionDivisibilityCovariance.resetVector_pair_inner
+alias centeredReset_pair_inner := NField.Alignment.CollisionDivisibilityCovariance.centeredReset_pair_inner
+alias divisorCovarianceTerm_summable := NField.Alignment.CollisionDivisibilityCovariance.divisorCovarianceTerm_summable
+alias incrementCovariance_arithmetic := NField.Alignment.CollisionDivisibilityCovariance.incrementCovariance_arithmetic
+alias arithmeticCovarianceTerm_summable := NField.Alignment.CollisionDivisibilityCovariance.arithmeticCovarianceTerm_summable
+alias incrementCovariance_one_neg := NField.Alignment.CollisionDivisibilityCovariance.incrementCovariance_one_neg
+
+alias primitiveSum_divisors := NField.Alignment.CollisionRamanujan.primitiveSum_divisors
+alias primitiveSum_eq_ramanujan := NField.Alignment.CollisionRamanujan.primitiveSum_eq_ramanujan
+alias primitiveSum_eq_units := NField.Alignment.CollisionRamanujan.primitiveSum_eq_units
+alias primitiveSum_norm_le := NField.Alignment.CollisionRamanujan.primitiveSum_norm_le
+alias ramanujan_divisors := NField.Alignment.CollisionRamanujan.ramanujan_divisors
+alias ramanujan_norm_le := NField.Alignment.CollisionRamanujan.ramanujan_norm_le
+alias jordanTwo_quadratic_lower := NField.Alignment.CollisionRamanujan.jordanTwo_quadratic_lower
+alias finite_arithmetic_regrouping := NField.Alignment.CollisionRamanujanCovariance.finite_arithmetic_regrouping
+alias covarianceCoefficient_summable := NField.Alignment.CollisionRamanujanCovariance.covarianceCoefficient_summable
+alias covarianceCoefficient_norm_summable := NField.Alignment.CollisionRamanujanCovariance.covarianceCoefficient_norm_summable
+alias covarianceCoefficient_limit := NField.Alignment.CollisionRamanujanCovariance.covarianceCoefficient_limit
+alias incrementCovariance_ramanujan := NField.Alignment.CollisionRamanujanCovariance.incrementCovariance_ramanujan
+alias complexCovarianceCoefficient_norm_summable := NField.Alignment.CollisionRamanujanCovariance.complexCovarianceCoefficient_norm_summable
+alias incrementCovariance_primitive := NField.Alignment.CollisionRamanujanCovariance.incrementCovariance_primitive
+alias covariance_and_recurrence := NField.Alignment.CollisionRamanujanCovariance.covariance_and_recurrence
+
+alias all_amplitudes_summable := NField.Alignment.CollisionMassInverse.all_amplitudes_summable
+alias inverse_norm_summable := NField.Alignment.CollisionMassInverse.inverse_norm_summable
+alias mass_moebius_inverse := NField.Alignment.CollisionMassInverse.mass_moebius_inverse
+alias potential_remainder_inner := NField.Alignment.CollisionPotentialRecovery.potential_remainder_inner
+alias amplitude_from_potential := NField.Alignment.CollisionPotentialRecovery.amplitude_from_potential
+alias potential_determines_mass := NField.Alignment.CollisionPotentialRecovery.potential_determines_mass
+alias limiting_potential_mean_zero := NField.Alignment.CollisionPotentialRecovery.limiting_potential_mean_zero
+alias coboundary_determines_mass := NField.Alignment.CollisionPotentialRecovery.coboundary_determines_mass
+alias admissible_mass_recovery := NField.Alignment.CollisionPotentialRecovery.admissible_mass_recovery
+
+alias lowerL2Linear_norm := NField.Alignment.CollisionL1Testing.lowerL2Linear_norm
+alias continuousTest_lowerL2 := NField.Alignment.CollisionL1Testing.continuousTest_lowerL2
+alias antiderivative_forward := NField.Alignment.CollisionFiniteAntiderivative.antiderivative_forward
+alias antiderivativeVector_step := NField.Alignment.CollisionFiniteAntiderivative.antiderivativeVector_step
+alias backward_difference_pairing := NField.Alignment.CollisionFiniteAntiderivative.backward_difference_pairing
+alias generalResetL1_norm_summable := NField.Alignment.CollisionGeneralForcing.generalResetL1_norm_summable
+alias forcingL1_coe := NField.Alignment.CollisionGeneralForcing.forcingL1_coe
+alias forcingFunction_integrable := NField.Alignment.CollisionGeneralForcing.forcingFunction_integrable
+alias finiteForcing_eq_lower_difference := NField.Alignment.CollisionGeneralForcing.finiteForcing_eq_lower_difference
+alias finiteForcing_tendsto := NField.Alignment.CollisionGeneralForcing.finiteForcing_tendsto
+alias forcing_finite_norm_bound := NField.Alignment.CollisionCoboundaryCriterion.forcing_finite_norm_bound
+alias energy_of_coboundary := NField.Alignment.CollisionCoboundaryCriterion.energy_of_coboundary
+alias coboundary_energy_iff := NField.Alignment.CollisionCoboundaryCriterion.coboundary_energy_iff
+alias forcing_equation_iff_ae := NField.Alignment.CollisionCoboundaryCriterion.forcing_equation_iff_ae
+alias general_weight_criterion := NField.Alignment.CollisionCoboundaryCriterion.general_weight_criterion
+alias uncenteredAge_split := NField.Alignment.CollisionStationaryAgeDivergence.uncenteredAge_split
+alias uncenteredAge_monotone := NField.Alignment.CollisionStationaryAgeDivergence.uncenteredAge_monotone
+alias uncenteredAge_tendsto_atTop_ae := NField.Alignment.CollisionStationaryAgeDivergence.uncenteredAge_tendsto_atTop_ae
+
+alias harmonic_cross_sum := NField.Alignment.CollisionStationaryAgeAsymptotic.harmonic_cross_sum
+alias firstMoment_moebius := NField.Alignment.CollisionStationaryAgeAsymptotic.firstMoment_moebius
+alias harmonic_square_log_error := NField.Alignment.CollisionStationaryAgeAsymptotic.harmonic_square_log_error
+alias firstMoment_main_error := NField.Alignment.CollisionStationaryAgeAsymptotic.firstMoment_main_error
+alias firstMoment_isBigO_log := NField.Alignment.CollisionStationaryAgeAsymptotic.firstMoment_isBigO_log
+alias stationaryAge_firstMoment := NField.Alignment.CollisionStationaryAgeAsymptotic.stationaryAge_firstMoment
+alias stationaryAge_main_error := NField.Alignment.CollisionStationaryAgeAsymptotic.stationaryAge_main_error
+alias stationaryAge_isBigO_log := NField.Alignment.CollisionStationaryAgeAsymptotic.stationaryAge_isBigO_log
+alias stationaryMass_tsum := NField.Alignment.CollisionCycleStationarity.stationaryMass_tsum
+alias orbitMass_tsum := NField.Alignment.CollisionCycleStationarity.orbitMass_tsum
+alias averagePMF_cesaro := NField.Alignment.CollisionCycleStationarity.averagePMF_cesaro
+alias averageMass_error := NField.Alignment.CollisionCycleStationarity.averageMass_error
+alias averageMass_tendsto := NField.Alignment.CollisionCycleStationarity.averageMass_tendsto
+alias cycleVariation_le := NField.Alignment.CollisionCycleStationarity.cycleVariation_le
+alias absolute_mass_discrepancy_summable := NField.Alignment.CollisionCycleStationarity.absolute_mass_discrepancy_summable
+alias totalVariation_eq_mass_discrepancy := NField.Alignment.CollisionCycleStationarity.totalVariation_eq_mass_discrepancy
+alias totalVariation_tendsto_zero := NField.Alignment.CollisionCycleStationarity.totalVariation_tendsto_zero
+alias ageMass_truncated := NField.Alignment.CollisionCycleStationarity.ageMass_truncated
+alias stationaryPMF_toReal := NField.Alignment.CollisionCycleStationarity.stationaryPMF_toReal
+alias stationaryPMF_mean_age := NField.Alignment.CollisionCycleStationarity.stationaryPMF_mean_age
+alias totalVariation_eq_pmf := NField.Alignment.CollisionCycleStationarity.totalVariation_eq_pmf
+alias truncated_stationary_age := NField.Alignment.CollisionCycleStationarity.truncated_stationary_age
+
+alias primitiveRow_toLp := NField.Alignment.CollisionConductorRows.primitiveRow_toLp
+alias primitiveRowMap_formula := NField.Alignment.CollisionConductorRows.primitiveRowMap_formula
+alias remainderVector_one := NField.Alignment.CollisionConductorRows.remainderVector_one
+alias sum_primitiveRow_divisors := NField.Alignment.CollisionConductorRows.sum_primitiveRow_divisors
+alias remainder_primitiveRow_inner := NField.Alignment.CollisionConductorRows.remainder_primitiveRow_inner
+alias primitiveRow_inner := NField.Alignment.CollisionConductorRows.primitiveRow_inner
+alias primitiveRow_norm_sq := NField.Alignment.CollisionConductorRows.primitiveRow_norm_sq
+alias primitiveRows_orthogonal := NField.Alignment.CollisionConductorRows.primitiveRows_orthogonal
+alias divisor_row_sum_within := NField.Alignment.CollisionConductorRows.divisor_row_sum_within
+alias finite_potential_rows := NField.Alignment.CollisionConductorRows.finite_potential_rows
+alias weightedRows_norm_sq := NField.Alignment.CollisionConductorRows.weightedRows_norm_sq
+alias weightedRows_sub := NField.Alignment.CollisionConductorRows.weightedRows_sub
+alias conductorCutoff_norm_le := NField.Alignment.CollisionConductorRows.conductorCutoff_norm_le
+alias conductorCutoff_difference_bound := NField.Alignment.CollisionConductorRows.conductorCutoff_difference_bound
+alias conductorCutoff_difference_tendsto := NField.Alignment.CollisionConductorRows.conductorCutoff_difference_tendsto
+alias conductor_expansion_tendsto := NField.Alignment.CollisionConductorRows.conductor_expansion_tendsto
+
+alias centered_congruence_sum := NField.Alignment.CollisionCylinderMeans.centered_congruence_sum
+alias residueEvent_measure := NField.Alignment.CollisionCylinderMeans.residueEvent_measure
+alias residue_remainder_inner := NField.Alignment.CollisionCylinderMeans.residue_remainder_inner
+alias cylinderFunctional_normalized_integral := NField.Alignment.CollisionCylinderMeans.cylinderFunctional_normalized_integral
+alias cylinderFunctional_remainder := NField.Alignment.CollisionCylinderMeans.cylinderFunctional_remainder
+alias cylinder_series_summable := NField.Alignment.CollisionCylinderMeans.cylinder_series_summable
+alias cylinderMean_series := NField.Alignment.CollisionCylinderMeans.cylinderMean_series
+alias primitiveValue_formula := NField.Alignment.CollisionCylinderMeans.primitiveValue_formula
+alias primitiveValue_divisor_sum := NField.Alignment.CollisionCylinderMeans.primitiveValue_divisor_sum
+alias finite_cylinder_regrouping := NField.Alignment.CollisionCylinderMeans.finite_cylinder_regrouping
+alias cylinderMean_conductors_ge_two := NField.Alignment.CollisionCylinderMeans.cylinderMean_conductors_ge_two
+alias alignment_series_summable := NField.Alignment.CollisionCylinderMeans.alignment_series_summable
+alias alignmentConstant_nonneg := NField.Alignment.CollisionCylinderMeans.alignmentConstant_nonneg
+alias totient_divisor_sum_ge_two := NField.Alignment.CollisionCylinderMeans.totient_divisor_sum_ge_two
+alias weighted_gcd_divisor_tsum := NField.Alignment.CollisionCylinderMeans.weighted_gcd_divisor_tsum
+alias alignmentConstant_conductors := NField.Alignment.CollisionCylinderMeans.alignmentConstant_conductors
+alias cylinderMean_gap := NField.Alignment.CollisionCylinderMeans.cylinderMean_gap
+alias cylinderMean_upper_gap := NField.Alignment.CollisionCylinderMeans.cylinderMean_upper_gap
+alias cylinderMean_lower := NField.Alignment.CollisionCylinderMeans.cylinderMean_lower
+alias cylinderMean_upper := NField.Alignment.CollisionCylinderMeans.cylinderMean_upper
+alias cylinderMean_near_zero := NField.Alignment.CollisionCylinderMeans.cylinderMean_near_zero
+alias cylinderMean_min_iff := NField.Alignment.CollisionCylinderMeans.cylinderMean_min_iff
+alias cylinderMean_max_iff := NField.Alignment.CollisionCylinderMeans.cylinderMean_max_iff
+alias cylinderMean_zero := NField.Alignment.CollisionCylinderMeans.cylinderMean_zero
+alias cylinderMean_predecessor := NField.Alignment.CollisionCylinderMeans.cylinderMean_predecessor
+alias cylinder_means := NField.Alignment.CollisionCylinderMeans.cylinder_means
+
+alias resetRow_inner := NField.Alignment.CollisionParityRows.resetRow_inner
+alias remainder_resetRow_inner := NField.Alignment.CollisionParityRows.remainder_resetRow_inner
+alias ramanujanRow_toLp := NField.Alignment.CollisionParityRows.ramanujanRow_toLp
+alias resetRow_ramanujan_inner := NField.Alignment.CollisionParityRows.resetRow_ramanujan_inner
+alias ramanujanRow_inner := NField.Alignment.CollisionParityRows.ramanujanRow_inner
+alias ramanujanRow_norm_sq := NField.Alignment.CollisionParityRows.ramanujanRow_norm_sq
+alias primitive_ramanujan_inner := NField.Alignment.CollisionParityRows.primitive_ramanujan_inner
+alias carrierRow_toLp := NField.Alignment.CollisionParityRows.carrierRow_toLp
+alias primitiveRow_split := NField.Alignment.CollisionParityRows.primitiveRow_split
+alias carrierRow_norm_sq := NField.Alignment.CollisionParityRows.carrierRow_norm_sq
+alias carrier_ramanujan_orthogonal := NField.Alignment.CollisionParityRows.carrier_ramanujan_orthogonal
+alias ramanujanRowMap_formula := NField.Alignment.CollisionParityRows.ramanujanRowMap_formula
+alias centered_inverse := NField.Alignment.CollisionParityRows.centered_inverse
+alias inverse_ramanujanRow := NField.Alignment.CollisionParityRows.inverse_ramanujanRow
+alias inverse_primitiveRow := NField.Alignment.CollisionParityRows.inverse_primitiveRow
+alias inverse_carrierRow := NField.Alignment.CollisionParityRows.inverse_carrierRow
+alias carrierRowMap_formula := NField.Alignment.CollisionParityRows.carrierRowMap_formula
+alias centered_sawtooth_endpoint := NField.Alignment.CollisionParityRows.centered_sawtooth_endpoint
+alias carrierRow_two := NField.Alignment.CollisionParityRows.carrierRow_two
+alias primitiveRow_two_ne_zero := NField.Alignment.CollisionParityRows.primitiveRow_two_ne_zero
+alias collisionPotential_inverse := NField.Alignment.CollisionParityRows.collisionPotential_inverse
+alias incrementVector_even := NField.Alignment.CollisionParityRows.incrementVector_even
+alias collisionPotential_parity_split := NField.Alignment.CollisionParityRows.collisionPotential_parity_split
+alias oddPotential_odd := NField.Alignment.CollisionParityRows.oddPotential_odd
+alias ramanujanCutoff_tendsto := NField.Alignment.CollisionParityRows.ramanujanCutoff_tendsto
+alias carrierCutoff_tendsto := NField.Alignment.CollisionParityRows.carrierCutoff_tendsto
+alias oddPotential_odd_ae := NField.Alignment.CollisionParityRows.oddPotential_odd_ae
+alias incrementVector_even_ae := NField.Alignment.CollisionParityRows.incrementVector_even_ae
+alias ramanujanRowMap_residue := NField.Alignment.CollisionParityRows.ramanujanRowMap_residue
+alias ramanujanRowMap_primitiveSum := NField.Alignment.CollisionParityRows.ramanujanRowMap_primitiveSum
+alias carrierRows_orthogonal := NField.Alignment.CollisionParityRows.carrierRows_orthogonal
+alias carrier_parity_decomposition := NField.Alignment.CollisionParityRows.carrier_parity_decomposition
+
+alias negativeRoot_power_iff := NField.Alignment.CollisionPrimitiveFourier.negativeRoot_power_iff
+alias negativeRoot_primitive_ne_one := NField.Alignment.CollisionPrimitiveFourier.negativeRoot_primitive_ne_one
+alias complex_sum_range_product := NField.Alignment.CollisionPrimitiveFourier.complex_sum_range_product
+alias periodic_transform_factor := NField.Alignment.CollisionPrimitiveFourier.periodic_transform_factor
+alias primitive_periodic_transform_zero := NField.Alignment.CollisionPrimitiveFourier.primitive_periodic_transform_zero
+alias centered_transform_own := NField.Alignment.CollisionPrimitiveFourier.centered_transform_own
+alias centered_primitive_transform := NField.Alignment.CollisionPrimitiveFourier.centered_primitive_transform
+alias fourierFunctional_apply := NField.Alignment.CollisionPrimitiveFourier.fourierFunctional_apply
+alias remainderVector_fourier := NField.Alignment.CollisionPrimitiveFourier.remainderVector_fourier
+alias primitiveRow_fourier := NField.Alignment.CollisionPrimitiveFourier.primitiveRow_fourier
+alias primitiveRow_fourier_support := NField.Alignment.CollisionPrimitiveFourier.primitiveRow_fourier_support
+alias finitePotential_fourier := NField.Alignment.CollisionPrimitiveFourier.finitePotential_fourier
+alias collisionPotential_fourier := NField.Alignment.CollisionPrimitiveFourier.collisionPotential_fourier
+alias cylinderFunctional_resetRow := NField.Alignment.CollisionPrimitiveFourier.cylinderFunctional_resetRow
+alias resetProfile_transform := NField.Alignment.CollisionPrimitiveFourier.resetProfile_transform
+alias resetRow_fourier := NField.Alignment.CollisionPrimitiveFourier.resetRow_fourier
+alias ramanujanRow_fourier := NField.Alignment.CollisionPrimitiveFourier.ramanujanRow_fourier
+alias ramanujanCutoff_fourier := NField.Alignment.CollisionPrimitiveFourier.ramanujanCutoff_fourier
+alias incrementVector_fourier := NField.Alignment.CollisionPrimitiveFourier.incrementVector_fourier
+alias fourierFunctional_integral := NField.Alignment.CollisionPrimitiveFourier.fourierFunctional_integral
+alias primitiveRow_mean_zero := NField.Alignment.CollisionPrimitiveFourier.primitiveRow_mean_zero
+alias spectrum_and_parity := NField.Alignment.CollisionPrimitiveFourier.spectrum_and_parity
+
+alias rangeDFT_eq_dft := NField.Alignment.CollisionCosecantIdentity.rangeDFT_eq_dft
+alias rangeDFT_parseval := NField.Alignment.CollisionCosecantIdentity.rangeDFT_parseval
+alias centeredDFT_zero := NField.Alignment.CollisionCosecantIdentity.centeredDFT_zero
+alias centeredDFT_nonzero := NField.Alignment.CollisionCosecantIdentity.centeredDFT_nonzero
+alias centeredDFT_norm_sq := NField.Alignment.CollisionCosecantIdentity.centeredDFT_norm_sq
+alias complete_chord_sum := NField.Alignment.CollisionCosecantIdentity.complete_chord_sum
+alias primitive_chord_divisors := NField.Alignment.CollisionCosecantIdentity.primitive_chord_divisors
+alias primitive_chord_sum := NField.Alignment.CollisionCosecantIdentity.primitive_chord_sum
+alias chordEnergy_eq_cosecant := NField.Alignment.CollisionCosecantIdentity.chordEnergy_eq_cosecant
+alias primitive_cosecant_square := NField.Alignment.CollisionCosecantIdentity.primitive_cosecant_square
+
+alias affineRow_measurable := NField.Alignment.CollisionRampEnergy.affineRow_measurable
+alias affineRow_norm_le := NField.Alignment.CollisionRampEnergy.affineRow_norm_le
+alias affineRow_intervalIntegrable := NField.Alignment.CollisionRampEnergy.affineRow_intervalIntegrable
+alias affineProduct_intervalIntegrable := NField.Alignment.CollisionRampEnergy.affineProduct_intervalIntegrable
+alias integral_uniform_cells := NField.Alignment.CollisionRampEnergy.integral_uniform_cells
+alias fract_affine_cell := NField.Alignment.CollisionRampEnergy.fract_affine_cell
+alias affineRow_on_cell := NField.Alignment.CollisionRampEnergy.affineRow_on_cell
+alias centered_translate_multiple := NField.Alignment.CollisionRampEnergy.centered_translate_multiple
+alias centered_sum_multiple := NField.Alignment.CollisionRampEnergy.centered_sum_multiple
+alias covariance_product_cycle := NField.Alignment.CollisionRampEnergy.covariance_product_cycle
+alias affine_cell_sum := NField.Alignment.CollisionRampEnergy.affine_cell_sum
+alias unit_centered_square_integral := NField.Alignment.CollisionRampEnergy.unit_centered_square_integral
+alias affine_ramp_gram := NField.Alignment.CollisionRampEnergy.affine_ramp_gram
+alias midpointRow_ae_affineRow := NField.Alignment.CollisionRampEnergy.midpointRow_ae_affineRow
+alias midpointRow_intervalIntegrable := NField.Alignment.CollisionRampEnergy.midpointRow_intervalIntegrable
+alias midpoint_ramp_gram := NField.Alignment.CollisionRampEnergy.midpoint_ramp_gram
+alias unit_centered_integral := NField.Alignment.CollisionRampEnergy.unit_centered_integral
+alias affineRow_mean_zero := NField.Alignment.CollisionRampEnergy.affineRow_mean_zero
+alias midpointRow_mean_zero := NField.Alignment.CollisionRampEnergy.midpointRow_mean_zero
+alias boundaryResponse_ae_affineResponse := NField.Alignment.CollisionRampEnergy.boundaryResponse_ae_affineResponse
+alias boundaryResponse_mean_zero := NField.Alignment.CollisionRampEnergy.boundaryResponse_mean_zero
+alias affineResponse_square := NField.Alignment.CollisionRampEnergy.affineResponse_square
+alias affineResponse_energy := NField.Alignment.CollisionRampEnergy.affineResponse_energy
+alias boundaryResponse_energy := NField.Alignment.CollisionRampEnergy.boundaryResponse_energy
+alias midpointRow_formula := NField.Alignment.CollisionRampEnergy.midpointRow_formula
+alias boundaryResponse_formula := NField.Alignment.CollisionRampEnergy.boundaryResponse_formula
+alias midpointRow_periodic := NField.Alignment.CollisionRampEnergy.midpointRow_periodic
+alias boundaryResponse_periodic := NField.Alignment.CollisionRampEnergy.boundaryResponse_periodic
+
+alias sourceRow_integrable := NField.Alignment.CollisionBoundaryMeasure.sourceRow_integrable
+alias sourceRow_integral := NField.Alignment.CollisionBoundaryMeasure.sourceRow_integral
+alias boundaryMeasure_integral := NField.Alignment.CollisionBoundaryMeasure.boundaryMeasure_integral
+alias affine_test_cell := NField.Alignment.CollisionBoundaryMeasure.affine_test_cell
+alias cyclic_address_sum := NField.Alignment.CollisionBoundaryMeasure.cyclic_address_sum
+alias affineRow_weak_derivative := NField.Alignment.CollisionBoundaryMeasure.affineRow_weak_derivative
+alias midpointRow_weak_derivative := NField.Alignment.CollisionBoundaryMeasure.midpointRow_weak_derivative
+alias sum_positive_indices := NField.Alignment.CollisionBoundaryMeasure.sum_positive_indices
+alias boundaryResponse_weak_derivative := NField.Alignment.CollisionBoundaryMeasure.boundaryResponse_weak_derivative
+alias primitiveSourceRow_split := NField.Alignment.CollisionBoundaryMeasure.primitiveSourceRow_split
+alias sourceRow_primitive_divisors := NField.Alignment.CollisionBoundaryMeasure.sourceRow_primitive_divisors
+alias multiples_Icc_card := NField.Alignment.CollisionBoundaryMeasure.multiples_Icc_card
+alias boundaryMeasure_primitive := NField.Alignment.CollisionBoundaryMeasure.boundaryMeasure_primitive
+alias boundary_energy_completed := NField.Alignment.CollisionBoundaryMeasure.boundary_energy_completed
+alias boundary_energy_readout := NField.Alignment.CollisionBoundaryMeasure.boundary_energy_readout
+alias boundary_energy_increment := NField.Alignment.CollisionBoundaryMeasure.boundary_energy_increment
+alias boundary_energy_coefficients_unique := NField.Alignment.CollisionBoundaryMeasure.boundary_energy_coefficients_unique
+alias boundary_selection_and_readout := NField.Alignment.CollisionBoundaryMeasure.boundary_selection_and_readout
+
+alias omittedAmplitude_summable := NField.Alignment.CollisionAmplitudeEnclosure.omittedAmplitude_summable
+alias amplitude_cutoff_split := NField.Alignment.CollisionAmplitudeEnclosure.amplitude_cutoff_split
+alias omittedAmplitude_nonneg := NField.Alignment.CollisionAmplitudeEnclosure.omittedAmplitude_nonneg
+alias omittedAmplitude_le_tailMass := NField.Alignment.CollisionAmplitudeEnclosure.omittedAmplitude_le_tailMass
+alias tailMass_eq_complement := NField.Alignment.CollisionAmplitudeEnclosure.tailMass_eq_complement
+alias amplitude_mem_enclosure := NField.Alignment.CollisionAmplitudeEnclosure.amplitude_mem_enclosure
+alias amplitude_enclosure_width := NField.Alignment.CollisionAmplitudeEnclosure.amplitude_enclosure_width
+alias amplitude_enclosure_width_tendsto := NField.Alignment.CollisionAmplitudeEnclosure.amplitude_enclosure_width_tendsto
+alias amplitudeUpper_tendsto := NField.Alignment.CollisionAmplitudeEnclosure.amplitudeUpper_tendsto
+
+alias translationStabilizer_open := NField.Alignment.ProfinitePeriodicTesting.translationStabilizer_open
+alias locallyConstant_integer_period := NField.Alignment.ProfinitePeriodicTesting.locallyConstant_integer_period
+alias phaseCycleMean_continuous := NField.Alignment.ProfinitePeriodicTesting.phaseCycleMean_continuous
+alias phaseCycleMean_invariant := NField.Alignment.ProfinitePeriodicTesting.phaseCycleMean_invariant
+alias continuous_phase_integrable := NField.Alignment.ProfinitePeriodicTesting.continuous_phase_integrable
+alias phaseCycleMean_integral := NField.Alignment.ProfinitePeriodicTesting.phaseCycleMean_integral
+alias phaseCycleMean_eq_integral := NField.Alignment.ProfinitePeriodicTesting.phaseCycleMean_eq_integral
+alias periodic_sum_error := NField.Alignment.ProfinitePeriodicTesting.periodic_sum_error
+alias periodic_average_tendsto := NField.Alignment.ProfinitePeriodicTesting.periodic_average_tendsto
+alias locallyConstant_orbit_tendsto := NField.Alignment.ProfinitePeriodicTesting.locallyConstant_orbit_tendsto
+alias locallyConstant_continuous_dense := NField.Alignment.ProfinitePeriodicTesting.locallyConstant_continuous_dense
+alias locallyConstant_L2_dense := NField.Alignment.ProfinitePeriodicTesting.locallyConstant_L2_dense
+alias locallyConstant_L2_separates := NField.Alignment.ProfinitePeriodicTesting.locallyConstant_L2_separates
+alias resetTerm_locallyConstant := NField.Alignment.CollisionBoundaryTesting.resetTerm_locallyConstant
+alias resetTerm_integer := NField.Alignment.CollisionBoundaryTesting.resetTerm_integer
+alias positive_sum_Icc := NField.Alignment.CollisionBoundaryTesting.positive_sum_Icc
+alias resetTerm_positive_sum := NField.Alignment.CollisionBoundaryTesting.resetTerm_positive_sum
+alias resetTest_average_bound := NField.Alignment.CollisionBoundaryTesting.resetTest_average_bound
+alias resetTest_average_tendsto := NField.Alignment.CollisionBoundaryTesting.resetTest_average_tendsto
+alias resetTerm_trace_summable := NField.Alignment.CollisionBoundaryTesting.resetTerm_trace_summable
+alias resetFunction_average_split := NField.Alignment.CollisionBoundaryTesting.resetFunction_average_split
+alias resetTest_integrable := NField.Alignment.CollisionBoundaryTesting.resetTest_integrable
+alias resetTest_integral_norm_bound := NField.Alignment.CollisionBoundaryTesting.resetTest_integral_norm_bound
+alias resetFunction_test_integrable := NField.Alignment.CollisionBoundaryTesting.resetFunction_test_integrable
+alias resetFunction_test_integral := NField.Alignment.CollisionBoundaryTesting.resetFunction_test_integral
+alias resetFunction_average_tendsto := NField.Alignment.CollisionBoundaryTesting.resetFunction_average_tendsto
+alias increment_test_formula := NField.Alignment.CollisionBoundaryTesting.increment_test_formula
+alias increment_test_integral := NField.Alignment.CollisionBoundaryTesting.increment_test_integral
+alias increment_test_average := NField.Alignment.CollisionBoundaryTesting.increment_test_average
+alias increment_test_tendsto := NField.Alignment.CollisionBoundaryTesting.increment_test_tendsto
+alias boundaryIncrement_succ := NField.Alignment.CollisionBoundaryTesting.boundaryIncrement_succ
+alias resetFunction_integer := NField.Alignment.CollisionBoundaryTesting.resetFunction_integer
+alias boundaryIncrement_integer := NField.Alignment.CollisionBoundaryTesting.boundaryIncrement_integer
+alias boundary_increment_average_tendsto := NField.Alignment.CollisionBoundaryTesting.boundary_increment_average_tendsto
+alias collisionPotential_real_boundary_pairings := NField.Alignment.CollisionBoundaryTesting.collisionPotential_real_boundary_pairings
+alias difference_test_coe := NField.Alignment.CollisionBoundaryTesting.difference_test_coe
+alias real_boundary_pairings_unique := NField.Alignment.CollisionBoundaryTesting.real_boundary_pairings_unique
+alias difference_test_integrable := NField.Alignment.CollisionBoundaryTesting.difference_test_integrable
+alias real_conjugate_product := NField.Alignment.CollisionBoundaryTesting.real_conjugate_product
+alias complex_test_average_split := NField.Alignment.CollisionBoundaryTesting.complex_test_average_split
+alias complex_test_integral_split := NField.Alignment.CollisionBoundaryTesting.complex_test_integral_split
+alias real_boundary_pairings_complex := NField.Alignment.CollisionBoundaryTesting.real_boundary_pairings_complex
+alias complex_boundary_pairings_real := NField.Alignment.CollisionBoundaryTesting.complex_boundary_pairings_real
+alias boundary_pairings_iff_real := NField.Alignment.CollisionBoundaryTesting.boundary_pairings_iff_real
+alias collisionPotential_boundary_pairings := NField.Alignment.CollisionBoundaryTesting.collisionPotential_boundary_pairings
+alias boundary_weak_pairing := NField.Alignment.CollisionBoundaryTesting.boundary_weak_pairing
+alias intrinsic_boundary_potential := NField.Alignment.CollisionBoundaryTesting.intrinsic_boundary_potential
+alias boundary_potential_exists_unique := NField.Alignment.CollisionBoundaryTesting.boundary_potential_exists_unique
+
+alias resetPair_norm_bound := NField.Alignment.CollisionHaarTestEnclosure.resetPair_norm_bound
+alias resetPair_summable := NField.Alignment.CollisionHaarTestEnclosure.resetPair_summable
+alias omittedPair_norm_bound := NField.Alignment.CollisionHaarTestEnclosure.omittedPair_norm_bound
+alias finiteHaarPair_error_identity := NField.Alignment.CollisionHaarTestEnclosure.finiteHaarPair_error_identity
+alias finiteHaarPair_error_bound := NField.Alignment.CollisionHaarTestEnclosure.finiteHaarPair_error_bound
+alias finiteHaarPair_enclosure := NField.Alignment.CollisionHaarTestEnclosure.finiteHaarPair_enclosure
+alias finiteHaarPair_tendsto := NField.Alignment.CollisionHaarTestEnclosure.finiteHaarPair_tendsto
+alias residueTableTest_integer := NField.Alignment.CollisionHaarTestEnclosure.residueTableTest_integer
+alias residueTableTest_mean := NField.Alignment.CollisionHaarTestEnclosure.residueTableTest_mean
+alias residueTableTest_norm_le := NField.Alignment.CollisionHaarTestEnclosure.residueTableTest_norm_le
+alias residueTableTest_eq_sum := NField.Alignment.CollisionHaarTestEnclosure.residueTableTest_eq_sum
+alias residuePair_integrable := NField.Alignment.CollisionHaarTestEnclosure.residuePair_integrable
+alias resetPair_residueTable := NField.Alignment.CollisionHaarTestEnclosure.resetPair_residueTable
+alias boundaryIncrement_divisor_formula := NField.Alignment.CollisionHaarTestEnclosure.boundaryIncrement_divisor_formula
+alias finiteHaarPair_residueTable := NField.Alignment.CollisionHaarTestEnclosure.finiteHaarPair_residueTable
+alias residueTable_boundary_average := NField.Alignment.CollisionHaarTestEnclosure.residueTable_boundary_average
+alias complexResidueTableTest_real := NField.Alignment.CollisionHaarTestEnclosure.complexResidueTableTest_real
+alias complexResidueTableTest_imag := NField.Alignment.CollisionHaarTestEnclosure.complexResidueTableTest_imag
+alias boundaryHaarPair_split := NField.Alignment.CollisionHaarTestEnclosure.boundaryHaarPair_split
+alias complexHaarPair_component_error := NField.Alignment.CollisionHaarTestEnclosure.complexHaarPair_component_error
+alias complexResidueTable_enclosure := NField.Alignment.CollisionHaarTestEnclosure.complexResidueTable_enclosure
+alias finiteComplexHaarPair_tendsto := NField.Alignment.CollisionHaarTestEnclosure.finiteComplexHaarPair_tendsto
+
+alias gcd_lcm_distrib := NField.Alignment.CollisionJointCRT.gcd_lcm_distrib
+alias modEq_finset_lcm := NField.Alignment.CollisionJointCRT.modEq_finset_lcm
+alias gcd_finset_lcm := NField.Alignment.CollisionJointCRT.gcd_finset_lcm
+alias joint_crt_exists := NField.Alignment.CollisionJointCRT.joint_crt_exists
+alias joint_crt_unique := NField.Alignment.CollisionJointCRT.joint_crt_unique
+alias joint_crt_compatible := NField.Alignment.CollisionJointCRT.joint_crt_compatible
+alias joint_residue_count := NField.Alignment.CollisionJointCRT.joint_residue_count
+alias joint_residue_integral := NField.Alignment.CollisionJointCRT.joint_residue_integral
+alias compatible_integer_difference := NField.Alignment.CollisionJointCRT.compatible_integer_difference
+alias joint_reset_integral_negative := NField.Alignment.CollisionJointCRT.joint_reset_integral_negative
+alias resetTerm_shift_inv := NField.Alignment.CollisionJointCRT.resetTerm_shift_inv
+alias joint_reset_integral := NField.Alignment.CollisionJointCRT.joint_reset_integral
+alias hasSum_nonneg_fin_product := NField.Alignment.CollisionJointMoments.hasSum_nonneg_fin_product
+alias resetTerm_summable_ae := NField.Alignment.CollisionJointMoments.resetTerm_summable_ae
+alias resetTerm_from_two_hasSum_ae := NField.Alignment.CollisionJointMoments.resetTerm_from_two_hasSum_ae
+alias reset_joint_integrable := NField.Alignment.CollisionJointMoments.reset_joint_integrable
+alias jointResetTerm_nonneg := NField.Alignment.CollisionJointMoments.jointResetTerm_nonneg
+alias jointResetTerm_continuous := NField.Alignment.CollisionJointMoments.jointResetTerm_continuous
+alias shifted_resetTerm_from_two_hasSum_ae := NField.Alignment.CollisionJointMoments.shifted_resetTerm_from_two_hasSum_ae
+alias jointResetTerm_hasSum_ae := NField.Alignment.CollisionJointMoments.jointResetTerm_hasSum_ae
+alias jointResetTerm_integral_hasSum := NField.Alignment.CollisionJointMoments.jointResetTerm_integral_hasSum
+alias jointCRTTerm_integral := NField.Alignment.CollisionJointMoments.jointCRTTerm_integral
+alias joint_moment_CRT_hasSum := NField.Alignment.CollisionJointMoments.joint_moment_CRT_hasSum
+alias joint_moment_CRT := NField.Alignment.CollisionJointMoments.joint_moment_CRT
+
+alias positive_divisor_count := NField.Alignment.CollisionIntegerJointMoments.positive_divisor_count
+alias shifted_divisor_count_bound := NField.Alignment.CollisionIntegerJointMoments.shifted_divisor_count_bound
+alias nat_div_average_bound := NField.Alignment.CollisionIntegerJointMoments.nat_div_average_bound
+alias jointIndicator_nonneg := NField.Alignment.CollisionIntegerJointMoments.jointIndicator_nonneg
+alias jointIndicator_le_single := NField.Alignment.CollisionIntegerJointMoments.jointIndicator_le_single
+alias jointIndicator_average_bound := NField.Alignment.CollisionIntegerJointMoments.jointIndicator_average_bound
+alias inverse_max_le_product := NField.Alignment.CollisionIntegerJointMoments.inverse_max_le_product
+alias translate_integerPhase := NField.Alignment.CollisionIntegerJointMoments.translate_integerPhase
+alias jointResetTerm_integer := NField.Alignment.CollisionIntegerJointMoments.jointResetTerm_integer
+alias jointTrace_eq_indicator := NField.Alignment.CollisionIntegerJointMoments.jointTrace_eq_indicator
+alias jointMajorant_nonneg := NField.Alignment.CollisionIntegerJointMoments.jointMajorant_nonneg
+alias jointTrace_norm_bound := NField.Alignment.CollisionIntegerJointMoments.jointTrace_norm_bound
+alias jointMajorant_summable := NField.Alignment.CollisionIntegerJointMoments.jointMajorant_summable
+alias locallyConstant_finsetProd := NField.Alignment.CollisionIntegerJointMoments.locallyConstant_finsetProd
+alias jointResetTerm_locallyConstant := NField.Alignment.CollisionIntegerJointMoments.jointResetTerm_locallyConstant
+alias jointTrace_tendsto := NField.Alignment.CollisionIntegerJointMoments.jointTrace_tendsto
+alias resetTerm_from_two_hasSum_integer := NField.Alignment.CollisionIntegerJointMoments.resetTerm_from_two_hasSum_integer
+alias jointResetTerm_hasSum_integer := NField.Alignment.CollisionIntegerJointMoments.jointResetTerm_hasSum_integer
+alias joint_average_split := NField.Alignment.CollisionIntegerJointMoments.joint_average_split
+alias reset_joint_moment_tendsto := NField.Alignment.CollisionIntegerJointMoments.reset_joint_moment_tendsto
+alias reset_product_integrable := NField.Alignment.CollisionIntegerIncrementMoments.reset_product_integrable
+alias reset_product_tendsto := NField.Alignment.CollisionIntegerIncrementMoments.reset_product_tendsto
+alias reset_subproduct_integrable := NField.Alignment.CollisionIntegerIncrementMoments.reset_subproduct_integrable
+alias reset_subproduct_tendsto := NField.Alignment.CollisionIntegerIncrementMoments.reset_subproduct_tendsto
+alias increment_product_expansion := NField.Alignment.CollisionIntegerIncrementMoments.increment_product_expansion
+alias increment_product_integrable := NField.Alignment.CollisionIntegerIncrementMoments.increment_product_integrable
+alias increment_product_integral := NField.Alignment.CollisionIntegerIncrementMoments.increment_product_integral
+alias increment_product_average := NField.Alignment.CollisionIntegerIncrementMoments.increment_product_average
+alias increment_product_tendsto := NField.Alignment.CollisionIntegerIncrementMoments.increment_product_tendsto
+alias increment_mixed_moment_tendsto := NField.Alignment.CollisionIntegerIncrementMoments.increment_mixed_moment_tendsto
+alias increment_pair_integrable := NField.Alignment.CollisionIntegerIncrementMoments.increment_pair_integrable
+alias increment_pair_tendsto := NField.Alignment.CollisionIntegerIncrementMoments.increment_pair_tendsto
+alias deficit_block_integer := NField.Alignment.CollisionIntegerIncrementMoments.deficit_block_integer
+alias block_square_expansion := NField.Alignment.CollisionIntegerIncrementMoments.block_square_expansion
+alias block_square_integral := NField.Alignment.CollisionIntegerIncrementMoments.block_square_integral
+alias deficit_block_square_average := NField.Alignment.CollisionIntegerIncrementMoments.deficit_block_square_average
+alias deficit_block_second_moment_tendsto := NField.Alignment.CollisionIntegerIncrementMoments.deficit_block_second_moment_tendsto
+
+alias locallyConstant_finsetSum := NField.Alignment.CollisionIntegerLawApproximation.locallyConstant_finsetSum
+alias resetPartial_locallyConstant := NField.Alignment.CollisionIntegerLawApproximation.resetPartial_locallyConstant
+alias resetPartial_integrable := NField.Alignment.CollisionIntegerLawApproximation.resetPartial_integrable
+alias resetPartial_integral := NField.Alignment.CollisionIntegerLawApproximation.resetPartial_integral
+alias resetPartial_le_of_summable := NField.Alignment.CollisionIntegerLawApproximation.resetPartial_le_of_summable
+alias resetPartial_L1_error := NField.Alignment.CollisionIntegerLawApproximation.resetPartial_L1_error
+alias resetPartial_shifted_L1_error := NField.Alignment.CollisionIntegerLawApproximation.resetPartial_shifted_L1_error
+alias resetShiftTrace_nonneg := NField.Alignment.CollisionIntegerLawApproximation.resetShiftTrace_nonneg
+alias resetShiftTrace_eq_count := NField.Alignment.CollisionIntegerLawApproximation.resetShiftTrace_eq_count
+alias resetShiftTrace_bound := NField.Alignment.CollisionIntegerLawApproximation.resetShiftTrace_bound
+alias resetShiftTrace_summable := NField.Alignment.CollisionIntegerLawApproximation.resetShiftTrace_summable
+alias resetPartial_integer_error := NField.Alignment.CollisionIntegerLawApproximation.resetPartial_integer_error
+alias resetPartial_integer_L1_error := NField.Alignment.CollisionIntegerLawApproximation.resetPartial_integer_L1_error
+alias locallyConstant_finite_pi := NField.Alignment.CollisionIntegerLawApproximation.locallyConstant_finite_pi
+alias finite_pi_norm_le_sum := NField.Alignment.CollisionIntegerLawApproximation.finite_pi_norm_le_sum
+alias orbitAverage_mono := NField.Alignment.CollisionIntegerLawApproximation.orbitAverage_mono
+alias orbitAverage_norm_bound := NField.Alignment.CollisionIntegerLawApproximation.orbitAverage_norm_bound
+alias orbitAverage_sub := NField.Alignment.CollisionIntegerLawApproximation.orbitAverage_sub
+alias orbitAverage_const_mul := NField.Alignment.CollisionIntegerLawApproximation.orbitAverage_const_mul
+alias orbitAverage_finsetSum := NField.Alignment.CollisionIntegerLawApproximation.orbitAverage_finsetSum
+alias tendsto_of_uniform_approximations := NField.Alignment.CollisionIntegerLawApproximation.tendsto_of_uniform_approximations
+alias jointResetPhase_aemeasurable := NField.Alignment.CollisionIntegerLawTests.jointResetPhase_aemeasurable
+alias jointPartialPhase_locallyConstant := NField.Alignment.CollisionIntegerLawTests.jointPartialPhase_locallyConstant
+alias lawErrorBound_tendsto_zero := NField.Alignment.CollisionIntegerLawTests.lawErrorBound_tendsto_zero
+alias lipschitz_finite_difference := NField.Alignment.CollisionIntegerLawTests.lipschitz_finite_difference
+alias testAverage_error_bound := NField.Alignment.CollisionIntegerLawTests.testAverage_error_bound
+alias bounded_test_integrable := NField.Alignment.CollisionIntegerLawTests.bounded_test_integrable
+alias shifted_error_integrable := NField.Alignment.CollisionIntegerLawTests.shifted_error_integrable
+alias testIntegral_error_bound := NField.Alignment.CollisionIntegerLawTests.testIntegral_error_bound
+alias joint_reset_bounded_lipschitz_tendsto := NField.Alignment.CollisionIntegerLawTests.joint_reset_bounded_lipschitz_tendsto
+alias empiricalLaw_integral := NField.Alignment.CollisionIntegerJointLaw.empiricalLaw_integral
+alias haarResetLaw_integral := NField.Alignment.CollisionIntegerJointLaw.haarResetLaw_integral
+alias empiricalResetLaw_tendsto := NField.Alignment.CollisionIntegerJointLaw.empiricalResetLaw_tendsto
+alias incrementMap_continuous := NField.Alignment.CollisionIntegerJointLaw.incrementMap_continuous
+alias jointIncrementPhase_eq_map := NField.Alignment.CollisionIntegerJointLaw.jointIncrementPhase_eq_map
+alias jointIncrementPhase_aemeasurable := NField.Alignment.CollisionIntegerJointLaw.jointIncrementPhase_aemeasurable
+alias haarIncrementLaw_eq_map := NField.Alignment.CollisionIntegerJointLaw.haarIncrementLaw_eq_map
+alias empiricalIncrementLaw_eq_map := NField.Alignment.CollisionIntegerJointLaw.empiricalIncrementLaw_eq_map
+alias empiricalIncrementLaw_tendsto := NField.Alignment.CollisionIntegerJointLaw.empiricalIncrementLaw_tendsto
+alias integer_laws_for_fixed_increments := NField.Alignment.CollisionIntegerJointLaw.integer_laws_for_fixed_increments
+
+alias jordanThree_euler_product := NField.Alignment.CollisionAmplitudeArithmetic.jordanThree_euler_product
+alias jordanThree_multiplicative := NField.Alignment.CollisionAmplitudeArithmetic.jordanThree_multiplicative
+alias jordanThree_zero := NField.Alignment.CollisionAmplitudeArithmetic.jordanThree_zero
+alias jordanThree_one := NField.Alignment.CollisionAmplitudeArithmetic.jordanThree_one
+alias deltaThree_pos := NField.Alignment.CollisionAmplitudeArithmetic.deltaThree_pos
+alias jordanThree_pos := NField.Alignment.CollisionAmplitudeArithmetic.jordanThree_pos
+alias jordanThree_prime_power_succ := NField.Alignment.CollisionAmplitudeArithmetic.jordanThree_prime_power_succ
+alias sum_jordanThree_prime_power := NField.Alignment.CollisionAmplitudeArithmetic.sum_jordanThree_prime_power
+alias jordanThree_mul_zeta := NField.Alignment.CollisionAmplitudeArithmetic.jordanThree_mul_zeta
+alias sum_jordanThree_divisors := NField.Alignment.CollisionAmplitudeArithmetic.sum_jordanThree_divisors
+alias harmonicKernel_nonneg := NField.Alignment.CollisionAmplitudeArithmetic.harmonicKernel_nonneg
+alias harmonicKernel_divisor := NField.Alignment.CollisionAmplitudeArithmetic.harmonicKernel_divisor
+alias cubeKernel_zero := NField.Alignment.CollisionHarmonicSeed.cubeKernel_zero
+alias cubeKernel_one := NField.Alignment.CollisionHarmonicSeed.cubeKernel_one
+alias cubeKernel_nonneg := NField.Alignment.CollisionHarmonicSeed.cubeKernel_nonneg
+alias cubeKernel_summable := NField.Alignment.CollisionHarmonicSeed.cubeKernel_summable
+alias zetaThree_pos := NField.Alignment.CollisionHarmonicSeed.zetaThree_pos
+alias zetaThree_eq_riemannZeta := NField.Alignment.CollisionHarmonicSeed.zetaThree_eq_riemannZeta
+alias divisor_product_fiber := NField.Alignment.CollisionHarmonicSeed.divisor_product_fiber
+alias weightedCube_nonneg := NField.Alignment.CollisionHarmonicSeed.weightedCube_nonneg
+alias weightedCube_summable := NField.Alignment.CollisionHarmonicSeed.weightedCube_summable
+alias weightedCube_fiber := NField.Alignment.CollisionHarmonicSeed.weightedCube_fiber
+alias harmonicKernel_hasSum := NField.Alignment.CollisionHarmonicSeed.harmonicKernel_hasSum
+alias tsum_multiples := NField.Alignment.CollisionHarmonicSeed.tsum_multiples
+alias harmonicSeed_summable := NField.Alignment.CollisionHarmonicSeed.harmonicSeed_summable
+alias harmonicSeed_positive_series := NField.Alignment.CollisionHarmonicSeed.harmonicSeed_positive_series
+alias harmonicSeed_one := NField.Alignment.CollisionHarmonicSeed.harmonicSeed_one
+alias gatedCube_summable := NField.Alignment.CollisionHarmonicSeed.gatedCube_summable
+alias gatedCube_fiber := NField.Alignment.CollisionHarmonicSeed.gatedCube_fiber
+alias harmonicSeed_eq_gatedCube := NField.Alignment.CollisionHarmonicSeed.harmonicSeed_eq_gatedCube
+alias cubeKernel_mul := NField.Alignment.CollisionHarmonicSeed.cubeKernel_mul
+alias cubeKernel_multiples := NField.Alignment.CollisionHarmonicSeed.cubeKernel_multiples
+alias divides_product_iff_reduced := NField.Alignment.CollisionHarmonicSeed.divides_product_iff_reduced
+alias gatedCube_row := NField.Alignment.CollisionHarmonicSeed.gatedCube_row
+alias harmonicSeed_gcd_reduced := NField.Alignment.CollisionHarmonicSeed.harmonicSeed_gcd_reduced
+alias cubeKernel_div_gcd := NField.Alignment.CollisionAmplitudeRefinement.cubeKernel_div_gcd
+alias harmonicSeed_gcd := NField.Alignment.CollisionAmplitudeRefinement.harmonicSeed_gcd
+alias gcd_jordanThree := NField.Alignment.CollisionAmplitudeRefinement.gcd_jordanThree
+alias weightedGcd_summable := NField.Alignment.CollisionAmplitudeRefinement.weightedGcd_summable
+alias weightedGcd_eq_jordan_budget := NField.Alignment.CollisionAmplitudeRefinement.weightedGcd_eq_jordan_budget
+alias amplitude_jordan_budget := NField.Alignment.CollisionAmplitudeRefinement.amplitude_jordan_budget
+alias amplitude_one := NField.Alignment.CollisionAmplitudeRefinement.amplitude_one
+alias amplitude_moebius_budget := NField.Alignment.CollisionAmplitudeRefinement.amplitude_moebius_budget
+alias amplitude_exact_transform := NField.Alignment.CollisionAmplitudeRefinement.amplitude_exact_transform
+alias exact_amplitude_refinement := NField.Alignment.CollisionAmplitudeRefinement.exact_amplitude_refinement
+alias moebiusCube_zero := NField.Alignment.CollisionAmplitudeMobiusSeries.moebiusCube_zero
+alias moebiusCube_norm := NField.Alignment.CollisionAmplitudeMobiusSeries.moebiusCube_norm
+alias moebiusCube_summable := NField.Alignment.CollisionAmplitudeMobiusSeries.moebiusCube_summable
+alias collisionWeight_moebius_convolution := NField.Alignment.CollisionAmplitudeMobiusSeries.collisionWeight_moebius_convolution
+alias moebiusDouble_summable := NField.Alignment.CollisionAmplitudeMobiusSeries.moebiusDouble_summable
+alias moebiusDouble_fiber := NField.Alignment.CollisionAmplitudeMobiusSeries.moebiusDouble_fiber
+alias amplitude_eq_moebiusDouble := NField.Alignment.CollisionAmplitudeMobiusSeries.amplitude_eq_moebiusDouble
+alias moebiusDouble_row := NField.Alignment.CollisionAmplitudeMobiusSeries.moebiusDouble_row
+alias amplitude_infinite_moebius := NField.Alignment.CollisionAmplitudeMobiusSeries.amplitude_infinite_moebius
+alias amplitude_infinite_moebius_summable := NField.Alignment.CollisionAmplitudeMobiusSeries.amplitude_infinite_moebius_summable
+alias amplitude_positive_moebius_series := NField.Alignment.CollisionAmplitudeMobiusSeries.amplitude_positive_moebius_series
+alias primitivePairMass_zero_left := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairMass_zero_left
+alias primitivePairMass_zero_right := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairMass_zero_right
+alias primitivePairMass_nonneg := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairMass_nonneg
+alias reduced_reflected_harmonic := NField.Alignment.CollisionPrimitivePairAmplitude.reduced_reflected_harmonic
+alias primitivePairMass_split := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairMass_split
+alias primitivePairMass_antidiagonal := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairMass_antidiagonal
+alias addition_fiber_sum := NField.Alignment.CollisionPrimitivePairAmplitude.addition_fiber_sum
+alias addition_fiber_summable := NField.Alignment.CollisionPrimitivePairAmplitude.addition_fiber_summable
+alias primitivePairMass_summable := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairMass_summable
+alias primitivePairGate_summable := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairGate_summable
+alias primitivePairGate_fiber := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairGate_fiber
+alias amplitude_primitive_pair := NField.Alignment.CollisionPrimitivePairAmplitude.amplitude_primitive_pair
+alias primitivePairGate_positive_series := NField.Alignment.CollisionPrimitivePairAmplitude.primitivePairGate_positive_series
+alias amplitude_positive_primitive_pair := NField.Alignment.CollisionPrimitivePairAmplitude.amplitude_positive_primitive_pair
+
+alias upperLogGap_hasDerivAt := NField.Alignment.CollisionLogQuadrature.upperLogGap_hasDerivAt
+alias lowerLogGap_hasDerivAt := NField.Alignment.CollisionLogQuadrature.lowerLogGap_hasDerivAt
+alias upperLogGap_strictMonoOn := NField.Alignment.CollisionLogQuadrature.upperLogGap_strictMonoOn
+alias lowerLogGap_strictMonoOn := NField.Alignment.CollisionLogQuadrature.lowerLogGap_strictMonoOn
+alias log_lt_trapezoid := NField.Alignment.CollisionLogQuadrature.log_lt_trapezoid
+alias trapezoid_sub_correction_lt_log := NField.Alignment.CollisionLogQuadrature.trapezoid_sub_correction_lt_log
+alias log_successor_ratio := NField.Alignment.CollisionHarmonicRemainder.log_successor_ratio
+alias lowerSeq_step := NField.Alignment.CollisionHarmonicRemainder.lowerSeq_step
+alias upperSeq_step := NField.Alignment.CollisionHarmonicRemainder.upperSeq_step
+alias lowerSeq_strictMono := NField.Alignment.CollisionHarmonicRemainder.lowerSeq_strictMono
+alias upperSeq_strictAnti := NField.Alignment.CollisionHarmonicRemainder.upperSeq_strictAnti
+alias reciprocal_succ_tendsto := NField.Alignment.CollisionHarmonicRemainder.reciprocal_succ_tendsto
+alias lowerSeq_tendsto := NField.Alignment.CollisionHarmonicRemainder.lowerSeq_tendsto
+alias upperSeq_tendsto := NField.Alignment.CollisionHarmonicRemainder.upperSeq_tendsto
+alias lowerSeq_lt_gamma := NField.Alignment.CollisionHarmonicRemainder.lowerSeq_lt_gamma
+alias gamma_lt_upperSeq := NField.Alignment.CollisionHarmonicRemainder.gamma_lt_upperSeq
+alias harmonicError_bounds := NField.Alignment.CollisionHarmonicRemainder.harmonicError_bounds
+alias strict_harmonic_remainder := NField.Alignment.CollisionHarmonicRemainder.strict_harmonic_remainder
+alias powerKernel_nonneg := NField.Alignment.CollisionZetaMoments.powerKernel_nonneg
+alias powerKernel_summable := NField.Alignment.CollisionZetaMoments.powerKernel_summable
+alias zetaNat_pos := NField.Alignment.CollisionZetaMoments.zetaNat_pos
+alias zetaNat_eq_riemannZeta := NField.Alignment.CollisionZetaMoments.zetaNat_eq_riemannZeta
+alias zetaNat_three := NField.Alignment.CollisionZetaMoments.zetaNat_three
+alias powerKernel_mul := NField.Alignment.CollisionZetaMoments.powerKernel_mul
+alias powerKernel_positive_hasSum := NField.Alignment.CollisionZetaMoments.powerKernel_positive_hasSum
+alias powerKernel_positive_multiple_hasSum := NField.Alignment.CollisionZetaMoments.powerKernel_positive_multiple_hasSum
+alias logSquareTerm_complex := NField.Alignment.CollisionZetaMoments.logSquareTerm_complex
+alias logSquareTerm_summable := NField.Alignment.CollisionZetaMoments.logSquareTerm_summable
+alias logSquareMoment_eq_LSeries := NField.Alignment.CollisionZetaMoments.logSquareMoment_eq_LSeries
+alias zeta_derivative_two := NField.Alignment.CollisionZetaMoments.zeta_derivative_two
+alias kappaZero_eq_zeta_derivative := NField.Alignment.CollisionZetaMoments.kappaZero_eq_zeta_derivative
+alias amplitudeLeading_eq_zeta_ratio := NField.Alignment.CollisionZetaMoments.amplitudeLeading_eq_zeta_ratio
+alias seedErrorTerm_bounds := NField.Alignment.CollisionHarmonicSeedExpansion.seedErrorTerm_bounds
+alias seedErrorTerm_norm_bound := NField.Alignment.CollisionHarmonicSeedExpansion.seedErrorTerm_norm_bound
+alias seedErrorTerm_summable := NField.Alignment.CollisionHarmonicSeedExpansion.seedErrorTerm_summable
+alias seedError_bounds := NField.Alignment.CollisionHarmonicSeedExpansion.seedError_bounds
+alias logSquareTerm_positive_hasSum := NField.Alignment.CollisionHarmonicSeedExpansion.logSquareTerm_positive_hasSum
+alias harmonicKernel_expansion := NField.Alignment.CollisionHarmonicSeedExpansion.harmonicKernel_expansion
+alias harmonicSeed_expansion := NField.Alignment.CollisionHarmonicSeedExpansion.harmonicSeed_expansion
+alias strict_harmonicSeed_expansion := NField.Alignment.CollisionHarmonicSeedExpansion.strict_harmonicSeed_expansion
+alias squarefree_divisor_product := NField.Alignment.CollisionSquarefreeEuler.squarefree_divisor_product
+alias realPower_apply := NField.Alignment.CollisionSquarefreeEuler.realPower_apply
+alias realPower_multiplicative := NField.Alignment.CollisionSquarefreeEuler.realPower_multiplicative
+alias moebiusTwist_multiplicative := NField.Alignment.CollisionSquarefreeEuler.moebiusTwist_multiplicative
+alias moebiusTwist_apply := NField.Alignment.CollisionSquarefreeEuler.moebiusTwist_apply
+alias moebiusTwist_prime := NField.Alignment.CollisionSquarefreeEuler.moebiusTwist_prime
+alias moebiusTwist_prime_power := NField.Alignment.CollisionSquarefreeEuler.moebiusTwist_prime_power
+alias moebius_power_divisor_product := NField.Alignment.CollisionSquarefreeEuler.moebius_power_divisor_product
+alias absMoebius_multiplicative := NField.Alignment.CollisionSquarefreeEuler.absMoebius_multiplicative
+alias absoluteLinear_apply := NField.Alignment.CollisionSquarefreeEuler.absoluteLinear_apply
+alias absoluteLinear_multiplicative := NField.Alignment.CollisionSquarefreeEuler.absoluteLinear_multiplicative
+alias absoluteLinear_prime := NField.Alignment.CollisionSquarefreeEuler.absoluteLinear_prime
+alias absoluteLinear_prime_power := NField.Alignment.CollisionSquarefreeEuler.absoluteLinear_prime_power
+alias abs_moebius_divisor_product := NField.Alignment.CollisionSquarefreeEuler.abs_moebius_divisor_product
+alias totientRatio_euler_product := NField.Alignment.CollisionConductorArithmetic.totientRatio_euler_product
+alias moebius_divisor_inverse := NField.Alignment.CollisionConductorArithmetic.moebius_divisor_inverse
+alias moebius_power_term_derivative := NField.Alignment.CollisionConductorArithmetic.moebius_power_term_derivative
+alias euler_power_term_derivative := NField.Alignment.CollisionConductorArithmetic.euler_power_term_derivative
+alias moebius_log_divisor := NField.Alignment.CollisionConductorArithmetic.moebius_log_divisor
+alias rho_euler_product := NField.Alignment.CollisionConductorArithmetic.rho_euler_product
+alias refinement_expansion_term := NField.Alignment.CollisionUniformAmplitude.refinement_expansion_term
+alias amplitude_uniform_formula := NField.Alignment.CollisionUniformAmplitude.amplitude_uniform_formula
+alias seedError_abs_bound := NField.Alignment.CollisionUniformAmplitude.seedError_abs_bound
+alias amplitude_error_term_bound := NField.Alignment.CollisionUniformAmplitude.amplitude_error_term_bound
+alias amplitude_uniform_error := NField.Alignment.CollisionUniformAmplitude.amplitude_uniform_error
+alias amplitude_prime_exact := NField.Alignment.CollisionUniformAmplitude.amplitude_prime_exact
+alias uniform_conductor_expansion := NField.Alignment.CollisionUniformAmplitude.uniform_conductor_expansion
+
+alias cylinderFunctional_primitiveRow := NField.Alignment.CollisionConductorProjection.cylinderFunctional_primitiveRow
+alias cylinderFunctional_weightedRows := NField.Alignment.CollisionConductorProjection.cylinderFunctional_weightedRows
+alias cutoff_cylinder_agreement := NField.Alignment.CollisionConductorProjection.cutoff_cylinder_agreement
+alias cutoff_residual_inner_residue := NField.Alignment.CollisionConductorProjection.cutoff_residual_inner_residue
+alias residueMap_eq_value_indicator := NField.Alignment.CollisionConductorProjection.residueMap_eq_value_indicator
+alias residueTableMap_value := NField.Alignment.CollisionConductorProjection.residueTableMap_value
+alias remainderMap_residue_expansion := NField.Alignment.CollisionConductorProjection.remainderMap_residue_expansion
+alias remainderVector_residue_expansion := NField.Alignment.CollisionConductorProjection.remainderVector_residue_expansion
+alias residueVector_mem_conductorSpace := NField.Alignment.CollisionConductorProjection.residueVector_mem_conductorSpace
+alias remainderVector_mem_conductorSpace := NField.Alignment.CollisionConductorProjection.remainderVector_mem_conductorSpace
+alias primitiveRow_mem_conductorSpace := NField.Alignment.CollisionConductorProjection.primitiveRow_mem_conductorSpace
+alias weightedRows_mem_conductorSpace := NField.Alignment.CollisionConductorProjection.weightedRows_mem_conductorSpace
+alias cutoff_residual_inner_conductorSpace := NField.Alignment.CollisionConductorProjection.cutoff_residual_inner_conductorSpace
+alias conductorSpace_projection := NField.Alignment.CollisionConductorProjection.conductorSpace_projection
+alias cutoff_pythagoras := NField.Alignment.CollisionConductorProjection.cutoff_pythagoras
+alias conductorEnergy_split := NField.Alignment.CollisionConductorProjection.conductorEnergy_split
+alias conductor_tail_summable := NField.Alignment.CollisionConductorProjection.conductor_tail_summable
+alias conductor_projection_tail := NField.Alignment.CollisionConductorProjection.conductor_projection_tail
+alias conductor_projection_tail_ge_one := NField.Alignment.CollisionConductorProjection.conductor_projection_tail_ge_one
+alias conductor_projection_converges := NField.Alignment.CollisionConductorProjection.conductor_projection_converges
+alias conductor_projection_tail_tendsto_zero := NField.Alignment.CollisionConductorProjection.conductor_projection_tail_tendsto_zero
+alias characterPartMap_value := NField.Alignment.CollisionConductorFourierSpace.characterPartMap_value
+alias characterPartVector_mem := NField.Alignment.CollisionConductorFourierSpace.characterPartVector_mem
+alias characterPartVector_mem_residueSpace := NField.Alignment.CollisionConductorFourierSpace.characterPartVector_mem_residueSpace
+alias residueMap_character_expansion := NField.Alignment.CollisionConductorFourierSpace.residueMap_character_expansion
+alias residueVector_character_expansion := NField.Alignment.CollisionConductorFourierSpace.residueVector_character_expansion
+alias conductorSpace_eq_additiveConductorSpace := NField.Alignment.CollisionConductorFourierSpace.conductorSpace_eq_additiveConductorSpace
+alias additive_conductor_projection := NField.Alignment.CollisionConductorFourierSpace.additive_conductor_projection
+alias additive_conductor_tail := NField.Alignment.CollisionConductorFourierSpace.additive_conductor_tail
+alias spectralWeight_euler_product := NField.Alignment.CollisionSpectralArithmetic.spectralWeight_euler_product
+alias spectralArithmetic_apply := NField.Alignment.CollisionSpectralArithmetic.spectralArithmetic_apply
+alias spectralArithmetic_multiplicative := NField.Alignment.CollisionSpectralArithmetic.spectralArithmetic_multiplicative
+alias localFactor_formula := NField.Alignment.CollisionSpectralArithmetic.localFactor_formula
+alias localFactor_pos := NField.Alignment.CollisionSpectralArithmetic.localFactor_pos
+alias localFactor_le_one := NField.Alignment.CollisionSpectralArithmetic.localFactor_le_one
+alias localFactor_defect_bound := NField.Alignment.CollisionSpectralArithmetic.localFactor_defect_bound
+alias localFactor_abs_defect := NField.Alignment.CollisionSpectralArithmetic.localFactor_abs_defect
+alias spectralWeight_pos := NField.Alignment.CollisionSpectralArithmetic.spectralWeight_pos
+alias spectralWeight_le_one := NField.Alignment.CollisionSpectralArithmetic.spectralWeight_le_one
+alias spectralWeight_multiplicative := NField.Alignment.CollisionSpectralArithmetic.spectralWeight_multiplicative
+alias spectralWeight_prime_power := NField.Alignment.CollisionSpectralArithmetic.spectralWeight_prime_power
+alias spectralCorrection_multiplicative := NField.Alignment.CollisionSpectralArithmetic.spectralCorrection_multiplicative
+alias spectralCorrection_prime := NField.Alignment.CollisionSpectralArithmetic.spectralCorrection_prime
+alias spectralCorrection_prime_power := NField.Alignment.CollisionSpectralArithmetic.spectralCorrection_prime_power
+alias spectralCorrection_squarefree_support := NField.Alignment.CollisionSpectralArithmetic.spectralCorrection_squarefree_support
+alias spectralWeight_divisor_sum := NField.Alignment.CollisionSpectralArithmetic.spectralWeight_divisor_sum
+alias spectralCorrection_convolution := NField.Alignment.CollisionSpectralArithmetic.spectralCorrection_convolution
+alias correctionKernel_apply := NField.Alignment.CollisionSpectralEuler.correctionKernel_apply
+alias correctionKernel_multiplicative := NField.Alignment.CollisionSpectralEuler.correctionKernel_multiplicative
+alias primeAbsolute_nonneg := NField.Alignment.CollisionSpectralEuler.primeAbsolute_nonneg
+alias primeAbsolute_bound := NField.Alignment.CollisionSpectralEuler.primeAbsolute_bound
+alias primeAbsolute_summable := NField.Alignment.CollisionSpectralEuler.primeAbsolute_summable
+alias correctionKernel_norm_squarefree := NField.Alignment.CollisionSpectralEuler.correctionKernel_norm_squarefree
+alias primeFactors_injective_squarefree := NField.Alignment.CollisionSpectralEuler.primeFactors_injective_squarefree
+alias correctionKernel_norm_summable := NField.Alignment.CollisionSpectralEuler.correctionKernel_norm_summable
+alias correctionKernel_summable := NField.Alignment.CollisionSpectralEuler.correctionKernel_summable
+alias correctionKernel_prime := NField.Alignment.CollisionSpectralEuler.correctionKernel_prime
+alias correctionKernel_prime_power := NField.Alignment.CollisionSpectralEuler.correctionKernel_prime_power
+alias correctionKernel_local_sum := NField.Alignment.CollisionSpectralEuler.correctionKernel_local_sum
+alias spectralConstant_hasProd := NField.Alignment.CollisionSpectralEuler.spectralConstant_hasProd
+alias spectralConstant_series := NField.Alignment.CollisionSpectralEuler.spectralConstant_series
+alias spectral_prime_correction_norm_summable := NField.Alignment.CollisionSpectralEuler.spectral_prime_correction_norm_summable
+alias spectral_euler_factor_pos := NField.Alignment.CollisionSpectralEuler.spectral_euler_factor_pos
+alias spectralConstant_pos := NField.Alignment.CollisionSpectralEuler.spectralConstant_pos
+alias spectralConstant_literal_product := NField.Alignment.CollisionSpectralEuler.spectralConstant_literal_product
+alias spectralWeight_partial_sum := NField.Alignment.CollisionSpectralMean.spectralWeight_partial_sum
+alias meanTerm_support := NField.Alignment.CollisionSpectralMean.meanTerm_support
+alias spectralMean_tsum := NField.Alignment.CollisionSpectralMean.spectralMean_tsum
+alias nat_quotient_ratio_bound := NField.Alignment.CollisionSpectralMean.nat_quotient_ratio_bound
+alias nat_quotient_ratio_error := NField.Alignment.CollisionSpectralMean.nat_quotient_ratio_error
+alias nat_quotient_ratio_tendsto := NField.Alignment.CollisionSpectralMean.nat_quotient_ratio_tendsto
+alias meanTerm_norm_bound := NField.Alignment.CollisionSpectralMean.meanTerm_norm_bound
+alias meanTerm_tendsto := NField.Alignment.CollisionSpectralMean.meanTerm_tendsto
+alias spectralWeight_mean := NField.Alignment.CollisionSpectralMean.spectralWeight_mean
+alias spectralWeight_real_divisor_sum := NField.Alignment.CollisionSpectralMean.spectralWeight_real_divisor_sum
+alias spectralWeight_real_mean := NField.Alignment.CollisionSpectralMean.spectralWeight_real_mean
+alias primeLogWeight_nonneg := NField.Alignment.CollisionSpectralPrimeMoments.primeLogWeight_nonneg
+alias firstPrimeTerm_nonneg := NField.Alignment.CollisionSpectralPrimeMoments.firstPrimeTerm_nonneg
+alias secondPrimeTerm_nonneg := NField.Alignment.CollisionSpectralPrimeMoments.secondPrimeTerm_nonneg
+alias primeLogWeight_bound := NField.Alignment.CollisionSpectralPrimeMoments.primeLogWeight_bound
+alias firstPrimeTerm_bound := NField.Alignment.CollisionSpectralPrimeMoments.firstPrimeTerm_bound
+alias log_nat_square_bound := NField.Alignment.CollisionSpectralPrimeMoments.log_nat_square_bound
+alias secondPrimeTerm_bound := NField.Alignment.CollisionSpectralPrimeMoments.secondPrimeTerm_bound
+alias firstPrimeTerm_summable := NField.Alignment.CollisionSpectralPrimeMoments.firstPrimeTerm_summable
+alias secondPrimeTerm_summable := NField.Alignment.CollisionSpectralPrimeMoments.secondPrimeTerm_summable
+alias firstPrimeMoment_nonneg := NField.Alignment.CollisionSpectralPrimeMoments.firstPrimeMoment_nonneg
+alias secondPrimeMoment_nonneg := NField.Alignment.CollisionSpectralPrimeMoments.secondPrimeMoment_nonneg
+alias first_prime_series_hasSum := NField.Alignment.CollisionSpectralPrimeMoments.first_prime_series_hasSum
+alias second_prime_series_hasSum := NField.Alignment.CollisionSpectralPrimeMoments.second_prime_series_hasSum
+alias literal_prime_series_converge := NField.Alignment.CollisionSpectralPrimeMoments.literal_prime_series_converge
+alias primeProfile_apply := NField.Alignment.CollisionSpectralNuBounds.primeProfile_apply
+alias primeProfile_nonneg := NField.Alignment.CollisionSpectralNuBounds.primeProfile_nonneg
+alias nu_divisor_sum := NField.Alignment.CollisionSpectralNuBounds.nu_divisor_sum
+alias nu_nonneg := NField.Alignment.CollisionSpectralNuBounds.nu_nonneg
+alias nu_convolution := NField.Alignment.CollisionSpectralNuBounds.nu_convolution
+alias nu_first_count := NField.Alignment.CollisionSpectralNuBounds.nu_first_count
+alias nat_div_cast_bound := NField.Alignment.CollisionSpectralNuBounds.nat_div_cast_bound
+alias nu_first_bound := NField.Alignment.CollisionSpectralNuBounds.nu_first_bound
+alias nu_cutoff_expansion := NField.Alignment.CollisionSpectralNuBounds.nu_cutoff_expansion
+alias interval_divisor_count := NField.Alignment.CollisionSpectralNuBounds.interval_divisor_count
+alias divisor_product_trace := NField.Alignment.CollisionSpectralNuBounds.divisor_product_trace
+alias nu_second_count := NField.Alignment.CollisionSpectralNuBounds.nu_second_count
+alias prime_pair_count_bound := NField.Alignment.CollisionSpectralNuBounds.prime_pair_count_bound
+alias profile_pair_count_bound := NField.Alignment.CollisionSpectralNuBounds.profile_pair_count_bound
+alias nu_second_bound := NField.Alignment.CollisionSpectralNuBounds.nu_second_bound
+alias nu_first_isBigO := NField.Alignment.CollisionSpectralNuBounds.nu_first_isBigO
+alias nu_second_isBigO := NField.Alignment.CollisionSpectralNuBounds.nu_second_isBigO
+alias logarithmic_conductor_moment_bounds := NField.Alignment.CollisionSpectralNuBounds.logarithmic_conductor_moment_bounds
+alias rho_prime_power := NField.Alignment.CollisionPrimePowerAmplitude.rho_prime_power
+alias nu_prime_power := NField.Alignment.CollisionPrimePowerAmplitude.nu_prime_power
+alias delta_prime_power := NField.Alignment.CollisionPrimePowerAmplitude.delta_prime_power
+alias amplitude_prime_power_formula := NField.Alignment.CollisionPrimePowerAmplitude.amplitude_prime_power_formula
+alias primeErrorFactor_pos := NField.Alignment.CollisionPrimePowerAmplitude.primeErrorFactor_pos
+alias amplitude_prime_power_error := NField.Alignment.CollisionPrimePowerAmplitude.amplitude_prime_power_error
+alias amplitude_prime_power_asymptotic := NField.Alignment.CollisionPrimePowerAmplitude.amplitude_prime_power_asymptotic
+
+alias squareEulerFactor_nonneg := NField.Alignment.CollisionSpectralErrorBound.squareEulerFactor_nonneg
+alias squareEulerFactor_le_one := NField.Alignment.CollisionSpectralErrorBound.squareEulerFactor_le_one
+alias squareEulerFactor_le_cube := NField.Alignment.CollisionSpectralErrorBound.squareEulerFactor_le_cube
+alias consecutive_square_product := NField.Alignment.CollisionSpectralErrorBound.consecutive_square_product
+alias consecutive_square_product_lower := NField.Alignment.CollisionSpectralErrorBound.consecutive_square_product_lower
+alias deltaThree_uniform_lower := NField.Alignment.CollisionSpectralErrorBound.deltaThree_uniform_lower
+alias prime_plus_one_product_bound := NField.Alignment.CollisionSpectralErrorBound.prime_plus_one_product_bound
+alias coarseErrorFactor_pos := NField.Alignment.CollisionSpectralErrorBound.coarseErrorFactor_pos
+alias amplitude_error_inverse_square := NField.Alignment.CollisionSpectralErrorBound.amplitude_error_inverse_square
+alias rho_nonneg := NField.Alignment.CollisionSpectralErrorBound.rho_nonneg
+alias rho_le_one := NField.Alignment.CollisionSpectralErrorBound.rho_le_one
+alias jordanTwo_le_square := NField.Alignment.CollisionSpectralErrorBound.jordanTwo_le_square
+alias complexLogPower_succ := NField.Alignment.CollisionLogTailKernel.complexLogPower_succ
+alias complexLogPower_abscissa := NField.Alignment.CollisionLogTailKernel.complexLogPower_abscissa
+alias logPowerKernel_nat_complex := NField.Alignment.CollisionLogTailKernel.logPowerKernel_nat_complex
+alias logPowerKernel_nat_summable := NField.Alignment.CollisionLogTailKernel.logPowerKernel_nat_summable
+alias squareLogKernel_nonneg := NField.Alignment.CollisionLogTailKernel.squareLogKernel_nonneg
+alias squareLogKernel_hasDerivAt := NField.Alignment.CollisionLogTailKernel.squareLogKernel_hasDerivAt
+alias kernelTail_hasDerivAt := NField.Alignment.CollisionLogTailKernel.kernelTail_hasDerivAt
+alias negative_kernelTail_hasDerivAt := NField.Alignment.CollisionLogTailKernel.negative_kernelTail_hasDerivAt
+alias logPower_div_linear_tendsto := NField.Alignment.CollisionLogTailKernel.logPower_div_linear_tendsto
+alias kernelTail_tendsto_zero := NField.Alignment.CollisionLogTailKernel.kernelTail_tendsto_zero
+alias negative_kernelTail_tendsto_zero := NField.Alignment.CollisionLogTailKernel.negative_kernelTail_tendsto_zero
+alias squareLogKernel_integrableOn := NField.Alignment.CollisionLogTailKernel.squareLogKernel_integrableOn
+alias squareLogKernel_integral := NField.Alignment.CollisionLogTailKernel.squareLogKernel_integral
+alias kernelTail_leading_ratio := NField.Alignment.CollisionLogTailKernel.kernelTail_leading_ratio
+alias spectralWeight_zero := NField.Alignment.CollisionSpectralAbel.spectralWeight_zero
+alias spectralWeight_nonneg := NField.Alignment.CollisionSpectralAbel.spectralWeight_nonneg
+alias spectralWeight_bound := NField.Alignment.CollisionSpectralAbel.spectralWeight_bound
+alias partialWeight_nonneg := NField.Alignment.CollisionSpectralAbel.partialWeight_nonneg
+alias partialWeight_monotone := NField.Alignment.CollisionSpectralAbel.partialWeight_monotone
+alias partialWeight_le := NField.Alignment.CollisionSpectralAbel.partialWeight_le
+alias partialWeight_Icc := NField.Alignment.CollisionSpectralAbel.partialWeight_Icc
+alias weightedTerm_nonneg := NField.Alignment.CollisionSpectralAbel.weightedTerm_nonneg
+alias weightedTerm_summable := NField.Alignment.CollisionSpectralAbel.weightedTerm_summable
+alias kernelDerivative_nonpos := NField.Alignment.CollisionSpectralAbel.kernelDerivative_nonpos
+alias kernelDerivative_abs_bound := NField.Alignment.CollisionSpectralAbel.kernelDerivative_abs_bound
+alias derivative_partial_norm_bound := NField.Alignment.CollisionSpectralAbel.derivative_partial_norm_bound
+alias derivative_partial_integrableOn := NField.Alignment.CollisionSpectralAbel.derivative_partial_integrableOn
+alias kernelDerivative_continuousOn := NField.Alignment.CollisionSpectralAbel.kernelDerivative_continuousOn
+alias squareLogKernel_derivative_integrable := NField.Alignment.CollisionSpectralAbel.squareLogKernel_derivative_integrable
+alias finite_spectral_abel := NField.Alignment.CollisionSpectralAbel.finite_spectral_abel
+alias finite_tail_eq_range := NField.Alignment.CollisionSpectralTailMean.finite_tail_eq_range
+alias finite_tail_tendsto := NField.Alignment.CollisionSpectralTailMean.finite_tail_tendsto
+alias weighted_boundary_tendsto := NField.Alignment.CollisionSpectralTailMean.weighted_boundary_tendsto
+alias derivative_partial_integral_tendsto := NField.Alignment.CollisionSpectralTailMean.derivative_partial_integral_tendsto
+alias infinite_spectral_abel := NField.Alignment.CollisionSpectralTailMean.infinite_spectral_abel
+alias linearKernelPrimitive_hasDerivAt := NField.Alignment.CollisionSpectralTailMean.linearKernelPrimitive_hasDerivAt
+alias linearKernelPrimitive_tendsto_zero := NField.Alignment.CollisionSpectralTailMean.linearKernelPrimitive_tendsto_zero
+alias derivative_linear_integrableOn := NField.Alignment.CollisionSpectralTailMean.derivative_linear_integrableOn
+alias derivative_linear_integral := NField.Alignment.CollisionSpectralTailMean.derivative_linear_integral
+alias kernelTail_pos := NField.Alignment.CollisionSpectralTailMean.kernelTail_pos
+alias kernel_boundary_le_tail := NField.Alignment.CollisionSpectralTailMean.kernel_boundary_le_tail
+alias derivative_mean_error_integral := NField.Alignment.CollisionSpectralTailMean.derivative_mean_error_integral
+alias weighted_tail_error_identity := NField.Alignment.CollisionSpectralTailMean.weighted_tail_error_identity
+alias weighted_tail_error_bound := NField.Alignment.CollisionSpectralTailMean.weighted_tail_error_bound
+alias weighted_tail_normalized_mean := NField.Alignment.CollisionSpectralTailMean.weighted_tail_normalized_mean
+alias weighted_tail_leading_mean := NField.Alignment.CollisionSpectralTailMean.weighted_tail_leading_mean
+alias weighted_tail_asymptotic := NField.Alignment.CollisionSpectralTailMean.weighted_tail_asymptotic
+alias spectral_weighted_tail_asymptotic := NField.Alignment.CollisionSpectralTailMean.spectral_weighted_tail_asymptotic
+
+alias positiveLogKernel_nonneg := NField.Alignment.CollisionPositiveLogTail.positiveLogKernel_nonneg
+alias positiveLogKernel_nat_nonneg := NField.Alignment.CollisionPositiveLogTail.positiveLogKernel_nat_nonneg
+alias positiveLogDerivative_nonpos := NField.Alignment.CollisionPositiveLogTail.positiveLogDerivative_nonpos
+alias positiveLogKernel_hasDerivAt := NField.Alignment.CollisionPositiveLogTail.positiveLogKernel_hasDerivAt
+alias positiveLogPrimitive_hasDerivAt := NField.Alignment.CollisionPositiveLogTail.positiveLogPrimitive_hasDerivAt
+alias positiveLogPrimitive_tendsto_zero := NField.Alignment.CollisionPositiveLogTail.positiveLogPrimitive_tendsto_zero
+alias positiveLogDerivative_linear_integrableOn := NField.Alignment.CollisionPositiveLogTail.positiveLogDerivative_linear_integrableOn
+alias positiveLogDerivative_linear_integral := NField.Alignment.CollisionPositiveLogTail.positiveLogDerivative_linear_integral
+alias countingSum_nonneg := NField.Alignment.CollisionPositiveLogTail.countingSum_nonneg
+alias countingSum_monotone := NField.Alignment.CollisionPositiveLogTail.countingSum_monotone
+alias countingSum_Icc := NField.Alignment.CollisionPositiveLogTail.countingSum_Icc
+alias countingSum_real_bound := NField.Alignment.CollisionPositiveLogTail.countingSum_real_bound
+alias positiveLogDerivative_count_norm_bound := NField.Alignment.CollisionPositiveLogTail.positiveLogDerivative_count_norm_bound
+alias positiveLogDerivative_count_integrableOn := NField.Alignment.CollisionPositiveLogTail.positiveLogDerivative_count_integrableOn
+alias positiveLogDerivative_count_integral_bound := NField.Alignment.CollisionPositiveLogTail.positiveLogDerivative_count_integral_bound
+alias positiveLogKernel_linear_tendsto := NField.Alignment.CollisionPositiveLogTail.positiveLogKernel_linear_tendsto
+alias positiveLogKernel_count_tendsto := NField.Alignment.CollisionPositiveLogTail.positiveLogKernel_count_tendsto
+alias positiveLogDerivative_continuousOn := NField.Alignment.CollisionPositiveLogTail.positiveLogDerivative_continuousOn
+alias positiveLogKernel_derivative_integrable := NField.Alignment.CollisionPositiveLogTail.positiveLogKernel_derivative_integrable
+alias finite_positiveLog_abel := NField.Alignment.CollisionPositiveLogTail.finite_positiveLog_abel
+alias positiveLog_finite_tail_eq_range := NField.Alignment.CollisionPositiveLogTail.positiveLog_finite_tail_eq_range
+alias positiveLog_count_integral_tendsto := NField.Alignment.CollisionPositiveLogTail.positiveLog_count_integral_tendsto
+alias positiveLog_finite_tail_tendsto := NField.Alignment.CollisionPositiveLogTail.positiveLog_finite_tail_tendsto
+alias positiveLog_tail_hasSum := NField.Alignment.CollisionPositiveLogTail.positiveLog_tail_hasSum
+alias positiveLog_infinite_abel := NField.Alignment.CollisionPositiveLogTail.positiveLog_infinite_abel
+alias positiveLog_tail_bound := NField.Alignment.CollisionPositiveLogTail.positiveLog_tail_bound
+alias positiveLog_tail_bound_of_nat := NField.Alignment.CollisionPositiveLogTail.positiveLog_tail_bound_of_nat
+alias positiveLog_tail_summable_of_nat := NField.Alignment.CollisionPositiveLogTail.positiveLog_tail_summable_of_nat
+alias positiveLog_tail_nonneg := NField.Alignment.CollisionPositiveLogTail.positiveLog_tail_nonneg
+alias positiveLog_tail_isBigO := NField.Alignment.CollisionPositiveLogTail.positiveLog_tail_isBigO
+alias log_linear_isLittleO_square := NField.Alignment.CollisionPositiveLogTail.log_linear_isLittleO_square
+alias positiveLog_tail_isLittleO := NField.Alignment.CollisionPositiveLogTail.positiveLog_tail_isLittleO
+alias momentMajorant_zero := NField.Alignment.CollisionSpectralLowerMoments.momentMajorant_zero
+alias momentMajorant_nonneg := NField.Alignment.CollisionSpectralLowerMoments.momentMajorant_nonneg
+alias momentMajorantConstant_pos := NField.Alignment.CollisionSpectralLowerMoments.momentMajorantConstant_pos
+alias momentMajorant_partial_bound := NField.Alignment.CollisionSpectralLowerMoments.momentMajorant_partial_bound
+alias momentMajorant_tail_summable := NField.Alignment.CollisionSpectralLowerMoments.momentMajorant_tail_summable
+alias momentMajorant_tail_bound := NField.Alignment.CollisionSpectralLowerMoments.momentMajorant_tail_bound
+alias momentMajorant_tail_isBigO := NField.Alignment.CollisionSpectralLowerMoments.momentMajorant_tail_isBigO
+alias momentMajorant_tail_isLittleO := NField.Alignment.CollisionSpectralLowerMoments.momentMajorant_tail_isLittleO
+alias spectralLeading_pos := NField.Alignment.CollisionSpectralEnergyError.spectralLeading_pos
+alias residualConstant_pos := NField.Alignment.CollisionSpectralEnergyError.residualConstant_pos
+alias energyErrorConstant_pos := NField.Alignment.CollisionSpectralEnergyError.energyErrorConstant_pos
+alias leadingAmplitude_nonneg := NField.Alignment.CollisionSpectralEnergyError.leadingAmplitude_nonneg
+alias leadingAmplitude_bound := NField.Alignment.CollisionSpectralEnergyError.leadingAmplitude_bound
+alias residualAmplitude_formula := NField.Alignment.CollisionSpectralEnergyError.residualAmplitude_formula
+alias residualAmplitude_bound := NField.Alignment.CollisionSpectralEnergyError.residualAmplitude_bound
+alias jordan_leading_square := NField.Alignment.CollisionSpectralEnergyError.jordan_leading_square
+alias energyResidual_identity := NField.Alignment.CollisionSpectralEnergyError.energyResidual_identity
+alias scalar_square_error_bound := NField.Alignment.CollisionSpectralEnergyError.scalar_square_error_bound
+alias energyResidual_raw_bound := NField.Alignment.CollisionSpectralEnergyError.energyResidual_raw_bound
+alias scalar_moment_majorant := NField.Alignment.CollisionSpectralEnergyError.scalar_moment_majorant
+alias energyResidual_bound_ge_two := NField.Alignment.CollisionSpectralEnergyError.energyResidual_bound_ge_two
+alias energyResidual_small := NField.Alignment.CollisionSpectralEnergyError.energyResidual_small
+alias energyResidual_bound := NField.Alignment.CollisionSpectralEnergyError.energyResidual_bound
+alias energyResidual_summable := NField.Alignment.CollisionSpectralEnergyError.energyResidual_summable
+alias energyResidual_tail_summable := NField.Alignment.CollisionSpectralEnergyError.energyResidual_tail_summable
+alias energyResidual_tail_bound := NField.Alignment.CollisionSpectralEnergyError.energyResidual_tail_bound
+alias energyResidual_tail_isBigO_moment := NField.Alignment.CollisionSpectralEnergyError.energyResidual_tail_isBigO_moment
+alias energyResidual_tail_isBigO := NField.Alignment.CollisionSpectralEnergyError.energyResidual_tail_isBigO
+alias energyResidual_tail_isLittleO := NField.Alignment.CollisionSpectralEnergyError.energyResidual_tail_isLittleO
+alias spectralEnergy_tail_summable := NField.Alignment.CollisionSharpSpectralTail.spectralEnergy_tail_summable
+alias spectralWeighted_tail_summable := NField.Alignment.CollisionSharpSpectralTail.spectralWeighted_tail_summable
+alias spectralEnergy_tail_decomposition := NField.Alignment.CollisionSharpSpectralTail.spectralEnergy_tail_decomposition
+alias spectralEnergy_tail_leading_mean := NField.Alignment.CollisionSharpSpectralTail.spectralEnergy_tail_leading_mean
+alias spectralEnergy_tail_asymptotic := NField.Alignment.CollisionSharpSpectralTail.spectralEnergy_tail_asymptotic
+alias spectralProjectionError_exact := NField.Alignment.CollisionSharpSpectralTail.spectralProjectionError_exact
+alias spectralProjectionError_leading_mean := NField.Alignment.CollisionSharpSpectralTail.spectralProjectionError_leading_mean
+alias spectralProjectionError_asymptotic := NField.Alignment.CollisionSharpSpectralTail.spectralProjectionError_asymptotic
+alias sharp_haar_spectral_tail := NField.Alignment.CollisionSharpSpectralTail.sharp_haar_spectral_tail
+
+alias nu_le_log := NField.Alignment.CollisionAmplitudeTail.nu_le_log
+alias positiveUnit_zero := NField.Alignment.CollisionAmplitudeTail.positiveUnit_zero
+alias positiveUnit_nonneg := NField.Alignment.CollisionAmplitudeTail.positiveUnit_nonneg
+alias positiveUnit_partial_sum := NField.Alignment.CollisionAmplitudeTail.positiveUnit_partial_sum
+alias positiveUnit_tail_summable := NField.Alignment.CollisionAmplitudeTail.positiveUnit_tail_summable
+alias positiveUnit_tail_bound := NField.Alignment.CollisionAmplitudeTail.positiveUnit_tail_bound
+alias amplitudeLogConstant_pos := NField.Alignment.CollisionAmplitudeTail.amplitudeLogConstant_pos
+alias amplitude_log_bound := NField.Alignment.CollisionAmplitudeTail.amplitude_log_bound
+alias amplitude_tail_term_bound := NField.Alignment.CollisionAmplitudeTail.amplitude_tail_term_bound
+alias amplitude_tail_summable := NField.Alignment.CollisionAmplitudeTail.amplitude_tail_summable
+alias amplitude_tail_nonneg := NField.Alignment.CollisionAmplitudeTail.amplitude_tail_nonneg
+alias amplitude_tail_comparison := NField.Alignment.CollisionAmplitudeTail.amplitude_tail_comparison
+alias amplitude_tail_bound := NField.Alignment.CollisionAmplitudeTail.amplitude_tail_bound
+alias amplitude_tail_isBigO := NField.Alignment.CollisionAmplitudeTail.amplitude_tail_isBigO
+alias alignmentConstant_pos := NField.Alignment.CollisionPositionStability.alignmentConstant_pos
+alias positionWeight_eq := NField.Alignment.CollisionPositionStability.positionWeight_eq
+alias positionWeight_nonneg := NField.Alignment.CollisionPositionStability.positionWeight_nonneg
+alias positionWeight_summable := NField.Alignment.CollisionPositionStability.positionWeight_summable
+alias positionWeight_tsum := NField.Alignment.CollisionPositionStability.positionWeight_tsum
+alias relativePosition_nonneg := NField.Alignment.CollisionPositionStability.relativePosition_nonneg
+alias relativePosition_le_one := NField.Alignment.CollisionPositionStability.relativePosition_le_one
+alias position_product_eq := NField.Alignment.CollisionPositionStability.position_product_eq
+alias position_product_summable := NField.Alignment.CollisionPositionStability.position_product_summable
+alias normalized_cylinder_position := NField.Alignment.CollisionPositionStability.normalized_cylinder_position
+alias positionExceedance_summable := NField.Alignment.CollisionPositionStability.positionExceedance_summable
+alias position_markov_bound := NField.Alignment.CollisionPositionStability.position_markov_bound
+alias position_stability := NField.Alignment.CollisionPositionStability.position_stability
+alias coprimeMass_summable := NField.Alignment.CollisionCylinderOne.coprimeMass_summable
+alias nontrivialMass_summable := NField.Alignment.CollisionCylinderOne.nontrivialMass_summable
+alias coprimeMass_nonneg := NField.Alignment.CollisionCylinderOne.coprimeMass_nonneg
+alias cylinder_mass_partition := NField.Alignment.CollisionCylinderOne.cylinder_mass_partition
+alias cylinder_one_gap := NField.Alignment.CollisionCylinderOne.cylinder_one_gap
+alias cutoffPeriod_pos := NField.Alignment.CollisionCylinderOne.cutoffPeriod_pos
+alias weight_le_amplitude := NField.Alignment.CollisionCylinderOne.weight_le_amplitude
+alias coprime_cutoff_term_bound := NField.Alignment.CollisionCylinderOne.coprime_cutoff_term_bound
+alias coprimeMass_cutoff_bound := NField.Alignment.CollisionCylinderOne.coprimeMass_cutoff_bound
+alias cylinderOneError_exact := NField.Alignment.CollisionCylinderOne.cylinderOneError_exact
+alias cylinderOneError_bound := NField.Alignment.CollisionCylinderOne.cylinderOneError_bound
+alias cylinderOneError_isBigO_log := NField.Alignment.CollisionCylinderOne.cylinderOneError_isBigO_log
+alias log_over_nat_isBigO_log_double := NField.Alignment.CollisionCylinderOne.log_over_nat_isBigO_log_double
+alias cylinder_address_one_asymptotic := NField.Alignment.CollisionCylinderOne.cylinder_address_one_asymptotic
+alias primitiveValue_at_zero := NField.Alignment.CollisionConductorOne.primitiveValue_at_zero
+alias primitiveValue_one_step := NField.Alignment.CollisionConductorOne.primitiveValue_one_step
+alias fixedConductor_zero := NField.Alignment.CollisionConductorOne.fixedConductor_zero
+alias fixedConductor_one_difference := NField.Alignment.CollisionConductorOne.fixedConductor_one_difference
+alias mobiusAmplitude_summable := NField.Alignment.CollisionConductorOne.mobiusAmplitude_summable
+alias mobiusAmplitude_tsum_zero := NField.Alignment.CollisionConductorOne.mobiusAmplitude_tsum_zero
+alias mobiusAmplitude_zero := NField.Alignment.CollisionConductorOne.mobiusAmplitude_zero
+alias mobiusAmplitude_one := NField.Alignment.CollisionConductorOne.mobiusAmplitude_one
+alias mobiusAmplitude_prefix := NField.Alignment.CollisionConductorOne.mobiusAmplitude_prefix
+alias mobiusAmplitude_split := NField.Alignment.CollisionConductorOne.mobiusAmplitude_split
+alias mobiusAmplitude_tail_summable := NField.Alignment.CollisionConductorOne.mobiusAmplitude_tail_summable
+alias mobiusAmplitude_norm_bound := NField.Alignment.CollisionConductorOne.mobiusAmplitude_norm_bound
+alias mobiusAmplitude_tail_bound := NField.Alignment.CollisionConductorOne.mobiusAmplitude_tail_bound
+alias conductorOneError_exact := NField.Alignment.CollisionConductorOne.conductorOneError_exact
+alias conductorOneError_bound := NField.Alignment.CollisionConductorOne.conductorOneError_bound
+alias conductor_address_one_asymptotic := NField.Alignment.CollisionConductorOne.conductor_address_one_asymptotic
+alias stationaryAge_le_alignment := NField.Alignment.CollisionPositionTheorem.stationaryAge_le_alignment
+alias totient_cutoff_sum := NField.Alignment.CollisionPositionTheorem.totient_cutoff_sum
+alias finiteTotientAmplitude_sum := NField.Alignment.CollisionPositionTheorem.finiteTotientAmplitude_sum
+alias stationaryAge_le_conductorEndpoint := NField.Alignment.CollisionPositionTheorem.stationaryAge_le_conductorEndpoint
+alias alignment_cutoff_tendsto_atTop := NField.Alignment.CollisionPositionTheorem.alignment_cutoff_tendsto_atTop
+alias conductorEndpoint_tendsto_atTop := NField.Alignment.CollisionPositionTheorem.conductorEndpoint_tendsto_atTop
+alias log_double_over_nat_tendsto_zero := NField.Alignment.CollisionPositionTheorem.log_double_over_nat_tendsto_zero
+alias cylinder_one_gap_tendsto := NField.Alignment.CollisionPositionTheorem.cylinder_one_gap_tendsto
+alias conductor_one_gap_tendsto := NField.Alignment.CollisionPositionTheorem.conductor_one_gap_tendsto
+alias cylinder_one_relative_gap_tendsto := NField.Alignment.CollisionPositionTheorem.cylinder_one_relative_gap_tendsto
+alias conductor_one_relative_gap_tendsto := NField.Alignment.CollisionPositionTheorem.conductor_one_relative_gap_tendsto
+alias address_one_not_divisible := NField.Alignment.CollisionPositionTheorem.address_one_not_divisible
+alias position_stability_and_divisibility_limit := NField.Alignment.CollisionPositionTheorem.position_stability_and_divisibility_limit
+
+alias bounded_weighted_summable := NField.Alignment.CollisionWeightedEnclosure.bounded_weighted_summable
+alias weightedRemainder_summable := NField.Alignment.CollisionWeightedEnclosure.weightedRemainder_summable
+alias weighted_cutoff_split := NField.Alignment.CollisionWeightedEnclosure.weighted_cutoff_split
+alias weightedRemainder_abs_bound := NField.Alignment.CollisionWeightedEnclosure.weightedRemainder_abs_bound
+alias weightedRemainder_nonneg := NField.Alignment.CollisionWeightedEnclosure.weightedRemainder_nonneg
+alias weightedPrefix_nonneg := NField.Alignment.CollisionWeightedEnclosure.weightedPrefix_nonneg
+alias weighted_series_enclosure := NField.Alignment.CollisionWeightedEnclosure.weighted_series_enclosure
+alias positive_weighted_series_enclosure := NField.Alignment.CollisionWeightedEnclosure.positive_weighted_series_enclosure
+alias weightedPrefix_tendsto := NField.Alignment.CollisionWeightedEnclosure.weightedPrefix_tendsto
+alias weighted_enclosure_radius_tendsto := NField.Alignment.CollisionWeightedEnclosure.weighted_enclosure_radius_tendsto
+alias alignmentCoefficient_bounds := NField.Alignment.CollisionCylinderEnclosure.alignmentCoefficient_bounds
+alias gapCoefficient_bounds := NField.Alignment.CollisionCylinderEnclosure.gapCoefficient_bounds
+alias meanCoefficient_abs_bound := NField.Alignment.CollisionCylinderEnclosure.meanCoefficient_abs_bound
+alias alignmentConstant_weighted := NField.Alignment.CollisionCylinderEnclosure.alignmentConstant_weighted
+alias cylinderMean_weighted := NField.Alignment.CollisionCylinderEnclosure.cylinderMean_weighted
+alias cylinderGap_weighted := NField.Alignment.CollisionCylinderEnclosure.cylinderGap_weighted
+alias finiteAlignment_formula := NField.Alignment.CollisionCylinderEnclosure.finiteAlignment_formula
+alias finiteCylinderMean_formula := NField.Alignment.CollisionCylinderEnclosure.finiteCylinderMean_formula
+alias finiteCylinderGap_eq := NField.Alignment.CollisionCylinderEnclosure.finiteCylinderGap_eq
+alias finiteAlignment_nonneg := NField.Alignment.CollisionCylinderEnclosure.finiteAlignment_nonneg
+alias finiteAlignment_pos := NField.Alignment.CollisionCylinderEnclosure.finiteAlignment_pos
+alias cylinderRadius_nonneg := NField.Alignment.CollisionCylinderEnclosure.cylinderRadius_nonneg
+alias alignment_enclosure := NField.Alignment.CollisionCylinderEnclosure.alignment_enclosure
+alias cylinderMean_enclosure := NField.Alignment.CollisionCylinderEnclosure.cylinderMean_enclosure
+alias cylinderGap_enclosure := NField.Alignment.CollisionCylinderEnclosure.cylinderGap_enclosure
+alias finiteCylinderGap_bounds := NField.Alignment.CollisionCylinderEnclosure.finiteCylinderGap_bounds
+alias cylinderRadius_tendsto := NField.Alignment.CollisionCylinderEnclosure.cylinderRadius_tendsto
+alias finiteAlignment_tendsto := NField.Alignment.CollisionCylinderEnclosure.finiteAlignment_tendsto
+alias finiteCylinderMean_tendsto := NField.Alignment.CollisionCylinderEnclosure.finiteCylinderMean_tendsto
+alias positive_ratio_enclosure := NField.Alignment.CollisionPositionEnclosure.positive_ratio_enclosure
+alias eventCoefficient_bounds := NField.Alignment.CollisionPositionEnclosure.eventCoefficient_bounds
+alias event_series_enclosure := NField.Alignment.CollisionPositionEnclosure.event_series_enclosure
+alias event_series_le_alignment := NField.Alignment.CollisionPositionEnclosure.event_series_le_alignment
+alias positionWeight_numerator := NField.Alignment.CollisionPositionEnclosure.positionWeight_numerator
+alias positionExceedance_numerator := NField.Alignment.CollisionPositionEnclosure.positionExceedance_numerator
+alias positionExceedance_enclosure := NField.Alignment.CollisionPositionEnclosure.positionExceedance_enclosure
+alias normalizedGap_enclosure := NField.Alignment.CollisionPositionEnclosure.normalizedGap_enclosure
+alias positionNumerator_nonneg := NField.Alignment.CollisionPositionEnclosure.positionNumerator_nonneg
+alias positionNumerator_le_alignment := NField.Alignment.CollisionPositionEnclosure.positionNumerator_le_alignment
+alias positionWeight_enclosure := NField.Alignment.CollisionPositionEnclosure.positionWeight_enclosure
+alias omittedPositionMass_numerator := NField.Alignment.CollisionPositionEnclosure.omittedPositionMass_numerator
+alias omittedPositionMass_enclosure := NField.Alignment.CollisionPositionEnclosure.omittedPositionMass_enclosure
+alias finitePositionEvent_tendsto := NField.Alignment.CollisionPositionEnclosure.finitePositionEvent_tendsto
+alias ratio_enclosure_limits := NField.Alignment.CollisionPositionEnclosure.ratio_enclosure_limits
+alias positionExceedance_enclosure_limits := NField.Alignment.CollisionPositionEnclosure.positionExceedance_enclosure_limits
+alias normalizedGap_enclosure_limits := NField.Alignment.CollisionPositionEnclosure.normalizedGap_enclosure_limits
+alias positionWeight_enclosure_limits := NField.Alignment.CollisionPositionEnclosure.positionWeight_enclosure_limits
+alias omittedPositionMass_upper_tendsto := NField.Alignment.CollisionPositionEnclosure.omittedPositionMass_upper_tendsto
+
+alias residueVector_mem_cylinderSpace := NField.Alignment.CollisionCylinderProjection.residueVector_mem_cylinderSpace
+alias residueProjection_mem := NField.Alignment.CollisionCylinderProjection.residueProjection_mem
+alias same_cylinder_gram := NField.Alignment.CollisionCylinderProjection.same_cylinder_gram
+alias residueProjection_inner := NField.Alignment.CollisionCylinderProjection.residueProjection_inner
+alias residueProjection_residual_inner := NField.Alignment.CollisionCylinderProjection.residueProjection_residual_inner
+alias residueProjection_eq_starProjection := NField.Alignment.CollisionCylinderProjection.residueProjection_eq_starProjection
+alias cylinderApproximation_table := NField.Alignment.CollisionCylinderProjection.cylinderApproximation_table
+alias remainderMap_on_cylinder := NField.Alignment.CollisionCylinderProjection.remainderMap_on_cylinder
+alias remainderVector_mem_cylinderSpace := NField.Alignment.CollisionCylinderProjection.remainderVector_mem_cylinderSpace
+alias finitePotential_mem_cutoffCylinder := NField.Alignment.CollisionCylinderProjection.finitePotential_mem_cutoffCylinder
+alias cylinderProjection_best := NField.Alignment.CollisionCylinderProjection.cylinderProjection_best
+alias cylinder_cutoff_error_le := NField.Alignment.CollisionCylinderProjection.cylinder_cutoff_error_le
+alias cylinder_cutoff_error_bound := NField.Alignment.CollisionCylinderProjection.cylinder_cutoff_error_bound
+alias dyadic_inverse_sqrt := NField.Alignment.CollisionCylinderProjection.dyadic_inverse_sqrt
+alias dyadic_log_factor_bound := NField.Alignment.CollisionCylinderProjection.dyadic_log_factor_bound
+alias dyadic_cylinder_error_bound := NField.Alignment.CollisionCylinderProjection.dyadic_cylinder_error_bound
+alias dyadic_cylinder_approximation := NField.Alignment.CollisionCylinderProjection.dyadic_cylinder_approximation
+
+alias primitiveNumerators_card := NField.Alignment.CollisionWeightMultiples.primitiveNumerators_card
+alias primitiveNumerators_complement := NField.Alignment.CollisionWeightMultiples.primitiveNumerators_complement
+alias reciprocal_complement_sum := NField.Alignment.CollisionWeightMultiples.reciprocal_complement_sum
+alias reciprocal_pair_lower := NField.Alignment.CollisionWeightMultiples.reciprocal_pair_lower
+alias reducedHarmonicStar_totient_lower := NField.Alignment.CollisionWeightMultiples.reducedHarmonicStar_totient_lower
+alias primitive_multiple_block_mem := NField.Alignment.CollisionWeightMultiples.primitive_multiple_block_mem
+alias reducedHarmonicStar_le_blocks := NField.Alignment.CollisionWeightMultiples.reducedHarmonicStar_le_blocks
+alias harmonicBlock_zero := NField.Alignment.CollisionWeightMultiples.harmonicBlock_zero
+alias harmonicBlock_bound := NField.Alignment.CollisionWeightMultiples.harmonicBlock_bound
+alias harmonicBlocks_split := NField.Alignment.CollisionWeightMultiples.harmonicBlocks_split
+alias harmonic_predecessor_Ico := NField.Alignment.CollisionWeightMultiples.harmonic_predecessor_Ico
+alias reducedHarmonicStar_multiple_bound := NField.Alignment.CollisionWeightMultiples.reducedHarmonicStar_multiple_bound
+alias collisionWeight_multiple_bound := NField.Alignment.CollisionWeightMultiples.collisionWeight_multiple_bound
+
+alias primitiveValue_within := NField.Alignment.CollisionFiniteRegrouping.primitiveValue_within
+alias beta_conductor_sum := NField.Alignment.CollisionFiniteRegrouping.beta_conductor_sum
+alias fixedConductor_regrouping := NField.Alignment.CollisionFiniteRegrouping.fixedConductor_regrouping
+alias beta_above_cutoff := NField.Alignment.CollisionFiniteRegrouping.beta_above_cutoff
+alias beta_top_range := NField.Alignment.CollisionFiniteRegrouping.beta_top_range
+alias conductorEndpoint_beta := NField.Alignment.CollisionFiniteRegrouping.conductorEndpoint_beta
+alias fixedConductor_beta_gap := NField.Alignment.CollisionFiniteRegrouping.fixedConductor_beta_gap
+alias amplitude_multiple_summable := NField.Alignment.CollisionFiniteRegrouping.amplitude_multiple_summable
+alias amplitude_multiple_series := NField.Alignment.CollisionFiniteRegrouping.amplitude_multiple_series
+alias partialMobius_cutoff := NField.Alignment.CollisionFiniteRegrouping.partialMobius_cutoff
+alias weighted_partialMobius := NField.Alignment.CollisionFiniteRegrouping.weighted_partialMobius
+alias beta_period_series_summable := NField.Alignment.CollisionFiniteRegrouping.beta_period_series_summable
+alias beta_period_series := NField.Alignment.CollisionFiniteRegrouping.beta_period_series
+alias partialMobius_one := NField.Alignment.CollisionFiniteRegrouping.partialMobius_one
+alias beta_period_split := NField.Alignment.CollisionFiniteRegrouping.beta_period_split
+
+alias negativeMobius_nonneg := NField.Alignment.CollisionMobiusDeficit.negativeMobius_nonneg
+alias negativeMobius_one := NField.Alignment.CollisionMobiusDeficit.negativeMobius_one
+alias absoluteMobius_divisor_count := NField.Alignment.CollisionMobiusDeficit.absoluteMobius_divisor_count
+alias negativeMobius_divisor_sum := NField.Alignment.CollisionMobiusDeficit.negativeMobius_divisor_sum
+alias partialMobius_term_lower := NField.Alignment.CollisionMobiusDeficit.partialMobius_term_lower
+alias partialMobius_lower := NField.Alignment.CollisionMobiusDeficit.partialMobius_lower
+alias divisorDeficit_literal := NField.Alignment.CollisionMobiusDeficit.divisorDeficit_literal
+alias divisorDeficit_nonneg := NField.Alignment.CollisionMobiusDeficit.divisorDeficit_nonneg
+alias divisorDeficit_prime_power := NField.Alignment.CollisionMobiusDeficit.divisorDeficit_prime_power
+alias zetaKernel_nonneg := NField.Alignment.CollisionDivisorSeries.zetaKernel_nonneg
+alias zetaKernel_summable := NField.Alignment.CollisionDivisorSeries.zetaKernel_summable
+alias zetaKernel_multiplicative := NField.Alignment.CollisionDivisorSeries.zetaKernel_multiplicative
+alias squarefreeKernel_multiplicative := NField.Alignment.CollisionDivisorSeries.squarefreeKernel_multiplicative
+alias squarefreeKernel_bounds := NField.Alignment.CollisionDivisorSeries.squarefreeKernel_bounds
+alias squarefreeKernel_summable := NField.Alignment.CollisionDivisorSeries.squarefreeKernel_summable
+alias realZeta_pos := NField.Alignment.CollisionDivisorSeries.realZeta_pos
+alias zetaKernel_prime_power := NField.Alignment.CollisionDivisorSeries.zetaKernel_prime_power
+alias zetaKernel_local_sum := NField.Alignment.CollisionDivisorSeries.zetaKernel_local_sum
+alias squarefreeKernel_local_sum := NField.Alignment.CollisionDivisorSeries.squarefreeKernel_local_sum
+alias realZeta_hasProd := NField.Alignment.CollisionDivisorSeries.realZeta_hasProd
+alias squarefreeSeries_hasProd := NField.Alignment.CollisionDivisorSeries.squarefreeSeries_hasProd
+alias squarefreeSeries_zeta := NField.Alignment.CollisionDivisorSeries.squarefreeSeries_zeta
+alias arithmetic_convolution_fiber := NField.Alignment.CollisionDivisorSeries.arithmetic_convolution_fiber
+alias arithmetic_convolution_hasSum := NField.Alignment.CollisionDivisorSeries.arithmetic_convolution_hasSum
+alias zetaKernel_mul := NField.Alignment.CollisionDivisorSeries.zetaKernel_mul
+alias squarefree_convolution := NField.Alignment.CollisionDivisorSeries.squarefree_convolution
+alias squarefreeDivisor_hasSum := NField.Alignment.CollisionDivisorSeries.squarefreeDivisor_hasSum
+alias deficitKernel_identity := NField.Alignment.CollisionDivisorSeries.deficitKernel_identity
+alias deficitSeries_hasSum := NField.Alignment.CollisionDivisorSeries.deficitSeries_hasSum
+alias deficitSeries_summable := NField.Alignment.CollisionDivisorSeries.deficitSeries_summable
+alias deficitSeries_formula := NField.Alignment.CollisionDivisorSeries.deficitSeries_formula
+alias deficitSeries_nonneg := NField.Alignment.CollisionDivisorSeries.deficitSeries_nonneg
+alias zetaKernel_rpow := NField.Alignment.CollisionDivisorSeries.zetaKernel_rpow
+alias realZeta_eq_riemannZeta := NField.Alignment.CollisionDivisorSeries.realZeta_eq_riemannZeta
+alias zetaKernel_nat := NField.Alignment.CollisionPositiveConstants.zetaKernel_nat
+alias realZeta_two := NField.Alignment.CollisionPositiveConstants.realZeta_two
+alias realZeta_four := NField.Alignment.CollisionPositiveConstants.realZeta_four
+alias realZeta_two_lower := NField.Alignment.CollisionPositiveConstants.realZeta_two_lower
+alias realZeta_three_lower := NField.Alignment.CollisionPositiveConstants.realZeta_three_lower
+alias threeHalves_power := NField.Alignment.CollisionPositiveConstants.threeHalves_power
+alias threeHalves_tail_le_one := NField.Alignment.CollisionPositiveConstants.threeHalves_tail_le_one
+alias threeHalves_two_bound := NField.Alignment.CollisionPositiveConstants.threeHalves_two_bound
+alias threeHalves_three_bound := NField.Alignment.CollisionPositiveConstants.threeHalves_three_bound
+alias realZeta_threeHalves_upper := NField.Alignment.CollisionPositiveConstants.realZeta_threeHalves_upper
+alias deficitSeries_two_exact := NField.Alignment.CollisionPositiveConstants.deficitSeries_two_exact
+alias deficitSeries_two_upper := NField.Alignment.CollisionPositiveConstants.deficitSeries_two_upper
+alias deficitSeries_threeHalves_upper := NField.Alignment.CollisionPositiveConstants.deficitSeries_threeHalves_upper
+alias logarithm_half_bound := NField.Alignment.CollisionPositiveConstants.logarithm_half_bound
+alias exp_negative_one_upper := NField.Alignment.CollisionPositiveConstants.exp_negative_one_upper
+alias logarithm_half_rational := NField.Alignment.CollisionPositiveConstants.logarithm_half_rational
+alias deficitSeries_combined_upper := NField.Alignment.CollisionPositiveConstants.deficitSeries_combined_upper
+alias harmonic_predecessor_log := NField.Alignment.CollisionPositiveRegrouping.harmonic_predecessor_log
+alias sqrt_zetaKernel_two := NField.Alignment.CollisionPositiveRegrouping.sqrt_zetaKernel_two
+alias collisionWeight_multiple_series_bound := NField.Alignment.CollisionPositiveRegrouping.collisionWeight_multiple_series_bound
+alias deficitMajorant_nonneg := NField.Alignment.CollisionPositiveRegrouping.deficitMajorant_nonneg
+alias deficitMajorant_summable := NField.Alignment.CollisionPositiveRegrouping.deficitMajorant_summable
+alias deficitMajorant_tsum := NField.Alignment.CollisionPositiveRegrouping.deficitMajorant_tsum
+alias deficitWeight_bounds := NField.Alignment.CollisionPositiveRegrouping.deficitWeight_bounds
+alias deficitWeight_summable := NField.Alignment.CollisionPositiveRegrouping.deficitWeight_summable
+alias deficitWeight_tsum_bound := NField.Alignment.CollisionPositiveRegrouping.deficitWeight_tsum_bound
+alias beta_term_lower := NField.Alignment.CollisionPositiveRegrouping.beta_term_lower
+alias beta_deficit_lower := NField.Alignment.CollisionPositiveRegrouping.beta_deficit_lower
+alias beta_series_lower := NField.Alignment.CollisionPositiveRegrouping.beta_series_lower
+alias beta_strict_half := NField.Alignment.CollisionPositiveRegrouping.beta_strict_half
+alias beta_ratio_lower := NField.Alignment.CollisionPositiveRegrouping.beta_ratio_lower
+alias positive_regrouping_margin := NField.Alignment.CollisionPositiveRegrouping.positive_regrouping_margin
+alias positive_mobius_regrouping := NField.Alignment.CollisionPositiveRegrouping.positive_mobius_regrouping
+
+alias beta_pos := NField.Alignment.CollisionConductorExtrema.beta_pos
+alias fixedConductor_lower := NField.Alignment.CollisionConductorExtrema.fixedConductor_lower
+alias fixedConductor_upper_gap := NField.Alignment.CollisionConductorExtrema.fixedConductor_upper_gap
+alias complementRemainder_nonneg := NField.Alignment.CollisionConductorExtrema.complementRemainder_nonneg
+alias fixedConductor_upper := NField.Alignment.CollisionConductorExtrema.fixedConductor_upper
+alias fixedConductor_min_divisors := NField.Alignment.CollisionConductorExtrema.fixedConductor_min_divisors
+alias complementRemainder_zero_iff := NField.Alignment.CollisionConductorExtrema.complementRemainder_zero_iff
+alias fixedConductor_max_divisors := NField.Alignment.CollisionConductorExtrema.fixedConductor_max_divisors
+alias cutoffPeriod_dvd_iff := NField.Alignment.CollisionConductorExtrema.cutoffPeriod_dvd_iff
+alias fixedConductor_min_iff := NField.Alignment.CollisionConductorExtrema.fixedConductor_min_iff
+alias fixedConductor_max_iff := NField.Alignment.CollisionConductorExtrema.fixedConductor_max_iff
+alias fixedConductor_unique_min := NField.Alignment.CollisionConductorExtrema.fixedConductor_unique_min
+alias fixedConductor_unique_max := NField.Alignment.CollisionConductorExtrema.fixedConductor_unique_max
+alias fixedConductor_at_last := NField.Alignment.CollisionConductorExtrema.fixedConductor_at_last
+alias complete_conductor_extrema := NField.Alignment.CollisionConductorExtrema.complete_conductor_extrema
+alias tail_indicator_shift := NField.Alignment.CollisionInverseRemainder.tail_indicator_shift
+alias inverseSquare_shift_summable := NField.Alignment.CollisionInverseRemainder.inverseSquare_shift_summable
+alias inverseSquare_shift_bound := NField.Alignment.CollisionInverseRemainder.inverseSquare_shift_bound
+alias positiveLog_shift_summable := NField.Alignment.CollisionInverseRemainder.positiveLog_shift_summable
+alias positiveLog_shift_bound := NField.Alignment.CollisionInverseRemainder.positiveLog_shift_bound
+alias amplitude_scaled_log_bound := NField.Alignment.CollisionInverseRemainder.amplitude_scaled_log_bound
+alias amplitude_multiple_shift_summable := NField.Alignment.CollisionInverseRemainder.amplitude_multiple_shift_summable
+alias amplitude_multiple_shift_bound := NField.Alignment.CollisionInverseRemainder.amplitude_multiple_shift_bound
+alias inverseTerm_summable := NField.Alignment.CollisionInverseRemainder.inverseTerm_summable
+alias inverseTerm_tsum := NField.Alignment.CollisionInverseRemainder.inverseTerm_tsum
+alias inverseTerm_norm_le := NField.Alignment.CollisionInverseRemainder.inverseTerm_norm_le
+alias inverseTerm_prefix := NField.Alignment.CollisionInverseRemainder.inverseTerm_prefix
+alias beta_inverse_remainder := NField.Alignment.CollisionInverseRemainder.beta_inverse_remainder
+alias beta_inverse_remainder_norm := NField.Alignment.CollisionInverseRemainder.beta_inverse_remainder_norm
+alias beta_inverse_quotient_bound := NField.Alignment.CollisionInverseRemainder.beta_inverse_quotient_bound
+alias beta_inverse_uniform_bound := NField.Alignment.CollisionInverseRemainder.beta_inverse_uniform_bound
+alias endpointError_formula := NField.Alignment.CollisionConductorEndpoint.endpointError_formula
+alias endpointError_term_bound := NField.Alignment.CollisionConductorEndpoint.endpointError_term_bound
+alias endpointError_bound := NField.Alignment.CollisionConductorEndpoint.endpointError_bound
+alias endpointError_isBigO_log := NField.Alignment.CollisionConductorEndpoint.endpointError_isBigO_log
+alias conductorEndpoint_isBigO_log := NField.Alignment.CollisionConductorEndpoint.conductorEndpoint_isBigO_log
+
+alias rho_prime := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.rho_prime
+alias rho_prime_defect_bound := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.rho_prime_defect_bound
+alias nu_prime := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.nu_prime
+alias nu_prime_le_one := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.nu_prime_le_one
+alias residualAmplitude_prime_bound := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.residualAmplitude_prime_bound
+alias rho_prime_log_bound := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.rho_prime_log_bound
+alias leadingAmplitude_prime_error := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.leadingAmplitude_prime_error
+alias amplitude_prime_main_error := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.amplitude_prime_main_error
+alias prime_limit_neBot := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.prime_limit_neBot
+alias amplitude_prime_asymptotic := NField.Alignment.CollisionPrimeAmplitudeAsymptotic.amplitude_prime_asymptotic
+
+alias cutoffPeriod_ge_three := NField.Alignment.CollisionRestrictedGap.cutoffPeriod_ge_three
+alias interiorResidues_mem := NField.Alignment.CollisionRestrictedGap.interiorResidues_mem
+alias interiorResidues_nonempty := NField.Alignment.CollisionRestrictedGap.interiorResidues_nonempty
+alias conductorGap_formula := NField.Alignment.CollisionRestrictedGap.conductorGap_formula
+alias conductorGap_pos := NField.Alignment.CollisionRestrictedGap.conductorGap_pos
+alias conductorGap_lt_twice_endpoint := NField.Alignment.CollisionRestrictedGap.conductorGap_lt_twice_endpoint
+alias reflectedResidue_mem := NField.Alignment.CollisionRestrictedGap.reflectedResidue_mem
+alias reflectedResidue_involutive := NField.Alignment.CollisionRestrictedGap.reflectedResidue_involutive
+alias remainder_reflection := NField.Alignment.CollisionRestrictedGap.remainder_reflection
+alias fixedConductor_reflection := NField.Alignment.CollisionRestrictedGap.fixedConductor_reflection
+alias conductorGap_reflection := NField.Alignment.CollisionRestrictedGap.conductorGap_reflection
+alias restrictedGap_eq_inf := NField.Alignment.CollisionRestrictedGap.restrictedGap_eq_inf
+alias restrictedGap_pos := NField.Alignment.CollisionRestrictedGap.restrictedGap_pos
+alias restrictedGap_le := NField.Alignment.CollisionRestrictedGap.restrictedGap_le
+alias restrictedGap_attained := NField.Alignment.CollisionRestrictedGap.restrictedGap_attained
+alias restricted_value_bounds := NField.Alignment.CollisionRestrictedGap.restricted_value_bounds
+alias restricted_extrema_attained := NField.Alignment.CollisionRestrictedGap.restricted_extrema_attained
+alias restricted_finite_extrema := NField.Alignment.CollisionRestrictedGap.restricted_finite_extrema
+alias prime_divisor_in_top_range := NField.Alignment.CollisionPrimeCandidate.prime_divisor_in_top_range
+alias complementPeriod_pos := NField.Alignment.CollisionPrimeCandidate.complementPeriod_pos
+alias dvd_complementPeriod := NField.Alignment.CollisionPrimeCandidate.dvd_complementPeriod
+alias prime_coprime_complement := NField.Alignment.CollisionPrimeCandidate.prime_coprime_complement
+alias cutoffPeriod_eq_prime_mul_complement := NField.Alignment.CollisionPrimeCandidate.cutoffPeriod_eq_prime_mul_complement
+alias complementPeriod_eq_div := NField.Alignment.CollisionPrimeCandidate.complementPeriod_eq_div
+alias complementPeriod_ge_two := NField.Alignment.CollisionPrimeCandidate.complementPeriod_ge_two
+alias primeCandidate_mod_complement := NField.Alignment.CollisionPrimeCandidate.primeCandidate_mod_complement
+alias primeCandidate_mod_prime := NField.Alignment.CollisionPrimeCandidate.primeCandidate_mod_prime
+alias primeCandidate_lt_period := NField.Alignment.CollisionPrimeCandidate.primeCandidate_lt_period
+alias primeCandidate_other_remainder := NField.Alignment.CollisionPrimeCandidate.primeCandidate_other_remainder
+alias primeCandidate_interior := NField.Alignment.CollisionPrimeCandidate.primeCandidate_interior
+alias primeCandidate_gap := NField.Alignment.CollisionPrimeCandidate.primeCandidate_gap
+alias restrictedGap_le_prime := NField.Alignment.CollisionPrimeCandidate.restrictedGap_le_prime
+
+alias primesUpTo_mem := NField.Alignment.CollisionMertensInput.primesUpTo_mem
+alias inversePrimeProduct_eq := NField.Alignment.CollisionMertensInput.inversePrimeProduct_eq
+alias inversePrimeProduct_pos := NField.Alignment.CollisionMertensInput.inversePrimeProduct_pos
+alias mertens_inverse_product := NField.Alignment.CollisionMertensInput.mertens_inverse_product
+alias logPrimeSum_error_bound := NField.Alignment.CollisionMertensInput.logPrimeSum_error_bound
+alias logPrimeSum_error_isBigO := NField.Alignment.CollisionMertensInput.logPrimeSum_error_isBigO
+alias literal_mertens_inputs := NField.Alignment.CollisionMertensInput.literal_mertens_inputs
+alias prime_error_factor_tendsto := NField.Alignment.CollisionPrimeDistribution.prime_error_factor_tendsto
+alias psi_asymptotic := NField.Alignment.CollisionPrimeDistribution.psi_asymptotic
+alias sqrt_isLittleO_id := NField.Alignment.CollisionPrimeDistribution.sqrt_isLittleO_id
+alias theta_asymptotic := NField.Alignment.CollisionPrimeDistribution.theta_asymptotic
+alias theta_ratio_tendsto := NField.Alignment.CollisionPrimeDistribution.theta_ratio_tendsto
+alias exists_prime_of_theta_lt := NField.Alignment.CollisionPrimeDistribution.exists_prime_of_theta_lt
+alias prime_in_relative_interval := NField.Alignment.CollisionPrimeDistribution.prime_in_relative_interval
+alias prime_in_relative_interval_nat := NField.Alignment.CollisionPrimeDistribution.prime_in_relative_interval_nat
+alias cutoffPeriod_eq_lcmUpto := NField.Alignment.CollisionPrimeDistribution.cutoffPeriod_eq_lcmUpto
+alias log_cutoffPeriod_eq_psi := NField.Alignment.CollisionPrimeDistribution.log_cutoffPeriod_eq_psi
+alias log_cutoffPeriod_asymptotic := NField.Alignment.CollisionPrimeDistribution.log_cutoffPeriod_asymptotic
+alias unconditional_prime_number_theorem := MediumPNT
+
+alias primitiveNumerators_prime := NField.Alignment.CollisionConductorCosts.primitiveNumerators_prime
+alias reducedHarmonicStar_prime := NField.Alignment.CollisionConductorCosts.reducedHarmonicStar_prime
+alias log_le_harmonic_predecessor := NField.Alignment.CollisionConductorCosts.log_le_harmonic_predecessor
+alias collisionWeight_prime_formula := NField.Alignment.CollisionConductorCosts.collisionWeight_prime_formula
+alias collisionWeight_prime_lower := NField.Alignment.CollisionConductorCosts.collisionWeight_prime_lower
+alias conductorGap_row_lower := NField.Alignment.CollisionConductorCosts.conductorGap_row_lower
+alias conductorGap_weight_lower := NField.Alignment.CollisionConductorCosts.conductorGap_weight_lower
+alias conductorGap_nondivisor_lower := NField.Alignment.CollisionConductorCosts.conductorGap_nondivisor_lower
+alias conductorGap_prime_lower := NField.Alignment.CollisionConductorCosts.conductorGap_prime_lower
+alias reciprocal_multiple_sum := NField.Alignment.CollisionConductorCosts.reciprocal_multiple_sum
+alias reducedHarmonicStar_prime_power := NField.Alignment.CollisionConductorCosts.reducedHarmonicStar_prime_power
+alias harmonic_predecessor_mono := NField.Alignment.CollisionConductorCosts.harmonic_predecessor_mono
+alias reducedHarmonicStar_prime_power_lower := NField.Alignment.CollisionConductorCosts.reducedHarmonicStar_prime_power_lower
+alias collisionWeight_prime_power_lower := NField.Alignment.CollisionConductorCosts.collisionWeight_prime_power_lower
+alias first_missing_power_remainder := NField.Alignment.CollisionConductorCosts.first_missing_power_remainder
+alias conductorGap_first_missing_power := NField.Alignment.CollisionConductorCosts.conductorGap_first_missing_power
+alias exp_half_le_two := NField.Alignment.CollisionConductorCosts.exp_half_le_two
+alias conductorGap_small_prime_lower := NField.Alignment.CollisionConductorCosts.conductorGap_small_prime_lower
+alias exp_two_thirds_le_two := NField.Alignment.CollisionConductorCosts.exp_two_thirds_le_two
+alias prime_power_denominator_le := NField.Alignment.CollisionConductorCosts.prime_power_denominator_le
+alias conductorGap_higher_power_lower := NField.Alignment.CollisionConductorCosts.conductorGap_higher_power_lower
+
+alias amplitudeLeading_eq_real_zeta_ratio := NField.Alignment.CollisionCandidateScale.amplitudeLeading_eq_real_zeta_ratio
+alias amplitudeLeading_lt_three_halves := NField.Alignment.CollisionCandidateScale.amplitudeLeading_lt_three_halves
+alias prime_candidate_scale_bound := NField.Alignment.CollisionCandidateScale.prime_candidate_scale_bound
+alias candidate_error_absorbed := NField.Alignment.CollisionCandidateScale.candidate_error_absorbed
+alias eventual_prime_candidate_upper := NField.Alignment.CollisionCandidateScale.eventual_prime_candidate_upper
+alias restrictedGap_upper_scale := NField.Alignment.CollisionCandidateScale.restrictedGap_upper_scale
+alias small_prime_scale_separated := NField.Alignment.CollisionCandidateScale.small_prime_scale_separated
+alias eventual_minimizer_small_primes := NField.Alignment.CollisionCandidateScale.eventual_minimizer_small_primes
+alias candidate_lt_higher_power_scale := NField.Alignment.CollisionCandidateScale.candidate_lt_higher_power_scale
+alias higher_power_scale_separated := NField.Alignment.CollisionCandidateScale.higher_power_scale_separated
+alias eventual_minimizer_higher_powers := NField.Alignment.CollisionCandidateScale.eventual_minimizer_higher_powers
+alias prime_power_saturation := NField.Alignment.CollisionMinimizerClassification.prime_power_saturation
+alias cutoffPeriod_dvd_of_saturated := NField.Alignment.CollisionMinimizerClassification.cutoffPeriod_dvd_of_saturated
+alias interior_missing_prime := NField.Alignment.CollisionMinimizerClassification.interior_missing_prime
+alias minimizer_top_prime_remainder := NField.Alignment.CollisionMinimizerClassification.minimizer_top_prime_remainder
+alias minimizer_other_remainders := NField.Alignment.CollisionMinimizerClassification.minimizer_other_remainders
+alias eventual_minimizer_coordinates := NField.Alignment.CollisionMinimizerClassification.eventual_minimizer_coordinates
+alias primeCandidate_eq_of_remainders := NField.Alignment.CollisionMinimizerClassification.primeCandidate_eq_of_remainders
+alias topPrimes_mem := NField.Alignment.CollisionMinimizerClassification.topPrimes_mem
+alias topPrimeAmplitude_le := NField.Alignment.CollisionMinimizerClassification.topPrimeAmplitude_le
+alias topPrimeAmplitude_eq_of_min := NField.Alignment.CollisionMinimizerClassification.topPrimeAmplitude_eq_of_min
+alias eventual_restricted_gap_exact := NField.Alignment.CollisionMinimizerClassification.eventual_restricted_gap_exact
+alias eventual_minimizer_iff_primeCandidate := NField.Alignment.CollisionMinimizerClassification.eventual_minimizer_iff_primeCandidate
+
+alias largestPrime_prime := NField.Alignment.CollisionLargestPrime.largestPrime_prime
+alias largestPrime_le := NField.Alignment.CollisionLargestPrime.largestPrime_le
+alias prime_le_largestPrime := NField.Alignment.CollisionLargestPrime.prime_le_largestPrime
+alias largestPrime_ratio_tendsto := NField.Alignment.CollisionLargestPrime.largestPrime_ratio_tendsto
+alias largestPrime_tendsto := NField.Alignment.CollisionLargestPrime.largestPrime_tendsto
+alias largestPrime_eventually_top := NField.Alignment.CollisionLargestPrime.largestPrime_eventually_top
+alias log_largestPrime_ratio_tendsto := NField.Alignment.CollisionLargestPrime.log_largestPrime_ratio_tendsto
+alias amplitude_prime_normalized_error := NField.Alignment.CollisionRestrictedGapAsymptotic.amplitude_prime_normalized_error
+alias largestPrime_amplitude_normalized_tendsto := NField.Alignment.CollisionRestrictedGapAsymptotic.largestPrime_amplitude_normalized_tendsto
+alias largestPrime_amplitude_at_cutoff_tendsto := NField.Alignment.CollisionRestrictedGapAsymptotic.largestPrime_amplitude_at_cutoff_tendsto
+alias top_prime_amplitude_lower := NField.Alignment.CollisionRestrictedGapAsymptotic.top_prime_amplitude_lower
+alias topPrimeAmplitude_attained := NField.Alignment.CollisionRestrictedGapAsymptotic.topPrimeAmplitude_attained
+alias eventual_topPrimeAmplitude_bounds := NField.Alignment.CollisionRestrictedGapAsymptotic.eventual_topPrimeAmplitude_bounds
+alias topPrimeAmplitude_normalized_tendsto := NField.Alignment.CollisionRestrictedGapAsymptotic.topPrimeAmplitude_normalized_tendsto
+alias restrictedGap_normalized_tendsto := NField.Alignment.CollisionRestrictedGapAsymptotic.restrictedGap_normalized_tendsto
+alias restrictedGap_asymptotic := NField.Alignment.CollisionRestrictedGapAsymptotic.restrictedGap_asymptotic
+alias restrictedGap_literal_asymptotic := NField.Alignment.CollisionRestrictedGapAsymptotic.restrictedGap_literal_asymptotic
+alias restrictedGap_two_sided_order := NField.Alignment.CollisionRestrictedGapAsymptotic.restrictedGap_two_sided_order
+alias complete_and_restricted_conductor_extrema := NField.Alignment.CollisionConductorExtremaTheorem.complete_and_restricted_conductor_extrema
+
+alias scalar_mem_enclosure := NField.Alignment.CollisionConductorEnclosure.scalar_mem_enclosure
+alias beta_raw_enclosure := NField.Alignment.CollisionConductorEnclosure.beta_raw_enclosure
+alias beta_mem_enclosure := NField.Alignment.CollisionConductorEnclosure.beta_mem_enclosure
+alias betaLower_pos := NField.Alignment.CollisionConductorEnclosure.betaLower_pos
+alias fixedConductor_mem_enclosure := NField.Alignment.CollisionConductorEnclosure.fixedConductor_mem_enclosure
+alias conductorEndpoint_mem_enclosure := NField.Alignment.CollisionConductorEnclosure.conductorEndpoint_mem_enclosure
+alias conductorGap_mem_enclosure := NField.Alignment.CollisionConductorEnclosure.conductorGap_mem_enclosure
+alias restrictedGap_mem_enclosure := NField.Alignment.CollisionConductorEnclosure.restrictedGap_mem_enclosure
+alias minimizer_in_enclosure_candidates := NField.Alignment.CollisionConductorEnclosure.minimizer_in_enclosure_candidates
+
+alias literal_capacity_and_deficit := NField.Alignment.CollisionElementaryDisplays.literal_capacity_and_deficit
+alias literal_reset_indicator_series := NField.Alignment.CollisionElementaryDisplays.literal_reset_indicator_series
+alias collisionWeight_five := NField.Alignment.CollisionElementaryDisplays.collisionWeight_five
+alias collisionWeight_six := NField.Alignment.CollisionElementaryDisplays.collisionWeight_six
+alias reset_values_four_five_six := NField.Alignment.CollisionElementaryDisplays.reset_values_four_five_six
+alias increment_values_four_five_six := NField.Alignment.CollisionElementaryDisplays.increment_values_four_five_six
+alias deficit_values_four_five_six := NField.Alignment.CollisionElementaryDisplays.deficit_values_four_five_six
+alias literal_reset_table := NField.Alignment.CollisionElementaryDisplays.literal_reset_table
+alias primitiveValue_six_table := NField.Alignment.CollisionElementaryDisplays.primitiveValue_six_table
+alias amplitude_log_two_bound := NField.Alignment.CollisionElementaryDisplays.amplitude_log_two_bound
+alias amplitude_isBigO_log_two_div_square := NField.Alignment.CollisionElementaryDisplays.amplitude_isBigO_log_two_div_square
+alias cycleRotation_period := NField.Alignment.CollisionClockDynamics.cycleRotation_period
+alias cycleRotation_residue := NField.Alignment.CollisionClockDynamics.cycleRotation_residue
+alias orbitPMF_literal := NField.Alignment.CollisionClockDynamics.orbitPMF_literal
+alias orbitPMF_inactive_zero := NField.Alignment.CollisionClockDynamics.orbitPMF_inactive_zero
+alias remainder_rotation_equivalence := NField.Alignment.CollisionClockDynamics.remainder_rotation_equivalence
+alias orbitMass_rotation := NField.Alignment.CollisionClockDynamics.orbitMass_rotation
+alias orbitPMF_rotation := NField.Alignment.CollisionClockDynamics.orbitPMF_rotation
+alias orbitPMF_pushforward := NField.Alignment.CollisionClockDynamics.orbitPMF_pushforward
+alias literal_clock_state_and_update := NField.Alignment.CollisionClockDynamics.literal_clock_state_and_update
+alias weight_tail_literal := NField.Alignment.CollisionMassDisplays.weight_tail_literal
+alias fractionalFloorTerm_le_firstMoment := NField.Alignment.CollisionMassDisplays.fractionalFloorTerm_le_firstMoment
+alias deficit_le_splitUpper := NField.Alignment.CollisionMassDisplays.deficit_le_splitUpper
+alias firstMoment_le_harmonic_sq := NField.Alignment.CollisionMassDisplays.firstMoment_le_harmonic_sq
+alias splitUpper_nonneg := NField.Alignment.CollisionMassDisplays.splitUpper_nonneg
+alias splitUpper_harmonic_bound := NField.Alignment.CollisionMassDisplays.splitUpper_harmonic_bound
+alias splitUpper_log_bound := NField.Alignment.CollisionMassDisplays.splitUpper_log_bound
+alias splitUpper_isBigO_log_sq := NField.Alignment.CollisionMassDisplays.splitUpper_isBigO_log_sq
+alias literal_deficit_split := NField.Alignment.CollisionMassDisplays.literal_deficit_split
+alias general_floor_summable := NField.Alignment.CollisionMassDisplays.general_floor_summable
+alias general_floor_balance := NField.Alignment.CollisionMassDisplays.general_floor_balance
+alias general_completion := NField.Alignment.CollisionMassDisplays.general_completion
+alias general_completion_from_two := NField.Alignment.CollisionMassDisplays.general_completion_from_two
+alias general_age_ratio_zero := NField.Alignment.CollisionMassDisplays.general_age_ratio_zero
+alias literal_general_completion_and_leading := NField.Alignment.CollisionMassDisplays.literal_general_completion_and_leading
+
+alias literal_midpoint_convention := NField.Alignment.CollisionStraighteningDisplay.literal_midpoint_convention
+alias floor_nat_ratio := NField.Alignment.CollisionStraighteningDisplay.floor_nat_ratio
+alias collisionResponse_eq_floorResponse := NField.Alignment.CollisionStraighteningDisplay.collisionResponse_eq_floorResponse
+alias residueSawtooth_eq_midpoint := NField.Alignment.CollisionStraighteningDisplay.residueSawtooth_eq_midpoint
+alias literal_boundary_straightening := NField.Alignment.CollisionStraighteningDisplay.literal_boundary_straightening
+alias conductorRadical_pos := NField.Alignment.CollisionRadicalRows.conductorRadical_pos
+alias conductorRadical_dvd := NField.Alignment.CollisionRadicalRows.conductorRadical_dvd
+alias squarefree_divisor_dvd_radical := NField.Alignment.CollisionRadicalRows.squarefree_divisor_dvd_radical
+alias conductorRadical_two_le := NField.Alignment.CollisionRadicalRows.conductorRadical_two_le
+alias remainder_mul_decomposition := NField.Alignment.CollisionRadicalRows.remainder_mul_decomposition
+alias centeredRemainder_mul_scale := NField.Alignment.CollisionRadicalRows.centeredRemainder_mul_scale
+alias primitiveValue_mobius_quotient := NField.Alignment.CollisionRadicalRows.primitiveValue_mobius_quotient
+alias primitiveValue_radical_sum := NField.Alignment.CollisionRadicalRows.primitiveValue_radical_sum
+alias primitiveValue_radical_scale := NField.Alignment.CollisionRadicalRows.primitiveValue_radical_scale
+alias multipleIndicator_zero := NField.Alignment.CollisionMultipleTailDisplay.multipleIndicator_zero
+alias multipleIndicator_nonneg := NField.Alignment.CollisionMultipleTailDisplay.multipleIndicator_nonneg
+alias positive_multiples_image := NField.Alignment.CollisionMultipleTailDisplay.positive_multiples_image
+alias multipleIndicator_partial_sum := NField.Alignment.CollisionMultipleTailDisplay.multipleIndicator_partial_sum
+alias multipleIndicator_partial_bound := NField.Alignment.CollisionMultipleTailDisplay.multipleIndicator_partial_bound
+alias omittedMass_summable := NField.Alignment.CollisionMultipleTailDisplay.omittedMass_summable
+alias omittedMass_nonneg := NField.Alignment.CollisionMultipleTailDisplay.omittedMass_nonneg
+alias omittedMass_le_counting_tail := NField.Alignment.CollisionMultipleTailDisplay.omittedMass_le_counting_tail
+alias omittedMass_counting_bound := NField.Alignment.CollisionMultipleTailDisplay.omittedMass_counting_bound
+alias omittedMass_log_bound := NField.Alignment.CollisionMultipleTailDisplay.omittedMass_log_bound
+alias omittedMass_above_cutoff := NField.Alignment.CollisionMultipleTailDisplay.omittedMass_above_cutoff
+alias literal_period_specific_tail := NField.Alignment.CollisionMultipleTailDisplay.literal_period_specific_tail
+alias pairTreePotential_conservation := NField.Alignment.CollisionPrimitiveMassDisplays.pairTreePotential_conservation
+alias primitiveAddressMass_nonneg := NField.Alignment.CollisionPrimitiveMassDisplays.primitiveAddressMass_nonneg
+alias primitivePairMass_symmetrization := NField.Alignment.CollisionPrimitiveMassDisplays.primitivePairMass_symmetrization
+alias primitiveAddressMass_summable := NField.Alignment.CollisionPrimitiveMassDisplays.primitiveAddressMass_summable
+alias primitiveAddressMass_swap_summable := NField.Alignment.CollisionPrimitiveMassDisplays.primitiveAddressMass_swap_summable
+alias primitiveAddressMass_swap_tsum := NField.Alignment.CollisionPrimitiveMassDisplays.primitiveAddressMass_swap_tsum
+alias primitivePairMass_total := NField.Alignment.CollisionPrimitiveMassDisplays.primitivePairMass_total
+alias primitiveAddressMass_total := NField.Alignment.CollisionPrimitiveMassDisplays.primitiveAddressMass_total
+alias positiveAddressMass_formula := NField.Alignment.CollisionPrimitiveMassDisplays.positiveAddressMass_formula
+alias positivePairMass_formula := NField.Alignment.CollisionPrimitiveMassDisplays.positivePairMass_formula
+alias positive_pair_shift_injective := NField.Alignment.CollisionPrimitiveMassDisplays.positive_pair_shift_injective
+alias positiveAddressMass_summable := NField.Alignment.CollisionPrimitiveMassDisplays.positiveAddressMass_summable
+alias positivePairMass_summable := NField.Alignment.CollisionPrimitiveMassDisplays.positivePairMass_summable
+alias positiveAddressMass_tsum := NField.Alignment.CollisionPrimitiveMassDisplays.positiveAddressMass_tsum
+alias positivePairMass_tsum := NField.Alignment.CollisionPrimitiveMassDisplays.positivePairMass_tsum
+alias literal_primitive_mass_normalization := NField.Alignment.CollisionPrimitiveMassDisplays.literal_primitive_mass_normalization
+
+alias centralBinomial_square_bound := NField.Alignment.CollisionActivationSperner.centralBinomial_square_bound
+alias odd_middle_le_twice_central := NField.Alignment.CollisionActivationSperner.odd_middle_le_twice_central
+alias middleBinomial_square_bound := NField.Alignment.CollisionActivationSperner.middleBinomial_square_bound
+alias middleBinomial_probability_bound := NField.Alignment.CollisionActivationSperner.middleBinomial_probability_bound
+alias fair_antichain_bound := NField.Alignment.CollisionActivationSperner.fair_antichain_bound
+alias coordinate_increase_monotone := NField.Alignment.CollisionActivationSperner.coordinate_increase_monotone
+alias strict_subset_increase := NField.Alignment.CollisionActivationSperner.strict_subset_increase
+alias short_interval_antichain := NField.Alignment.CollisionActivationSperner.short_interval_antichain
+alias fair_short_interval_bound := NField.Alignment.CollisionActivationSperner.fair_short_interval_bound
+alias bernoulliAverage_empty := NField.Alignment.CollisionBernoulliProduct.bernoulliAverage_empty
+alias weightOn_absent := NField.Alignment.CollisionBernoulliProduct.weightOn_absent
+alias weightOn_present := NField.Alignment.CollisionBernoulliProduct.weightOn_present
+alias powerset_insert_disjoint := NField.Alignment.CollisionBernoulliProduct.powerset_insert_disjoint
+alias bernoulliAverage_insert := NField.Alignment.CollisionBernoulliProduct.bernoulliAverage_insert
+alias bernoulliAverage_congr := NField.Alignment.CollisionBernoulliProduct.bernoulliAverage_congr
+alias bernoulliAverage_add := NField.Alignment.CollisionBernoulliProduct.bernoulliAverage_add
+alias bernoulliAverage_const_mul := NField.Alignment.CollisionBernoulliProduct.bernoulliAverage_const_mul
+alias bernoulliAverage_const := NField.Alignment.CollisionBernoulliProduct.bernoulliAverage_const
+alias weightOn_nonneg := NField.Alignment.CollisionBernoulliProduct.weightOn_nonneg
+alias bernoulliAverage_nonneg := NField.Alignment.CollisionBernoulliProduct.bernoulliAverage_nonneg
+alias bernoulliAverage_mono := NField.Alignment.CollisionBernoulliProduct.bernoulliAverage_mono
+alias fairAverage_insert := NField.Alignment.CollisionBernoulliProduct.fairAverage_insert
+alias activation_coupling := NField.Alignment.CollisionBernoulliProduct.activation_coupling
+alias weightOn_fair := NField.Alignment.CollisionBernoulliProduct.weightOn_fair
+alias fairAverage_uniform := NField.Alignment.CollisionBernoulliProduct.fairAverage_uniform
+alias bernoulli_count_mean := NField.Alignment.CollisionBernoulliMoments.bernoulli_count_mean
+alias bernoulli_count_second_moment := NField.Alignment.CollisionBernoulliMoments.bernoulli_count_second_moment
+alias bernoulli_count_variance := NField.Alignment.CollisionBernoulliMoments.bernoulli_count_variance
+alias countMean_nonneg := NField.Alignment.CollisionBernoulliMoments.countMean_nonneg
+alias countVariance_le_mean := NField.Alignment.CollisionBernoulliMoments.countVariance_le_mean
+alias lowCountMass_nonneg := NField.Alignment.CollisionBernoulliMoments.lowCountMass_nonneg
+alias lowCountMass_le_one := NField.Alignment.CollisionBernoulliMoments.lowCountMass_le_one
+alias lowCountMass_chebyshev := NField.Alignment.CollisionBernoulliMoments.lowCountMass_chebyshev
+alias antichain_card_on := NField.Alignment.CollisionActivationRestriction.antichain_card_on
+alias fair_antichain_on := NField.Alignment.CollisionActivationRestriction.fair_antichain_on
+alias fair_short_interval_on := NField.Alignment.CollisionActivationRestriction.fair_short_interval_on
+alias inverseRoot_count_le_one := NField.Alignment.CollisionBernoulliActivationFinite.inverseRoot_count_le_one
+alias inverseRoot_good_count := NField.Alignment.CollisionBernoulliActivationFinite.inverseRoot_good_count
+alias inverseRootAverage_le_one := NField.Alignment.CollisionBernoulliActivationFinite.inverseRootAverage_le_one
+alias inverseRootAverage_split := NField.Alignment.CollisionBernoulliActivationFinite.inverseRootAverage_split
+alias inverseRootAverage_bound := NField.Alignment.CollisionBernoulliActivationFinite.inverseRootAverage_bound
+alias bernoulli_product_short_interval_bound := NField.Alignment.CollisionBernoulliActivationFinite.bernoulli_product_short_interval_bound
+alias activeSet_eq_iff := NField.Alignment.CollisionBernoulliActivation.activeSet_eq_iff
+alias activeSet_atom := NField.Alignment.CollisionBernoulliActivation.activeSet_atom
+alias activeSet_atom_measurable := NField.Alignment.CollisionBernoulliActivation.activeSet_atom_measurable
+alias weightOn_univ_product := NField.Alignment.CollisionBernoulliActivation.weightOn_univ_product
+alias independent_activeSet_atom := NField.Alignment.CollisionBernoulliActivation.independent_activeSet_atom
+alias independent_activeSet_event := NField.Alignment.CollisionBernoulliActivation.independent_activeSet_event
+alias bernoulli_activation := NField.Alignment.CollisionBernoulliActivation.bernoulli_activation
+
+alias fair_short_interval_sperner := NField.Alignment.CollisionBernoulliCertificate.fair_short_interval_sperner
+alias bernoulli_product_sperner := NField.Alignment.CollisionBernoulliCertificate.bernoulli_product_sperner
+alias bernoulli_product_squared_bound := NField.Alignment.CollisionBernoulliCertificate.bernoulli_product_squared_bound
+
+alias coprime_residues_compatible := NField.Alignment.CollisionResidueIndependence.coprime_residues_compatible
+alias residueTuple_surjective := NField.Alignment.CollisionResidueIndependence.residueTuple_surjective
+alias residueTuple_measurePreserving := NField.Alignment.CollisionResidueIndependence.residueTuple_measurePreserving
+alias coprime_residue_independence := NField.Alignment.CollisionResidueIndependence.coprime_residue_independence
+alias hitResidues_card := NField.Alignment.CollisionPrimeHit.hitResidues_card
+alias hitCoordinate_iff := NField.Alignment.CollisionPrimeHit.hitCoordinate_iff
+alias hitCoordinate_measurable := NField.Alignment.CollisionPrimeHit.hitCoordinate_measurable
+alias hitCoordinate_probability := NField.Alignment.CollisionPrimeHit.hitCoordinate_probability
+alias hit_location_unique := NField.Alignment.CollisionPrimeHit.hit_location_unique
+alias hit_coordinates_independent := NField.Alignment.CollisionPrimeHit.hit_coordinates_independent
+alias hit_probability_at_most_half := NField.Alignment.CollisionPrimeHit.hit_probability_at_most_half
+alias hitCoordinate_zero := NField.Alignment.CollisionPrimeHit.hitCoordinate_zero
+alias hitCoordinate_integer := NField.Alignment.CollisionPrimeHit.hitCoordinate_integer
+alias prime_hit_law := NField.Alignment.CollisionPrimeHit.prime_hit_law
+alias locationSet_measurable := NField.Alignment.CollisionHitConditioning.locationSet_measurable
+alias locationSet_probability := NField.Alignment.CollisionHitConditioning.locationSet_probability
+alias mem_locationSet := NField.Alignment.CollisionHitConditioning.mem_locationSet
+alias hitCoordinate_locations := NField.Alignment.CollisionHitConditioning.hitCoordinate_locations
+alias location_given_hit := NField.Alignment.CollisionHitConditioning.location_given_hit
+alias locationSet_subset_of_dvd := NField.Alignment.CollisionHitConditioning.locationSet_subset_of_dvd
+alias valuationSet_measurable := NField.Alignment.CollisionHitConditioning.valuationSet_measurable
+alias valuationSet_probability := NField.Alignment.CollisionHitConditioning.valuationSet_probability
+alias valuationSet_subset_location := NField.Alignment.CollisionHitConditioning.valuationSet_subset_location
+alias valuation_given_hitLocation := NField.Alignment.CollisionHitConditioning.valuation_given_hitLocation
+alias positive_valuation_mass_one := NField.Alignment.CollisionHitConditioning.positive_valuation_mass_one
+alias location_valuation_given_hit := NField.Alignment.CollisionHitConditioning.location_valuation_given_hit
+alias hitValuationSet_probability := NField.Alignment.CollisionHitConditioning.hitValuationSet_probability
+alias valuation_given_any_hit := NField.Alignment.CollisionHitConditioning.valuation_given_any_hit
+
+alias ae_resetTerm_summable := NField.Alignment.CollisionActivationArithmetic.ae_resetTerm_summable
+alias blockResetSummable_ae := NField.Alignment.CollisionActivationArithmetic.blockResetSummable_ae
+alias forcingTermBlock_nonneg := NField.Alignment.CollisionActivationArithmetic.forcingTermBlock_nonneg
+alias forcingTermBlock_summable := NField.Alignment.CollisionActivationArithmetic.forcingTermBlock_summable
+alias forcingBlock_tsum := NField.Alignment.CollisionActivationArithmetic.forcingBlock_tsum
+alias resetTerm_eq_away := NField.Alignment.CollisionActivationArithmetic.resetTerm_eq_away
+alias inactive_multiple_zero := NField.Alignment.CollisionActivationArithmetic.inactive_multiple_zero
+alias forcingTermBlock_activation_mono := NField.Alignment.CollisionActivationArithmetic.forcingTermBlock_activation_mono
+alias forcingTermBlock_prime_increment := NField.Alignment.CollisionActivationArithmetic.forcingTermBlock_prime_increment
+alias forcingBlock_prime_activation := NField.Alignment.CollisionActivationArithmetic.forcingBlock_prime_activation
+alias forcingBlock_Icc := NField.Alignment.CollisionActivationArithmetic.forcingBlock_Icc
+alias blockFunction_forcingBlock := NField.Alignment.CollisionActivationArithmetic.blockFunction_forcingBlock
+alias prime_increment_positive := NField.Alignment.CollisionActivationArithmetic.prime_increment_positive
+alias prime_increment_formula := NField.Alignment.CollisionActivationArithmetic.prime_increment_formula
+alias prime_increment_log_lower := NField.Alignment.CollisionActivationArithmetic.prime_increment_log_lower
+alias prime_increment_window_lower := NField.Alignment.CollisionActivationArithmetic.prime_increment_window_lower
+alias resetTerm_eq_of_residue := NField.Alignment.CollisionActivationArithmetic.resetTerm_eq_of_residue
+alias forcingTermBlock_activation_mono_below := NField.Alignment.CollisionActivationArithmetic.forcingTermBlock_activation_mono_below
+alias forcingCutoff_prime_activation := NField.Alignment.CollisionActivationArithmetic.forcingCutoff_prime_activation
+alias forcingCutoff_tendsto := NField.Alignment.CollisionActivationArithmetic.forcingCutoff_tendsto
+
+alias productWeight_nonneg := NField.Alignment.CollisionFiniteActivationMixture.productWeight_nonneg
+alias productWeight_sum := NField.Alignment.CollisionFiniteActivationMixture.productWeight_sum
+alias productAverage_const := NField.Alignment.CollisionFiniteActivationMixture.productAverage_const
+alias productAverage_mono := NField.Alignment.CollisionFiniteActivationMixture.productAverage_mono
+alias bernoulli_product_expectation := NField.Alignment.CollisionFiniteActivationMixture.bernoulli_product_expectation
+alias product_eq_indicator := NField.Alignment.CollisionFiniteActivationMixture.product_eq_indicator
+alias selected_atom_expectation := NField.Alignment.CollisionFiniteActivationMixture.selected_atom_expectation
+alias productAverage_const_mul := NField.Alignment.CollisionFiniteActivationMixture.productAverage_const_mul
+alias productAverage_sum := NField.Alignment.CollisionFiniteActivationMixture.productAverage_sum
+alias bernoulliAverage_sum := NField.Alignment.CollisionFiniteActivationMixture.bernoulliAverage_sum
+alias conditional_mixture_atom := NField.Alignment.CollisionFiniteActivationMixture.conditional_mixture_atom
+alias conditional_mixture_observable := NField.Alignment.CollisionFiniteActivationMixture.conditional_mixture_observable
+alias conditional_activation_bound := NField.Alignment.CollisionFiniteActivationMixture.conditional_activation_bound
+alias subtype_indicator_sum := NField.Alignment.CollisionFiniteActivationMixture.subtype_indicator_sum
+alias conditionalPairWeight_nonneg := NField.Alignment.CollisionFiniteActivationMixture.conditionalPairWeight_nonneg
+alias conditionalPairWeight_sum := NField.Alignment.CollisionFiniteActivationMixture.conditionalPairWeight_sum
+alias conditionalPair_active_marginal := NField.Alignment.CollisionFiniteActivationMixture.conditionalPair_active_marginal
+alias conditionalPair_inactive_marginal := NField.Alignment.CollisionFiniteActivationMixture.conditionalPair_inactive_marginal
+alias conditionalPair_mixture_uniform := NField.Alignment.CollisionFiniteActivationMixture.conditionalPair_mixture_uniform
+alias uniform_productAverage := NField.Alignment.CollisionFiniteActivationMixture.uniform_productAverage
+alias uniform_conditional_mixture := NField.Alignment.CollisionFiniteActivationMixture.uniform_conditional_mixture
+alias uniform_conditional_activation_bound := NField.Alignment.CollisionFiniteActivationMixture.uniform_conditional_activation_bound
+alias hitRatio_uniform_event := NField.Alignment.CollisionFiniteActivationMixture.hitRatio_uniform_event
+alias select_insert_update := NField.Alignment.CollisionFiniteActivationMixture.select_insert_update
+alias uniform_coordinate_activation_bound := NField.Alignment.CollisionFiniteActivationMixture.uniform_coordinate_activation_bound
+alias representative_coordinate := NField.Alignment.CollisionActivationCRT.representative_coordinate
+alias coordinates_determine_product := NField.Alignment.CollisionActivationCRT.coordinates_determine_product
+alias representative_residue := NField.Alignment.CollisionActivationCRT.representative_residue
+alias forcingCutoff_factors := NField.Alignment.CollisionActivationCRT.forcingCutoff_factors
+alias representative_modEq := NField.Alignment.CollisionActivationCRT.representative_modEq
+alias representative_agrees_away := NField.Alignment.CollisionActivationCRT.representative_agrees_away
+alias residueTuple_integral := NField.Alignment.CollisionActivationCRT.residueTuple_integral
+alias forcingCutoff_crt_integral := NField.Alignment.CollisionActivationCRT.forcingCutoff_crt_integral
+alias forcingCutoff_continuous_via_crt := NField.Alignment.CollisionActivationCRT.forcingCutoff_continuous_via_crt
+alias forcingCutoff_crt_probability := NField.Alignment.CollisionActivationCRT.forcingCutoff_crt_probability
+alias uniform_product_section_bound := NField.Alignment.CollisionActivationSubfamily.uniform_product_section_bound
+alias extend_selected := NField.Alignment.CollisionActivationSubfamily.extend_selected
+alias extend_update := NField.Alignment.CollisionActivationSubfamily.extend_update
+alias uniform_subfamily_activation_bound := NField.Alignment.CollisionActivationSubfamily.uniform_subfamily_activation_bound
+alias quotientHit_phase := NField.Alignment.CollisionActivationQuotient.quotientHit_phase
+alias quotientHit_ratio := NField.Alignment.CollisionActivationQuotient.quotientHit_ratio
+alias quotientHit_nonempty := NField.Alignment.CollisionActivationQuotient.quotientHit_nonempty
+alias quotientHit_complement_nonempty := NField.Alignment.CollisionActivationQuotient.quotientHit_complement_nonempty
+alias quotientHit_representative := NField.Alignment.CollisionActivationQuotient.quotientHit_representative
+alias prime_power_cutoff_concentration := NField.Alignment.CollisionActivationQuotient.prime_power_cutoff_concentration
+alias measure_eventually_membership_le := NField.Alignment.CollisionConcentrationLimit.measure_eventually_membership_le
+alias closed_interval_limit_bound := NField.Alignment.CollisionConcentrationLimit.closed_interval_limit_bound
+alias forcingBlock_limit_concentration := NField.Alignment.CollisionConcentrationLimit.forcingBlock_limit_concentration
+alias selectedFactorial_sum := NField.Alignment.CollisionPrimeSetConcentration.selectedFactorial_sum
+alias finite_prime_set_cutoff_concentration := NField.Alignment.CollisionPrimeSetConcentration.finite_prime_set_cutoff_concentration
+alias finite_prime_set_block_concentration := NField.Alignment.CollisionPrimeSetConcentration.finite_prime_set_block_concentration
+alias finite_positive_lower_bound := NField.Alignment.CollisionPrimeBlockAtomless.finite_positive_lower_bound
+alias finite_prime_set_block_atom_bound := NField.Alignment.CollisionPrimeBlockAtomless.finite_prime_set_block_atom_bound
+alias prime_reciprocal_mass_unbounded := NField.Alignment.CollisionPrimeBlockAtomless.prime_reciprocal_mass_unbounded
+alias prime_activation_mass_unbounded := NField.Alignment.CollisionPrimeBlockAtomless.prime_activation_mass_unbounded
+alias forcingBlock_atom_zero := NField.Alignment.CollisionPrimeBlockAtomless.forcingBlock_atom_zero
+alias forcingBlock_atom_measure_zero := NField.Alignment.CollisionPrimeBlockAtomless.forcingBlock_atom_measure_zero
+alias forcingBlock_one := NField.Alignment.CollisionPrimeBlockAtomless.forcingBlock_one
+alias resetFunction_atom_measure_zero := NField.Alignment.CollisionPrimeBlockAtomless.resetFunction_atom_measure_zero
+alias increment_atom_measure_zero := NField.Alignment.CollisionPrimeBlockAtomless.increment_atom_measure_zero
+alias incrementBlock_atom_measure_zero := NField.Alignment.CollisionPrimeBlockAtomless.incrementBlock_atom_measure_zero
+alias resetFunction_law_singleton := NField.Alignment.CollisionPrimeBlockAtomless.resetFunction_law_singleton
+
+alias translate_one_iterate := NField.Alignment.CollisionPotentialAtomless.translate_one_iterate
+alias potential_atom_measure_zero := NField.Alignment.CollisionPotentialAtomless.potential_atom_measure_zero
+alias potential_law_singleton := NField.Alignment.CollisionPotentialAtomless.potential_law_singleton
+alias mem_dyadicPrimes := NField.Alignment.CollisionDyadicPrimeMass.mem_dyadicPrimes
+alias dyadic_log_sum := NField.Alignment.CollisionDyadicPrimeMass.dyadic_log_sum
+alias dyadic_theta_ratio_tendsto := NField.Alignment.CollisionDyadicPrimeMass.dyadic_theta_ratio_tendsto
+alias dyadic_log_sum_lower := NField.Alignment.CollisionDyadicPrimeMass.dyadic_log_sum_lower
+alias dyadic_log_sum_upper := NField.Alignment.CollisionDyadicPrimeMass.dyadic_log_sum_upper
+alias dyadic_prime_count_lower := NField.Alignment.CollisionDyadicPrimeMass.dyadic_prime_count_lower
+alias dyadic_reciprocal_sum_card := NField.Alignment.CollisionDyadicPrimeMass.dyadic_reciprocal_sum_card
+alias dyadic_reciprocal_sum_lower := NField.Alignment.CollisionDyadicPrimeMass.dyadic_reciprocal_sum_lower
+alias dyadic_activation_mass_lower := NField.Alignment.CollisionDyadicPrimeMass.dyadic_activation_mass_lower
+alias inverseRoot_activation_bound := NField.Alignment.CollisionDyadicBlockConcentration.inverseRoot_activation_bound
+alias dyadic_block_concentration_eventually := NField.Alignment.CollisionDyadicBlockConcentration.dyadic_block_concentration_eventually
+alias finite_range_root_lower := NField.Alignment.CollisionDyadicBlockConcentration.finite_range_root_lower
+alias dyadic_block_concentration_uniform := NField.Alignment.CollisionDyadicBlockConcentration.dyadic_block_concentration_uniform
+alias block_concentration := NField.Alignment.CollisionDyadicBlockConcentration.block_concentration
+
+alias strictPairSum_succ := NField.Alignment.CollisionReturnPairCounting.strictPairSum_succ
+alias reverse_gap_sum := NField.Alignment.CollisionReturnPairCounting.reverse_gap_sum
+alias weightedGapSum_succ := NField.Alignment.CollisionReturnPairCounting.weightedGapSum_succ
+alias strict_pair_gap_identity := NField.Alignment.CollisionReturnPairCounting.strict_pair_gap_identity
+alias weightedGapSum_Icc := NField.Alignment.CollisionReturnPairCounting.weightedGapSum_Icc
+alias visitIndicator_integrable := NField.Alignment.CollisionReturnTimeMoments.visitIndicator_integrable
+alias indicator_integral := NField.Alignment.CollisionReturnTimeMoments.indicator_integral
+alias visitIndicator_mean := NField.Alignment.CollisionReturnTimeMoments.visitIndicator_mean
+alias visitIndicator_sq := NField.Alignment.CollisionReturnTimeMoments.visitIndicator_sq
+alias visitIndicator_norm_le_one := NField.Alignment.CollisionReturnTimeMoments.visitIndicator_norm_le_one
+alias visitIndicator_pair := NField.Alignment.CollisionReturnTimeMoments.visitIndicator_pair
+alias visitIndicator_pair_integrable := NField.Alignment.CollisionReturnTimeMoments.visitIndicator_pair_integrable
+alias visitIndicator_pair_mean := NField.Alignment.CollisionReturnTimeMoments.visitIndicator_pair_mean
+alias visitCount_integrable := NField.Alignment.CollisionReturnTimeMoments.visitCount_integrable
+alias visitCount_norm_bound := NField.Alignment.CollisionReturnTimeMoments.visitCount_norm_bound
+alias visitCount_sq_integrable := NField.Alignment.CollisionReturnTimeMoments.visitCount_sq_integrable
+alias visitCount_mean := NField.Alignment.CollisionReturnTimeMoments.visitCount_mean
+alias visitCount_cross_integrable := NField.Alignment.CollisionReturnTimeMoments.visitCount_cross_integrable
+alias visitCount_cross_mean := NField.Alignment.CollisionReturnTimeMoments.visitCount_cross_mean
+alias visitCount_succ := NField.Alignment.CollisionReturnTimeMoments.visitCount_succ
+alias visitCount_second_moment := NField.Alignment.CollisionReturnTimeMoments.visitCount_second_moment
+alias square_mean_le_second_moment := NField.Alignment.CollisionReturnTimeMoments.square_mean_le_second_moment
+alias stationary_recurrence := NField.Alignment.CollisionReturnTimeMoments.stationary_recurrence
+alias stationary_recurrence_Icc := NField.Alignment.CollisionReturnTimeMoments.stationary_recurrence_Icc
+alias inverse_sqrt_step := NField.Alignment.CollisionRootSumBounds.inverse_sqrt_step
+alias inverse_sqrt_sum := NField.Alignment.CollisionRootSumBounds.inverse_sqrt_sum
+alias sqrt_ratio_sum := NField.Alignment.CollisionRootSumBounds.sqrt_ratio_sum
+alias reciprocal_le_sqrt_ratio := NField.Alignment.CollisionRootSumBounds.reciprocal_le_sqrt_ratio
+alias potentialInterval_nullMeasurable := NField.Alignment.CollisionReturnConcentration.potentialInterval_nullMeasurable
+alias potential_return_forcing := NField.Alignment.CollisionReturnConcentration.potential_return_forcing
+alias potential_return_bound := NField.Alignment.CollisionReturnConcentration.potential_return_bound
+alias weightedGapSum_root_bound := NField.Alignment.CollisionReturnConcentration.weightedGapSum_root_bound
+alias recurrence_expression_root_bound := NField.Alignment.CollisionReturnConcentration.recurrence_expression_root_bound
+alias stationary_root_bound := NField.Alignment.CollisionReturnConcentration.stationary_root_bound
+alias potential_stationary_root_bound := NField.Alignment.CollisionReturnConcentration.potential_stationary_root_bound
+alias primeScale_reciprocal := NField.Alignment.CollisionConcentrationScales.primeScale_reciprocal
+alias scale_threshold := NField.Alignment.CollisionConcentrationScales.scale_threshold
+alias primeScale_bounds := NField.Alignment.CollisionConcentrationScales.primeScale_bounds
+alias primeScale_twice := NField.Alignment.CollisionConcentrationScales.primeScale_twice
+alias primeScale_pos := NField.Alignment.CollisionConcentrationScales.primeScale_pos
+alias primeScale_log_lower := NField.Alignment.CollisionConcentrationScales.primeScale_log_lower
+alias primeScale_width := NField.Alignment.CollisionConcentrationScales.primeScale_width
+alias returnScale_floor := NField.Alignment.CollisionConcentrationScales.returnScale_floor
+alias returnScale_upper := NField.Alignment.CollisionConcentrationScales.returnScale_upper
+alias returnScale_lower := NField.Alignment.CollisionConcentrationScales.returnScale_lower
+alias returnScale_pos := NField.Alignment.CollisionConcentrationScales.returnScale_pos
+alias primeScale_log_upper := NField.Alignment.CollisionConcentrationScales.primeScale_log_upper
+alias scale_ratio_bound := NField.Alignment.CollisionConcentrationScales.scale_ratio_bound
+alias literal_stationary_recurrence := NField.Alignment.CollisionPotentialConcentration.literal_stationary_recurrence
+alias double_sqrt_eq_quarter := NField.Alignment.CollisionPotentialConcentration.double_sqrt_eq_quarter
+alias quarter_of_square_root_bound := NField.Alignment.CollisionPotentialConcentration.quarter_of_square_root_bound
+alias potential_concentration_small := NField.Alignment.CollisionPotentialConcentration.potential_concentration_small
+alias potential_interval_bound := NField.Alignment.CollisionPotentialConcentration.potential_interval_bound
+alias potential_concentration := NField.Alignment.CollisionPotentialConcentration.potential_concentration
+alias concentration_and_absence_of_atoms := NField.Alignment.CollisionPotentialConcentration.concentration_and_absence_of_atoms
+
+alias distribution_upper_comparison := NField.Alignment.CollisionDistributionComparison.distribution_upper_comparison
+alias distribution_lower_comparison := NField.Alignment.CollisionDistributionComparison.distribution_lower_comparison
+alias square_error_probability := NField.Alignment.CollisionDistributionComparison.square_error_probability
+alias distribution_smoothing := NField.Alignment.CollisionDistributionComparison.distribution_smoothing
+alias distribution_difference_le_one := NField.Alignment.CollisionDistributionComparison.distribution_difference_le_one
+alias balance_quarter_powers := NField.Alignment.CollisionDistributionComparison.balance_quarter_powers
+alias distribution_ninth_rate := NField.Alignment.CollisionDistributionComparison.distribution_ninth_rate
+alias distributionScale_pos := NField.Alignment.CollisionDistributionApproximation.distributionScale_pos
+alias finitePotential_coe_map := NField.Alignment.CollisionDistributionApproximation.finitePotential_coe_map
+alias cutoff_error_vector_coe := NField.Alignment.CollisionDistributionApproximation.cutoff_error_vector_coe
+alias cutoff_error_sq_integrable := NField.Alignment.CollisionDistributionApproximation.cutoff_error_sq_integrable
+alias cutoff_error_second_moment := NField.Alignment.CollisionDistributionApproximation.cutoff_error_second_moment
+alias cutoff_norm_log_uniform := NField.Alignment.CollisionDistributionApproximation.cutoff_norm_log_uniform
+alias cutoff_variance_uniform := NField.Alignment.CollisionDistributionApproximation.cutoff_variance_uniform
+alias cutoff_distribution_uniform := NField.Alignment.CollisionDistributionApproximation.cutoff_distribution_uniform
+alias distribution_function_approximation := NField.Alignment.CollisionDistributionApproximation.distribution_function_approximation
+
+alias centered_abs_bound := NField.Alignment.CollisionPotentialTailBounds.centered_abs_bound
+alias potentialMap_abs_bound := NField.Alignment.CollisionPotentialTailBounds.potentialMap_abs_bound
+alias stationaryAge_nonneg := NField.Alignment.CollisionPotentialTailBounds.stationaryAge_nonneg
+alias stationaryAge_monotone := NField.Alignment.CollisionPotentialTailBounds.stationaryAge_monotone
+alias positive_gram_tail_norm_monotone := NField.Alignment.CollisionPotentialTailBounds.positive_gram_tail_norm_monotone
+alias finite_cutoff_tail_norm_monotone := NField.Alignment.CollisionPotentialTailBounds.finite_cutoff_tail_norm_monotone
+alias finite_cutoff_tail_norm_le_infinite := NField.Alignment.CollisionPotentialTailBounds.finite_cutoff_tail_norm_le_infinite
+alias tail_of_bounded_approximation := NField.Alignment.CollisionTailProbability.tail_of_bounded_approximation
+alias infinite_tail_chebyshev := NField.Alignment.CollisionTailProbability.infinite_tail_chebyshev
+alias finite_cutoff_error_coe := NField.Alignment.CollisionTailProbability.finite_cutoff_error_coe
+alias finite_cutoff_error_sq_integrable := NField.Alignment.CollisionTailProbability.finite_cutoff_error_sq_integrable
+alias finite_cutoff_error_second_moment := NField.Alignment.CollisionTailProbability.finite_cutoff_error_second_moment
+alias finite_tail_chebyshev := NField.Alignment.CollisionTailProbability.finite_tail_chebyshev
+alias uniform_tail_variance_bound := NField.Alignment.CollisionTailProbability.uniform_tail_variance_bound
+alias exp_floor_bounds := NField.Alignment.CollisionTailCutoffScales.exp_floor_bounds
+alias log_exp_floor_le := NField.Alignment.CollisionTailCutoffScales.log_exp_floor_le
+alias stationaryAge_quadratic_upper := NField.Alignment.CollisionTailCutoffScales.stationaryAge_quadratic_upper
+alias quadratic_height_margin := NField.Alignment.CollisionTailCutoffScales.quadratic_height_margin
+alias tail_cutoff_height := NField.Alignment.CollisionTailCutoffScales.tail_cutoff_height
+alias tail_scale_exponential := NField.Alignment.CollisionUpperTails.tail_scale_exponential
+alias decay_ratio_bound := NField.Alignment.CollisionUpperTails.decay_ratio_bound
+alias upper_tails_large := NField.Alignment.CollisionUpperTails.upper_tails_large
+alias upper_tails := NField.Alignment.CollisionUpperTails.upper_tails
+
+alias exponential_primitive := NField.Alignment.CollisionExponentialMoments.exponential_primitive
+alias weighted_tail_integral := NField.Alignment.CollisionExponentialMoments.weighted_tail_integral
+alias exponential_moment_of_tail := NField.Alignment.CollisionExponentialMoments.exponential_moment_of_tail
+alias exponential_moment_nonpositive := NField.Alignment.CollisionExponentialMoments.exponential_moment_nonpositive
+alias root_tail_event := NField.Alignment.CollisionRootTails.root_tail_event
+alias root_tail_normalize := NField.Alignment.CollisionRootTails.root_tail_normalize
+alias potential_root_tails := NField.Alignment.CollisionRootTails.potential_root_tails
+alias potential_root_aemeasurable := NField.Alignment.CollisionPotentialMoments.potential_root_aemeasurable
+alias cutoff_root_aemeasurable := NField.Alignment.CollisionPotentialMoments.cutoff_root_aemeasurable
+alias potential_exponential_moments := NField.Alignment.CollisionPotentialMoments.potential_exponential_moments
+alias abs_root_rpow := NField.Alignment.CollisionPotentialMoments.abs_root_rpow
+alias power_integrable_of_root_exponential := NField.Alignment.CollisionPotentialMoments.power_integrable_of_root_exponential
+alias potential_finite_moments := NField.Alignment.CollisionPotentialMoments.potential_finite_moments
+alias potential_memLp_finite := NField.Alignment.CollisionPotentialMoments.potential_memLp_finite
+alias cutoff_memLp_finite := NField.Alignment.CollisionPotentialMoments.cutoff_memLp_finite
+alias power_bound_by_root_exponential := NField.Alignment.CollisionMomentNormBounds.power_bound_by_root_exponential
+alias small_power_bound := NField.Alignment.CollisionMomentNormBounds.small_power_bound
+alias lpNorm_bound_of_root_exponential := NField.Alignment.CollisionMomentNormBounds.lpNorm_bound_of_root_exponential
+alias potential_quadratic_norm_bound := NField.Alignment.CollisionMomentNormBounds.potential_quadratic_norm_bound
+alias small_set_norm_bound := NField.Alignment.CollisionPotentialLpConvergence.small_set_norm_bound
+alias higher_norm_uniform_integrability := NField.Alignment.CollisionPotentialLpConvergence.higher_norm_uniform_integrability
+alias cutoff_uniform_integrability := NField.Alignment.CollisionPotentialLpConvergence.cutoff_uniform_integrability
+alias cutoff_tendsto_in_measure := NField.Alignment.CollisionPotentialLpConvergence.cutoff_tendsto_in_measure
+alias cutoff_tendsto_eLpNorm := NField.Alignment.CollisionPotentialLpConvergence.cutoff_tendsto_eLpNorm
+alias cutoff_tendsto_lpNorm := NField.Alignment.CollisionPotentialLpConvergence.cutoff_tendsto_lpNorm
+
+alias potentialCharacteristic_integral := NField.Alignment.CollisionCharacteristicLaw.potentialCharacteristic_integral
+alias potential_law_memLp := NField.Alignment.CollisionCharacteristicLaw.potential_law_memLp
+alias potentialCharacteristic_smooth := NField.Alignment.CollisionCharacteristicLaw.potentialCharacteristic_smooth
+alias potentialCharacteristic_even := NField.Alignment.CollisionCharacteristicLaw.potentialCharacteristic_even
+alias potentialCharacteristic_real := NField.Alignment.CollisionCharacteristicLaw.potentialCharacteristic_real
+alias imaginary_exponential_difference := NField.Alignment.CollisionCharacteristicLaw.imaginary_exponential_difference
+alias imaginary_exponential_integrable := NField.Alignment.CollisionCharacteristicLaw.imaginary_exponential_integrable
+alias characteristic_difference_L1 := NField.Alignment.CollisionCharacteristicLaw.characteristic_difference_L1
+alias finite_haar_complex_integral := NField.Alignment.CollisionCharacteristicCycles.finite_haar_complex_integral
+alias sum_zmod_val_complex := NField.Alignment.CollisionCharacteristicCycles.sum_zmod_val_complex
+alias integral_residue_complex := NField.Alignment.CollisionCharacteristicCycles.integral_residue_complex
+alias potentialMap_via_cutoff_residue := NField.Alignment.CollisionCharacteristicCycles.potentialMap_via_cutoff_residue
+alias cutoffCharacteristic_integral := NField.Alignment.CollisionCharacteristicCycles.cutoffCharacteristic_integral
+alias cutoff_error_L1_le_L2 := NField.Alignment.CollisionCharacteristicApproximation.cutoff_error_L1_le_L2
+alias characteristic_cutoff_error_L2 := NField.Alignment.CollisionCharacteristicApproximation.characteristic_cutoff_error_L2
+alias cutoffCharacteristic_tendsto := NField.Alignment.CollisionCharacteristicApproximation.cutoffCharacteristic_tendsto
+alias characteristic_uniform_error := NField.Alignment.CollisionCharacteristicApproximation.characteristic_uniform_error
+alias characteristic_function_approximation := NField.Alignment.CollisionCharacteristicApproximation.characteristic_function_approximation
+
+alias cylinder_zero_integral := NField.Alignment.CollisionCylinderTailLowerBound.cylinder_zero_integral
+alias cylinder_excess_integral := NField.Alignment.CollisionCylinderTailLowerBound.cylinder_excess_integral
+alias cylinder_truncated_excess := NField.Alignment.CollisionCylinderTailLowerBound.cylinder_truncated_excess
+alias integral_abs_on_set_le_second_moment := NField.Alignment.CollisionCylinderTailLowerBound.integral_abs_on_set_le_second_moment
+alias cylinder_excess_upper := NField.Alignment.CollisionCylinderTailLowerBound.cylinder_excess_upper
+alias cylinder_tail_lower_bound := NField.Alignment.CollisionCylinderTailLowerBound.cylinder_tail_lower_bound
+alias potential_tail_symmetry := NField.Alignment.CollisionPotentialSupport.potential_tail_symmetry
+alias potential_negative_tail_positive_nonnegative := NField.Alignment.CollisionPotentialSupport.potential_negative_tail_positive_nonnegative
+alias potential_negative_tail_positive := NField.Alignment.CollisionPotentialSupport.potential_negative_tail_positive
+alias potential_both_tails_positive := NField.Alignment.CollisionPotentialSupport.potential_both_tails_positive
+alias potential_law_tails_positive := NField.Alignment.CollisionPotentialSupport.potential_law_tails_positive
+alias potential_support_unbounded := NField.Alignment.CollisionPotentialSupport.potential_support_unbounded
+
+alias resetPrimeFactor_succ := NField.Alignment.CollisionResetLocalFactors.resetPrimeFactor_succ
+alias resetPrimeNumerator_succ := NField.Alignment.CollisionResetLocalFactors.resetPrimeNumerator_succ
+alias resetPrimeFactor_bounds := NField.Alignment.CollisionResetLocalFactors.resetPrimeFactor_bounds
+alias resetPrimeNumerator_nonneg := NField.Alignment.CollisionResetLocalFactors.resetPrimeNumerator_nonneg
+alias resetPrimeNumerator_gap := NField.Alignment.CollisionResetLocalFactors.resetPrimeNumerator_gap
+alias resetPrimeAverage_bounds := NField.Alignment.CollisionResetLocalFactors.resetPrimeAverage_bounds
+alias resetPrimeNumerator_formula := NField.Alignment.CollisionResetLocalFactors.resetPrimeNumerator_formula
+alias resetPrimeNumerator_Icc := NField.Alignment.CollisionResetLocalFactors.resetPrimeNumerator_Icc
+alias reset_prime_local_factors := NField.Alignment.CollisionResetLocalFactors.reset_prime_local_factors
+alias resetPrimeFactor_tendsto := NField.Alignment.CollisionResetLocalFactors.resetPrimeFactor_tendsto
+alias resetPrimeNumerator_gap_tendsto := NField.Alignment.CollisionResetLocalFactors.resetPrimeNumerator_gap_tendsto
+alias resetPrimeAverage_tendsto := NField.Alignment.CollisionResetLocalFactors.resetPrimeAverage_tendsto
+alias alignmentPrimeTerm_prefix := NField.Alignment.CollisionAlignmentLocalSeries.alignmentPrimeTerm_prefix
+alias alignmentPrimeTerm_tail := NField.Alignment.CollisionAlignmentLocalSeries.alignmentPrimeTerm_tail
+alias alignmentPrimeTerm_tail_hasSum := NField.Alignment.CollisionAlignmentLocalSeries.alignmentPrimeTerm_tail_hasSum
+alias alignmentPrimeNumerator_hasSum := NField.Alignment.CollisionAlignmentLocalSeries.alignmentPrimeNumerator_hasSum
+alias alignmentPrimeNumerator_formula := NField.Alignment.CollisionAlignmentLocalSeries.alignmentPrimeNumerator_formula
+alias alignmentPrimeNumerator_nonneg := NField.Alignment.CollisionAlignmentLocalSeries.alignmentPrimeNumerator_nonneg
+alias alignmentPrimeNumerator_positive_indices := NField.Alignment.CollisionAlignmentLocalSeries.alignmentPrimeNumerator_positive_indices
+alias alignment_prime_local_factors := NField.Alignment.CollisionAlignmentLocalSeries.alignment_prime_local_factors
+alias alignmentPrimeFactor_bounds := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeFactor_bounds
+alias alignmentPrimeNumerator_gap := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeNumerator_gap
+alias alignmentPrimeAverage_bounds := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeAverage_bounds
+alias alignmentPrimeFactor_zero := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeFactor_zero
+alias alignmentPrimeAverage_zero := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeAverage_zero
+alias alignmentPrimeAverage_zero_bound := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeAverage_zero_bound
+alias alignment_prime_local_bounds := NField.Alignment.CollisionAlignmentLocalBounds.alignment_prime_local_bounds
+alias alignmentPrimeFactor_tendsto := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeFactor_tendsto
+alias alignmentPrimeNumerator_gap_tendsto := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeNumerator_gap_tendsto
+alias alignmentPrimeAverage_tendsto := NField.Alignment.CollisionAlignmentLocalBounds.alignmentPrimeAverage_tendsto
+alias resetPrimeFactor_mass_sum := NField.Alignment.CollisionAlignmentPrimeMass.resetPrimeFactor_mass_sum
+alias alignmentPrimeMass_prefix := NField.Alignment.CollisionAlignmentPrimeMass.alignmentPrimeMass_prefix
+alias alignmentPrimeMass_tail := NField.Alignment.CollisionAlignmentPrimeMass.alignmentPrimeMass_tail
+alias alignmentPrimeMass_tail_hasSum := NField.Alignment.CollisionAlignmentPrimeMass.alignmentPrimeMass_tail_hasSum
+alias alignmentPrimeFactor_reset_tail := NField.Alignment.CollisionAlignmentPrimeMass.alignmentPrimeFactor_reset_tail
+alias alignmentPrimeMass_hasSum := NField.Alignment.CollisionAlignmentPrimeMass.alignmentPrimeMass_hasSum
+alias alignmentPrimeMass_totient := NField.Alignment.CollisionAlignmentPrimeMass.alignmentPrimeMass_totient
+alias alignment_prime_arithmetic_factor := NField.Alignment.CollisionAlignmentPrimeMass.alignment_prime_arithmetic_factor
+
+alias reset_coefficient_moebius := NField.Alignment.CollisionHarmonicLocalExpansion.reset_coefficient_moebius
+alias harmonic_local_expansion_term := NField.Alignment.CollisionHarmonicLocalExpansion.harmonic_local_expansion_term
+alias harmonic_local_formula := NField.Alignment.CollisionHarmonicLocalExpansion.harmonic_local_formula
+alias harmonicError_abs_bound := NField.Alignment.CollisionHarmonicLocalExpansion.harmonicError_abs_bound
+alias harmonic_local_error_term_bound := NField.Alignment.CollisionHarmonicLocalExpansion.harmonic_local_error_term_bound
+alias harmonic_local_error_bound := NField.Alignment.CollisionHarmonicLocalExpansion.harmonic_local_error_bound
+alias harmonic_local_expansion := NField.Alignment.CollisionHarmonicLocalExpansion.harmonic_local_expansion
+alias harmonic_local_isBigO := NField.Alignment.CollisionHarmonicLocalExpansion.harmonic_local_isBigO
+alias harmonicLocalErrorBound_nonneg := NField.Alignment.CollisionHarmonicLocalSummability.harmonicLocalErrorBound_nonneg
+alias harmonicLocalErrorBound_convolution := NField.Alignment.CollisionHarmonicLocalSummability.harmonicLocalErrorBound_convolution
+alias harmonicLocalErrorBound_hasSum := NField.Alignment.CollisionHarmonicLocalSummability.harmonicLocalErrorBound_hasSum
+alias harmonicLocalError_summable := NField.Alignment.CollisionHarmonicLocalSummability.harmonicLocalError_summable
+alias harmonicLocalError_absolute_bound := NField.Alignment.CollisionHarmonicLocalSummability.harmonicLocalError_absolute_bound
+alias harmonicLocalError_finite_bound := NField.Alignment.CollisionHarmonicLocalSummability.harmonicLocalError_finite_bound
+alias weighted_harmonicLocalError_norm_bound := NField.Alignment.CollisionHarmonicLocalSummability.weighted_harmonicLocalError_norm_bound
+alias weighted_harmonicLocalError_summable := NField.Alignment.CollisionHarmonicLocalSummability.weighted_harmonicLocalError_summable
+alias weighted_harmonicLocalError_sum_bound := NField.Alignment.CollisionHarmonicLocalSummability.weighted_harmonicLocalError_sum_bound
+alias alignment_gcd_ratio_bound := NField.Alignment.CollisionHarmonicLocalSummability.alignment_gcd_ratio_bound
+alias alignment_harmonicLocalError_summable := NField.Alignment.CollisionHarmonicLocalSummability.alignment_harmonicLocalError_summable
+alias alignment_harmonicLocalError_uniform_bound := NField.Alignment.CollisionHarmonicLocalSummability.alignment_harmonicLocalError_uniform_bound
+alias harmonic_global_formula := NField.Alignment.CollisionHarmonicObservableApproximation.harmonic_global_formula
+alias harmonicGlobalError_bound := NField.Alignment.CollisionHarmonicObservableApproximation.harmonicGlobalError_bound
+alias harmonicGlobalError_summable := NField.Alignment.CollisionHarmonicObservableApproximation.harmonicGlobalError_summable
+alias harmonicGlobalError_finite_bound := NField.Alignment.CollisionHarmonicObservableApproximation.harmonicGlobalError_finite_bound
+alias reset_harmonic_approximation := NField.Alignment.CollisionHarmonicObservableApproximation.reset_harmonic_approximation
+alias alignment_global_error_bound := NField.Alignment.CollisionHarmonicObservableApproximation.alignment_global_error_bound
+alias alignment_global_error_summable := NField.Alignment.CollisionHarmonicObservableApproximation.alignment_global_error_summable
+alias alignment_global_error_uniform := NField.Alignment.CollisionHarmonicObservableApproximation.alignment_global_error_uniform
+alias alignment_harmonic_term := NField.Alignment.CollisionHarmonicObservableApproximation.alignment_harmonic_term
+alias alignment_gcd_series_summable := NField.Alignment.CollisionHarmonicObservableApproximation.alignment_gcd_series_summable
+alias alignment_gcd_series_value := NField.Alignment.CollisionHarmonicObservableApproximation.alignment_gcd_series_value
+alias alignment_harmonic_main_summable := NField.Alignment.CollisionHarmonicObservableApproximation.alignment_harmonic_main_summable
+alias alignment_harmonic_approximation := NField.Alignment.CollisionHarmonicObservableApproximation.alignment_harmonic_approximation
+alias multiplicative_divisor_euler := NField.Alignment.CollisionFiniteEulerMoments.multiplicative_divisor_euler
+alias dual_product_mass_moment := NField.Alignment.CollisionFiniteEulerMoments.dual_product_mass_moment
+alias totientSquareWeight_mul := NField.Alignment.CollisionFiniteEulerMoments.totientSquareWeight_mul
+alias nu_coprime_add := NField.Alignment.CollisionFiniteEulerMoments.nu_coprime_add
+alias logarithmicMark_mul := NField.Alignment.CollisionFiniteEulerMoments.logarithmicMark_mul
+alias harmonicJet_multiplicative := NField.Alignment.CollisionFiniteEulerMoments.harmonicJet_multiplicative
+alias totientSquareWeight_prime_power := NField.Alignment.CollisionFiniteEulerMoments.totientSquareWeight_prime_power
+alias logarithmicMark_prime_power := NField.Alignment.CollisionFiniteEulerMoments.logarithmicMark_prime_power
+alias harmonicJet_prime_power_sum := NField.Alignment.CollisionResetEulerProduct.harmonicJet_prime_power_sum
+alias reset_harmonic_euler_jet := NField.Alignment.CollisionResetEulerProduct.reset_harmonic_euler_jet
+alias harmonicLocalMain_jet := NField.Alignment.CollisionResetEulerProduct.harmonicLocalMain_jet
+alias reset_harmonic_main_euler := NField.Alignment.CollisionResetEulerProduct.reset_harmonic_main_euler
+alias reset_euler_product := NField.Alignment.CollisionResetEulerProduct.reset_euler_product
+alias reset_euler_uniform_error := NField.Alignment.CollisionResetEulerProduct.reset_euler_uniform_error
+
+alias alignmentHarmonicMass_mul := NField.Alignment.CollisionAlignmentEulerJet.alignmentHarmonicMass_mul
+alias alignmentJet_multiplicative := NField.Alignment.CollisionAlignmentEulerJet.alignmentJet_multiplicative
+alias alignmentHarmonicMass_nonneg := NField.Alignment.CollisionAlignmentEulerJet.alignmentHarmonicMass_nonneg
+alias alignmentHarmonicMass_bound := NField.Alignment.CollisionAlignmentEulerJet.alignmentHarmonicMass_bound
+alias alignmentHarmonicMass_summable := NField.Alignment.CollisionAlignmentEulerJet.alignmentHarmonicMass_summable
+alias alignmentHarmonicMoment_summable := NField.Alignment.CollisionAlignmentEulerJet.alignmentHarmonicMoment_summable
+alias alignmentJet_norm_summable := NField.Alignment.CollisionAlignmentEulerJet.alignmentJet_norm_summable
+alias alignmentJet_euler_hasProd := NField.Alignment.CollisionAlignmentEulerJet.alignmentJet_euler_hasProd
+alias prime_power_gcd_factorization := NField.Alignment.CollisionAlignmentEulerJet.prime_power_gcd_factorization
+alias alignmentHarmonicMass_prime_power := NField.Alignment.CollisionAlignmentEulerJet.alignmentHarmonicMass_prime_power
+alias alignmentHarmonicMoment_prime_power := NField.Alignment.CollisionAlignmentEulerJet.alignmentHarmonicMoment_prime_power
+alias massMoment_hasSum := NField.Alignment.CollisionAlignmentEulerLocalSums.massMoment_hasSum
+alias alignmentHarmonicMass_local_hasSum := NField.Alignment.CollisionAlignmentEulerLocalSums.alignmentHarmonicMass_local_hasSum
+alias alignmentHarmonicMoment_local_hasSum := NField.Alignment.CollisionAlignmentEulerLocalSums.alignmentHarmonicMoment_local_hasSum
+alias alignmentJet_local_hasSum := NField.Alignment.CollisionAlignmentEulerLocalSums.alignmentJet_local_hasSum
+alias alignmentJet_global_hasSum := NField.Alignment.CollisionAlignmentEulerLocalSums.alignmentJet_global_hasSum
+alias alignment_local_euler_hasProd := NField.Alignment.CollisionAlignmentEulerLocalSums.alignment_local_euler_hasProd
+alias alignmentEulerMass_lower := NField.Alignment.CollisionAlignmentEulerLocalSums.alignmentEulerMass_lower
+alias factorization_zero_of_not_primeFactor := NField.Alignment.CollisionAlignmentPrimeLogSum.factorization_zero_of_not_primeFactor
+alias alignmentPrimeLogTerm_nonneg := NField.Alignment.CollisionAlignmentPrimeLogSum.alignmentPrimeLogTerm_nonneg
+alias alignmentPrimeLogTerm_absent_bound := NField.Alignment.CollisionAlignmentPrimeLogSum.alignmentPrimeLogTerm_absent_bound
+alias alignmentPrimeLogTerm_summable := NField.Alignment.CollisionAlignmentPrimeLogSum.alignmentPrimeLogTerm_summable
+alias alignmentEulerLogSum_hasSum := NField.Alignment.CollisionAlignmentPrimeLogSum.alignmentEulerLogSum_hasSum
+alias alignmentEulerMass_hasProd := NField.Alignment.CollisionAlignmentEulerProduct.alignmentEulerMass_hasProd
+alias alignmentEulerProduct_eq_mass := NField.Alignment.CollisionAlignmentEulerProduct.alignmentEulerProduct_eq_mass
+alias alignment_finite_euler_product := NField.Alignment.CollisionAlignmentEulerProduct.alignment_finite_euler_product
+alias alignment_normalized_euler_hasProd := NField.Alignment.CollisionAlignmentEulerProduct.alignment_normalized_euler_hasProd
+alias alignmentEulerMoment_formula := NField.Alignment.CollisionAlignmentEulerProduct.alignmentEulerMoment_formula
+alias alignment_harmonic_main_euler := NField.Alignment.CollisionAlignmentEulerProduct.alignment_harmonic_main_euler
+alias alignment_euler_product := NField.Alignment.CollisionAlignmentEulerProduct.alignment_euler_product
+alias alignment_euler_uniform_error := NField.Alignment.CollisionAlignmentEulerProduct.alignment_euler_uniform_error
+alias prime_factor_log_sum_le := NField.Alignment.CollisionLargePrimeFactors.prime_factor_log_sum_le
+alias prime_factor_subset_log_sum_le := NField.Alignment.CollisionLargePrimeFactors.prime_factor_subset_log_sum_le
+alias large_prime_reciprocal_bound := NField.Alignment.CollisionLargePrimeFactors.large_prime_reciprocal_bound
+alias large_prime_logarithmic_bound := NField.Alignment.CollisionLargePrimeFactors.large_prime_logarithmic_bound
+alias large_prime_factor_bounds := NField.Alignment.CollisionLargePrimeFactors.large_prime_factor_bounds
+
+alias inverseSquareTailTerm_nonneg := NField.Alignment.CollisionIntegerPrimeTailMajorants.inverseSquareTailTerm_nonneg
+alias inverseSquareTailTerm_summable := NField.Alignment.CollisionIntegerPrimeTailMajorants.inverseSquareTailTerm_summable
+alias inverseSquareTailTerm_tsum := NField.Alignment.CollisionIntegerPrimeTailMajorants.inverseSquareTailTerm_tsum
+alias integer_inverse_square_tail_bound := NField.Alignment.CollisionIntegerPrimeTailMajorants.integer_inverse_square_tail_bound
+alias logarithmic_integer_tail_bound := NField.Alignment.CollisionIntegerPrimeTailMajorants.logarithmic_integer_tail_bound
+alias absentPrimeMassTerm_nonneg := NField.Alignment.CollisionAbsentPrimeSums.absentPrimeMassTerm_nonneg
+alias absentPrimeMassTerm_bound := NField.Alignment.CollisionAbsentPrimeSums.absentPrimeMassTerm_bound
+alias absentPrimeMassTerm_summable := NField.Alignment.CollisionAbsentPrimeSums.absentPrimeMassTerm_summable
+alias absent_prime_mass_sum_bound := NField.Alignment.CollisionAbsentPrimeSums.absent_prime_mass_sum_bound
+alias absentPrimeLogTerm_nonneg := NField.Alignment.CollisionAbsentPrimeSums.absentPrimeLogTerm_nonneg
+alias absentPrimeLogTerm_bound := NField.Alignment.CollisionAbsentPrimeSums.absentPrimeLogTerm_bound
+alias absentPrimeLogTerm_summable := NField.Alignment.CollisionAbsentPrimeSums.absentPrimeLogTerm_summable
+alias absent_prime_log_sum_bound := NField.Alignment.CollisionAbsentPrimeSums.absent_prime_log_sum_bound
+alias absentPrimeFactor_one_add := NField.Alignment.CollisionAbsentPrimeProducts.absentPrimeFactor_one_add
+alias absentPrimeProduct_multipliable := NField.Alignment.CollisionAbsentPrimeProducts.absentPrimeProduct_multipliable
+alias absentPrimeProduct_one_add := NField.Alignment.CollisionAbsentPrimeProducts.absentPrimeProduct_one_add
+alias absentPrimeProduct_lower := NField.Alignment.CollisionAbsentPrimeProducts.absentPrimeProduct_lower
+alias absentPrimeProduct_exp_bound := NField.Alignment.CollisionAbsentPrimeProducts.absentPrimeProduct_exp_bound
+alias exp_sub_one_le_twice := NField.Alignment.CollisionAbsentPrimeProducts.exp_sub_one_le_twice
+alias absent_prime_product_error_bound := NField.Alignment.CollisionAbsentPrimeProducts.absent_prime_product_error_bound
+alias absentPrimeLogSum_nonneg := NField.Alignment.CollisionAbsentPrimeProducts.absentPrimeLogSum_nonneg
+alias absent_prime_tail_uniform_bounds := NField.Alignment.CollisionAbsentPrimeProducts.absent_prime_tail_uniform_bounds
+alias absent_prime_product_isBigO := NField.Alignment.CollisionAbsentPrimeProducts.absent_prime_product_isBigO
+alias absent_prime_log_isBigO := NField.Alignment.CollisionAbsentPrimeProducts.absent_prime_log_isBigO
+alias absent_prime_tail_estimates := NField.Alignment.CollisionAbsentPrimeProducts.absent_prime_tail_estimates
+alias reciprocal_predecessor_bound := NField.Alignment.CollisionLocalFactorLosses.reciprocal_predecessor_bound
+alias alignment_gap_constant_bound := NField.Alignment.CollisionLocalFactorLosses.alignment_gap_constant_bound
+alias resetPrimeAverage_loss_bound := NField.Alignment.CollisionLocalFactorLosses.resetPrimeAverage_loss_bound
+alias alignmentPrimeAverage_loss_bound := NField.Alignment.CollisionLocalFactorLosses.alignmentPrimeAverage_loss_bound
+alias resetPrimeFactor_relative_loss_bound := NField.Alignment.CollisionLocalFactorLosses.resetPrimeFactor_relative_loss_bound
+alias alignmentPrimeFactor_relative_loss_bound := NField.Alignment.CollisionLocalFactorLosses.alignmentPrimeFactor_relative_loss_bound
+alias cutoffPeriod_prime_exponent := NField.Alignment.CollisionLcmPrimeLosses.cutoffPeriod_prime_exponent
+alias cutoffPeriod_prime_exponent_floor := NField.Alignment.CollisionLcmPrimeLosses.cutoffPeriod_prime_exponent_floor
+alias cutoffPeriod_primeFactors := NField.Alignment.CollisionLcmPrimeLosses.cutoffPeriod_primeFactors
+alias lcmPrimePowerLoss_nonneg := NField.Alignment.CollisionLcmPrimeLosses.lcmPrimePowerLoss_nonneg
+alias lcmPrimePowerLoss_bound := NField.Alignment.CollisionLcmPrimeLosses.lcmPrimePowerLoss_bound
+alias lcm_logarithmic_multiplier_bound := NField.Alignment.CollisionLcmPrimeLosses.lcm_logarithmic_multiplier_bound
+alias lcm_alignment_average_loss := NField.Alignment.CollisionLcmPrimeLosses.lcm_alignment_average_loss
+alias lcm_reset_average_loss := NField.Alignment.CollisionLcmPrimeLosses.lcm_reset_average_loss
+alias finite_small_index_sum_bound := NField.Alignment.CollisionSqrtPrimeSplit.finite_small_index_sum_bound
+alias finite_large_index_sum_bound := NField.Alignment.CollisionSqrtPrimeSplit.finite_large_index_sum_bound
+alias finite_inverse_square_split := NField.Alignment.CollisionSqrtPrimeSplit.finite_inverse_square_split
+alias lcmPrimePowerLoss_sum_bound := NField.Alignment.CollisionLcmFactorErrors.lcmPrimePowerLoss_sum_bound
+alias lcmAlignmentFactorLoss_nonneg := NField.Alignment.CollisionLcmFactorErrors.lcmAlignmentFactorLoss_nonneg
+alias lcmAlignmentAverageLoss_nonneg := NField.Alignment.CollisionLcmFactorErrors.lcmAlignmentAverageLoss_nonneg
+alias lcmResetFactorLoss_nonneg := NField.Alignment.CollisionLcmFactorErrors.lcmResetFactorLoss_nonneg
+alias lcmResetAverageLoss_nonneg := NField.Alignment.CollisionLcmFactorErrors.lcmResetAverageLoss_nonneg
+alias lcmAlignmentFactorLoss_bound := NField.Alignment.CollisionLcmFactorErrors.lcmAlignmentFactorLoss_bound
+alias lcmResetFactorLoss_bound := NField.Alignment.CollisionLcmFactorErrors.lcmResetFactorLoss_bound
+alias lcmAlignmentAverageLoss_bound := NField.Alignment.CollisionLcmFactorErrors.lcmAlignmentAverageLoss_bound
+alias lcmResetAverageLoss_bound := NField.Alignment.CollisionLcmFactorErrors.lcmResetAverageLoss_bound
+alias lcm_alignment_local_errors := NField.Alignment.CollisionLcmFactorErrors.lcm_alignment_local_errors
+alias lcm_factor_errors_isBigO := NField.Alignment.CollisionLcmFactorErrors.lcm_factor_errors_isBigO
+
+alias squareReciprocalHom_norm_summable := NField.Alignment.CollisionLimitingPrimeProduct.squareReciprocalHom_norm_summable
+alias inverse_square_prime_product_tendsto := NField.Alignment.CollisionLimitingPrimeProduct.inverse_square_prime_product_tendsto
+alias primeSquareComplementNat_tendsto := NField.Alignment.CollisionLimitingPrimeProduct.primeSquareComplementNat_tendsto
+alias primesUpTo_eq_primesLE_floor := NField.Alignment.CollisionLimitingPrimeProduct.primesUpTo_eq_primesLE_floor
+alias primeSquareComplement_tendsto := NField.Alignment.CollisionLimitingPrimeProduct.primeSquareComplement_tendsto
+alias limitingPrimeProduct_factorization := NField.Alignment.CollisionLimitingPrimeProduct.limitingPrimeProduct_factorization
+alias alignmentKappa_pos := NField.Alignment.CollisionLimitingPrimeProduct.alignmentKappa_pos
+alias alignmentGamma_pos := NField.Alignment.CollisionLimitingPrimeProduct.alignmentGamma_pos
+alias zetaNat_two_value := NField.Alignment.CollisionLimitingPrimeProduct.zetaNat_two_value
+alias alignmentGamma_value := NField.Alignment.CollisionLimitingPrimeProduct.alignmentGamma_value
+alias limitingPrimeProduct_asymptotic := NField.Alignment.CollisionLimitingPrimeProduct.limitingPrimeProduct_asymptotic
+alias prime_log_correction_bounds := NField.Alignment.CollisionLimitingPrimeLogSum.prime_log_correction_bounds
+alias limitingPrimeLogSum_correction_bound := NField.Alignment.CollisionLimitingPrimeLogSum.limitingPrimeLogSum_correction_bound
+alias limitingPrimeLogSum_error_bound := NField.Alignment.CollisionLimitingPrimeLogSum.limitingPrimeLogSum_error_bound
+alias limitingPrimeLogSum_error_isBigO := NField.Alignment.CollisionLimitingPrimeLogSum.limitingPrimeLogSum_error_isBigO
+alias constant_isLittleO_log := NField.Alignment.CollisionLimitingPrimeLogSum.constant_isLittleO_log
+alias limitingPrimeLogSum_asymptotic := NField.Alignment.CollisionLimitingPrimeLogSum.limitingPrimeLogSum_asymptotic
+alias finite_product_deficit := NField.Alignment.CollisionFiniteProductDeficit.finite_product_deficit
+alias finite_relative_product_deficit := NField.Alignment.CollisionFiniteProductDeficit.finite_relative_product_deficit
+alias primesUpTo_natCast := NField.Alignment.CollisionLcmFiniteProducts.primesUpTo_natCast
+alias limitingPrimeProduct_nat_formula := NField.Alignment.CollisionLcmFiniteProducts.limitingPrimeProduct_nat_formula
+alias lcmResetEulerProduct_formula := NField.Alignment.CollisionLcmFiniteProducts.lcmResetEulerProduct_formula
+alias lcmResetEulerLogSum_formula := NField.Alignment.CollisionLcmFiniteProducts.lcmResetEulerLogSum_formula
+alias lcmAlignmentFiniteProduct_relative_error := NField.Alignment.CollisionLcmFiniteProducts.lcmAlignmentFiniteProduct_relative_error
+alias lcmResetEulerProduct_relative_error := NField.Alignment.CollisionLcmFiniteProducts.lcmResetEulerProduct_relative_error
+alias inverse_sqrt_nat_tendsto := NField.Alignment.CollisionLcmFiniteProducts.inverse_sqrt_nat_tendsto
+alias tendsto_one_of_sqrt_error := NField.Alignment.CollisionLcmFiniteProducts.tendsto_one_of_sqrt_error
+alias lcmAlignmentFiniteProduct_ratio_tendsto := NField.Alignment.CollisionLcmFiniteProducts.lcmAlignmentFiniteProduct_ratio_tendsto
+alias lcmResetEulerProduct_ratio_tendsto := NField.Alignment.CollisionLcmFiniteProducts.lcmResetEulerProduct_ratio_tendsto
+alias lcmAlignmentFiniteProduct_asymptotic := NField.Alignment.CollisionLcmFiniteProducts.lcmAlignmentFiniteProduct_asymptotic
+alias lcmResetEulerProduct_asymptotic := NField.Alignment.CollisionLcmFiniteProducts.lcmResetEulerProduct_asymptotic
+alias sqrt_log_loss_isLittleO := NField.Alignment.CollisionLcmFiniteLogSums.sqrt_log_loss_isLittleO
+alias lcmAlignmentAverageLoss_isLittleO := NField.Alignment.CollisionLcmFiniteLogSums.lcmAlignmentAverageLoss_isLittleO
+alias lcmResetAverageLoss_isLittleO := NField.Alignment.CollisionLcmFiniteLogSums.lcmResetAverageLoss_isLittleO
+alias lcmAlignmentFiniteLogSum_loss_identity := NField.Alignment.CollisionLcmFiniteLogSums.lcmAlignmentFiniteLogSum_loss_identity
+alias lcmResetEulerLogSum_loss_identity := NField.Alignment.CollisionLcmFiniteLogSums.lcmResetEulerLogSum_loss_identity
+alias lcmAlignmentFiniteLogSum_asymptotic := NField.Alignment.CollisionLcmFiniteLogSums.lcmAlignmentFiniteLogSum_asymptotic
+alias lcmResetEulerLogSum_asymptotic := NField.Alignment.CollisionLcmFiniteLogSums.lcmResetEulerLogSum_asymptotic
+alias primeCutoffSet_mem := NField.Alignment.CollisionLcmAlignmentTailSplit.primeCutoffSet_mem
+alias finite_prime_head_product := NField.Alignment.CollisionLcmAlignmentTailSplit.finite_prime_head_product
+alias finite_prime_head_sum := NField.Alignment.CollisionLcmAlignmentTailSplit.finite_prime_head_sum
+alias lcm_prime_absent_iff := NField.Alignment.CollisionLcmAlignmentTailSplit.lcm_prime_absent_iff
+alias lcm_alignment_prime_factor_split := NField.Alignment.CollisionLcmAlignmentTailSplit.lcm_alignment_prime_factor_split
+alias lcm_alignment_prime_log_split := NField.Alignment.CollisionLcmAlignmentTailSplit.lcm_alignment_prime_log_split
+alias lcm_alignment_product_split := NField.Alignment.CollisionLcmAlignmentTailSplit.lcm_alignment_product_split
+alias lcm_alignment_log_sum_split := NField.Alignment.CollisionLcmAlignmentTailSplit.lcm_alignment_log_sum_split
+alias lcm_absent_product_tendsto := NField.Alignment.CollisionLcmAlignmentEulerAsymptotic.lcm_absent_product_tendsto
+alias lcm_absent_log_sum_tendsto := NField.Alignment.CollisionLcmAlignmentEulerAsymptotic.lcm_absent_log_sum_tendsto
+alias lcm_absent_log_sum_isLittleO := NField.Alignment.CollisionLcmAlignmentEulerAsymptotic.lcm_absent_log_sum_isLittleO
+alias lcm_alignment_euler_product_asymptotic := NField.Alignment.CollisionLcmAlignmentEulerAsymptotic.lcm_alignment_euler_product_asymptotic
+alias lcm_alignment_euler_log_sum_asymptotic := NField.Alignment.CollisionLcmAlignmentEulerAsymptotic.lcm_alignment_euler_log_sum_asymptotic
+alias constant_isLittleO_log_square_nat := NField.Alignment.CollisionLogSquareAsymptotic.constant_isLittleO_log_square_nat
+alias asymptotic_of_uniform_log_square_error := NField.Alignment.CollisionLogSquareAsymptotic.asymptotic_of_uniform_log_square_error
+alias euler_main_log_square_asymptotic := NField.Alignment.CollisionLogSquareAsymptotic.euler_main_log_square_asymptotic
+alias shifted_uniform_error_bound := NField.Alignment.CollisionLogSquareAsymptotic.shifted_uniform_error_bound
+alias scaled_alignment_error_bound := NField.Alignment.CollisionLogSquareAsymptotic.scaled_alignment_error_bound
+alias integer_reset_euler_error := NField.Alignment.CollisionLcmSharpOrders.integer_reset_euler_error
+alias alignment_euler_scaled_error := NField.Alignment.CollisionLcmSharpOrders.alignment_euler_scaled_error
+alias lcm_reset_sharp_order := NField.Alignment.CollisionLcmSharpOrders.lcm_reset_sharp_order
+alias lcm_alignment_sharp_order := NField.Alignment.CollisionLcmSharpOrders.lcm_alignment_sharp_order
+alias lcm_sharp_alignment_and_reset_orders := NField.Alignment.CollisionLcmSharpOrders.lcm_sharp_alignment_and_reset_orders
+
+alias log_exp_floor_ge := NField.Alignment.CollisionExponentialFloorScale.log_exp_floor_ge
+alias log_exp_floor_error := NField.Alignment.CollisionExponentialFloorScale.log_exp_floor_error
+alias log_exp_floor_asymptotic := NField.Alignment.CollisionExponentialFloorScale.log_exp_floor_asymptotic
+alias tail_exponent_tendsto := NField.Alignment.CollisionExponentialFloorScale.tail_exponent_tendsto
+alias tailCutoff_tendsto := NField.Alignment.CollisionExponentialFloorScale.tailCutoff_tendsto
+alias log_tailCutoff_asymptotic := NField.Alignment.CollisionExponentialFloorScale.log_tailCutoff_asymptotic
+alias log_tailCutoff_square_asymptotic := NField.Alignment.CollisionExponentialFloorScale.log_tailCutoff_square_asymptotic
+alias cutoff_alignment_asymptotic := NField.Alignment.CollisionLowerTailCutoffAlignment.cutoff_alignment_asymptotic
+alias alignment_scale_coefficient_gt_one := NField.Alignment.CollisionLowerTailCutoffAlignment.alignment_scale_coefficient_gt_one
+alias asymptotic_linear_excess := NField.Alignment.CollisionLowerTailCutoffAlignment.asymptotic_linear_excess
+alias cutoff_alignment_excess := NField.Alignment.CollisionLowerTailCutoffAlignment.cutoff_alignment_excess
+alias log_cutoffPeriod_eventual_upper := NField.Alignment.CollisionLowerTailCutoffAlignment.log_cutoffPeriod_eventual_upper
+alias lower_tail_modulus_log_bound := NField.Alignment.CollisionLowerTailCutoffAlignment.lower_tail_modulus_log_bound
+alias exponential_scale_domination := NField.Alignment.CollisionDoubleExponentialComparison.exponential_scale_domination
+alias double_exponential_below_reciprocal := NField.Alignment.CollisionDoubleExponentialComparison.double_exponential_below_reciprocal
+alias stationary_negative_tail_lower := NField.Alignment.CollisionDoubleExponentialLowerTails.stationary_negative_tail_lower
+alias stationary_double_exponential_lower_tails := NField.Alignment.CollisionDoubleExponentialLowerTails.stationary_double_exponential_lower_tails
+alias cutoff_tendsto_eLpNorm_all_real := NField.Alignment.CollisionStationaryTailTheorem.cutoff_tendsto_eLpNorm_all_real
+alias stationary_tails_and_moments := NField.Alignment.CollisionStationaryTailTheorem.stationary_tails_and_moments
+
+alias smallPrimeFactors_subset := NField.Alignment.CollisionPrimeDivisorEnvelopes.smallPrimeFactors_subset
+alias small_prime_product_bound := NField.Alignment.CollisionPrimeDivisorEnvelopes.small_prime_product_bound
+alias small_prime_log_sum_bound := NField.Alignment.CollisionPrimeDivisorEnvelopes.small_prime_log_sum_bound
+alias large_prime_product_bound := NField.Alignment.CollisionPrimeDivisorEnvelopes.large_prime_product_bound
+alias prime_divisor_product_envelope := NField.Alignment.CollisionPrimeDivisorEnvelopes.prime_divisor_product_envelope
+alias prime_divisor_log_sum_envelope := NField.Alignment.CollisionPrimeDivisorEnvelopes.prime_divisor_log_sum_envelope
+alias resetEulerProduct_nonneg := NField.Alignment.CollisionResetGlobalEnvelope.resetEulerProduct_nonneg
+alias resetEulerLogSum_nonneg := NField.Alignment.CollisionResetGlobalEnvelope.resetEulerLogSum_nonneg
+alias resetEulerProduct_global_bound := NField.Alignment.CollisionResetGlobalEnvelope.resetEulerProduct_global_bound
+alias resetEulerLogSum_global_bound := NField.Alignment.CollisionResetGlobalEnvelope.resetEulerLogSum_global_bound
+alias log_nat_tendsto_atTop := NField.Alignment.CollisionLogLogEnvelopes.log_nat_tendsto_atTop
+alias loglog_nat_tendsto_atTop := NField.Alignment.CollisionLogLogEnvelopes.loglog_nat_tendsto_atTop
+alias large_prime_multiplier_tendsto := NField.Alignment.CollisionLogLogEnvelopes.large_prime_multiplier_tendsto
+alias primeEulerEnvelope_asymptotic := NField.Alignment.CollisionLogLogEnvelopes.primeEulerEnvelope_asymptotic
+alias primeEulerEnvelope_log_nat_asymptotic := NField.Alignment.CollisionLogLogEnvelopes.primeEulerEnvelope_log_nat_asymptotic
+alias integer_reset_global_upper := NField.Alignment.CollisionResetSharpUpper.integer_reset_global_upper
+alias integer_reset_eventual_upper := NField.Alignment.CollisionResetSharpUpper.integer_reset_eventual_upper
+alias resetGlobalUpper_asymptotic := NField.Alignment.CollisionResetSharpUpper.resetGlobalUpper_asymptotic
+alias integer_reset_sharp_upper := NField.Alignment.CollisionResetSharpUpper.integer_reset_sharp_upper
+alias liftPrimeSet_mem := NField.Alignment.CollisionAlignmentEnvelopeSet.liftPrimeSet_mem
+alias envelopePrimeSet_prime := NField.Alignment.CollisionAlignmentEnvelopeSet.envelopePrimeSet_prime
+alias envelopePrimeSet_mem := NField.Alignment.CollisionAlignmentEnvelopeSet.envelopePrimeSet_mem
+alias envelopePrimeSet_complement := NField.Alignment.CollisionAlignmentEnvelopeSet.envelopePrimeSet_complement
+alias envelopePrimeSet_disjoint := NField.Alignment.CollisionAlignmentEnvelopeSet.envelopePrimeSet_disjoint
+alias envelopePrimeSet_product_bound := NField.Alignment.CollisionAlignmentEnvelopeSet.envelopePrimeSet_product_bound
+alias envelopePrimeSet_log_sum_bound := NField.Alignment.CollisionAlignmentEnvelopeSet.envelopePrimeSet_log_sum_bound
+alias finite_prime_set_product := NField.Alignment.CollisionAlignmentEnvelopeSet.finite_prime_set_product
+alias finite_prime_set_sum := NField.Alignment.CollisionAlignmentEnvelopeSet.finite_prime_set_sum
+alias cutoffPeriod_tendsto_atTop := NField.Alignment.CollisionLcmLogLogScale.cutoffPeriod_tendsto_atTop
+alias lcm_loglog_asymptotic := NField.Alignment.CollisionLcmLogLogScale.lcm_loglog_asymptotic
+alias lcm_loglog_square_asymptotic := NField.Alignment.CollisionLcmLogLogScale.lcm_loglog_square_asymptotic
+alias lcm_reset_global_scale_asymptotic := NField.Alignment.CollisionLcmLogLogScale.lcm_reset_global_scale_asymptotic
+alias lcm_alignment_global_scale_asymptotic := NField.Alignment.CollisionLcmLogLogScale.lcm_alignment_global_scale_asymptotic
+alias ratio_tendsto_of_asymptotic := NField.Alignment.CollisionLcmLogLogScale.ratio_tendsto_of_asymptotic
+alias lcm_loglog_square_eventually_ne_zero := NField.Alignment.CollisionLcmLogLogScale.lcm_loglog_square_eventually_ne_zero
+alias lcm_reset_global_ratio_tendsto := NField.Alignment.CollisionLcmLogLogScale.lcm_reset_global_ratio_tendsto
+alias lcm_alignment_global_ratio_tendsto := NField.Alignment.CollisionLcmLogLogScale.lcm_alignment_global_ratio_tendsto
+alias alignment_global_prime_factor_split := NField.Alignment.CollisionAlignmentGlobalSplit.alignment_global_prime_factor_split
+alias alignment_global_prime_log_split := NField.Alignment.CollisionAlignmentGlobalSplit.alignment_global_prime_log_split
+alias alignment_global_product_split := NField.Alignment.CollisionAlignmentGlobalSplit.alignment_global_product_split
+alias alignment_global_log_sum_split := NField.Alignment.CollisionAlignmentGlobalSplit.alignment_global_log_sum_split
+alias alignmentGlobalHeadProduct_nonneg := NField.Alignment.CollisionAlignmentGlobalEnvelope.alignmentGlobalHeadProduct_nonneg
+alias alignmentEulerProduct_nonneg := NField.Alignment.CollisionAlignmentGlobalEnvelope.alignmentEulerProduct_nonneg
+alias alignmentEulerLogSum_nonneg := NField.Alignment.CollisionAlignmentGlobalEnvelope.alignmentEulerLogSum_nonneg
+alias alignmentGlobalHeadProduct_bound := NField.Alignment.CollisionAlignmentGlobalEnvelope.alignmentGlobalHeadProduct_bound
+alias alignmentGlobalHeadLogSum_bound := NField.Alignment.CollisionAlignmentGlobalEnvelope.alignmentGlobalHeadLogSum_bound
+alias alignmentEulerProduct_global_bound := NField.Alignment.CollisionAlignmentGlobalEnvelope.alignmentEulerProduct_global_bound
+alias alignmentEulerLogSum_global_bound := NField.Alignment.CollisionAlignmentGlobalEnvelope.alignmentEulerLogSum_global_bound
+alias absent_log_envelope_tendsto := NField.Alignment.CollisionAlignmentSharpUpper.absent_log_envelope_tendsto
+alias alignment_global_upper := NField.Alignment.CollisionAlignmentSharpUpper.alignment_global_upper
+alias alignment_eventual_upper := NField.Alignment.CollisionAlignmentSharpUpper.alignment_eventual_upper
+alias absent_product_log_multiplier_tendsto := NField.Alignment.CollisionAlignmentSharpUpper.absent_product_log_multiplier_tendsto
+alias alignmentGlobalUpper_asymptotic := NField.Alignment.CollisionAlignmentSharpUpper.alignmentGlobalUpper_asymptotic
+alias alignment_sharp_upper := NField.Alignment.CollisionAlignmentSharpUpper.alignment_sharp_upper
+alias limsup_eq_of_upper_and_attained := NField.Alignment.CollisionSharpLimsupTransfer.limsup_eq_of_upper_and_attained
+alias scaled_upper_to_ratio_upper := NField.Alignment.CollisionSharpLimsupTransfer.scaled_upper_to_ratio_upper
+alias loglog_square_eventually_pos := NField.Alignment.CollisionSharpLimsupTransfer.loglog_square_eventually_pos
+alias resetFunction_pointwise_nonneg := NField.Alignment.CollisionSharpMaximalOrders.resetFunction_pointwise_nonneg
+alias reset_global_limsup := NField.Alignment.CollisionSharpMaximalOrders.reset_global_limsup
+alias alignment_global_limsup := NField.Alignment.CollisionSharpMaximalOrders.alignment_global_limsup
+alias global_reset_and_alignment_limsups := NField.Alignment.CollisionSharpMaximalOrders.global_reset_and_alignment_limsups
+alias inverse_loglog_square_tendsto_zero := NField.Alignment.CollisionMaximalOrderTheorem.inverse_loglog_square_tendsto_zero
+alias negative_increment_ratio_formula := NField.Alignment.CollisionMaximalOrderTheorem.negative_increment_ratio_formula
+alias negative_increment_sharp_upper := NField.Alignment.CollisionMaximalOrderTheorem.negative_increment_sharp_upper
+alias negative_increment_ratio_eventual_lower := NField.Alignment.CollisionMaximalOrderTheorem.negative_increment_ratio_eventual_lower
+alias lcm_negative_increment_ratio_tendsto := NField.Alignment.CollisionMaximalOrderTheorem.lcm_negative_increment_ratio_tendsto
+alias negative_increment_global_limsup := NField.Alignment.CollisionMaximalOrderTheorem.negative_increment_global_limsup
+alias maximal_alignment_and_reset_orders := NField.Alignment.CollisionMaximalOrderTheorem.maximal_alignment_and_reset_orders
+
+alias divisor_reset_primitive_addresses := NField.Alignment.CollisionGcdResetDisplay.divisor_reset_primitive_addresses
+alias interior_gcd_sum_reset := NField.Alignment.CollisionGcdResetDisplay.interior_gcd_sum_reset
+alias literal_gcd_reset_identity := NField.Alignment.CollisionGcdResetDisplay.literal_gcd_reset_identity
+alias half_linear_hasSum := NField.Alignment.CollisionPrimePowerMajorant.half_linear_hasSum
+alias prime_power_term_majorant := NField.Alignment.CollisionPrimePowerMajorant.prime_power_term_majorant
+alias prime_power_majorant_sum := NField.Alignment.CollisionPrimePowerMajorant.prime_power_majorant_sum
+alias prime_power_reset_sum := NField.Alignment.CollisionPrimePowerBoundDisplay.prime_power_reset_sum
+alias prime_power_alignment_sum := NField.Alignment.CollisionPrimePowerBoundDisplay.prime_power_alignment_sum
+alias reset_coefficient_log_bound := NField.Alignment.CollisionPrimePowerBoundDisplay.reset_coefficient_log_bound
+alias conductor_coefficient_log_bound := NField.Alignment.CollisionPrimePowerBoundDisplay.conductor_coefficient_log_bound
+alias prime_power_reset_bound := NField.Alignment.CollisionPrimePowerBoundDisplay.prime_power_reset_bound
+alias prime_power_alignment_bound := NField.Alignment.CollisionPrimePowerBoundDisplay.prime_power_alignment_bound
+alias literal_prime_power_bound := NField.Alignment.CollisionPrimePowerBoundDisplay.literal_prime_power_bound
+
+alias primitiveSquare_mem := NField.Alignment.CollisionPrimitiveSquareTree.primitiveSquare_mem
+alias primitiveSquare_root := NField.Alignment.CollisionPrimitiveSquareTree.primitiveSquare_root
+alias square_left_child_sum := NField.Alignment.CollisionPrimitiveSquareTree.square_left_child_sum
+alias square_right_child_sum := NField.Alignment.CollisionPrimitiveSquareTree.square_right_child_sum
+alias primitiveSquare_diagonal_root := NField.Alignment.CollisionPrimitiveSquareTree.primitiveSquare_diagonal_root
+alias square_potential_root_split := NField.Alignment.CollisionPrimitiveSquareTree.square_potential_root_split
+alias primitive_square_tree_identity := NField.Alignment.CollisionPrimitiveSquareTree.primitive_square_tree_identity
+alias pairTreePotential_nonneg := NField.Alignment.CollisionPrimitiveSquareBoundary.pairTreePotential_nonneg
+alias pairTreePotential_symm := NField.Alignment.CollisionPrimitiveSquareBoundary.pairTreePotential_symm
+alias left_child_frontier_bound := NField.Alignment.CollisionPrimitiveSquareBoundary.left_child_frontier_bound
+alias squareTreeBoundary_twice_left := NField.Alignment.CollisionPrimitiveSquareBoundary.squareTreeBoundary_twice_left
+alias square_boundary_partner_set := NField.Alignment.CollisionPrimitiveSquareBoundary.square_boundary_partner_set
+alias square_boundary_partner_count := NField.Alignment.CollisionPrimitiveSquareBoundary.square_boundary_partner_count
+alias full_square_left_majorant := NField.Alignment.CollisionPrimitiveSquareBoundary.full_square_left_majorant
+alias leftSquareBoundary_bound := NField.Alignment.CollisionPrimitiveSquareBoundary.leftSquareBoundary_bound
+alias squareTreeBoundary_bounds := NField.Alignment.CollisionPrimitiveSquareBoundary.squareTreeBoundary_bounds
+alias literal_primitive_square_frontier := NField.Alignment.CollisionPrimitiveSquareBoundary.literal_primitive_square_frontier
+
+alias sawtooth_fin_fiber := NField.Alignment.CollisionSawtoothDistribution.sawtooth_fin_fiber
+alias sawtooth_product_fiber := NField.Alignment.CollisionSawtoothDistribution.sawtooth_product_fiber
+alias sawtooth_reduction_fiber := NField.Alignment.CollisionSawtoothDistribution.sawtooth_reduction_fiber
+alias twisted_sawtooth_fiber := NField.Alignment.CollisionSawtoothDistribution.twisted_sawtooth_fiber
+alias residue_pair_count_complex := NField.Alignment.CollisionResiduePairing.residue_pair_count_complex
+alias residue_table_pair := NField.Alignment.CollisionResiduePairing.residue_table_pair
+alias compatible_table_sum := NField.Alignment.CollisionResiduePairing.compatible_table_sum
+alias residue_table_pair_fibers := NField.Alignment.CollisionResiduePairing.residue_table_pair_fibers
+alias midpointSawtooth_formula := NField.Alignment.CollisionDedekindPairing.midpointSawtooth_formula
+alias midpointSawtooth_complex := NField.Alignment.CollisionDedekindPairing.midpointSawtooth_complex
+alias twistedSawtooth_one := NField.Alignment.CollisionDedekindPairing.twistedSawtooth_one
+alias twistedSawtooth_integer := NField.Alignment.CollisionDedekindPairing.twistedSawtooth_integer
+alias realDedekindSum_complex := NField.Alignment.CollisionDedekindPairing.realDedekindSum_complex
+alias twisted_dedekind_sum := NField.Alignment.CollisionDedekindPairing.twisted_dedekind_sum
+alias gcd_lcm_scalar := NField.Alignment.CollisionDedekindPairing.gcd_lcm_scalar
+alias twisted_pair_complex := NField.Alignment.CollisionDedekindPairing.twisted_pair_complex
+alias literal_dedekind_pairing := NField.Alignment.CollisionDedekindPairing.literal_dedekind_pairing
+alias midpointSawtooth_natCast := NField.Alignment.CollisionDedekindPairing.midpointSawtooth_natCast
+alias midpointSawtooth_fract := NField.Alignment.CollisionDedekindPairing.midpointSawtooth_fract
+alias twistedSawtooth_literal := NField.Alignment.CollisionDedekindPairing.twistedSawtooth_literal
+alias realDedekindSum_literal := NField.Alignment.CollisionDedekindPairing.realDedekindSum_literal
+alias midpointSawtooth_mod_one := NField.Alignment.CollisionDedekindPairing.midpointSawtooth_mod_one
+alias twistedSawtooth_period_one := NField.Alignment.CollisionDedekindPairing.twistedSawtooth_period_one
+alias realDedekindSum_mod_one := NField.Alignment.CollisionDedekindPairing.realDedekindSum_mod_one
+alias realDedekindSum_eq_zero_of_period_one := NField.Alignment.CollisionDedekindPairing.realDedekindSum_eq_zero_of_period_one
+alias dedekind_pairing_coprime := NField.Alignment.CollisionDedekindPairing.dedekind_pairing_coprime
+alias twisted_cylinder_integral_complex := NField.Alignment.CollisionDedekindConditioning.twisted_cylinder_integral_complex
+alias twisted_cylinder_integral := NField.Alignment.CollisionDedekindConditioning.twisted_cylinder_integral
+alias twisted_cylinder_mean := NField.Alignment.CollisionDedekindConditioning.twisted_cylinder_mean
+alias twistedSawtooth_via_grid := NField.Alignment.CollisionDedekindConditioning.twistedSawtooth_via_grid
+alias finite_sawtooth_grid_energy := NField.Alignment.CollisionDedekindConditioning.finite_sawtooth_grid_energy
+alias finite_sawtooth_grid_invariance := NField.Alignment.CollisionDedekindConditioning.finite_sawtooth_grid_invariance
+
+alias inner_shift_shift := NField.Alignment.CollisionSpectralMomentRecurrence.inner_shift_shift
+alias haarCovariance_even := NField.Alignment.CollisionSpectralMomentRecurrence.haarCovariance_even
+alias haarCovariance_zero := NField.Alignment.CollisionSpectralMomentRecurrence.haarCovariance_zero
+alias haarCovariance_coboundary := NField.Alignment.CollisionSpectralMomentRecurrence.haarCovariance_coboundary
+alias even_second_difference_unique := NField.Alignment.CollisionSpectralMomentRecurrence.even_second_difference_unique
+alias potential_covariance_second_difference := NField.Alignment.CollisionSpectralMomentRecurrence.potential_covariance_second_difference
+alias potential_spectral_moments_unique := NField.Alignment.CollisionSpectralMomentRecurrence.potential_spectral_moments_unique
+alias address_bounds := NField.Alignment.CollisionSpectralWeights.address_bounds
+alias address_period := NField.Alignment.CollisionSpectralWeights.address_period
+alias address_coprime := NField.Alignment.CollisionSpectralWeights.address_coprime
+alias frequency_mem := NField.Alignment.CollisionSpectralWeights.frequency_mem
+alias incrementMass_nonneg := NField.Alignment.CollisionSpectralWeights.incrementMass_nonneg
+alias potentialMass_nonneg := NField.Alignment.CollisionSpectralWeights.potentialMass_nonneg
+alias potentialMass_literal := NField.Alignment.CollisionSpectralWeights.potentialMass_literal
+alias potentialMass_fiber := NField.Alignment.CollisionSpectralWeights.potentialMass_fiber
+alias incrementMass_fiber_bound := NField.Alignment.CollisionSpectralWeights.incrementMass_fiber_bound
+alias potentialMass_summable := NField.Alignment.CollisionSpectralWeights.potentialMass_summable
+alias incrementMass_summable := NField.Alignment.CollisionSpectralWeights.incrementMass_summable
+alias potentialMass_total := NField.Alignment.CollisionSpectralWeights.potentialMass_total
+alias fourierCharacter_frequency := NField.Alignment.CollisionAtomicSpectra.fourierCharacter_frequency
+alias atomicMeasure_mass := NField.Alignment.CollisionAtomicSpectra.atomicMeasure_mass
+alias atomicMeasure_finite := NField.Alignment.CollisionAtomicSpectra.atomicMeasure_finite
+alias atomicMeasure_outside := NField.Alignment.CollisionAtomicSpectra.atomicMeasure_outside
+alias weightedPhase_norm := NField.Alignment.CollisionAtomicSpectra.weightedPhase_norm
+alias weightedPhase_summable := NField.Alignment.CollisionAtomicSpectra.weightedPhase_summable
+alias fourierCharacter_integrable := NField.Alignment.CollisionAtomicSpectra.fourierCharacter_integrable
+alias atomicMeasure_fourier := NField.Alignment.CollisionAtomicSpectra.atomicMeasure_fourier
+alias incrementPhase_fiber := NField.Alignment.CollisionAtomicSpectra.incrementPhase_fiber
+alias incrementMeasure_fourier := NField.Alignment.CollisionAtomicSpectra.incrementMeasure_fourier
+alias potentialMeasure_mass := NField.Alignment.CollisionAtomicSpectra.potentialMeasure_mass
+alias phase_add := NField.Alignment.CollisionPotentialSpectralMoments.phase_add
+alias phase_zero := NField.Alignment.CollisionPotentialSpectralMoments.phase_zero
+alias phase_conj := NField.Alignment.CollisionPotentialSpectralMoments.phase_conj
+alias negativeRoot_phase := NField.Alignment.CollisionPotentialSpectralMoments.negativeRoot_phase
+alias reflectedAddress_involutive := NField.Alignment.CollisionPotentialSpectralMoments.reflectedAddress_involutive
+alias phase_reflected := NField.Alignment.CollisionPotentialSpectralMoments.phase_reflected
+alias potentialMass_reflected := NField.Alignment.CollisionPotentialSpectralMoments.potentialMass_reflected
+alias potentialMoment_series := NField.Alignment.CollisionPotentialSpectralMoments.potentialMoment_series
+alias potentialMoment_even := NField.Alignment.CollisionPotentialSpectralMoments.potentialMoment_even
+alias potentialMoment_zero := NField.Alignment.CollisionPotentialSpectralMoments.potentialMoment_zero
+alias chord_second_difference := NField.Alignment.CollisionPotentialSpectralMoments.chord_second_difference
+alias potentialMass_second_difference := NField.Alignment.CollisionPotentialSpectralMoments.potentialMass_second_difference
+alias potentialMoment_second_difference := NField.Alignment.CollisionPotentialSpectralMoments.potentialMoment_second_difference
+alias potentialMeasure_fourier := NField.Alignment.CollisionPotentialSpectralMoments.potentialMeasure_fourier
+alias amplitude_pos := NField.Alignment.CollisionSpectralSupport.amplitude_pos
+alias incrementMass_pos := NField.Alignment.CollisionSpectralSupport.incrementMass_pos
+alias potentialMass_pos := NField.Alignment.CollisionSpectralSupport.potentialMass_pos
+alias atomicMeasure_atom_lower := NField.Alignment.CollisionSpectralSupport.atomicMeasure_atom_lower
+alias incrementMeasure_atom_pos := NField.Alignment.CollisionSpectralSupport.incrementMeasure_atom_pos
+alias potentialMeasure_atom_pos := NField.Alignment.CollisionSpectralSupport.potentialMeasure_atom_pos
+alias translate_mem := NField.Alignment.CollisionTranslationSubspace.translate_mem
+alias self_mem := NField.Alignment.CollisionTranslationSubspace.self_mem
+alias cyclicSpace_shift := NField.Alignment.CollisionTranslationSubspace.cyclicSpace_shift
+alias cyclicSpace_projection_shift := NField.Alignment.CollisionTranslationSubspace.cyclicSpace_projection_shift
+alias shift_oneVector := NField.Alignment.CollisionTranslationSubspace.shift_oneVector
+alias shift_mean_inner := NField.Alignment.CollisionTranslationSubspace.shift_mean_inner
+alias mem_meanZeroSpace := NField.Alignment.CollisionTranslationSubspace.mem_meanZeroSpace
+alias incrementVector_mean_inner := NField.Alignment.CollisionTranslationSubspace.incrementVector_mean_inner
+alias increment_cyclicSpace_mean_zero := NField.Alignment.CollisionTranslationSubspace.increment_cyclicSpace_mean_zero
+alias characterMap_phase := NField.Alignment.CollisionCharacterEigenvectors.characterMap_phase
+alias characterMap_norm := NField.Alignment.CollisionCharacterEigenvectors.characterMap_norm
+alias characterRoot_phase := NField.Alignment.CollisionCharacterEigenvectors.characterRoot_phase
+alias characterRoot_norm := NField.Alignment.CollisionCharacterEigenvectors.characterRoot_norm
+alias characterMap_translate := NField.Alignment.CollisionCharacterEigenvectors.characterMap_translate
+alias shift_toLp := NField.Alignment.CollisionCharacterEigenvectors.shift_toLp
+alias characterReVector_shift := NField.Alignment.CollisionCharacterEigenvectors.characterReVector_shift
+alias characterImVector_shift := NField.Alignment.CollisionCharacterEigenvectors.characterImVector_shift
+alias complex_pair_translate := NField.Alignment.CollisionCharacterEigenvectors.complex_pair_translate
+alias character_eigenpair_simple := NField.Alignment.CollisionCharacterEigenvectors.character_eigenpair_simple
+alias characterReVector_coe := NField.Alignment.CollisionCharacterPairing.characterReVector_coe
+alias characterImVector_coe := NField.Alignment.CollisionCharacterPairing.characterImVector_coe
+alias character_combination_re_coe := NField.Alignment.CollisionCharacterPairing.character_combination_re_coe
+alias character_combination_im_coe := NField.Alignment.CollisionCharacterPairing.character_combination_im_coe
+alias character_eigenpair_vectors := NField.Alignment.CollisionCharacterPairing.character_eigenpair_vectors
+alias negativeRoot_pow_phase := NField.Alignment.CollisionCharacterPairing.negativeRoot_pow_phase
+alias characterMap_conj := NField.Alignment.CollisionCharacterPairing.characterMap_conj
+alias inner_character_re := NField.Alignment.CollisionCharacterPairing.inner_character_re
+alias inner_character_im := NField.Alignment.CollisionCharacterPairing.inner_character_im
+alias fourierFunctional_character_pair := NField.Alignment.CollisionCharacterPairing.fourierFunctional_character_pair
+alias increment_character_pair := NField.Alignment.CollisionCharacterPairing.increment_character_pair
+alias primitive_character_mem := NField.Alignment.CollisionCyclicCharacters.primitive_character_mem
+alias locallyConstant_residue_table := NField.Alignment.ProfiniteResidueTestDensity.locallyConstant_residue_table
+alias locallyConstant_residue_expansion := NField.Alignment.ProfiniteResidueTestDensity.locallyConstant_residue_expansion
+alias residueVector_L2_separates := NField.Alignment.ProfiniteResidueTestDensity.residueVector_L2_separates
+alias ramanujanRow_character_sum := NField.Alignment.CollisionCyclicResidues.ramanujanRow_character_sum
+alias ramanujanRow_mem := NField.Alignment.CollisionCyclicResidues.ramanujanRow_mem
+alias resetRow_one := NField.Alignment.CollisionCyclicResidues.resetRow_one
+alias ramanujanRow_one := NField.Alignment.CollisionCyclicResidues.ramanujanRow_one
+alias sum_ramanujanRow_divisors := NField.Alignment.CollisionCyclicResidues.sum_ramanujanRow_divisors
+alias resetRow_mem := NField.Alignment.CollisionCyclicResidues.resetRow_mem
+alias shifted_residue_zero := NField.Alignment.CollisionCyclicResidues.shifted_residue_zero
+alias centered_residue_mem := NField.Alignment.CollisionCyclicResidues.centered_residue_mem
+alias increment_cyclicSpace_eq_meanZeroSpace := NField.Alignment.CollisionIncrementCyclicity.increment_cyclicSpace_eq_meanZeroSpace
+alias literal_increment_cyclic_span := NField.Alignment.CollisionIncrementCyclicity.literal_increment_cyclic_span
+alias complexLift_coe := NField.Alignment.CollisionComplexCyclicity.complexLift_coe
+alias realPart_coe := NField.Alignment.CollisionComplexCyclicity.realPart_coe
+alias imagPart_coe := NField.Alignment.CollisionComplexCyclicity.imagPart_coe
+alias complex_parts := NField.Alignment.CollisionComplexCyclicity.complex_parts
+alias complexShift_coe := NField.Alignment.CollisionComplexCyclicity.complexShift_coe
+alias complexLift_shift := NField.Alignment.CollisionComplexCyclicity.complexLift_shift
+alias complex_mean_inner := NField.Alignment.CollisionComplexCyclicity.complex_mean_inner
+alias mem_complexMeanZeroSpace := NField.Alignment.CollisionComplexCyclicity.mem_complexMeanZeroSpace
+alias complexCyclicSpace_mean_zero := NField.Alignment.CollisionComplexCyclicity.complexCyclicSpace_mean_zero
+alias complexLift_mem_cyclic := NField.Alignment.CollisionComplexCyclicity.complexLift_mem_cyclic
+alias complexCyclicSpace_eq_meanZeroSpace := NField.Alignment.CollisionComplexCyclicity.complexCyclicSpace_eq_meanZeroSpace
+alias literal_complex_increment_cyclic_span := NField.Alignment.CollisionComplexCyclicity.literal_complex_increment_cyclic_span
+alias primitiveNumerators_empty_below_two := NField.Alignment.CollisionSpectralMeasures.primitiveNumerators_empty_below_two
+alias atomicMeasure_by_conductor := NField.Alignment.CollisionSpectralMeasures.atomicMeasure_by_conductor
+alias incrementMeasure_literal := NField.Alignment.CollisionSpectralMeasures.incrementMeasure_literal
+alias potentialMeasure_literal := NField.Alignment.CollisionSpectralMeasures.potentialMeasure_literal
+alias literal_translation_spectral_measures := NField.Alignment.CollisionSpectralMeasures.literal_translation_spectral_measures
+
+alias negativeRoot_pow_im := NField.Alignment.CollisionFiniteSineTransform.negativeRoot_pow_im
+alias sawtoothFourier_im := NField.Alignment.CollisionFiniteSineTransform.sawtoothFourier_im
+alias finiteSineTransform_reduced := NField.Alignment.CollisionFiniteSineTransform.finiteSineTransform_reduced
+alias sawtoothFourier_mod := NField.Alignment.CollisionFiniteSineTransform.sawtoothFourier_mod
+alias finiteSineTransform_mod := NField.Alignment.CollisionFiniteSineTransform.finiteSineTransform_mod
+alias cotangent_mod := NField.Alignment.CollisionFiniteSineTransform.cotangent_mod
+alias literal_finite_sine_transform := NField.Alignment.CollisionFiniteSineTransform.literal_finite_sine_transform
+
+alias cotangentTerm_zero := NField.Alignment.CollisionCotangentSeries.cotangentTerm_zero
+alias cotangentTerm_one := NField.Alignment.CollisionCotangentSeries.cotangentTerm_one
+alias unitCotangentSum_one := NField.Alignment.CollisionCotangentSeries.unitCotangentSum_one
+alias cotangentTerm_summable := NField.Alignment.CollisionCotangentSeries.cotangentTerm_summable
+alias unitCotangentTerm_summable := NField.Alignment.CollisionCotangentSeries.unitCotangentTerm_summable
+alias cotangentSum_positive_series := NField.Alignment.CollisionCotangentSeries.cotangentSum_positive_series
+alias cotangentTerm_scale := NField.Alignment.CollisionCotangentSeries.cotangentTerm_scale
+alias gcd_fiber_cotangent := NField.Alignment.CollisionCotangentSeries.gcd_fiber_cotangent
+alias cotangentSum_gcd_descent := NField.Alignment.CollisionCotangentSeries.cotangentSum_gcd_descent
+alias cotangent_weighted_divisor_budget := NField.Alignment.CollisionCotangentSeries.cotangent_weighted_divisor_budget
+alias cotangentSum_divisor_descent := NField.Alignment.CollisionCotangentSeries.cotangentSum_divisor_descent
+alias unitCotangentSum_moebius := NField.Alignment.CollisionCotangentSeries.unitCotangentSum_moebius
+alias literal_cotangent_gcd_descent := NField.Alignment.CollisionCotangentSeries.literal_cotangent_gcd_descent
+
+alias character_nat_power := NField.Alignment.CollisionPeriodicLValue.character_nat_power
+alias orderedLPartial_dft := NField.Alignment.CollisionPeriodicLValue.orderedLPartial_dft
+alias dft_orderedLPartial_tendsto := NField.Alignment.CollisionPeriodicLValue.dft_orderedLPartial_tendsto
+alias orderedLPartial_tendsto := NField.Alignment.CollisionPeriodicLValue.orderedLPartial_tendsto
+alias odd_character_ordered_L_one := NField.Alignment.CollisionPeriodicLValue.odd_character_ordered_L_one
+alias orderedLPartial_blocks := NField.Alignment.CollisionCotangentLValue.orderedLPartial_blocks
+alias odd_residue_blocks_paired := NField.Alignment.CollisionCotangentLValue.odd_residue_blocks_paired
+alias complex_cotangent_real := NField.Alignment.CollisionCotangentLValue.complex_cotangent_real
+alias odd_blocks_cotangent_limit := NField.Alignment.CollisionCotangentLValue.odd_blocks_cotangent_limit
+alias odd_cotangent_coefficient := NField.Alignment.CollisionCotangentLValue.odd_cotangent_coefficient
+alias odd_character_cotangent_coefficient := NField.Alignment.CollisionCotangentLValue.odd_character_cotangent_coefficient
+alias cotangent_complement := NField.Alignment.CollisionCotangentLValue.cotangent_complement
+alias even_cotangent_coefficient_zero := NField.Alignment.CollisionCotangentLValue.even_cotangent_coefficient_zero
+alias cotangent_coefficient_eq_units := NField.Alignment.CollisionCotangentLValue.cotangent_coefficient_eq_units
+alias odd_character_unit_cotangent := NField.Alignment.CollisionCotangentLValue.odd_character_unit_cotangent
+alias even_character_unit_cotangent := NField.Alignment.CollisionCotangentLValue.even_character_unit_cotangent
+alias conjugate_character_value := NField.Alignment.CollisionCotangentLValue.conjugate_character_value
+alias odd_inverse_character := NField.Alignment.CollisionCotangentLValue.odd_inverse_character
+alias literal_odd_character_cotangent := NField.Alignment.CollisionCotangentLValue.literal_odd_character_cotangent
+
+alias conjugated_character_reconstruction := NField.Alignment.CollisionCotangentMixedMoment.conjugated_character_reconstruction
+alias even_inverse_character := NField.Alignment.CollisionCotangentMixedMoment.even_inverse_character
+alias cotangent_signal_coefficient := NField.Alignment.CollisionCotangentMixedMoment.cotangent_signal_coefficient
+alias cotangent_signal_expansion := NField.Alignment.CollisionCotangentMixedMoment.cotangent_signal_expansion
+alias unitCotangentTerm_character_expansion := NField.Alignment.CollisionCotangentMixedMoment.unitCotangentTerm_character_expansion
+alias character_L_two_hasSum := NField.Alignment.CollisionCotangentMixedMoment.character_L_two_hasSum
+alias literal_unit_cotangent_mixed_moment := NField.Alignment.CollisionCotangentMixedMoment.literal_unit_cotangent_mixed_moment
+alias mixedMomentScale_real := NField.Alignment.CollisionCotangentMixedMoment.mixedMomentScale_real
+alias cotangentCharacterMoment_real := NField.Alignment.CollisionCotangentMixedMoment.cotangentCharacterMoment_real
+alias no_odd_character_two := NField.Alignment.CollisionCotangentMixedMoment.no_odd_character_two
+alias cotangentCharacterMoment_two := NField.Alignment.CollisionCotangentMixedMoment.cotangentCharacterMoment_two
+alias unitCotangentSum_two := NField.Alignment.CollisionCotangentMixedMoment.unitCotangentSum_two
+
+
+/-! The actual harmonic series and closed-arc root identity. -/
+alias harmonicPowerTerm_bound := NField.Alignment.CollisionHarmonicRootSeries.harmonicPowerTerm_bound
+alias harmonicPowerTerm_summable := NField.Alignment.CollisionHarmonicRootSeries.harmonicPowerTerm_summable
+alias harmonicPolylog_continuousOn := NField.Alignment.CollisionHarmonicRootSeries.harmonicPolylog_continuousOn
+alias cubicCosineTerm_bound := NField.Alignment.CollisionHarmonicRootSeries.cubicCosineTerm_bound
+alias quadraticSineTerm_bound := NField.Alignment.CollisionHarmonicRootSeries.quadraticSineTerm_bound
+alias inverseSquare_summable := NField.Alignment.CollisionHarmonicRootSeries.inverseSquare_summable
+alias cubicCosineTerm_summable := NField.Alignment.CollisionHarmonicRootSeries.cubicCosineTerm_summable
+alias quadraticSineTerm_summable := NField.Alignment.CollisionHarmonicRootSeries.quadraticSineTerm_summable
+alias cubicCosine_continuous := NField.Alignment.CollisionHarmonicRootSeries.cubicCosine_continuous
+alias quadraticSine_continuous := NField.Alignment.CollisionHarmonicRootSeries.quadraticSine_continuous
+alias circle_exp_norm := NField.Alignment.CollisionHarmonicRootSeries.circle_exp_norm
+alias harmonicBoundary_continuous := NField.Alignment.CollisionHarmonicRootSeries.harmonicBoundary_continuous
+alias harmonicPolylog_one := NField.Alignment.CollisionHarmonicRootSeries.harmonicPolylog_one
+alias harmonicPolylog_zero := NField.Alignment.CollisionHarmonicRootSeries.harmonicPolylog_zero
+alias cubicCosine_zero := NField.Alignment.CollisionHarmonicRootSeries.cubicCosine_zero
+alias quadraticSine_zero := NField.Alignment.CollisionHarmonicRootSeries.quadraticSine_zero
+alias harmonicBoundary_zero := NField.Alignment.CollisionHarmonicRootSeries.harmonicBoundary_zero
+alias cubicCosineTerm_hasDerivAt := NField.Alignment.CollisionHarmonicRootSeries.cubicCosineTerm_hasDerivAt
+alias cubicCosine_hasDerivAt := NField.Alignment.CollisionHarmonicRootSeries.cubicCosine_hasDerivAt
+alias norm_sum_range_smul_le := NField.Alignment.CollisionDirichletBoundary.norm_sum_range_smul_le
+alias norm_geometric_partial_le := NField.Alignment.CollisionDirichletBoundary.norm_geometric_partial_le
+alias norm_geometric_tail_le := NField.Alignment.CollisionDirichletBoundary.norm_geometric_tail_le
+alias norm_weighted_geometric_tail_le := NField.Alignment.CollisionDirichletBoundary.norm_weighted_geometric_tail_le
+alias dirichletPartial_add := NField.Alignment.CollisionDirichletBoundary.dirichletPartial_add
+alias dirichletPartial_cauchy := NField.Alignment.CollisionDirichletBoundary.dirichletPartial_cauchy
+alias dirichlet_limit_tail_bound := NField.Alignment.CollisionDirichletBoundary.dirichlet_limit_tail_bound
+alias dirichlet_tendstoUniformlyOn := NField.Alignment.CollisionDirichletBoundary.dirichlet_tendstoUniformlyOn
+alias one_sub_circle_exp_factor := NField.Alignment.CollisionHarmonicLogBoundary.one_sub_circle_exp_factor
+alias half_angle_sine_pos := NField.Alignment.CollisionHarmonicLogBoundary.half_angle_sine_pos
+alias norm_one_sub_circle_exp := NField.Alignment.CollisionHarmonicLogBoundary.norm_one_sub_circle_exp
+alias circle_exp_ne_one := NField.Alignment.CollisionHarmonicLogBoundary.circle_exp_ne_one
+alias arg_one_sub_circle_exp := NField.Alignment.CollisionHarmonicLogBoundary.arg_one_sub_circle_exp
+alias log_one_sub_circle_exp_re := NField.Alignment.CollisionHarmonicLogBoundary.log_one_sub_circle_exp_re
+alias log_one_sub_circle_exp_im := NField.Alignment.CollisionHarmonicLogBoundary.log_one_sub_circle_exp_im
+alias literal_principal_log_boundary := NField.Alignment.CollisionHarmonicLogBoundary.literal_principal_log_boundary
+alias inverseLinear_nonneg := NField.Alignment.CollisionClausenDerivative.inverseLinear_nonneg
+alias inverseLinear_antitone := NField.Alignment.CollisionClausenDerivative.inverseLinear_antitone
+alias inverseLinear_tendsto_zero := NField.Alignment.CollisionClausenDerivative.inverseLinear_tendsto_zero
+alias inverseLinear_dirichlet_tendsto := NField.Alignment.CollisionClausenDerivative.inverseLinear_dirichlet_tendsto
+alias circle_power_re := NField.Alignment.CollisionClausenDerivative.circle_power_re
+alias clausenDerivativePartial_eq_re := NField.Alignment.CollisionClausenDerivative.clausenDerivativePartial_eq_re
+alias quadraticSineTerm_succ_hasDerivAt := NField.Alignment.CollisionClausenDerivative.quadraticSineTerm_succ_hasDerivAt
+alias clausenPartial_hasDerivAt := NField.Alignment.CollisionClausenDerivative.clausenPartial_hasDerivAt
+alias clausenPartial_tendsto := NField.Alignment.CollisionClausenDerivative.clausenPartial_tendsto
+alias quadraticSine_hasDerivAt_log := NField.Alignment.CollisionClausenDerivative.quadraticSine_hasDerivAt_log
+alias literal_clausen_derivative := NField.Alignment.CollisionClausenDerivative.literal_clausen_derivative
+alias harmonic_real_succ := NField.Alignment.CollisionHarmonicCoefficients.harmonic_real_succ
+alias harmonic_real_monotone := NField.Alignment.CollisionHarmonicCoefficients.harmonic_real_monotone
+alias harmonic_real_one_le := NField.Alignment.CollisionHarmonicCoefficients.harmonic_real_one_le
+alias harmonic_real_le_index := NField.Alignment.CollisionHarmonicCoefficients.harmonic_real_le_index
+alias harmonicFirstKernel_nonneg := NField.Alignment.CollisionHarmonicCoefficients.harmonicFirstKernel_nonneg
+alias harmonicFirstKernel_le_one := NField.Alignment.CollisionHarmonicCoefficients.harmonicFirstKernel_le_one
+alias shiftedHarmonicFirst_eq := NField.Alignment.CollisionHarmonicCoefficients.shiftedHarmonicFirst_eq
+alias shiftedHarmonicFirst_nonneg := NField.Alignment.CollisionHarmonicCoefficients.shiftedHarmonicFirst_nonneg
+alias shiftedHarmonicFirst_antitone := NField.Alignment.CollisionHarmonicCoefficients.shiftedHarmonicFirst_antitone
+alias harmonic_over_index_tendsto_zero := NField.Alignment.CollisionHarmonicCoefficients.harmonic_over_index_tendsto_zero
+alias shiftedHarmonicFirst_tendsto_zero := NField.Alignment.CollisionHarmonicCoefficients.shiftedHarmonicFirst_tendsto_zero
+alias harmonicFirstKernel_eq_mul := NField.Alignment.CollisionHarmonicCoefficients.harmonicFirstKernel_eq_mul
+alias reciprocal_convolution := NField.Alignment.CollisionHarmonicCoefficients.reciprocal_convolution
+alias logPowerTerm_hasSum := NField.Alignment.CollisionHarmonicInterior.logPowerTerm_hasSum
+alias logPowerTerm_convolution := NField.Alignment.CollisionHarmonicInterior.logPowerTerm_convolution
+alias harmonicFirstPowerTerm_hasSum := NField.Alignment.CollisionHarmonicInterior.harmonicFirstPowerTerm_hasSum
+alias harmonicDerivativeTerm_hasSum := NField.Alignment.CollisionHarmonicInterior.harmonicDerivativeTerm_hasSum
+alias harmonicPowerTerm_succ_succ_hasDerivAt := NField.Alignment.CollisionHarmonicInterior.harmonicPowerTerm_succ_succ_hasDerivAt
+alias harmonicDerivativeTerm_bound := NField.Alignment.CollisionHarmonicInterior.harmonicDerivativeTerm_bound
+alias harmonicPolylog_eq_shift := NField.Alignment.CollisionHarmonicInterior.harmonicPolylog_eq_shift
+alias literal_harmonic_polylog_derivative := NField.Alignment.CollisionHarmonicInterior.literal_harmonic_polylog_derivative
+alias one_sub_unit_root_mem_slitPlane := NField.Alignment.CollisionHarmonicAbelBoundary.one_sub_unit_root_mem_slitPlane
+alias harmonic_dirichlet_tendsto := NField.Alignment.CollisionHarmonicAbelBoundary.harmonic_dirichlet_tendsto
+alias circle_exp_hasDerivAt := NField.Alignment.CollisionHarmonicBoundaryDerivative.circle_exp_hasDerivAt
+alias harmonicBoundaryTerm_hasDerivAt := NField.Alignment.CollisionHarmonicBoundaryDerivative.harmonicBoundaryTerm_hasDerivAt
+alias harmonicBoundaryPartial_hasDerivAt := NField.Alignment.CollisionHarmonicBoundaryDerivative.harmonicBoundaryPartial_hasDerivAt
+alias harmonicBoundaryPartial_tendsto := NField.Alignment.CollisionHarmonicBoundaryDerivative.harmonicBoundaryPartial_tendsto
+alias harmonicBoundary_hasDerivAt_log := NField.Alignment.CollisionHarmonicBoundaryDerivative.harmonicBoundary_hasDerivAt_log
+alias harmonicBoundary_re_hasDerivAt := NField.Alignment.CollisionHarmonicBoundaryDerivative.harmonicBoundary_re_hasDerivAt
+alias literal_harmonic_series_hasSum := NField.Alignment.CollisionHarmonicRootIdentity.literal_harmonic_series_hasSum
+alias literal_cubic_cosine_hasSum := NField.Alignment.CollisionHarmonicRootIdentity.literal_cubic_cosine_hasSum
+alias literal_quadratic_sine_hasSum := NField.Alignment.CollisionHarmonicRootIdentity.literal_quadratic_sine_hasSum
+alias literal_absolute_series := NField.Alignment.CollisionHarmonicRootIdentity.literal_absolute_series
+alias harmonicRootExpression_continuous := NField.Alignment.CollisionHarmonicRootIdentity.harmonicRootExpression_continuous
+alias harmonicRootDifference_continuous := NField.Alignment.CollisionHarmonicRootIdentity.harmonicRootDifference_continuous
+alias harmonicRootExpression_hasDerivAt := NField.Alignment.CollisionHarmonicRootIdentity.harmonicRootExpression_hasDerivAt
+alias harmonicRootDifference_hasDerivAt_zero := NField.Alignment.CollisionHarmonicRootIdentity.harmonicRootDifference_hasDerivAt_zero
+alias harmonicRootDifference_zero := NField.Alignment.CollisionHarmonicRootIdentity.harmonicRootDifference_zero
+alias literal_harmonic_root_identity := NField.Alignment.CollisionHarmonicRootIdentity.literal_harmonic_root_identity
+
+alias rootAngle_nonneg := NField.Alignment.CollisionHarmonicRootAverage.rootAngle_nonneg
+alias rootAngle_lt_two_pi := NField.Alignment.CollisionHarmonicRootAverage.rootAngle_lt_two_pi
+alias root_power_eq_phase := NField.Alignment.CollisionHarmonicRootAverage.root_power_eq_phase
+alias root_power_sum := NField.Alignment.CollisionHarmonicRootAverage.root_power_sum
+alias root_series_summable := NField.Alignment.CollisionHarmonicRootAverage.root_series_summable
+alias root_series_sum := NField.Alignment.CollisionHarmonicRootAverage.root_series_sum
+alias harmonic_root_sum := NField.Alignment.CollisionHarmonicRootAverage.harmonic_root_sum
+alias harmonic_root_re_sum := NField.Alignment.CollisionHarmonicRootAverage.harmonic_root_re_sum
+alias cubic_root_term_re := NField.Alignment.CollisionHarmonicRootAverage.cubic_root_term_re
+alias cubic_root_sum := NField.Alignment.CollisionHarmonicRootAverage.cubic_root_sum
+alias rootAngle_weight := NField.Alignment.CollisionHarmonicRootAverage.rootAngle_weight
+alias weighted_sine_root_term := NField.Alignment.CollisionHarmonicRootAverage.weighted_sine_root_term
+alias weighted_clausen_root_sum := NField.Alignment.CollisionHarmonicRootAverage.weighted_clausen_root_sum
+alias literal_harmonic_root_average := NField.Alignment.CollisionHarmonicRootAverage.literal_harmonic_root_average
+alias reciprocalCube_moebius_divisor_sum := NField.Alignment.CollisionAmplitudeCotangent.reciprocalCube_moebius_divisor_sum
+alias harmonic_seed_moebius_cotangent := NField.Alignment.CollisionAmplitudeCotangent.harmonic_seed_moebius_cotangent
+alias literal_amplitude_cotangent := NField.Alignment.CollisionAmplitudeCotangent.literal_amplitude_cotangent
+alias literal_original_amplitude_mixed_moment := NField.Alignment.CollisionAmplitudeCotangent.literal_original_amplitude_mixed_moment
+alias original_amplitude_two := NField.Alignment.CollisionAmplitudeCotangent.original_amplitude_two
+alias unitCotangentTerm_progression := NField.Alignment.CollisionCotangentPositivity.unitCotangentTerm_progression
+alias unitCotangentResidue_complement := NField.Alignment.CollisionCotangentPositivity.unitCotangentResidue_complement
+alias pairedCotangentResidue_complement := NField.Alignment.CollisionCotangentPositivity.pairedCotangentResidue_complement
+alias cotangentBlock_pairing := NField.Alignment.CollisionCotangentPositivity.cotangentBlock_pairing
+alias cotangent_nonneg_lower_half := NField.Alignment.CollisionCotangentPositivity.cotangent_nonneg_lower_half
+alias cotangent_pos_lower_half := NField.Alignment.CollisionCotangentPositivity.cotangent_pos_lower_half
+alias residueSquare_antitone := NField.Alignment.CollisionCotangentPositivity.residueSquare_antitone
+alias residueSquare_strictAnti := NField.Alignment.CollisionCotangentPositivity.residueSquare_strictAnti
+alias pairedCotangentResidue_nonneg_lower := NField.Alignment.CollisionCotangentPositivity.pairedCotangentResidue_nonneg_lower
+alias pairedCotangentResidue_nonneg := NField.Alignment.CollisionCotangentPositivity.pairedCotangentResidue_nonneg
+alias pairedCotangentResidue_one_pos := NField.Alignment.CollisionCotangentPositivity.pairedCotangentResidue_one_pos
+alias cotangentBlock_pos := NField.Alignment.CollisionCotangentPositivity.cotangentBlock_pos
+alias unitCotangentSum_block_limit := NField.Alignment.CollisionCotangentPositivity.unitCotangentSum_block_limit
+alias unitCotangentSum_pos := NField.Alignment.CollisionCotangentPositivity.unitCotangentSum_pos
+alias original_amplitude_strict_bounds := NField.Alignment.CollisionCotangentPositivity.original_amplitude_strict_bounds
+alias original_mass_has_mixed_moment_amplitudes := NField.Alignment.CollisionMixedMomentCharacterization.original_mass_has_mixed_moment_amplitudes
+alias mass_eq_collision_of_amplitudes := NField.Alignment.CollisionMixedMomentCharacterization.mass_eq_collision_of_amplitudes
+alias mixed_moment_mass_selector := NField.Alignment.CollisionMixedMomentCharacterization.mixed_moment_mass_selector
+alias literal_mixed_moment_characterization := NField.Alignment.CollisionMixedMomentCharacterization.literal_mixed_moment_characterization
+alias chiMinusThreeInt_quadratic := NField.Alignment.CollisionSmallConductorCharacters.chiMinusThreeInt_quadratic
+alias chiMinusThree_odd := NField.Alignment.CollisionSmallConductorCharacters.chiMinusThree_odd
+alias chiMinusFour_odd := NField.Alignment.CollisionSmallConductorCharacters.chiMinusFour_odd
+alias chiInducedSix_nat := NField.Alignment.CollisionSmallConductorCharacters.chiInducedSix_nat
+alias chiInducedSix_odd := NField.Alignment.CollisionSmallConductorCharacters.chiInducedSix_odd
+alias induced_six_L_two_factor := NField.Alignment.CollisionSmallConductorCharacters.induced_six_L_two_factor
+alias unitCotangentTerm_eq_residue := NField.Alignment.CollisionSmallConductorAmplitudes.unitCotangentTerm_eq_residue
+alias unitCotangentSum_of_character_table := NField.Alignment.CollisionSmallConductorAmplitudes.unitCotangentSum_of_character_table
+alias cotangent_pi_third := NField.Alignment.CollisionSmallConductorAmplitudes.cotangent_pi_third
+alias cotangent_pi_fourth := NField.Alignment.CollisionSmallConductorAmplitudes.cotangent_pi_fourth
+alias cotangent_pi_sixth := NField.Alignment.CollisionSmallConductorAmplitudes.cotangent_pi_sixth
+alias cotangent_three_table := NField.Alignment.CollisionSmallConductorAmplitudes.cotangent_three_table
+alias cotangent_four_table := NField.Alignment.CollisionSmallConductorAmplitudes.cotangent_four_table
+alias cotangent_six_table := NField.Alignment.CollisionSmallConductorAmplitudes.cotangent_six_table
+alias unitCotangentSum_three := NField.Alignment.CollisionSmallConductorAmplitudes.unitCotangentSum_three
+alias unitCotangentSum_four := NField.Alignment.CollisionSmallConductorAmplitudes.unitCotangentSum_four
+alias unitCotangentSum_six := NField.Alignment.CollisionSmallConductorAmplitudes.unitCotangentSum_six
+alias L_three_eq_real_cotangent := NField.Alignment.CollisionSmallConductorAmplitudes.L_three_eq_real_cotangent
+alias L_four_eq_real_cotangent := NField.Alignment.CollisionSmallConductorAmplitudes.L_four_eq_real_cotangent
+alias small_L_values_real := NField.Alignment.CollisionSmallConductorAmplitudes.small_L_values_real
+alias unitCotangentSum_six_three := NField.Alignment.CollisionSmallConductorAmplitudes.unitCotangentSum_six_three
+alias deltaThree_three := NField.Alignment.CollisionSmallConductorAmplitudes.deltaThree_three
+alias deltaThree_four := NField.Alignment.CollisionSmallConductorAmplitudes.deltaThree_four
+alias deltaThree_six := NField.Alignment.CollisionSmallConductorAmplitudes.deltaThree_six
+alias literal_amplitude_three := NField.Alignment.CollisionSmallConductorAmplitudes.literal_amplitude_three
+alias literal_amplitude_four := NField.Alignment.CollisionSmallConductorAmplitudes.literal_amplitude_four
+alias literal_amplitude_six := NField.Alignment.CollisionSmallConductorAmplitudes.literal_amplitude_six
+alias literal_small_conductor_examples := NField.Alignment.CollisionSmallConductorAmplitudes.literal_small_conductor_examples
+
+alias cycleVariation_summable := NField.Alignment.CollisionCycleTruncation.cycleVariation_summable
+alias truncatedTotalVariation_le := NField.Alignment.CollisionCycleTruncation.truncatedTotalVariation_le
+alias totalVariation_le_truncated_add_omitted := NField.Alignment.CollisionCycleTruncation.totalVariation_le_truncated_add_omitted
+alias totalVariation_exact_cutoff_enclosure := NField.Alignment.CollisionCycleTruncation.totalVariation_exact_cutoff_enclosure
+
+end NField.Papers.ConservationAndProfiniteDynamicsInDigitCollisionEnergy

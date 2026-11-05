@@ -4,47 +4,21 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
-import NField.Alignment.AnalyticCollisionTransform
+import NField.Alignment.PrimitiveAnalyticSpecialValues
+import NField.Alignment.LandscapeSourceMoments
+import NField.Alignment.CenteredCollisionClosure
 
-/-!
-# The Analytic Collision Transform
+/-! # The Analytic Collision Transform
 
-Reader-facing theorem map for the Lean companion to
-`papers/the_analytic_collision_transform.tex`.
+The original ten title declarations below are preserved. Additional selections
+assemble the actual finite coefficient, primitive fibers, paired analytic
+observable, periodic-zeta model, main factorization, both boundaries and
+zero multiplicities from existing NField and Mathlib theorems.
 
-## Checked here
-
-* The fixed first/last-digit diagonal has exactly the manuscript's lag-one
-  form, its general cardinality is `b^ell`, and both singular endpoint slices
-  belong to it.
-* The exact gamma-sine-power prefactor from the manuscript is defined with
-  Euler's totient normalization.  Lean proves that it is analytic and nonzero
-  throughout the open critical strip.
-* Mathlib's analytically continued Dirichlet L-function for the conjugate of
-  an odd character is analytic.
-* Once the periodic-zeta factorization is supplied, a zero diagonal boundary
-  kills the channel, while an active boundary gives exactly the same zeros as
-  the continued L-function.
-* The equality is proved at the level of `analyticOrderAt`, so multiplicities
-  agree rather than only the zero sets.
-* Lean checks the exact left-boundary recovery factor `i*pi` and the separate
-  Gauss-twisted right-boundary substitution.
-
-## Boundary
-
-Mathlib contains Hurwitz zeta functions and continued Dirichlet L-functions,
-but this companion does not yet prove the manuscript's periodic-zeta model
-sum over primitive congruence fibers.  The main transform factorization is
-therefore an explicit hypothesis of the zero-visibility and multiplicity
-theorems, not a hidden declaration.  The prior finite companion also
-does not yet join every concrete floor-jump slice to its Bernoulli transform
-in one theorem.  Consequently the analytic factorization and the fully
-concrete finite-coefficient bridge remain the two stated assembly boundaries.
-
-The zero theorem is conditional only on that factorization.  It makes no
-critical-line, zero-free-region, cross-conductor, or GRH claim.  No manuscript
-contradiction appeared in the formalized layer, and no unchecked declaration
-is used.
+All nine named manuscript results have concrete checked counterparts. The
+cotangent kernel value is checked at every rational argument used by the
+observable. Its standalone arbitrary-real argument display is not claimed
+closed. Cross-conductor control and zero location remain outside the claims.
 -/
 
 namespace NField.Papers.AnalyticCollisionTransform
@@ -176,3 +150,47 @@ theorem exact_right_boundary_gauss_twist
 #check exact_right_boundary_gauss_twist
 
 end NField.Papers.AnalyticCollisionTransform
+
+#check NField.Alignment.PrimitiveAnalyticKernel.hurwitz_character_sum
+#check NField.Alignment.PrimitiveAnalyticKernel.periodic_kernel_base_sum
+#check NField.Alignment.PrimitiveAnalyticKernel.periodic_kernel_model_sum
+#check NField.Alignment.PrimitiveAnalyticKernel.coefficient_eq_inverse_sum
+#check NField.Alignment.PrimitiveAnalyticKernel.primitive_centering_preserves_coefficient
+#check NField.Alignment.PrimitiveAnalyticKernel.kernel_boundary_coefficient
+#check NField.Alignment.PrimitiveAnalyticKernel.centered_kernel_boundary_factorization
+#check NField.Alignment.PrimitiveAnalyticKernel.kernel_boundary_eq_paired
+#check NField.Alignment.PrimitiveAnalyticKernel.diagonal_interior_eq_filter
+#check NField.Alignment.PrimitiveAnalyticKernel.actual_finite_collision_coefficient
+#check NField.Alignment.PrimitiveAnalyticKernel.actual_inactive_channel
+#check NField.Alignment.PrimitiveAnalyticKernel.actual_active_zero_iff
+#check NField.Alignment.PrimitiveAnalyticKernel.actual_active_zero_order
+#check NField.Alignment.PrimitiveAnalyticEndpoints.periodic_kernel_gauss_sum
+#check NField.Alignment.PrimitiveAnalyticEndpoints.periodic_kernel_left_sum
+#check NField.Alignment.PrimitiveAnalyticEndpoints.odd_l_function_zero
+#check NField.Alignment.PrimitiveAnalyticEndpoints.periodic_kernel_right_sum
+#check NField.Alignment.PrimitiveAnalyticEndpoints.kernel_boundary_coefficient_gauss
+#check NField.Alignment.PrimitiveAnalyticEndpoints.centered_kernel_boundary_gauss_factorization
+#check NField.Alignment.PrimitiveAnalyticEndpoints.centered_kernel_boundary_differentiable
+#check NField.Alignment.PrimitiveAnalyticEndpoints.actual_left_boundary
+#check NField.Alignment.PrimitiveAnalyticEndpoints.actual_right_boundary
+#check NField.Alignment.PrimitiveAnalyticEndpoints.actual_collision_recovery
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.hurwitz_odd_zero
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.hurwitz_zero
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.nonprincipal_l_function_zero
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.periodic_kernel_right_cotangent
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.periodic_kernel_left_log
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.periodic_kernel_differentiable
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.real_kernel_differentiable
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.periodic_kernel_residue
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.real_kernel_connection
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.periodic_amplitude_left_limit
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.primitive_odd_gauss_product
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.bernoulli_one_functional_relation
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.actual_right_l_value
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.nonzero_residue_mem_unit_interval
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.interior_arguments_ne_zero
+#check NField.Alignment.PrimitiveAnalyticSpecialValues.centered_kernel_boundary_printed_mean
+#check NField.Alignment.PrimitiveReductionFiber.primitive_fiber_sum_zero
+#check NField.Alignment.PrimitiveReductionFiber.primitive_reduction_weight_sum_zero
+#check NField.Alignment.CenteredPowerFibers.coarseUnitReduction_fiber_card
+#check NField.Alignment.SawtoothLValue.primitiveOdd_gaussSum_normSq

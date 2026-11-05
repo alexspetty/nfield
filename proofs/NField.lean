@@ -35,4 +35,6 @@ import NField.Papers.TheStructureThatSurvives
 import NField.Papers.CarryBoundariesAndBernoulliSpectra
 import NField.Papers.AdditiveBoundariesAndConductorEnergiesOfPeriodicRemainderOrbits
 import NField.Papers.TheCubicLawForDigitCollisionEnergy
+import NField.Papers.RationalRigidityGoldenScale
 import NField.Papers.TheSecondaryTermInDigitCollisionEnergy
+import NField.Papers.ConservationAndProfiniteDynamicsInDigitCollisionEnergy

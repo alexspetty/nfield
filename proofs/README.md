@@ -10,13 +10,13 @@ upstream source retains its separate attribution and license notices.
 The library builds on [Mathlib](https://github.com/leanprover-community/mathlib4),
 using its mathematical definitions, existing theorems, and proof tactics.
 Mathlib is installed as a pinned dependency; its source is not copied into
-this package. Two additional analytic number theory modules are adapted from
+this package. Fifteen additional analytic number theory modules are adapted from
 PrimeNumberTheoremAnd. Their authorship, source revision, exact source hashes,
 and adaptations are documented in
 [the upstream provenance note](NField/External/ConservationPNT/README.md).
 
 The root module imports the formal paper maps in reading order, ending with
-*The Secondary Term in Digit-Collision Energy*. The reusable definitions and
+*Conservation and Profinite Dynamics in Digit-Collision Energy*. The reusable definitions and
 proofs under `NField/Alignment/`, `NField/Golden/`, and the other object-named
 directories are included when one of those paper maps imports them.
 

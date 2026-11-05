@@ -4,6 +4,19 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.PrimitiveReductionFiber
+import NField.Alignment.LandscapeActualSpectrum
+import NField.Alignment.LandscapeSpecialValueMoment
+import NField.Alignment.BaseFiveCharacterPolynomial
+import NField.Alignment.BaseFiveCollisionEnergy
+import NField.Alignment.BaseFiveSpecialValue
+import NField.Alignment.BaseFiveLaurentLedger
+import NField.Alignment.BaseFiveCharacterRoots
+import NField.Alignment.BaseFiveFourthMomentDetails
+import NField.Alignment.PrimitiveNaturalFloorTransform
+import NField.Alignment.LandscapeSourceMoments
+import NField.Alignment.BaseFiveArithmeticDetails
+import NField.Alignment.LandscapeCorrelationScaling
 import NField.Alignment.CollisionSpectrumLandscape
 import NField.Alignment.PrimitiveFloorTransform
 import NField.Alignment.PrimitiveOddBoundaryMean
@@ -44,15 +57,15 @@ Reader-facing theorem map for the Lean companion to
   centered collision energy forty-eight and checks zero total on every coarse
   fiber.
 
-## Boundary
+## Exact source assembly
 
-The companion proves the finite generalized-Bernoulli and floor transforms,
-the primitive-odd gate and population, the exact factorization algebra, the
-special-value magnitude identity, and the base-five certificates.  It does not
-yet join every concrete floor-jump slice and the natural diagonal indexing into
-one theorem about the actual centered collision coefficient.  The checked
-pieces have no contradictory assumptions, but that final assembly remains an
-explicit formalization boundary.
+The actual primitive coefficient, diagonal reduction, weighted special-value
+moment and exact base-five fourth moment are proved without factorization
+hypotheses. Primitive reduction fibers, every natural floor multiplier, the
+separate floor and diagonal moments, actual generator exponents, Bernoulli
+polynomials and the literal Laurent/Ramanujan ledger are connected explicitly.
+The original twenty-five declarations retain their statements; the additional
+forty-six selected results supply the concrete source correspondences.
 
 The correlations for bases five through seventy-one remain exhaustive nfield
 evidence rather than Lean theorems.  No asymptotic correlation, decay law,
@@ -365,5 +378,52 @@ theorem declared_ledger_channel_count :
 #check base_five_fourth_power_ledgers
 #check base_five_fourth_moment_from_parseval
 #check declared_ledger_channel_count
+
+#check NField.Alignment.PrimitiveReductionFiber.primitive_nontrivial_kernel
+#check NField.Alignment.PrimitiveReductionFiber.primitive_fiber_sum_zero
+#check NField.Alignment.PrimitiveReductionFiber.primitive_reduction_weight_sum_zero
+#check NField.Alignment.LandscapeActualSpectrum.diagonalBoundary_eq_short_sum
+#check NField.Alignment.LandscapeActualSpectrum.diagonalBoundary_norm
+#check NField.Alignment.LandscapeActualSpectrum.actual_collision_coefficient
+#check NField.Alignment.LandscapeActualSpectrum.actual_centered_collision_coefficient
+#check NField.Alignment.LandscapeActualSpectrum.bernoulli_l_value_norm
+#check NField.Alignment.LandscapeActualSpectrum.actual_coefficient_l_value_norm
+#check NField.Alignment.LandscapeSpecialValueMoment.actual_primitive_parseval
+#check NField.Alignment.LandscapeSpecialValueMoment.actual_special_value_moment
+#check NField.Alignment.BaseFiveCharacterPolynomial.short_character_polynomial
+#check NField.Alignment.BaseFiveCharacterPolynomial.bernoulli_character_polynomial
+#check NField.Alignment.BaseFiveCharacterPolynomial.primitive_odd_cyclotomic_twenty
+#check NField.Alignment.BaseFiveCollisionEnergy.base_five_actual_collision_energy
+#check NField.Alignment.BaseFiveSpecialValue.actual_short_bernoulli_norm_sq
+#check NField.Alignment.BaseFiveSpecialValue.actual_diagonal_bernoulli_norm
+#check NField.Alignment.BaseFiveSpecialValue.actual_coefficient_l_value
+#check NField.Alignment.BaseFiveSpecialValue.actual_l_value_fourth_moment
+#check NField.Alignment.BaseFiveLaurentLedger.short_laurent_expansion
+#check NField.Alignment.BaseFiveLaurentLedger.even_square_mod_twenty
+#check NField.Alignment.BaseFiveLaurentLedger.actual_ramanujan_twenty_values
+#check NField.Alignment.BaseFiveLaurentLedger.actual_ramanujan_twenty_odd_zero
+#check NField.Alignment.BaseFiveCharacterRoots.generator_order
+#check NField.Alignment.BaseFiveCharacterRoots.character_value_isPrimitiveRoot
+#check NField.Alignment.BaseFiveCharacterRoots.characterExponent_bijective
+#check NField.Alignment.BaseFiveFourthMomentDetails.actual_short_bernoulli_norm
+#check NField.Alignment.BaseFiveFourthMomentDetails.actual_coefficient_diagonal_fourth
+#check NField.Alignment.BaseFiveFourthMomentDetails.actual_diagonal_fourth_moment
+#check NField.Alignment.BaseFiveFourthMomentDetails.actual_initial_fourth_moment
+#check NField.Alignment.BaseFiveFourthMomentDetails.primitive_root_fourth_moment
+#check NField.Alignment.PrimitiveNaturalFloorTransform.primitive_fractional_transform
+#check NField.Alignment.PrimitiveNaturalFloorTransform.primitive_natural_floor_transform
+#check NField.Alignment.PrimitiveNaturalFloorTransform.primitive_floor_jump_transform
+#check NField.Alignment.LandscapeSourceMoments.prime_base_character_zero
+#check NField.Alignment.LandscapeSourceMoments.primitive_base_floor_moment
+#check NField.Alignment.LandscapeSourceMoments.primitive_diagonal_floor_moment
+#check NField.Alignment.LandscapeSourceMoments.primitive_centering_removal
+#check NField.Alignment.LandscapeSourceMoments.primitive_raw_coefficient_sum
+#check NField.Alignment.LandscapeSourceMoments.actual_coefficient_short_l_norm
+#check NField.Alignment.BaseFiveArithmeticDetails.residue_power_list
+#check NField.Alignment.BaseFiveArithmeticDetails.primitive_exponent_list
+#check NField.Alignment.BaseFiveArithmeticDetails.paired_residue_powers
+#check NField.Alignment.BaseFiveArithmeticDetails.paired_character_powers
+#check NField.Alignment.BaseFiveArithmeticDetails.paired_bernoulli_polynomial
+#check NField.Alignment.LandscapeCorrelationScaling.actual_bernoulli_l_correlation
 
 end NField.Papers.CollisionSpectrumLandscape
