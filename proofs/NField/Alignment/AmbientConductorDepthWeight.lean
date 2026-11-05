@@ -33,10 +33,10 @@ noncomputable def ambientConductorDepthWeight
       (p ^ v : ℂ) * ψ⁻¹ (k.val.divMaxPow p : ZMod (p ^ t))
     else 0
 
-/--
+/-- Title: `Exact response at each conductor depth`.
+
 At a fixed ambient prime power, every residue has exactly the response
-prescribed by its canonical p-adic depth and primitive unit part.
--/
+prescribed by its canonical p-adic depth and primitive unit part. -/
 theorem ambientConductorDepthWeight_exact_response
     {p N t : ℕ} [NeZero (p ^ N)] [NeZero (p ^ t)]
     (hp : p.Prime) (ht : 1 ≤ t) (htN : t ≤ N)

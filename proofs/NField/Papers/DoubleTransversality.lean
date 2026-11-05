@@ -5,6 +5,9 @@ Author: Alexander S. Petty
 -/
 
 import NField.Alignment.DoubleTransversality
+import NField.Alignment.FiniteFamilyCRT
+import NField.Alignment.FiniteFamilyNorm
+import NField.Alignment.CenteredPowerFibers
 
 /-!
 # The Double Transversality
@@ -37,11 +40,9 @@ Reader-facing theorem map for the Lean companion to
 
 The fourteen higher-lag prime-cutoff rows, Pearson coefficients, five-cutoff
 monotonicity table, and ten-base implementation audit are finite software
-evidence and are not recomputed in Lean.  Independence of all coordinate
-random variables and the arbitrary finite-family Fourier factorization are
-not separately encoded; the companion proves the exact two-coordinate
-orthogonality, support, energy, and recovery statements from which the finite
-pairwise claims follow.  Cutoff-uniform assignment control and convergence
+evidence and are not recomputed in Lean.  The arbitrary finite-family CRT,
+character factorization, disjoint support, weighted energy, recovery, and
+probabilistic independence are encoded below. Cutoff-uniform assignment control and convergence
 below one remain open.  No unchecked declaration is used.
 -/
 
@@ -61,6 +62,22 @@ noncomputable def centeredCollisionTable (b ell : ℕ)
     [NeZero b] [NeZero (allLagModulus b ell)] :
     UnitClass (allLagModulus b ell) → ℂ :=
   centeredSignal (coarseUnitReduction b ell) (allLagUnitTable b ell)
+
+/-- Every base-reduction fiber has the exact size used in the manuscript's mean. -/
+theorem exact_reduction_fiber_card (b ell : ℕ) [NeZero b]
+    [NeZero (allLagModulus b ell)] (u : UnitClass b) :
+    Fintype.card (Fiber (coarseUnitReduction b ell) u) = b ^ ell :=
+  NField.Alignment.CenteredPowerFibers.coarseUnitReduction_fiber_card b ell u
+
+/-- The centered signal uses exactly the printed denominator `b^ell`. -/
+theorem exact_centering_denominator (b ell : ℕ) [NeZero b]
+    [NeZero (allLagModulus b ell)] (a : UnitClass (allLagModulus b ell)) :
+    centeredCollisionTable b ell a = allLagUnitTable b ell a -
+      (b ^ ell : ℂ)⁻¹ *
+        ∑ t : Fiber (coarseUnitReduction b ell) (coarseUnitReduction b ell a),
+          allLagUnitTable b ell t := by
+  unfold centeredCollisionTable centeredSignal
+  rw [NField.Alignment.CenteredPowerFibers.coarse_fiberMean]
 
 /-- Natural unit reduction commutes with negation. -/
 theorem coarseUnitReduction_neg
@@ -324,7 +341,126 @@ theorem lcm_common_quotient_orthogonal_of_right
   unfold finiteInner
   simp [hzero]
 
+section FiniteFamily
+
+open NField.Alignment.FiniteFamilyTransversality NField.Alignment.FiniteFamilyCRT
+open NField.Alignment.FiniteFamilyProbability
+open NField.Alignment.FiniteFamilyNorm
+open MeasureTheory ProbabilityTheory
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] (b ell : ι → ℕ)
+    [∀ i, NeZero (b i)] [∀ i, NeZero (allLagModulus (b i) (ell i))]
+    [NeZero (∏ i, allLagModulus (b i) (ell i))]
+    (hb : Pairwise fun i j => Nat.Coprime (b i) (b j))
+
+/-- The finite CRT coordinates are reductions modulo the independently chosen power moduli. -/
+noncomputable def familyUnitEquiv :
+    UnitClass (∏ i, allLagModulus (b i) (ell i)) ≃*
+      ∀ i, UnitClass (allLagModulus (b i) (ell i)) :=
+  unitPiEquiv (fun i => allLagModulus (b i) (ell i))
+    (fun _ _ hij => table_moduli_coprime (hb hij))
+
+noncomputable def familyLift (i : ι)
+    (a : UnitClass (∏ i, allLagModulus (b i) (ell i))) : ℂ :=
+  centeredCollisionTable (b i) (ell i) (familyUnitEquiv b ell hb a i)
+
+theorem finite_family_zero_mean (i : ι) : ∑ a, familyLift b ell hb i a = 0 :=
+  crt_sum_zero _ _ (fun i => centeredCollisionTable (b i) (ell i))
+    (fun _ => centered_collision_table_sum_zero) i
+
+theorem finite_family_orthogonality {i j : ι} (hij : i ≠ j) :
+    finiteInner (familyLift b ell hb i) (familyLift b ell hb j) = 0 :=
+  crt_orthogonal _ _ (fun i => centeredCollisionTable (b i) (ell i))
+    (fun _ => centered_collision_table_sum_zero) hij
+
+theorem finite_family_energy_preserved (i : ι) :
+    finiteEnergy (familyLift b ell hb i) = finiteEnergy (centeredCollisionTable (b i) (ell i)) :=
+  crt_energy _ _ (fun i => centeredCollisionTable (b i) (ell i)) i
+
+theorem finite_family_weighted_energy (w : ι → ℂ) :
+    finiteEnergy (fun a => ∑ i, w i * familyLift b ell hb i a) =
+      ∑ i, (w i * star (w i)) * finiteEnergy (centeredCollisionTable (b i) (ell i)) :=
+  crt_weighted_energy _ _ (fun i => centeredCollisionTable (b i) (ell i))
+    (fun _ => centered_collision_table_sum_zero) w
+
+omit [∀ i, NeZero (b i)] [∀ i, NeZero (allLagModulus (b i) (ell i))]
+  [NeZero (∏ i, allLagModulus (b i) (ell i))] in
+theorem finite_family_character_factorization
+    (χ : UnitClass (∏ i, allLagModulus (b i) (ell i)) →* ℂ) :
+    ∃! ψ : ∀ i, UnitClass (allLagModulus (b i) (ell i)) →* ℂ,
+      ∀ a, χ a = ∏ i, ψ i (familyUnitEquiv b ell hb a i) :=
+  crt_character_factorization _ _ χ
+
+theorem finite_family_coefficient (i : ι)
+    (χ : ∀ i, UnitClass (allLagModulus (b i) (ell i)) →* ℂ) :
+    finiteCoefficient (familyLift b ell hb i) (fun a => ∏ j, χ j (familyUnitEquiv b ell hb a j)) =
+      finiteCoefficient (centeredCollisionTable (b i) (ell i)) (χ i) *
+        ∏ j : {j // j ≠ i}, finiteMean (fun a => star (χ j a)) :=
+  crt_coefficient _ _ (fun i => centeredCollisionTable (b i) (ell i)) i χ
+
+theorem finite_family_disjoint_support {i j : ι} (hij : i ≠ j)
+    (χ : ∀ i, UnitClass (allLagModulus (b i) (ell i)) →* ℂ) :
+    finiteCoefficient (familyLift b ell hb i) (fun a => ∏ k, χ k (familyUnitEquiv b ell hb a k)) = 0 ∨
+      finiteCoefficient (familyLift b ell hb j) (fun a => ∏ k, χ k (familyUnitEquiv b ell hb a k)) = 0 :=
+  crt_disjoint_support _ _ (fun i => centeredCollisionTable (b i) (ell i))
+    (fun _ => centered_collision_table_sum_zero) hij χ
+
+omit [NeZero (∏ i, allLagModulus (b i) (ell i))] in
+theorem finite_family_coordinate_recovery (w : ι → ℂ) (i : ι)
+    (a : UnitClass (allLagModulus (b i) (ell i))) :
+    finiteMean (fun y : ∀ j : {j // j ≠ i}, UnitClass (allLagModulus (b j) (ell j)) =>
+      ∑ j, w j * familyLift b ell hb j ((familyUnitEquiv b ell hb).symm
+        ((Equiv.piSplitAt i (fun j => UnitClass (allLagModulus (b j) (ell j)))).symm (a, y)))) =
+      w i * centeredCollisionTable (b i) (ell i) a :=
+  crt_recover_coordinate _ _ (fun i => centeredCollisionTable (b i) (ell i))
+    (fun _ => centered_collision_table_sum_zero) w i a
+
+/-- The printed equality of normalized real norms. -/
+theorem finite_family_norm_preserved (i : ι) :
+    finiteNorm (familyLift b ell hb i) = finiteNorm (centeredCollisionTable (b i) (ell i)) :=
+  finiteNorm_of_energy_eq _ _ (finite_family_energy_preserved b ell hb i)
+
+/-- The printed Pythagorean identity with real squared absolute values of arbitrary complex weights. -/
+theorem finite_family_pythagorean (w : ι → ℂ) :
+    finiteNorm (fun a => ∑ i, w i * familyLift b ell hb i a) ^ 2 =
+      ∑ i, ‖w i‖ ^ 2 * finiteNorm (centeredCollisionTable (b i) (ell i)) ^ 2 := by
+  rw [weighted_norm_square (familyLift b ell hb) w
+    (fun _ _ hij => finite_family_orthogonality b ell hb hij)]
+  simp only [finite_family_norm_preserved]
+
+local instance unitMeasurableSpace (n : ℕ) : MeasurableSpace (UnitClass n) := ⊤
+local instance unitMeasurableSingleton (n : ℕ) : MeasurableSingletonClass (UnitClass n) :=
+  ⟨fun _ => trivial⟩
+
+omit [∀ i, NeZero (b i)] in
+theorem finite_family_uniform_coordinates :
+    (uniformMeasure (UnitClass (∏ i, allLagModulus (b i) (ell i)))).map
+      (familyUnitEquiv b ell hb) =
+        Measure.pi (fun i => uniformMeasure (UnitClass (allLagModulus (b i) (ell i)))) :=
+  crt_uniform_coordinates _ _
+
+theorem finite_family_independence :
+    iIndepFun (familyLift b ell hb)
+      (uniformMeasure (UnitClass (∏ i, allLagModulus (b i) (ell i)))) :=
+  crt_independent_signals _ _ (fun i => centeredCollisionTable (b i) (ell i))
+
+end FiniteFamily
+
+#check finite_family_zero_mean
+#check finite_family_orthogonality
+#check finite_family_energy_preserved
+#check finite_family_weighted_energy
+#check finite_family_character_factorization
+#check finite_family_coefficient
+#check finite_family_disjoint_support
+#check finite_family_coordinate_recovery
+#check finite_family_uniform_coordinates
+#check finite_family_independence
+#check finite_family_norm_preserved
+#check finite_family_pythagorean
 #check centered_collision_table_sum_zero
+#check exact_reduction_fiber_card
+#check exact_centering_denominator
 #check exact_raw_reflection
 #check exact_centered_reflection
 #check even_character_gate

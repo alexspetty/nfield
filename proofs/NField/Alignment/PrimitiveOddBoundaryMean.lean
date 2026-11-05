@@ -257,6 +257,7 @@ theorem primitiveOddKernel_eq_difference
     nonprimitiveOddKernel_eq_previous hp hN x y]
   ring
 
+/-- Title: `Primitive odd character kernel at a prime power`. -/
 theorem primitiveOddKernel_eq_primePowerKernel
     {p N : ℕ} (hp : p.Prime) (hN : 2 ≤ N)
     (x y : UnitClass (p ^ N)) :
@@ -646,6 +647,7 @@ theorem primitiveOdd_population_ratio
   rw [hcount]
   field_simp [hp1, hbase]
 
+/-- Title: `Mean law under the boundary criterion`. -/
 theorem boundaryMeanCriterion_average
     {p N : ℕ} [NeZero (p ^ N)] [NeZero (p ^ (N - 1))]
     (hp : p.Prime) (hpodd : p ≠ 2) (hN : 2 ≤ N)

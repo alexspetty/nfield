@@ -55,11 +55,11 @@ noncomputable def blockLiftWeight
     (h : ZMod q → ℂ) (x : ZMod (q * L)) : ℂ :=
   h ((x.val / L : ℕ) : ZMod q)
 
-/--
+/-- Title: `Boundary of a block lift at dilated endpoints`.
+
 The boundary of a block lift at every dilated endpoint is exactly the
 lower-level signed boundary. Together with vanishing off dilated endpoints,
-this is the finite pushforward identity for the complete boundary chain.
--/
+this is the finite pushforward identity for the complete boundary chain. -/
 theorem blockLiftBoundary_at_dilated_point
     {q L : ℕ} [NeZero q] [NeZero (q * L)]
     (hq : 2 ≤ q) (hL : 0 < L) (h : ZMod q → ℂ)
@@ -119,7 +119,9 @@ theorem blockLiftBoundary_at_dilated_point
     rw [hxprev, hxval', pred_mul_div hL hypos, hdiv]
     rw [← hyprev, ZMod.natCast_zmod_val, ZMod.natCast_zmod_val]
 
-/-- A block-lift boundary vanishes away from indices divisible by the block length. -/
+/-- Title: `Vanishing away from dilated endpoints`.
+
+A block-lift boundary vanishes away from indices divisible by the block length. -/
 theorem blockLiftBoundary_zero_off_dilated_support
     {q L : ℕ} [NeZero q] [NeZero (q * L)]
     (hq : 2 ≤ q) (hL : 0 < L) (h : ZMod q → ℂ)
@@ -168,7 +170,9 @@ theorem blockLiftBoundary_nonunit_of_prime_dilation
   have hcop' : x.val.Coprime p := hcop.of_dvd_right hpTop
   exact (hp.coprime_iff_not_dvd.mp hcop'.symm) hpx
 
-/-- Primitive characters at the lifted level cannot see a support native to the lower level. -/
+/-- Title: `Primitive invisibility of a lifted boundary`.
+
+Primitive characters at the lifted level cannot see a support native to the lower level. -/
 theorem primitiveTransform_blockLift_zero
     {p q L : ℕ} [NeZero q] [NeZero (q * L)]
     (hp : p.Prime) (hq : 2 ≤ q) (hL : 0 < L) (hpL : p ∣ L)

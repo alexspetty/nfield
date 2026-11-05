@@ -23,7 +23,9 @@ open NField.Alignment.CarryBoundarySpectra
 open NField.Alignment.ConductorDepthWeight
 open NField.Alignment.DepthWeightedBoundaryFactorization
 
-/-- Cell-difference form of the exact conductor-stratified factorization. -/
+/-- Title: `Carry factorization by conductor depth`.
+
+Cell-difference form of the exact conductor-stratified factorization. -/
 theorem conductorDepth_carry_factorization
     {p t s : ℕ} [NeZero (p ^ t * p ^ s)] [NeZero (p ^ t)]
     (hp : p.Prime) (ht : 1 ≤ t)
@@ -37,7 +39,9 @@ theorem conductorDepth_carry_factorization
   exact carryTransform_of_exact_response w _ _ _
     (conductorDepthWeight_exact_response hp ht hψ)
 
-/-- Signed-boundary-chain form of the exact conductor-stratified factorization. -/
+/-- Title: `Boundary factorization by conductor depth`.
+
+Signed-boundary-chain form of the exact conductor-stratified factorization. -/
 theorem conductorDepth_boundary_factorization
     {p t s : ℕ} [NeZero (p ^ t * p ^ s)] [NeZero (p ^ t)]
     (hp : p.Prime) (ht : 1 ≤ t)

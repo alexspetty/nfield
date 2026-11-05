@@ -477,6 +477,7 @@ theorem doublePairing_finset_sum_swap
       intro x _
       rw [Finset.mul_sum]
 
+/-- Title: `Conductor decomposition of the primitive odd boundary moment`. -/
 theorem primitiveOddBoundaryMoment_conductorLedger
     (μ : UnitClass m → ℂ) :
     primitiveOddBoundaryMoment μ =

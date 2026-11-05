@@ -5,7 +5,11 @@ Author: Alexander S. Petty
 -/
 
 import NField.Alignment.CollisionInvariant
+import NField.Alignment.FloorDigitBinDistribution
 import NField.Alignment.CenteredCollisionClosure
+import NField.Alignment.CompositeCollisionConjugation
+import NField.Alignment.BasePowerOptimality
+import NField.Alignment.CollisionInvariantDetails
 
 /-!
 # The Collision Invariant
@@ -30,19 +34,13 @@ Reader-facing theorem map for the Lean companion to
   Lean derives the exact cardinality `phi(m)/2` for all `m >= 3` and
   `1 <= n <= m-2`.
 
-## Boundary
+## Complete finite correspondence
 
-The manuscript's stronger collision-coordinate identity expressing the count
-as twice a positive-displacement count is not yet assembled here.  Parity is
-proved independently, while the exact zero gate and its `b-1` family are
-inherited from the bin-derangement companion.
+The composite coprime conjugation, positive-displacement count and both
+sharpness witnesses are proved for the actual digit word and all-lag table.
+The lower-power obstruction and diagonal half-group corollary are explicit.
+The manuscript's numerical sweeps remain finite computational evidence.
 
-The two symbolic values used to prove optimality of `b^(ell+1)` among base
-powers remain an assembly target.  The general composite-modulus version of
-the initial conjugation lemma is likewise not yet generalized from the current
-prime statement.  No boundary is hidden behind an unchecked declaration.
-
-No contradiction with the manuscript appeared in the formalized layer.
 -/
 
 namespace NField.Papers.CollisionInvariant
@@ -161,6 +159,61 @@ theorem exact_half_group {m n : ℕ} [NeZero m]
     Fintype.card (WrappingClass m (n + 1)) = m.totient / 2 :=
   interiorWrappingClass_card hm3 hnlo hnhi
 
+
+/-- Base conjugation for arbitrary coprime moduli. -/
+theorem exact_coprime_conjugation {b N : ℕ}
+    (hb : 0 < b) (hcop : b.Coprime N) (hbN : b < N) [NeZero N]
+    (r s : ZMod N) :
+    digitBin b N r.val = digitBin b N s.val ↔
+      ((b : ZMod N) * r).val % b = ((b : ZMod N) * s).val % b :=
+  NField.Alignment.CompositeCollisionConjugation.digit_eq_iff_transformed_mod_coprime
+    hb hcop hbN r s
+
+/-- The complete collision congruence for a unit at a composite modulus. -/
+theorem exact_coprime_collision_congruence {b N : ℕ}
+    (hb : 0 < b) (hcop : b.Coprime N) (hbN : b < N) [NeZero N]
+    (g : (ZMod N)ˣ) :
+    collisionCount (primeDigitWord b N hb (NeZero.pos N)) g.val =
+      transformedCollisionCount b N g.val :=
+  NField.Alignment.CompositeCollisionConjugation.collisionCount_eq_congruence_coprime
+    hb hcop hbN g
+
+/-- The collision count is twice the actual positive-displacement count. -/
+theorem exact_positive_collision_coordinate {b p : ℕ}
+    (hb2 : 2 ≤ b) (hp : Nat.Prime p) (hbp : b < p) [NeZero p]
+    {g : ZMod p} (hg0 : g ≠ 0) (hg1 : g ≠ 1) :
+    collisionCount (primeDigitWord b p (by omega) hp.pos) g =
+      2 * ((Finset.Icc 1 ((p - 1) / b)).filter
+        (fun j => j * b < j * gateParameter b p g % p)).card :=
+  NField.Alignment.SilentPrimesClosure.collision_coordinate_positive_comparisons
+    hb2 hp hbp hg0 hg1
+
+/-- The manuscript's two unit classes have the displayed unequal values. -/
+theorem exact_optimal_base_power_witnesses {b ell : ℕ}
+    (hb2 : 2 ≤ b) (hell : 1 ≤ ell) :
+    (allLagModulus b ell - b ^ ell + 1).Coprime (allLagModulus b ell) ∧
+    1 ≡ allLagModulus b ell - b ^ ell + 1 [MOD b ^ ell] ∧
+    allLagTable b ell 1 = 0 ∧
+    allLagTable b ell (allLagModulus b ell - b ^ ell + 1) =
+      -(((b - 1) * b ^ (ell - 1) : ℕ) : ℤ) :=
+  NField.Alignment.BasePowerOptimality.optimal_base_power_witnesses hb2 hell
+
+/-- Every smaller base power fails to determine the actual unit table. -/
+theorem exact_no_lower_base_power {b ell k : ℕ}
+    (hb2 : 2 ≤ b) (hell : 1 ≤ ell) (hk : k ≤ ell) :
+    ¬ ∃ f : ℕ → ℤ, ∀ a, 0 < a → a < allLagModulus b ell →
+      a.Coprime (allLagModulus b ell) → allLagTable b ell a = f (a % b ^ k) :=
+  NField.Alignment.BasePowerOptimality.allLagTable_not_factor_lower_power hb2 hell hk
+
+/-- Every nonendpoint diagonal wrapping set has half the unit classes. -/
+theorem exact_diagonal_half_group {b ell n : ℕ}
+    [NeZero (allLagModulus b ell)] (hb2 : 2 ≤ b) (hell : 1 ≤ ell)
+    (hn : n ∈ allLagDiagonal b ell) (hn0 : n ≠ 0)
+    (hnlast : n ≠ allLagModulus b ell - 1) :
+    Fintype.card (WrappingClass (allLagModulus b ell) (n + 1)) =
+      (allLagModulus b ell).totient / 2 :=
+  NField.Alignment.CollisionInvariantDetails.diagonal_wrapping_card hb2 hell hn hn0 hnlast
+
 #check exact_prime_conjugation
 #check exact_collision_congruence
 #check exact_bilateral_parity
@@ -174,5 +227,47 @@ theorem exact_half_group {m n : ℕ} [NeZero m]
 #check exact_reflection
 #check exact_grand_mean
 #check exact_half_group
+
+#check exact_coprime_conjugation
+#check exact_coprime_collision_congruence
+#check exact_positive_collision_coordinate
+#check exact_optimal_base_power_witnesses
+#check exact_no_lower_base_power
+#check exact_diagonal_half_group
+#check NField.Alignment.digitBinPopulation_eq_boundary_sub
+#check NField.Alignment.digitBinPopulation_eq_quotient_or_succ
+#check NField.Alignment.enlargedDigitBins_card
+#check NField.Alignment.BinDerangementsClosure.digitBinPopulation_floor_formula
+#check NField.Alignment.BinDerangements.digit_decomposition
+#check NField.Alignment.BinDerangements.gateParameter_mul_one_sub
+#check NField.Alignment.BinDerangements.transformedCollisionCount_eq_zero_iff_parameter_lt
+#check NField.Alignment.SilentPrimesClosure.positive_point_collision
+#check NField.Alignment.SilentPrimesClosure.negative_point_collision
+#check NField.Alignment.SilentPrimesClosure.collision_has_positive_coordinate
+#check NField.Alignment.SilentPrimesClosure.transformedCollisionSet_eq_coordinate_points
+#check NField.Alignment.SilentPrimesClosure.coordinate_points_card
+#check NField.Alignment.CenteredCollisionClosure.encodedPrefixDigit_allLag_first
+#check NField.Alignment.CenteredCollisionClosure.encodedPrefixDigit_allLag_last
+#check NField.Alignment.CenteredCollisionClosure.digitReadout_eq_transported_digitBin
+#check NField.Alignment.CenteredCollisionClosure.direct_allLag_collision_iff_prefix_cell_mem
+#check NField.Alignment.CenteredCollisionClosure.directAllLagCollisionCount_eq_allLagSliceScore
+#check NField.Alignment.CollisionFluctuationSum.floorJump_add_modulus_mul
+#check NField.Alignment.BasePowerOptimality.sharp_witness_residue
+#check NField.Alignment.BasePowerOptimality.sharp_witness_bounds
+#check NField.Alignment.BasePowerOptimality.sharp_witness_coprime
+#check NField.Alignment.BasePowerOptimality.sharp_witness_quotient
+#check NField.Alignment.BasePowerOptimality.allLagTable_one
+#check NField.Alignment.BasePowerOptimality.allLagTable_sharp_witness
+#check NField.Alignment.BasePowerOptimality.sharp_witness_lower_congruence
+#check NField.Alignment.CollisionPeriodicTable.complement_div
+#check NField.Alignment.CollisionPeriodicTable.floorJump_complement_interior
+#check NField.Alignment.PrimeCarryTableColumnLaw.floorJump_last_eq_one
+#check NField.Alignment.CollisionTransformStrip.allLag_jump_pair_value
+#check NField.Alignment.CollisionTransformStrip.allLag_jump_pair_sum
+#check NField.Alignment.CollisionTransformStrip.allLag_quotient_complement
+#check NField.Alignment.CollisionInvariant.wraps_neg_iff
+#check NField.Alignment.CollisionInvariantDetails.collisionCount_eq_natural_card
+#check NField.Alignment.CollisionInvariantDetails.directAllLagCollisionCount_eq_natural_card
+#check NField.Alignment.CollisionInvariantDetails.identity_collision_count
 
 end NField.Papers.CollisionInvariant

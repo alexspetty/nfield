@@ -60,7 +60,9 @@ theorem natCast_mul_ne_zero
   have hle := Nat.le_of_dvd hnpos hmn
   omega
 
-/-- Pointwise carry identity, including both cyclic endpoint corrections. -/
+/-- Title: `Sawtooth carry identity with endpoint corrections`.
+
+Pointwise carry identity, including both cyclic endpoint corrections. -/
 theorem sawtooth_carry_step
     {m A n : ℕ} [NeZero m]
     (hm : 2 ≤ m) (hApos : 1 ≤ A) (hAm : A < m)
@@ -142,7 +144,9 @@ noncomputable def naturalWeightTotal
     {m : ℕ} [NeZero m] (w : ZMod m → ℂ) : ℂ :=
   ∑ n : Fin m, w (n.val : ZMod m)
 
-/-- Exact endpoint normalization for every unit multiplier. -/
+/-- Title: `Endpoint normalization`.
+
+Exact endpoint normalization for every unit multiplier. -/
 theorem endpoint_normalization
     {m : ℕ} [NeZero m] (hm : 2 ≤ m)
     (w : ZMod m → ℂ) (a : UnitClass m) :
@@ -257,7 +261,9 @@ theorem endpoint_normalization
   rw [hcarrySum, hbulkSum]
   ring
 
-/-- A constant discrepancy on units vanishes in every nonprincipal character channel. -/
+/-- Title: `Spectral invisibility of a constant on units`.
+
+A constant discrepancy on units vanishes in every nonprincipal character channel. -/
 theorem unit_constant_is_spectrally_invisible
     {m : ℕ} [NeZero m] (F A : ZMod m → ℂ) (c : ℂ)
     {ψ : Character m} (hψ : ψ ≠ 1)

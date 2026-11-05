@@ -4,6 +4,17 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.PushdownParity
+import NField.Alignment.DivisorConductorLedger
+import NField.Alignment.IncreasingDigitBoundary
+import NField.Alignment.RationalRemainderOrbit
+import NField.Alignment.BaseFifteenActualEnergy
+import NField.Alignment.OrbitIndicatorCorrespondence
+import NField.Alignment.EventualCycleBoundary
+import NField.Alignment.OrbitPaperExamples
+import NField.Alignment.OrbitPaperDetails
+import NField.Alignment.BaseFifteenEndpointDetails
+import NField.Alignment.QuadraticSupplementaryPowers
 import NField.Alignment.BaseFifteenConductorSpectrum
 import NField.Alignment.FiniteStateOrbitBoundary
 import NField.Alignment.IndexTwoOrbitEnergy
@@ -47,15 +58,16 @@ Reader-facing theorem map for the Lean companion to
   cycle, predecessor minus current value is the dynamical boundary, and its
   total mass is zero.
 
-## Formalization boundary
+## Source correspondence and evidence
 
-The fifty-one checked results cover the main finite theorem stack. The
-pushdown-vanishing implication, its modulus-25 converse witness, and the
-general CRT reduction to the coprime periodic component are not assembled as
-title-facing theorems. The claim and equation ledgers record these remaining
-formalization obligations separately from the open higher-index energy
-question. A checked declaration does not certify every clause of nearby
-exposition. No unchecked declaration is used in the listed theorem stack.
+The November continuation assembles the parity criterion and literal
+modulus-25 witness, denominator CRT and exact period/coset, arbitrary-divisor
+ledger, and connections from the actual digit/orbit indicators to the
+character energies. It constructs the actual eventual cycle permutation and
+checks the printed finite examples. The separate source inventories cover
+all named results and displays; the higher-index closed-form question remains
+explicitly open. Native package and local reader admission have their own
+receipts. A build alone does not establish source correspondence.
 -/
 
 namespace NField.Papers.AdditiveBoundariesAndConductorEnergiesOfPeriodicRemainderOrbits
@@ -136,5 +148,44 @@ open NField.Alignment.SubgroupOrbitJacobiExpansion
 #check dynamicalBoundary
 #check booleanDynamicalBoundary_eq
 #check dynamicalBoundary_sum_zero
+
+-- November source-correspondence completion.
+#check NField.Alignment.PushdownParity.exactConductorEnergy_zero_of_even_pushdown
+#check NField.Alignment.PushdownParity.exactConductorEnergy_zero_of_zero_pushdown
+#check NField.Alignment.PushdownParity.exactConductorEnergy_zero_iff_primitive_odd_flux_zero
+#check NField.Alignment.DivisorConductorLedger.exactConductorEnergy_cast_eq_ledger
+#check NField.Alignment.IncreasingDigitBoundary.actual_digit_boundary_witness
+#check NField.Alignment.IncreasingDigitBoundary.actual_top_concentration
+#check NField.Alignment.DenominatorSplit.factorization
+#check NField.Alignment.DenominatorSplit.coprimePart_coprime_base
+#check NField.Alignment.RationalRemainderOrbit.remainderCRT_after_burnIn
+#check NField.Alignment.RationalRemainderOrbit.exact_positive_period
+#check NField.Alignment.RationalRemainderOrbit.orbit_is_coset
+#check NField.Alignment.BaseFifteenActualEnergy.actual_conductor_spectrum
+#check NField.Alignment.BaseFifteenActualEnergy.actual_digit_energy_split
+#check NField.Alignment.BaseFifteenExamples.base_fifteen_diagonal_ledger
+#check NField.Alignment.BaseFifteenExamples.base_fifteen_antipodal_ledger
+#check NField.Alignment.BaseFifteenEndpointDetails.endpoint_coincidences
+#check NField.Alignment.OrbitIndicatorCorrespondence.fullUnitBoundary_formula
+#check NField.Alignment.OrbitIndicatorCorrespondence.actual_full_orbit_conductor_energy
+#check NField.Alignment.OrbitIndicatorCorrespondence.actual_full_orbit_total_energy
+#check NField.Alignment.OrbitIndicatorCorrespondence.indexTwoIndicator_eq_square_indicator
+#check NField.Alignment.OrbitIndicatorCorrespondence.indexTwoIndicator_eq_kernel_indicator
+#check NField.Alignment.OrbitPaperExamples.full_orbit_nine_cycle
+#check NField.Alignment.OrbitPaperExamples.full_orbit_nine_boundary
+#check NField.Alignment.OrbitPaperExamples.full_orbit_nine_energy
+#check NField.Alignment.OrbitPaperExamples.prime_seven_card_moment
+#check NField.Alignment.OrbitPaperDetails.twistedSawtooth_even_zero
+#check NField.Alignment.OrbitPaperDetails.finite_fourier_expansion
+#check NField.Alignment.OrbitPaperDetails.fourier_twisted_expansion
+#check NField.Alignment.OrbitPaperDetails.trivial_on_subgroup_iff_factors
+#check NField.Alignment.OrbitPaperDetails.no_odd_resonance_of_neg_one_mem
+#check NField.Alignment.OrbitPaperDetails.odd_energy_resonance_split
+#check NField.Alignment.OrbitPaperDetails.off_resonance_character_sum
+#check NField.Alignment.QuadraticSupplementaryPowers.quadratic_supplementary_powers
+#check NField.Alignment.EventualCycleBoundary.finiteTrajectory_enters_actual_cycle
+#check NField.Alignment.EventualCycleBoundary.orbitPermutation_predecessor
+#check NField.Alignment.EventualCycleBoundary.actual_cycle_boundary
+#check NField.Alignment.EventualCycleBoundary.emittedDigit_lt_base
 
 end NField.Papers.AdditiveBoundariesAndConductorEnergiesOfPeriodicRemainderOrbits

@@ -566,6 +566,7 @@ theorem terminalUnitBoundary_norm
 def terminalFormalBoundarySize (p N : ℕ) : ℕ :=
   2 * p ^ (N - 1)
 
+/-- Title: `Mean law for the terminal unit boundary`. -/
 theorem terminalUnitBoundary_meanLaw
     {p N : ℕ} [NeZero (p ^ N)] [NeZero (p ^ (N - 1))]
     (hp : p.Prime) (hpodd : p ≠ 2) (hN : 2 ≤ N) :

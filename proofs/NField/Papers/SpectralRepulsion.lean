@@ -7,6 +7,11 @@ Author: Alexander S. Petty
 import NField.Alignment.SpectralRepulsion
 import NField.Alignment.CenteredCollisionClosure
 import NField.Papers.DoubleTransversality
+import NField.Alignment.SpectralSectorFactorization
+import NField.Alignment.SpectralActualRelabeling
+import NField.Alignment.ReflectedPrimePairs
+import NField.Alignment.ReflectedTargetDensity
+import NField.Alignment.SpectralPaperDetails
 
 /-!
 # The Spectral Repulsion
@@ -37,24 +42,26 @@ Reader-facing theorem map for the Lean companion to
 * Every finite family of reflected additive pairs contributes a negative sum
   of squares and is therefore nonpositive.
 
-## Boundary
+* The actual primitive odd sector, its character and pair counts, and its
+  fixed-point-free conjugation are proved using the existing conductor theory.
+  The actual collision coefficients and finite prime sums have conjugate
+  magnitudes. Their normalized masses regroup into pair masses of total one,
+  with the exact sector factorization and permutation moments.
+* Actual ordered prime representations satisfy the required residue relation.
+  Their weighted sum is the negative square sum, strictly negative when a
+  representation has nonzero weight. The printed target densities are limits
+  of exact counts among the positive even integers.
 
-The primitive-character conductor classification, the count of eligible odd
-primitive characters, and the fact that no eligible character is
-self-conjugate are not separately encoded here.  The sector theorem starts
-from the resulting full-to-eligible mass relation.
+## Boundary
 
 The manuscript's underlap and entropy rows remain finite nfield evidence and
 are not recomputed by Lean.
 
 The additive theorem is proved for an arbitrary odd real signal on `ZMod N`
-and specialized here to the zero-extended centered collision table.  The
-reflected-pair identity is likewise specialized to arbitrary finite families
-of residues satisfying `q i = -p i`.  The finite indexing type abstracts the
-ordered prime representations; their elementary congruence supplies that
-displayed residue relation in the manuscript.  No asymptotic prime statement
-or zero-location claim is formalized or asserted.  No manuscript contradiction
-appeared in the formalized layer, and no unchecked declaration is used.
+and specialized here to the zero-extended centered collision table. Actual
+ordered prime pairs are a finite subtype with primality and sum conditions.
+The target density counts divisibility conditions, without asserting a density
+of prime representations. The limiting spectral assignment remains open.
 -/
 
 namespace NField.Papers.SpectralRepulsion
@@ -400,6 +407,88 @@ theorem reflected_pair_obstruction
     (p q : ι → G) (hpq : ∀ i, q i = -p i) :
     (∑ i, f (p i) * f (q i)) ≤ 0 :=
   reflected_pair_sum_nonpositive f hodd p q hpq
+
+/-! ## Actual prime-representation specialization -/
+
+theorem centered_collision_prime_pair_term
+    {b ell N : ℕ} [NeZero b] [NeZero (allLagModulus b ell)]
+    (hb : 2 ≤ b) (hell : 1 ≤ ell) (hN : allLagModulus b ell ∣ N)
+    (pq : NField.Alignment.ReflectedPrimePairs.OrderedPrimePair N) :
+    centered_collision_zero_extension (b := b) (ell := ell) pq.val.1.val *
+      centered_collision_zero_extension (b := b) (ell := ell) pq.val.2.val =
+        -(centered_collision_zero_extension (b := b) (ell := ell) pq.val.1.val) ^ 2 :=
+  NField.Alignment.ReflectedPrimePairs.term_eq_neg_square _
+    (centered_collision_zero_extension_odd hb hell) hN pq
+
+theorem centered_collision_goldbach_identity
+    {b ell N : ℕ} [NeZero b] [NeZero (allLagModulus b ell)]
+    (hb : 2 ≤ b) (hell : 1 ≤ ell) (hN : allLagModulus b ell ∣ N) :
+    NField.Alignment.ReflectedPrimePairs.weightedGoldbach
+      (centered_collision_zero_extension (b := b) (ell := ell)) N =
+        -(∑ pq : NField.Alignment.ReflectedPrimePairs.OrderedPrimePair N,
+          (centered_collision_zero_extension (b := b) (ell := ell) pq.val.1.val) ^ 2) :=
+  NField.Alignment.ReflectedPrimePairs.weightedGoldbach_eq_neg_squares _
+    (centered_collision_zero_extension_odd hb hell) hN
+
+theorem centered_collision_goldbach_nonpos
+    {b ell N : ℕ} [NeZero b] [NeZero (allLagModulus b ell)]
+    (hb : 2 ≤ b) (hell : 1 ≤ ell) (hN : allLagModulus b ell ∣ N) :
+    NField.Alignment.ReflectedPrimePairs.weightedGoldbach
+      (centered_collision_zero_extension (b := b) (ell := ell)) N ≤ 0 :=
+  NField.Alignment.ReflectedPrimePairs.weightedGoldbach_nonpos _
+    (centered_collision_zero_extension_odd hb hell) hN
+
+theorem centered_collision_goldbach_strict
+    {b ell N : ℕ} [NeZero b] [NeZero (allLagModulus b ell)]
+    (hb : 2 ≤ b) (hell : 1 ≤ ell) (hN : allLagModulus b ell ∣ N)
+    (hw : ∃ pq : NField.Alignment.ReflectedPrimePairs.OrderedPrimePair N,
+      centered_collision_zero_extension (b := b) (ell := ell) pq.val.1.val ≠ 0) :
+    NField.Alignment.ReflectedPrimePairs.weightedGoldbach
+      (centered_collision_zero_extension (b := b) (ell := ell)) N < 0 :=
+  NField.Alignment.ReflectedPrimePairs.weightedGoldbach_strict _
+    (centered_collision_zero_extension_odd hb hell) hN hw
+
+theorem centered_collision_additive_strict
+    {b ell : ℕ} [NeZero b] [NeZero (allLagModulus b ell)]
+    (hb : 2 ≤ b) (hell : 1 ≤ ell)
+    (hw : ∃ a, centered_collision_zero_extension (b := b) (ell := ell) a ≠ 0) :
+    additiveSelfConvolution (centered_collision_zero_extension (b := b) (ell := ell)) 0 < 0 :=
+  NField.Alignment.ReflectedPrimePairs.selfConvolution_strict _
+    (centered_collision_zero_extension_odd hb hell) hw
+
+#check NField.Papers.DoubleTransversality.exact_reduction_fiber_card
+#check NField.Papers.DoubleTransversality.exact_centering_denominator
+#check NField.Alignment.TheCollisionSpectrum.activeLagOneChannel_primitive_and_odd
+#check NField.Alignment.PrimeSquareCharacterPairs.self_inverse_factorsThrough
+#check NField.Alignment.PrimeSquareCharacterPairs.primitive_ne_conjugate
+#check NField.Alignment.SpectralCharacterPairs.odd_population
+#check NField.Alignment.SpectralCharacterPairs.primitive_population
+#check NField.Alignment.SpectralCharacterPairs.pair_population
+#check NField.Alignment.SpectralCharacterPairs.base_three_one_pair
+#check NField.Alignment.SpectralCharacterDistributions.mem_primeWindow
+#check NField.Alignment.SpectralCharacterDistributions.collisionCoeff_conjugate
+#check NField.Alignment.SpectralCharacterDistributions.primeSum_conjugate
+#check NField.Alignment.SpectralCharacterDistributions.collisionMass_nonneg
+#check NField.Alignment.SpectralCharacterDistributions.primeMass_nonneg
+#check NField.Alignment.SpectralCharacterDistributions.collisionMass_sum
+#check NField.Alignment.SpectralCharacterDistributions.primeMass_sum
+#check NField.Alignment.SpectralCharacterDistributions.collisionPairMass_sum
+#check NField.Alignment.SpectralCharacterDistributions.primePairMass_sum
+#check NField.Alignment.SpectralCharacterDistributions.scaledOverlap_pairs
+#check NField.Alignment.SpectralSectorFactorization.actual_sector_factorization
+#check NField.Alignment.SpectralActualRelabeling.actual_relabeling_mean
+#check NField.Alignment.SpectralActualRelabeling.actual_relabeling_variance
+#check NField.Alignment.SpectralActualRelabeling.base_three_overlap
+#check NField.Alignment.ReflectedPrimePairs.residue_reflection
+#check NField.Alignment.ReflectedTargetDensity.odd_prime_density
+#check NField.Alignment.ReflectedTargetDensity.base_ten_density
+#check NField.Alignment.SpectralPaperDetails.nested_floor_division
+#check NField.Alignment.SpectralPaperDetails.unscaled_permutation_variance
+#check centered_collision_prime_pair_term
+#check centered_collision_goldbach_identity
+#check centered_collision_goldbach_nonpos
+#check centered_collision_goldbach_strict
+#check centered_collision_additive_strict
 
 #check exact_finite_determination
 #check raw_collision_table_reflection

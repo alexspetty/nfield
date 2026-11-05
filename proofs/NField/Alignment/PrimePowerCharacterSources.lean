@@ -68,11 +68,11 @@ theorem odd_conductor_prime_power
     exact MulChar.one_apply isUnit_neg_one
   exact ⟨t, ht, htN, hcond⟩
 
-/--
+/-- Title: `Primitive source of an odd character`.
+
 Every odd prime-power character is induced from a primitive odd character at
 one unique positive conductor level. This theorem supplies existence; source
-uniqueness follows from invariance of the conductor under change of level.
--/
+uniqueness follows from invariance of the conductor under change of level. -/
 theorem odd_character_has_primitive_source
     {p N : ℕ} [NeZero (p ^ N)] (hp : p.Prime) (hN : 1 ≤ N)
     {χ : Character (p ^ N)} (hχ : χ.Odd) :

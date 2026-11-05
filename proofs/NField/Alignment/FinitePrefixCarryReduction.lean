@@ -16,6 +16,7 @@ def digitReadout (b q r ell : ℕ) : ℕ :=
 def greedyDigitDifference (b q r ell : ℕ) : ℕ :=
   b ^ (ell + 1) * r / q - b * (b ^ ell * r / q)
 
+/-- Title: `Digit readout from the quotient remainder`. -/
 theorem digitReadout_eq_quotient_mod
     (b q r ell : ℕ) (hb : 0 < b) (hq : 0 < q) :
     digitReadout b q r ell = (b ^ (ell + 1) * r / q) % b := by
@@ -38,6 +39,7 @@ theorem digitReadout_eq_quotient_mod
   rw [Nat.mul_add_mod_self_left]
   exact (Nat.mod_eq_of_lt hlt).symm
 
+/-- Title: `Greedy digit difference and remainder readout`. -/
 theorem greedyDigitDifference_eq_readout
     (b q r ell : ℕ) (hq : 0 < q) :
     greedyDigitDifference b q r ell = digitReadout b q r ell := by
@@ -60,7 +62,9 @@ position. -/
 def encodedPrefixDigit (b N n ell : ℕ) : ℕ :=
   (n / b ^ (N - 1 - ell)) % b
 
-/-- The cell index `floor (b^N r / q)` contains exactly the first `N`
+/-- Title: `Recovery of digits from the prefix index`.
+
+The cell index `floor (b^N r / q)` contains exactly the first `N`
 long-division digits of `r / q`. -/
 theorem prefixIndex_digit
     {b q r N ell : ℕ} (hb : 0 < b) (hq : 0 < q)
@@ -264,7 +268,9 @@ def weightedCarryCount (m a : ℕ) (w : ℕ → ℂ) : ℂ :=
   ∑ n ∈ Finset.range m,
     (((n + 1) * a / m - n * a / m : ℕ) : ℂ) * w n
 
-/-- Every weighted finite-prefix observable is exactly its weighted cell
+/-- Title: `Digit prefix observables as weighted cell counts`.
+
+Every weighted finite-prefix observable is exactly its weighted cell
 count.  Arbitrary word sets are recovered by taking `Φ` to be their indicator. -/
 theorem cylinderToCarryCount
     {b N q : ℕ} (hb : 0 < b) (hq : 0 < q)
@@ -353,6 +359,7 @@ theorem terminalCorrection_le_sliceMultiplicity
     omega
   · simp [hlast]
 
+/-- Title: `Finite prefix slice identity`. -/
 theorem finitePrefixSliceIdentity
     {m q h a : ℕ} (hm : 0 < m) (hq : q = h * m + a)
     (ha1 : 1 ≤ a) (ham : a < m) (hcop : a.Coprime m)
@@ -401,7 +408,9 @@ theorem finitePrefixSliceIdentity
             ring
     _ = _ := by rw [hendpoint]
 
-/-- Centered form of the finite-prefix slice identity. -/
+/-- Title: `Centered finite prefix identity`.
+
+Centered form of the finite-prefix slice identity. -/
 theorem finitePrefixCenteredIdentity
     {m q h a : ℕ} (hm : 0 < m) (hq : q = h * m + a)
     (ha1 : 1 ≤ a) (ham : a < m) (hcop : a.Coprime m)

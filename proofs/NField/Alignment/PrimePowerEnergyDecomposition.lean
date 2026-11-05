@@ -154,6 +154,7 @@ theorem oddCharacter_sum_eq_source_sum
     _ = ∑ source : PrimitiveOddSource p N, f source.lift.val := by
           rfl
 
+/-- Title: `Conductor channels at a prime power`. -/
 theorem ambient_primePower_conductor_channel
     {p N t : ℕ} [NeZero (p ^ N)] [NeZero (p ^ t)]
     (hp : p.Prime) (ht : 1 ≤ t) (htN : t ≤ N)
@@ -195,6 +196,7 @@ theorem ambient_primePower_conductor_channel
           (DirichletCharacter.changeLevel (pow_dvd_pow p htN)) ψ).symm]
   exact hfactor
 
+/-- Title: `Energy decomposition by primitive conductor`. -/
 theorem primePower_energy_decomposition
     {p N : ℕ} [NeZero (p ^ N)]
     (hp : p.Prime) (hN : 1 ≤ N)
