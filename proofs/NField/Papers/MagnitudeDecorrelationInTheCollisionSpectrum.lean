@@ -1,0 +1,3501 @@
+/-
+Copyright 2020-2026 Alexander S. Petty.
+SPDX-License-Identifier: Apache-2.0
+Author: Alexander S. Petty
+-/
+
+import NField.Alignment.MagnitudeCorrelationRate
+import NField.Alignment.MagnitudeActualConcentration
+import NField.Alignment.MagnitudeVarianceDisplays
+import NField.Alignment.MagnitudeKernelDisplays
+import NField.Alignment.MagnitudeShortMomentBound
+import NField.Alignment.HarperJointGoodEvent
+import NField.Alignment.HarperRestrictedLogMoment
+import NField.Alignment.HarperGoodEventUnion
+import NField.Alignment.HarperSourceBarrierBound
+import NField.Alignment.HarperLogarithmicSourcePath
+import NField.Alignment.HarperGaussianBarrierPerturbation
+import NField.Alignment.HarperGaussianMaximumInterval
+import NField.Alignment.HarperGaussianBarrier
+import NField.Alignment.HarperSourceKilledPath
+import NField.Alignment.HarperGaussianOvershoot
+import NField.Alignment.HarperCenteredPath
+import NField.Alignment.HarperPrimeBlockPath
+import NField.Alignment.HarperPrimeBlockJointRelative
+import NField.Alignment.HarperPrimeBlockRelative
+import NField.Alignment.PrimeSquareMagnitudeMixedMoment
+import NField.Alignment.PrimeSquareMagnitudeTwist
+import NField.Alignment.MagnitudeMomentArithmetic
+import NField.Alignment.OddBernoulliPrimeSquare
+import NField.Alignment.MagnitudeBaseSevenObstruction
+import NField.Alignment.MagnitudeDefinitionCorrespondence
+import NField.Alignment.MagnitudeCubicLimits
+import NField.Alignment.MagnitudeEnergyCorrespondence
+import NField.Alignment.MagnitudePolynomialMoment
+import NField.Alignment.MagnitudeLMomentBound
+import NField.Alignment.MagnitudeShortComparison
+import NField.Alignment.HarperPrimeSquareComparison
+import NField.Alignment.HarperSmoothDivisor
+import NField.Alignment.HarperWeightedConditioning
+import NField.Alignment.HarperPartition
+import NField.Alignment.HarperPartitionTaylor
+import NField.Alignment.HarperPrimeTaylorComparison
+import NField.Alignment.HarperPrimeEvenMoment
+import NField.Alignment.HarperEvenMomentBound
+import NField.Alignment.HarperPrimeEnergyBound
+import NField.Alignment.HarperActualConditioning
+import NField.Alignment.HarperSmoothRemoval
+import NField.Alignment.MagnitudeShortFractionalTransfer
+import NField.Alignment.HarperRoughOrthogonality
+import NField.Alignment.HarperRoughDecomposition
+import NField.Alignment.HarperSmoothingConditioning
+import NField.Alignment.HarperSieveScales
+import NField.Alignment.HarperMainConditioning
+import NField.Alignment.HarperSpectralConditioning
+import NField.Alignment.HarperFrequencyScales
+import NField.Alignment.HarperDiscretizationScales
+import NField.Alignment.HarperActualSharpConditioning
+import NField.Alignment.HarperExtremeScales
+import NField.Alignment.MagnitudeSharpFractionalTransfer
+import NField.Alignment.MagnitudeUnconditionalFractionalTransfer
+import NField.Alignment.HarperPhaseShift
+import NField.Alignment.MagnitudeContinuousFractionalTransfer
+import NField.Alignment.HarperTiltedCoordinates
+import NField.Alignment.HarperTiltedLogMoments
+import NField.Alignment.HarperCharacteristicTail
+import NField.Alignment.HarperGaussianSmoothingScales
+import NField.Alignment.HarperPrimeBlockGaussian
+import NField.Alignment.MagnitudeFiniteDisplayCorrespondence
+
+/-!
+# Magnitude Decorrelation in the Collision Spectrum
+
+The 1616 theorem aliases expose reusable proofs with their original statements
+and hypotheses. The actual primitive odd character family is used throughout
+the manuscript-facing results, including both members of every conjugate pair.
+
+Eleven of the twelve numbered manuscript results are formalized. They include
+the exact marginal and mixed square moments, the primitive odd kernel,
+the base-seven obstruction, both complex twists at two, the positive
+L-magnitude variance, the uniform fourth and third L-value moments, and the
+finite fractional-moment criterion. The prime-square short-sum estimate is
+proved with its literal exponent -3/8. Its random comparison, conditioning,
+critical Euler-product low-moment bound, and family restriction are assembled
+without an unproved analytic input. The resulting magnitude correlation has
+eventually positive variances, the exact quarter-logarithmic rate, and limit
+zero along all growing odd primes. The square-mass concentration theorem and
+the leading mixed-square, square-ratio and covariance limits are also proved.
+
+The exact inventory records 78 of 80 mathematical display blocks as closed.
+Earlier deductions from explicit inputs remain available as supporting
+theorems; the unconditional actual-family results supply the completed claims.
+
+## Formalization boundary
+
+The two secondary expansions in Corollary 6, together with their sharper
+collision-energy source expansion, remain unproved here. These occupy
+display blocks 032 and 034. The leading limits do not prove the secondary
+coefficients or their printed remainder rates. No full-paper closure is claimed.
+
+The separate six-row rounded numerical table is computed-only, not
+kernel-certified, and is outside the 80-display inventory. Its floating-point
+checks do not certify the printed decimal cells. The additional numerical
+examples and plots in the article retain their computational status.
+-/
+
+namespace NField.Papers.MagnitudeDecorrelationInTheCollisionSpectrum
+
+alias exact_primitive_odd_kernel := NField.Alignment.PrimitiveOddBoundaryMean.primitiveOddKernel_eq_primePowerKernel
+alias exact_population := NField.Alignment.PrimeSquareMagnitudeFamily.family_population
+alias exact_family_nonempty := NField.Alignment.PrimeSquareMagnitudeFamily.family_nonempty
+alias exact_bernoulli_l_magnitude := NField.Alignment.PrimeSquareMagnitudeFamily.bernoulli_l_magnitude_sq
+alias bernoulli_marginal_algebra := NField.Alignment.MagnitudeMomentArithmetic.bernoulli_marginal_subtraction
+alias twisted_marginal_algebra := NField.Alignment.MagnitudeMomentArithmetic.twisted_marginal_subtraction
+alias bernoulli_normalization := NField.Alignment.MagnitudeMomentArithmetic.bernoulli_to_l_normalization
+alias twist_normalization := NField.Alignment.MagnitudeMomentArithmetic.twist_to_l_normalization
+alias marginal_positive := NField.Alignment.MagnitudeMomentArithmetic.marginal_positive
+alias marginal_upper := NField.Alignment.MagnitudeMomentArithmetic.marginal_upper
+alias variance_constant := NField.Alignment.MagnitudeMomentArithmetic.variance_constant
+alias pearson_first_moments := NField.Alignment.FiniteMagnitudeDecorrelation.correlation_from_first_moments
+alias finite_holder := NField.Alignment.FiniteMagnitudeDecorrelation.average_holder_three_halves
+alias mean_fractional_bound := NField.Alignment.FiniteMagnitudeDecorrelation.mean_le_fractional_moment
+alias finite_covariance_bound := NField.Alignment.FiniteMagnitudeDecorrelation.covariance_bound
+alias short_variance_bound := NField.Alignment.FiniteMagnitudeDecorrelation.variance_lower_from_fractional
+alias twist_variance_bound := NField.Alignment.FiniteMagnitudeDecorrelation.twist_forces_variance
+alias finite_correlation_bound := NField.Alignment.FiniteMagnitudeDecorrelation.fractional_correlation_bound
+alias correlation_limit_from_moment_inputs := NField.Alignment.FiniteMagnitudeDecorrelation.correlation_limit_from_moments
+alias character_family_limit_from_inputs := NField.Alignment.PrimeSquareMagnitudeFamily.correlation_limit_from_character_moments
+alias tail_fraction_bound := NField.Alignment.FiniteMagnitudeDecorrelation.tail_fraction_bound
+alias lower_square_bound := NField.Alignment.FiniteMagnitudeDecorrelation.lower_square_mass_bound
+alias exact_square_mass_split := NField.Alignment.FiniteMagnitudeDecorrelation.square_mass_split
+alias tail_fraction_limit_from_input := NField.Alignment.FiniteMagnitudeDecorrelation.tail_fraction_tendsto_zero
+alias lower_square_limit_from_input := NField.Alignment.FiniteMagnitudeDecorrelation.lower_square_mass_tendsto_zero
+alias upper_square_limit_from_input := NField.Alignment.FiniteMagnitudeDecorrelation.upper_square_mass_tendsto_one
+alias mixed_square_ratio_algebra := NField.Alignment.MagnitudeMomentArithmetic.mixed_square_ratio
+alias normalized_square_ratio := NField.Alignment.MagnitudeMomentArithmetic.square_ratio_normalization
+alias square_ratio_limit_from_energy_input := NField.Alignment.MagnitudeMomentArithmetic.square_ratio_limit_from_cubic
+
+alias exact_short_sum_square_total := NField.Alignment.PrimeSquareMagnitudeFamily.shortSum_second_moment_total
+alias exact_short_magnitude_second_moment := NField.Alignment.PrimeSquareMagnitudeFamily.short_magnitude_second_moment
+alias character_family_limit_from_remaining_inputs := NField.Alignment.PrimeSquareMagnitudeFamily.correlation_limit_from_remaining_inputs
+
+#check exact_primitive_odd_kernel
+#check exact_population
+#check exact_family_nonempty
+#check exact_bernoulli_l_magnitude
+#check bernoulli_marginal_algebra
+#check twisted_marginal_algebra
+#check bernoulli_normalization
+#check twist_normalization
+#check marginal_positive
+#check marginal_upper
+#check variance_constant
+#check pearson_first_moments
+#check finite_holder
+#check mean_fractional_bound
+#check finite_covariance_bound
+#check short_variance_bound
+#check twist_variance_bound
+#check finite_correlation_bound
+#check correlation_limit_from_moment_inputs
+#check character_family_limit_from_inputs
+#check tail_fraction_bound
+#check lower_square_bound
+#check exact_square_mass_split
+#check tail_fraction_limit_from_input
+#check lower_square_limit_from_input
+#check upper_square_limit_from_input
+#check mixed_square_ratio_algebra
+#check normalized_square_ratio
+#check square_ratio_limit_from_energy_input
+
+#check exact_short_sum_square_total
+#check exact_short_magnitude_second_moment
+#check character_family_limit_from_remaining_inputs
+
+alias exact_balanced_bernoulli_transform := NField.Alignment.PrimeSquareMagnitudeFamily.bernoulli_eq_balanced_flux
+alias exact_balanced_bernoulli_square_mass := NField.Alignment.PrimeSquareMagnitudeFamily.balancedBernoulli_square_mass
+alias exact_bernoulli_magnitude_second_moment := NField.Alignment.PrimeSquareMagnitudeFamily.bernoulli_magnitude_second_moment
+alias exact_l_magnitude_second_moment := NField.Alignment.PrimeSquareMagnitudeFamily.l_magnitude_second_moment
+alias character_family_limit_from_analytic_inputs := NField.Alignment.PrimeSquareMagnitudeFamily.correlation_limit_from_analytic_inputs
+
+#check exact_balanced_bernoulli_transform
+#check exact_balanced_bernoulli_square_mass
+#check exact_bernoulli_magnitude_second_moment
+#check exact_l_magnitude_second_moment
+#check character_family_limit_from_analytic_inputs
+
+
+alias exact_short_l_square_total := NField.Alignment.PrimeSquareMagnitudeFamily.short_l_second_moment_total
+alias exact_mixed_magnitude_second_moment := NField.Alignment.PrimeSquareMagnitudeFamily.mixed_magnitude_second_moment
+alias exact_mixed_magnitude_square_ratio := NField.Alignment.PrimeSquareMagnitudeFamily.mixed_magnitude_square_ratio
+
+#check exact_short_l_square_total
+#check exact_mixed_magnitude_second_moment
+#check exact_mixed_magnitude_square_ratio
+
+
+alias exact_doubling_carry_moment := NField.Alignment.PrimeSquareMagnitudeFamily.centered_double_moment
+alias exact_twisted_boundary_pairing := NField.Alignment.PrimitiveOddBoundaryMean.boundary_twist_criterion
+alias exact_balanced_bernoulli_doubling := NField.Alignment.PrimeSquareMagnitudeFamily.balancedBernoulli_double_pairing
+alias exact_character_two_mean := NField.Alignment.PrimeSquareMagnitudeFamily.character_two_mean
+alias exact_bernoulli_twist_mean := NField.Alignment.PrimeSquareMagnitudeFamily.bernoulli_twist_mean
+alias exact_l_magnitude_twist := NField.Alignment.PrimeSquareMagnitudeFamily.l_magnitude_twist
+alias exact_l_variance_bounds := NField.Alignment.PrimeSquareMagnitudeFamily.l_magnitude_variance_bounds
+alias character_family_limit_from_final_analytic_inputs := NField.Alignment.PrimeSquareMagnitudeFamily.correlation_limit_from_final_analytic_inputs
+
+#check exact_doubling_carry_moment
+#check exact_twisted_boundary_pairing
+#check exact_balanced_bernoulli_doubling
+#check exact_character_two_mean
+#check exact_bernoulli_twist_mean
+#check exact_l_magnitude_twist
+#check exact_l_variance_bounds
+#check character_family_limit_from_final_analytic_inputs
+
+alias exact_odd_doubling_sum := NField.Alignment.PrimeSquareMagnitudeFamily.odd_doubling_sum
+alias exact_odd_doubling_square_subtraction := NField.Alignment.PrimeSquareMagnitudeFamily.odd_doubling_square_subtraction
+
+#check exact_odd_doubling_sum
+#check exact_odd_doubling_square_subtraction
+
+
+alias exact_odd_doubling_split := NField.Alignment.PrimeSquareMagnitudeFamily.odd_doubling_split
+alias exact_odd_bernoulli_square := NField.Alignment.OddBernoulliMoments.odd_bernoulli_square
+alias exact_odd_bernoulli_twist_two := NField.Alignment.OddBernoulliMoments.odd_bernoulli_twist_two
+alias exact_unit_square_sum := NField.Alignment.OddBernoulliMoments.squareWeight_primeSquare_units
+alias exact_prime_odd_bernoulli_square := NField.Alignment.OddBernoulliMoments.full_odd_prime_square
+alias exact_prime_square_odd_bernoulli_square := NField.Alignment.OddBernoulliMoments.full_odd_primeSquare_square
+alias exact_bernoulli_lift := NField.Alignment.OddBernoulliMoments.bernoulli_lift_primeSquare
+alias exact_bernoulli_lift_double_sum := NField.Alignment.OddBernoulliMoments.bernoulli_lift_double_sum
+alias exact_lift_character_two := NField.Alignment.OddBernoulliMoments.lift_character_two
+alias exact_imprimitive_odd_character_sum := NField.Alignment.OddBernoulliMoments.nonprimitive_odd_sum_primeSquare
+alias exact_lifted_odd_bernoulli_square := NField.Alignment.OddBernoulliMoments.lifted_odd_primeSquare_square
+alias exact_primitive_odd_bernoulli_square_total := NField.Alignment.OddBernoulliMoments.primitive_odd_primeSquare_square_total
+alias exact_unit_doubling_sum := NField.Alignment.OddBernoulliMoments.doublingWeight_primeSquare_units
+alias exact_unit_doubling_restriction := NField.Alignment.OddBernoulliMoments.primeSquare_unit_doubling_restriction
+alias exact_prime_odd_bernoulli_twist := NField.Alignment.OddBernoulliMoments.full_odd_prime_twist
+alias exact_prime_square_odd_bernoulli_twist := NField.Alignment.OddBernoulliMoments.full_odd_primeSquare_twist
+alias exact_lifted_odd_bernoulli_twist := NField.Alignment.OddBernoulliMoments.lifted_odd_primeSquare_twist
+alias exact_primitive_odd_bernoulli_twist_total := NField.Alignment.OddBernoulliMoments.primitive_odd_primeSquare_twist_total
+
+#check exact_odd_doubling_split
+#check exact_odd_bernoulli_square
+#check exact_odd_bernoulli_twist_two
+#check exact_unit_square_sum
+#check exact_prime_odd_bernoulli_square
+#check exact_prime_square_odd_bernoulli_square
+#check exact_bernoulli_lift
+#check exact_bernoulli_lift_double_sum
+#check exact_lift_character_two
+#check exact_imprimitive_odd_character_sum
+#check exact_lifted_odd_bernoulli_square
+#check exact_primitive_odd_bernoulli_square_total
+#check exact_unit_doubling_sum
+#check exact_unit_doubling_restriction
+#check exact_prime_odd_bernoulli_twist
+#check exact_prime_square_odd_bernoulli_twist
+#check exact_lifted_odd_bernoulli_twist
+#check exact_primitive_odd_bernoulli_twist_total
+
+
+alias exact_diagonal_reduction := NField.Alignment.PrimeSquareMagnitudeFamily.diagonalSum_eq_short_sum
+alias exact_diagonal_magnitude := NField.Alignment.PrimeSquareMagnitudeFamily.diagonalSum_norm
+alias exact_short_square_average := NField.Alignment.PrimeSquareMagnitudeFamily.shortSum_square_average
+alias exact_diagonal_square_average := NField.Alignment.PrimeSquareMagnitudeFamily.diagonalSum_square_average
+alias exact_base_seven_square_ratio := NField.Alignment.MagnitudeBaseSeven.base_seven_square_ratio
+alias exact_base_seven_forced_ratio := NField.Alignment.PrimeSquareMagnitudeFamily.baseSeven_proportionality_forces_square
+alias exact_base_seven_generator := NField.Alignment.MagnitudeBaseSeven.generator_generates
+alias exact_base_seven_character := NField.Alignment.MagnitudeBaseSeven.witness_spec
+alias exact_base_seven_short_sum := NField.Alignment.MagnitudeBaseSeven.witness_short_sum
+alias exact_base_seven_bernoulli_sum := NField.Alignment.MagnitudeBaseSeven.witness_bernoulli_sum
+alias exact_base_seven_laurent_certificate := NField.Alignment.MagnitudeBaseSeven.laurent_certificate
+alias exact_base_seven_cyclotomic_remainder := NField.Alignment.MagnitudeBaseSeven.normSq_discrepancy
+alias exact_base_seven_remainder_nonzero := NField.Alignment.MagnitudeBaseSeven.obstruction_ne_zero
+alias exact_base_seven_nonproportionality := NField.Alignment.MagnitudeBaseSeven.base_seven_nonproportionality
+alias exact_bernoulli_residue_sum := NField.Alignment.PrimeSquareMagnitudeFamily.bernoulliSum_eq_full_residue_sum
+alias exact_bernoulli_l_magnitude_unsquared := NField.Alignment.PrimeSquareMagnitudeFamily.bernoulli_l_magnitude
+alias exact_normalized_bernoulli_l_magnitude := NField.Alignment.PrimeSquareMagnitudeFamily.normalized_bernoulli_l_magnitude
+
+#check exact_diagonal_reduction
+#check exact_diagonal_magnitude
+#check exact_short_square_average
+#check exact_diagonal_square_average
+#check exact_base_seven_square_ratio
+#check exact_base_seven_forced_ratio
+#check exact_base_seven_generator
+#check exact_base_seven_character
+#check exact_base_seven_short_sum
+#check exact_base_seven_bernoulli_sum
+#check exact_base_seven_laurent_certificate
+#check exact_base_seven_cyclotomic_remainder
+#check exact_base_seven_remainder_nonzero
+#check exact_base_seven_nonproportionality
+#check exact_bernoulli_residue_sum
+#check exact_bernoulli_l_magnitude_unsquared
+#check exact_normalized_bernoulli_l_magnitude
+
+alias exact_odd_prime_limit_nontrivial := NField.Alignment.MagnitudeCubicLimits.oddPrimeAtTop_neBot
+alias exact_normalized_cubic_error := NField.Alignment.MagnitudeCubicLimits.normalized_cubic_error
+alias exact_normalized_cubic_limit := NField.Alignment.MagnitudeCubicLimits.normalized_cubic_limit
+alias exact_cubic_energy_asymptotic := NField.Alignment.MagnitudeCubicLimits.cubic_energy_error_isBigO
+alias exact_l_second_moment_limit := NField.Alignment.MagnitudeCubicLimits.l_magnitude_second_moment_limit
+alias exact_mixed_second_moment_limit := NField.Alignment.MagnitudeCubicLimits.mixed_magnitude_second_moment_limit
+alias exact_square_ratio_limit := NField.Alignment.MagnitudeCubicLimits.mixed_magnitude_square_ratio_limit
+alias exact_square_covariance := NField.Alignment.MagnitudeCubicLimits.square_magnitude_covariance
+alias exact_square_covariance_limit := NField.Alignment.MagnitudeCubicLimits.square_magnitude_covariance_limit
+alias exact_collision_class_mean := NField.Alignment.PrimeSquareMagnitudeFamily.collision_class_mean
+alias exact_collision_class_membership := NField.Alignment.PrimeSquareMagnitudeFamily.collision_fiber_iff_mod
+alias exact_collision_centering := NField.Alignment.PrimeCarryFiberCentering.centeredLagOneSpectrum_eq_primeCarryCentered
+alias exact_collision_coefficient_factorization := NField.Alignment.PrimeSquareMagnitudeFamily.collision_coefficient_factorization
+alias exact_collision_primitive_parseval := NField.Alignment.PrimeSquareMagnitudeFamily.collision_coefficient_primitive_parseval
+alias exact_family_correlation_reduction := NField.Alignment.PrimeSquareMagnitudeFamily.family_correlation_reduction
+
+#check exact_odd_prime_limit_nontrivial
+#check exact_normalized_cubic_error
+#check exact_normalized_cubic_limit
+#check exact_cubic_energy_asymptotic
+#check exact_l_second_moment_limit
+#check exact_mixed_second_moment_limit
+#check exact_square_ratio_limit
+#check exact_square_covariance
+#check exact_square_covariance_limit
+#check exact_collision_class_mean
+#check exact_collision_class_membership
+#check exact_collision_centering
+#check exact_collision_coefficient_factorization
+#check exact_collision_primitive_parseval
+#check exact_family_correlation_reduction
+
+alias exact_nonprincipal_shifted_sum_bound := NField.Alignment.MagnitudeLTruncation.shifted_character_sum_bound
+alias exact_nonprincipal_partial_sum_bound := NField.Alignment.MagnitudeLTruncation.character_real_partial_sum_bound
+alias exact_l_one_tail_bound_succ := NField.Alignment.MagnitudeLTruncation.l_one_tail_bound_succ
+alias exact_l_one_tail_bound := NField.Alignment.MagnitudeLTruncation.l_one_tail_bound
+alias exact_l_one_truncation := NField.Alignment.MagnitudeLTruncation.l_one_interval_truncation
+alias exact_primitive_odd_l_truncation := NField.Alignment.MagnitudeLTruncation.primitive_odd_l_truncation
+alias exact_truncation_square := NField.Alignment.MagnitudePolynomialMoment.modulus_square_polynomial_square
+alias exact_truncation_coefficients := NField.Alignment.MagnitudePolynomialMoment.coefficient_spec
+alias exact_residue_character_orthogonality := NField.Alignment.MagnitudePolynomialMoment.residue_character_orthogonality_product
+alias exact_truncation_fourth_moment := NField.Alignment.MagnitudePolynomialMoment.modulus_square_fourth_moment
+
+#check exact_nonprincipal_shifted_sum_bound
+#check exact_nonprincipal_partial_sum_bound
+#check exact_l_one_tail_bound_succ
+#check exact_l_one_tail_bound
+#check exact_l_one_truncation
+#check exact_primitive_odd_l_truncation
+#check exact_truncation_square
+#check exact_truncation_coefficients
+#check exact_residue_character_orthogonality
+#check exact_truncation_fourth_moment
+
+
+alias exact_divisor_small_power := NField.Alignment.DivisorSmallPowerBound.divisor_count_small_power
+alias exact_divisor_square_summability := NField.Alignment.DivisorSmallPowerBound.summable_divisor_square_weight
+alias exact_divisor_pair_box_bound := NField.Alignment.DivisorSmallPowerBound.divisor_pair_box_bound
+alias exact_truncation_diagonal_bound := NField.Alignment.MagnitudeFourthMomentBound.coefficient_diagonal_bound
+alias exact_ordered_off_diagonal_split := NField.Alignment.MagnitudeFourthMomentBound.ordered_off_diagonal_split
+alias exact_off_diagonal_grid_bound := NField.Alignment.MagnitudeFourthMomentBound.off_diagonal_le_reciprocal_grid
+alias exact_reciprocal_grid_log_bound := NField.Alignment.MagnitudeFourthMomentBound.reciprocal_grid_log_bound
+alias exact_off_diagonal_log_bound := NField.Alignment.MagnitudeFourthMomentBound.off_diagonal_log_bound
+alias exact_uniform_full_polynomial_fourth_moment := NField.Alignment.MagnitudeFourthMomentBound.uniform_polynomial_fourth_moment_bound
+alias exact_primitive_family_average_bound := NField.Alignment.MagnitudeLMomentBound.primitive_family_average_le
+alias exact_uniform_primitive_polynomial_fourth_moment := NField.Alignment.MagnitudeLMomentBound.uniform_primitive_polynomial_fourth_bound
+alias exact_l_fourth_transfer := NField.Alignment.MagnitudeLMomentBound.actual_l_fourth_transfer
+alias exact_fourth_to_third_holder := NField.Alignment.MagnitudeLMomentBound.average_third_le_fourth
+alias exact_uniform_l_fourth_and_third_moments := NField.Alignment.MagnitudeLMomentBound.uniform_l_fourth_and_third_moments
+alias character_family_limit_from_short_moment_input := NField.Alignment.MagnitudeLMomentBound.correlation_limit_from_short_moment
+
+#check exact_divisor_small_power
+#check exact_divisor_square_summability
+#check exact_divisor_pair_box_bound
+#check exact_truncation_diagonal_bound
+#check exact_ordered_off_diagonal_split
+#check exact_off_diagonal_grid_bound
+#check exact_reciprocal_grid_log_bound
+#check exact_off_diagonal_log_bound
+#check exact_uniform_full_polynomial_fourth_moment
+#check exact_primitive_family_average_bound
+#check exact_uniform_primitive_polynomial_fourth_moment
+#check exact_l_fourth_transfer
+#check exact_fourth_to_third_holder
+#check exact_uniform_l_fourth_and_third_moments
+#check character_family_limit_from_short_moment_input
+
+
+/-! Exact comparison in Proposition 11; the analytic estimate remains open. -/
+
+alias exact_steinhaus_prime_law := NField.Alignment.SteinhausMoment.prime_value_law
+alias exact_steinhaus_prime_independence := NField.Alignment.SteinhausMoment.prime_values_independent
+alias exact_steinhaus_multiplicativity := NField.Alignment.SteinhausMoment.steinhaus_mul
+alias exact_steinhaus_unit_magnitude := NField.Alignment.SteinhausMoment.steinhaus_norm
+alias exact_steinhaus_orthogonality := NField.Alignment.SteinhausMoment.steinhaus_orthogonality
+alias exact_steinhaus_polynomial_second_moment := NField.Alignment.SteinhausMoment.polynomial_second_moment
+alias exact_full_character_average := NField.Alignment.MagnitudeShortComparison.full_character_average
+alias exact_short_character_orthogonality := NField.Alignment.MagnitudeShortComparison.short_character_orthogonality
+alias exact_short_orthogonality := NField.Alignment.MagnitudeShortComparison.short_orthogonality
+alias exact_finite_character_random_comparison := NField.Alignment.MagnitudeShortComparison.finite_pairing_comparison
+alias exact_polynomial_character_random_comparison := NField.Alignment.MagnitudeShortComparison.polynomial_pair_comparison
+alias exact_polynomial_second_moment_comparison := NField.Alignment.MagnitudeShortComparison.polynomial_second_moment_comparison
+alias exact_prime_square_product_units := NField.Alignment.MagnitudeShortComparison.powered_product_unit
+alias exact_complete_product_support := NField.Alignment.MagnitudeShortComparison.complete_product_support
+alias exact_complete_product_comparison := NField.Alignment.MagnitudeShortComparison.complete_product_pair_comparison
+
+#check exact_steinhaus_prime_law
+#check exact_steinhaus_prime_independence
+#check exact_steinhaus_multiplicativity
+#check exact_steinhaus_unit_magnitude
+#check exact_steinhaus_orthogonality
+#check exact_steinhaus_polynomial_second_moment
+#check exact_full_character_average
+#check exact_short_character_orthogonality
+#check exact_short_orthogonality
+#check exact_finite_character_random_comparison
+#check exact_polynomial_character_random_comparison
+#check exact_polynomial_second_moment_comparison
+#check exact_prime_square_product_units
+#check exact_complete_product_support
+#check exact_complete_product_comparison
+
+
+/-! Rounded Harper parameters and complete-product budgets. -/
+
+alias exact_harper_cutoff_rounding := NField.Alignment.HarperRoundedCutoff.rounding_identity
+alias exact_harper_integer_counts := NField.Alignment.HarperRoundedCutoff.integer_frequency_counts
+alias exact_harper_cutoff_scale := NField.Alignment.HarperRoundedCutoff.cutoffLog_asymptotic
+alias exact_harper_range_ceil := NField.Alignment.HarperParameterBounds.rangeCount_int_ceil
+alias exact_harper_comparison_log := NField.Alignment.HarperRoundedCutoff.comparison_log_identity
+alias exact_harper_log_cost_bound := NField.Alignment.HarperParameterBounds.logCost_bound
+alias exact_harper_growth_chain := NField.Alignment.HarperRoundedCutoff.logarithmic_growth_chain
+alias exact_harper_size_condition := NField.Alignment.HarperRoundedCutoff.eventual_prime_square_size
+alias exact_harper_taylor_order := NField.Alignment.HarperTaylorBudget.taylorOrder_spec
+alias exact_harper_taylor_exponent := NField.Alignment.HarperTaylorBudget.taylor_exponent_bound
+alias exact_harper_taylor_products := NField.Alignment.HarperTaylorBudget.eventual_taylor_monomial_size
+alias exact_harper_remainder_products := NField.Alignment.HarperTaylorBudget.eventual_prime_square_remainder_size
+alias exact_harper_cutoff_hierarchy := NField.Alignment.HarperRoundedCutoff.eventual_cutoff_hierarchy
+alias exact_harper_square_cutoff := NField.Alignment.HarperRoundedCutoff.eventual_cutoff_square_lt
+alias exact_harper_precision_bound := NField.Alignment.HarperParameterBounds.precisionLoad_bound
+alias exact_harper_precision_limit := NField.Alignment.HarperParameterBounds.precisionLoad_tendsto
+alias exact_harper_precision_condition := NField.Alignment.HarperRoundedCutoff.eventual_prime_square_precision
+alias exact_harper_taylor_support := NField.Alignment.HarperPrimeSquareComparison.eventual_taylor_support
+alias exact_harper_taylor_comparison := NField.Alignment.HarperPrimeSquareComparison.eventual_taylor_comparison
+alias exact_harper_remainder_comparison := NField.Alignment.HarperPrimeSquareComparison.eventual_remainder_comparison
+
+#check exact_harper_cutoff_rounding
+#check exact_harper_integer_counts
+#check exact_harper_cutoff_scale
+#check exact_harper_range_ceil
+#check exact_harper_comparison_log
+#check exact_harper_log_cost_bound
+#check exact_harper_growth_chain
+#check exact_harper_size_condition
+#check exact_harper_taylor_order
+#check exact_harper_taylor_exponent
+#check exact_harper_taylor_products
+#check exact_harper_remainder_products
+#check exact_harper_cutoff_hierarchy
+#check exact_harper_square_cutoff
+#check exact_harper_precision_bound
+#check exact_harper_precision_limit
+#check exact_harper_precision_condition
+#check exact_harper_taylor_support
+#check exact_harper_taylor_comparison
+#check exact_harper_remainder_comparison
+
+alias exact_smooth_integer_support := NField.Alignment.HarperSmoothDivisor.smoothIntegers_mem
+alias exact_smooth_reciprocal_product := NField.Alignment.HarperSmoothDivisor.smooth_reciprocal_hasSum
+alias exact_smooth_divisor_rearrangement := NField.Alignment.HarperSmoothDivisor.smooth_divisor_sum_exact
+alias exact_smooth_partial_reciprocal_bound := NField.Alignment.HarperSmoothDivisor.smooth_partial_reciprocal_bound
+alias exact_smooth_divisor_sum_bound := NField.Alignment.HarperSmoothDivisor.smooth_divisor_sum_real_bound
+alias exact_smooth_prime_product_growth := NField.Alignment.HarperSmoothDivisor.inversePrimeProduct_isBigO_log
+alias exact_uniform_smooth_divisor_estimate := NField.Alignment.HarperSmoothDivisor.uniform_smooth_divisor_estimate
+alias exact_prime_square_smooth_divisor_estimate := NField.Alignment.HarperSmoothDivisor.prime_square_smooth_divisor_estimate
+
+#check exact_smooth_integer_support
+#check exact_smooth_reciprocal_product
+#check exact_smooth_divisor_rearrangement
+#check exact_smooth_partial_reciprocal_bound
+#check exact_smooth_divisor_sum_bound
+#check exact_smooth_prime_product_growth
+#check exact_uniform_smooth_divisor_estimate
+#check exact_prime_square_smooth_divisor_estimate
+
+alias exact_conditioning_parameters := NField.Alignment.HarperConditioningDecay.parameter_definitions
+alias exact_conditioning_box_count := NField.Alignment.HarperConditioningDecay.box_count_cardinality
+alias exact_conditioning_log_bound := NField.Alignment.HarperConditioningDecay.prime_square_log_errorMass
+alias exact_conditioning_arbitrary_power_bound := NField.Alignment.HarperConditioningDecay.eventual_powered_errorMass_le_rpow
+alias exact_conditioning_rounded_decay := NField.Alignment.HarperConditioningDecay.rounded_powered_errorMass_isLittleO
+alias exact_conditioning_loss_scales := NField.Alignment.HarperConditioningDecay.accumulated_loss_scales_decay
+alias exact_prime_square_conditioning_loss_scales := NField.Alignment.HarperConditioningDecay.prime_square_loss_scales_decay
+alias exact_conditioning_weighted_holder := NField.Alignment.HarperWeightedConditioning.weighted_holder
+alias exact_conditioning_zero_weight_identity := NField.Alignment.HarperWeightedConditioning.conditional_term_identity
+alias exact_conditioning_polynomial_error := NField.Alignment.HarperWeightedConditioning.polynomial_error_bound
+alias exact_conditioning_weight_error := NField.Alignment.HarperWeightedConditioning.weight_error_bound
+alias exact_conditioning_transfer_from_errors := NField.Alignment.HarperWeightedConditioning.rounded_transfer_from_errors
+
+#check exact_conditioning_parameters
+#check exact_conditioning_box_count
+#check exact_conditioning_log_bound
+#check exact_conditioning_arbitrary_power_bound
+#check exact_conditioning_rounded_decay
+#check exact_conditioning_loss_scales
+#check exact_prime_square_conditioning_loss_scales
+#check exact_conditioning_weighted_holder
+#check exact_conditioning_zero_weight_identity
+#check exact_conditioning_polynomial_error
+#check exact_conditioning_weight_error
+#check exact_conditioning_transfer_from_errors
+
+alias exact_partition_kernel_integral := NField.Alignment.HarperSincKernel.integral_kernel
+alias exact_partition_kernel_nonnegative := NField.Alignment.HarperSincKernel.kernel_nonneg
+alias exact_partition_kernel_integrable := NField.Alignment.HarperSincKernel.integrable_kernel
+alias exact_partition_kernel_continuous := NField.Alignment.HarperSincKernel.continuous_kernel
+alias exact_partition_kernel_fourier := NField.Alignment.HarperSincKernel.fourier_kernel
+alias exact_partition_kernel_support := NField.Alignment.HarperSincKernel.fourier_kernel_support
+alias exact_partition_kernel_tail_bound := NField.Alignment.HarperSincKernel.kernel_tail_bound
+alias exact_partition_kernel_tail_mass := NField.Alignment.HarperSincKernel.integral_kernel_tail_le
+alias exact_partition_kernel_tail_precision := NField.Alignment.HarperSincKernel.integral_kernel_half_tail_le
+alias exact_partition_cell_nonnegative := NField.Alignment.HarperPartition.cell_nonneg
+alias exact_partition_cell_upper_bound := NField.Alignment.HarperPartition.cell_le_one
+alias exact_partition_cell_localization := NField.Alignment.HarperPartition.cell_localization
+alias exact_partition_adjacent_windows := NField.Alignment.HarperPartition.cellSum_as_intervalIntegral
+alias exact_partition_outside_nonnegative := NField.Alignment.HarperPartition.outside_nonneg
+alias exact_partition_outside_localization := NField.Alignment.HarperPartition.outside_localization
+alias exact_partition_sum := NField.Alignment.HarperPartition.partition_sum
+alias exact_partition_label_nonnegative := NField.Alignment.HarperPartition.labelWeight_nonneg
+alias exact_partition_label_sum := NField.Alignment.HarperPartition.labelWeight_sum
+alias exact_partition_box_nonnegative := NField.Alignment.HarperPartition.boxWeight_nonneg
+alias exact_partition_box_sum := NField.Alignment.HarperPartition.boxWeight_sum
+
+#check exact_partition_kernel_integral
+#check exact_partition_kernel_nonnegative
+#check exact_partition_kernel_integrable
+#check exact_partition_kernel_continuous
+#check exact_partition_kernel_fourier
+#check exact_partition_kernel_support
+#check exact_partition_kernel_tail_bound
+#check exact_partition_kernel_tail_mass
+#check exact_partition_kernel_tail_precision
+#check exact_partition_cell_nonnegative
+#check exact_partition_cell_upper_bound
+#check exact_partition_cell_localization
+#check exact_partition_adjacent_windows
+#check exact_partition_outside_nonnegative
+#check exact_partition_outside_localization
+#check exact_partition_sum
+#check exact_partition_label_nonnegative
+#check exact_partition_label_sum
+#check exact_partition_box_nonnegative
+#check exact_partition_box_sum
+
+alias exact_partition_cell_fourier := NField.Alignment.HarperPartitionFourier.fourier_cell
+alias exact_partition_cell_smooth := NField.Alignment.HarperPartitionFourier.contDiff_cell
+alias exact_partition_density_support := NField.Alignment.HarperPartitionFourier.density_compactSupport
+alias exact_partition_derivative_fourier := NField.Alignment.HarperPartitionFourier.cell_iteratedDeriv_fourier
+alias exact_partition_derivative_real_norm := NField.Alignment.HarperPartitionFourier.cell_iteratedDeriv_norm
+alias exact_partition_cell_derivative := NField.Alignment.HarperPartitionDerivative.cell_derivative_bound
+alias exact_partition_sum_derivative := NField.Alignment.HarperPartitionDerivative.cellSum_derivative_bound
+alias exact_partition_outside_derivative := NField.Alignment.HarperPartitionDerivative.outside_derivative_bound
+alias exact_partition_label_smooth := NField.Alignment.HarperPartitionDerivative.contDiff_labelWeight
+alias exact_partition_label_derivative := NField.Alignment.HarperPartitionDerivative.labelWeight_derivative_bound
+alias exact_partition_label_upper_bound := NField.Alignment.HarperPartitionDerivative.labelWeight_le_one
+alias exact_partition_taylor_coeff := NField.Alignment.HarperPartitionTaylor.polynomial_coeff
+alias exact_partition_taylor_eval := NField.Alignment.HarperPartitionTaylor.polynomial_eval
+alias exact_partition_taylor_support := NField.Alignment.HarperPartitionTaylor.polynomial_support
+alias exact_partition_taylor_degree := NField.Alignment.HarperPartitionTaylor.polynomial_natDegree
+alias exact_partition_taylor_at_origin := NField.Alignment.HarperPartitionTaylor.polynomial_eval_zero
+alias exact_partition_taylor_identification := NField.Alignment.HarperPartitionTaylor.polynomial_eq_taylorWithin
+alias exact_partition_taylor_remainder := NField.Alignment.HarperPartitionTaylor.polynomial_remainder
+alias exact_partition_taylor_absolute_bound := NField.Alignment.HarperPartitionTaylor.polynomial_abs_le
+alias exact_partition_taylor_even_remainder := NField.Alignment.HarperPartitionTaylor.polynomial_even_remainder
+
+#check exact_partition_cell_fourier
+#check exact_partition_cell_smooth
+#check exact_partition_density_support
+#check exact_partition_derivative_fourier
+#check exact_partition_derivative_real_norm
+#check exact_partition_cell_derivative
+#check exact_partition_sum_derivative
+#check exact_partition_outside_derivative
+#check exact_partition_label_smooth
+#check exact_partition_label_derivative
+#check exact_partition_label_upper_bound
+#check exact_partition_taylor_coeff
+#check exact_partition_taylor_eval
+#check exact_partition_taylor_support
+#check exact_partition_taylor_degree
+#check exact_partition_taylor_at_origin
+#check exact_partition_taylor_identification
+#check exact_partition_taylor_remainder
+#check exact_partition_taylor_absolute_bound
+#check exact_partition_taylor_even_remainder
+
+alias exact_expansion_linear_argument := NField.Alignment.HarperTaylorExpansion.linear_eval
+alias exact_expansion_linear_degree := NField.Alignment.HarperTaylorExpansion.linear_degree
+alias exact_expansion_taylor_eval := NField.Alignment.HarperTaylorExpansion.taylor_eval
+alias exact_expansion_taylor_degree := NField.Alignment.HarperTaylorExpansion.taylor_degree
+alias exact_expansion_product_eval := NField.Alignment.HarperTaylorExpansion.product_eval
+alias exact_expansion_product_degree := NField.Alignment.HarperTaylorExpansion.product_degree
+alias exact_expansion_product_occurrences := NField.Alignment.HarperTaylorExpansion.product_occurrences
+alias exact_expansion_monomial_pair := NField.Alignment.HarperTaylorExpansion.monomial_pair
+alias exact_expansion_weighted_product := NField.Alignment.HarperTaylorComparison.weighted_expansion
+alias exact_expansion_conditional_comparison := NField.Alignment.HarperTaylorComparison.weighted_comparison
+alias exact_expansion_prime_argument := NField.Alignment.HarperPrimeTaylorComparison.primeArgument_eq
+alias exact_expansion_prime_indices := NField.Alignment.HarperPrimeTaylorComparison.atomIndex_bounds
+alias exact_expansion_prime_product := NField.Alignment.HarperPrimeTaylorComparison.primeProduct_eval
+alias exact_expansion_prime_degree := NField.Alignment.HarperPrimeTaylorComparison.primeProduct_degree
+alias exact_expansion_prime_occurrences := NField.Alignment.HarperPrimeTaylorComparison.primeProduct_occurrences
+alias exact_expansion_random_integrability := NField.Alignment.HarperPrimeTaylorComparison.weighted_taylor_integrable
+alias exact_expansion_prime_size := NField.Alignment.HarperPrimeTaylorComparison.eventual_prime_product_size
+alias exact_expansion_prime_support := NField.Alignment.HarperPrimeTaylorComparison.eventual_prime_product_support
+alias exact_expansion_prime_comparison := NField.Alignment.HarperPrimeTaylorComparison.eventual_prime_taylor_comparison
+alias exact_expansion_short_comparison := NField.Alignment.HarperPrimeTaylorComparison.eventual_short_prime_taylor_comparison
+
+#check exact_expansion_linear_argument
+#check exact_expansion_linear_degree
+#check exact_expansion_taylor_eval
+#check exact_expansion_taylor_degree
+#check exact_expansion_product_eval
+#check exact_expansion_product_degree
+#check exact_expansion_product_occurrences
+#check exact_expansion_monomial_pair
+#check exact_expansion_weighted_product
+#check exact_expansion_conditional_comparison
+#check exact_expansion_prime_argument
+#check exact_expansion_prime_indices
+#check exact_expansion_prime_product
+#check exact_expansion_prime_degree
+#check exact_expansion_prime_occurrences
+#check exact_expansion_random_integrability
+#check exact_expansion_prime_size
+#check exact_expansion_prime_support
+#check exact_expansion_prime_comparison
+#check exact_expansion_short_comparison
+
+alias exact_even_moment_power_coefficients := NField.Alignment.HarperMomentExpansion.power_coefficient_expansion
+alias exact_even_moment_weighted_coefficients := NField.Alignment.HarperMomentExpansion.weighted_coefficient_expansion
+alias exact_even_moment_random_integrability := NField.Alignment.HarperPrimeEvenMoment.prime_even_moment_integrable
+alias exact_even_moment_random_diagonal := NField.Alignment.HarperPrimeEvenMoment.prime_even_moment_exact
+alias exact_even_moment_complete_size := NField.Alignment.HarperMomentExpansion.completeIndex_le
+alias exact_even_moment_divisor_submultiplicative := NField.Alignment.HarperSmoothConvolution.smoothDivisorCount_mul_le
+alias exact_even_moment_convolution_bound := NField.Alignment.HarperSmoothConvolution.convolution_energy_bound
+alias exact_even_moment_coefficient_reduction := NField.Alignment.HarperMomentReduction.weighted_even_moment_coefficient_bound
+alias exact_even_moment_tuple_reduction := NField.Alignment.HarperPrimeEvenMoment.prime_even_moment_tuple_bound
+alias exact_even_moment_prime_square_weights := NField.Alignment.HarperPrimeEvenMoment.corrected_atom_energy_sum
+alias exact_even_moment_finite_comparison := NField.Alignment.HarperPrimeEvenMoment.prime_even_moment_comparison
+alias exact_even_moment_remainder_comparison := NField.Alignment.HarperPrimeEvenMoment.eventual_remainder_moment_comparison
+
+#check exact_even_moment_power_coefficients
+#check exact_even_moment_weighted_coefficients
+#check exact_even_moment_random_integrability
+#check exact_even_moment_random_diagonal
+#check exact_even_moment_complete_size
+#check exact_even_moment_divisor_submultiplicative
+#check exact_even_moment_convolution_bound
+#check exact_even_moment_coefficient_reduction
+#check exact_even_moment_tuple_reduction
+#check exact_even_moment_prime_square_weights
+#check exact_even_moment_finite_comparison
+#check exact_even_moment_remainder_comparison
+
+alias exact_factorial_moment_coefficient_recurrence := NField.Alignment.HarperTuplePolynomial.coefficient_recurrence
+alias exact_factorial_moment_coefficient_bound := NField.Alignment.HarperTuplePolynomial.coefficient_factorial_bound
+alias exact_factorial_moment_product_signature := NField.Alignment.HarperTupleMultiplicity.tuple_factorization
+alias exact_factorial_moment_tuple_two := NField.Alignment.HarperTupleMultiplicity.tupleMultiplicity_le_factorial_two
+alias exact_factorial_moment_tuple_four := NField.Alignment.HarperTupleMultiplicity.tupleMultiplicity_le_factorial_four
+alias exact_factorial_moment_random_weighted := NField.Alignment.HarperEvenMomentBound.random_weighted_even_moment_bound
+alias exact_factorial_moment_character_weighted := NField.Alignment.HarperEvenMomentBound.character_weighted_even_moment_bound
+alias exact_factorial_moment_remainder_orders := NField.Alignment.HarperEvenMomentBound.eventual_remainder_moment_bound
+alias exact_factorial_moment_plain_integrability := NField.Alignment.HarperEvenMomentBound.random_even_moment_integrable
+alias exact_factorial_moment_random_plain_two := NField.Alignment.HarperEvenMomentBound.random_even_moment_bound_two
+alias exact_factorial_moment_random_plain := NField.Alignment.HarperEvenMomentBound.random_even_moment_bound
+alias exact_factorial_moment_character_plain := NField.Alignment.HarperEvenMomentBound.character_even_moment_bound
+
+#check exact_factorial_moment_coefficient_recurrence
+#check exact_factorial_moment_coefficient_bound
+#check exact_factorial_moment_product_signature
+#check exact_factorial_moment_tuple_two
+#check exact_factorial_moment_tuple_four
+#check exact_factorial_moment_random_weighted
+#check exact_factorial_moment_character_weighted
+#check exact_factorial_moment_remainder_orders
+#check exact_factorial_moment_plain_integrability
+#check exact_factorial_moment_random_plain_two
+#check exact_factorial_moment_random_plain
+#check exact_factorial_moment_character_plain
+
+alias exact_remainder_common_product_moment := NField.Alignment.HarperProductMoment.integral_weighted_product_le_common
+alias exact_remainder_coefficient_energy := NField.Alignment.HarperPrimeProductMoment.primeEnergy_le_unit
+alias exact_remainder_random_product_integrability := NField.Alignment.HarperPrimeProductMoment.random_weighted_power_product_integrable
+alias exact_remainder_random_weighted_product := NField.Alignment.HarperPrimeProductMoment.random_weighted_power_product_bound
+alias exact_remainder_character_weighted_product := NField.Alignment.HarperPrimeProductMoment.character_weighted_power_product_bound
+alias exact_remainder_random_unweighted_product := NField.Alignment.HarperPrimeProductMoment.random_power_product_bound
+alias exact_remainder_character_unweighted_product := NField.Alignment.HarperPrimeProductMoment.character_power_product_bound
+alias exact_remainder_pointwise_majorant := NField.Alignment.HarperRemainderProduct.remainder_le_majorant
+alias exact_remainder_actual_error_integrability := NField.Alignment.HarperRemainderProduct.random_weighted_remainder_integrable
+alias exact_remainder_random_weighted_errors := NField.Alignment.HarperRemainderProduct.random_weighted_remainder_bound
+alias exact_remainder_character_weighted_errors := NField.Alignment.HarperRemainderProduct.character_weighted_remainder_bound
+alias exact_remainder_random_unweighted_errors := NField.Alignment.HarperRemainderProduct.random_remainder_bound
+alias exact_remainder_character_unweighted_errors := NField.Alignment.HarperRemainderProduct.character_remainder_bound
+alias exact_remainder_subset_expansion := NField.Alignment.HarperProductApproximation.weighted_product_error
+alias exact_remainder_binomial_sum := NField.Alignment.HarperProductApproximation.errorSum_eq_subsets
+alias exact_remainder_random_weighted_approximation := NField.Alignment.HarperAverageApproximation.random_weighted_approximation_bound
+alias exact_remainder_character_weighted_approximation := NField.Alignment.HarperAverageApproximation.character_weighted_approximation_bound
+alias exact_remainder_random_unweighted_approximation := NField.Alignment.HarperAverageApproximation.random_approximation_bound
+alias exact_remainder_character_unweighted_approximation := NField.Alignment.HarperAverageApproximation.character_approximation_bound
+alias exact_remainder_eventual_short_comparison := NField.Alignment.HarperSmoothComparison.eventual_weighted_smooth_comparison
+alias exact_remainder_eventual_weight_comparison := NField.Alignment.HarperSmoothComparison.eventual_smooth_weight_comparison
+alias exact_remainder_prime_energy_loglog := NField.Alignment.HarperPrimeEnergyBound.unitPrimeEnergy_loglog_bound
+alias exact_remainder_prime_energy_eventual := NField.Alignment.HarperPrimeEnergyBound.eventual_unitPrimeEnergy_bound
+alias exact_remainder_short_energy_eventual := NField.Alignment.HarperPrimeEnergyBound.eventual_shortEnergy_bound
+
+#check exact_remainder_common_product_moment
+#check exact_remainder_coefficient_energy
+#check exact_remainder_random_product_integrability
+#check exact_remainder_random_weighted_product
+#check exact_remainder_character_weighted_product
+#check exact_remainder_random_unweighted_product
+#check exact_remainder_character_unweighted_product
+#check exact_remainder_pointwise_majorant
+#check exact_remainder_actual_error_integrability
+#check exact_remainder_random_weighted_errors
+#check exact_remainder_character_weighted_errors
+#check exact_remainder_random_unweighted_errors
+#check exact_remainder_character_unweighted_errors
+#check exact_remainder_subset_expansion
+#check exact_remainder_binomial_sum
+#check exact_remainder_random_weighted_approximation
+#check exact_remainder_character_weighted_approximation
+#check exact_remainder_random_unweighted_approximation
+#check exact_remainder_character_unweighted_approximation
+#check exact_remainder_eventual_short_comparison
+#check exact_remainder_eventual_weight_comparison
+#check exact_remainder_prime_energy_loglog
+#check exact_remainder_prime_energy_eventual
+#check exact_remainder_short_energy_eventual
+
+alias exact_decay_factorial_lower := NField.Alignment.HarperFactorialDecay.factorial_lower
+alias exact_decay_factorial_upper := NField.Alignment.HarperFactorialDecay.factorial_upper
+alias exact_decay_factorial_product := NField.Alignment.HarperFactorialDecay.productBound_le
+alias exact_decay_binomial_geometric := NField.Alignment.HarperFactorialDecay.errorSum_geometric
+alias exact_decay_rounded_floor := NField.Alignment.HarperTaylorGrowth.taylorOrder_lower
+alias exact_decay_rounded_order := NField.Alignment.HarperTaylorGrowth.eventual_taylorOrder_bounds
+alias exact_decay_rounded_geometric := NField.Alignment.HarperRemainderDecay.eventual_geometric_bound
+alias exact_decay_weighted_error := NField.Alignment.HarperRemainderDecay.eventual_weighted_error_le
+alias exact_decay_unweighted_error := NField.Alignment.HarperRemainderDecay.eventual_unweighted_error_le
+alias exact_decay_weighted_box := NField.Alignment.HarperBoxComparison.eventual_weighted_box_error
+alias exact_decay_weight_box := NField.Alignment.HarperBoxComparison.eventual_weight_box_error
+alias exact_decay_actual_weight_sum := NField.Alignment.HarperActualConditioning.characterWeight_sum
+alias exact_decay_actual_moment_total := NField.Alignment.HarperActualConditioning.randomMoment_total
+alias exact_decay_actual_moment_bound := NField.Alignment.HarperActualConditioning.randomMoment_total_le
+alias exact_decay_actual_transfer := NField.Alignment.HarperActualConditioning.eventual_actual_transfer
+alias exact_decay_actual_loss := NField.Alignment.HarperActualConditioning.actual_loss_decay
+
+#check exact_decay_factorial_lower
+#check exact_decay_factorial_upper
+#check exact_decay_factorial_product
+#check exact_decay_binomial_geometric
+#check exact_decay_rounded_floor
+#check exact_decay_rounded_order
+#check exact_decay_rounded_geometric
+#check exact_decay_weighted_error
+#check exact_decay_unweighted_error
+#check exact_decay_weighted_box
+#check exact_decay_weight_box
+#check exact_decay_actual_weight_sum
+#check exact_decay_actual_moment_total
+#check exact_decay_actual_moment_bound
+#check exact_decay_actual_transfer
+#check exact_decay_actual_loss
+
+alias exact_smooth_removal_support := NField.Alignment.HarperSmoothCount.smoothSet_mem
+alias exact_smooth_removal_one := NField.Alignment.HarperSmoothCount.one_mem_smoothSet
+alias exact_smooth_removal_euler_product := NField.Alignment.HarperSmoothCount.smooth_power_hasSum
+alias exact_smooth_removal_rankin := NField.Alignment.HarperSmoothCount.rankin_bound
+alias exact_smooth_removal_shifted_product := NField.Alignment.HarperShiftedEulerProduct.shiftedProduct_bound
+alias exact_smooth_removal_product_growth := NField.Alignment.HarperShiftedEulerProduct.eventual_shiftedProduct_log_bound
+alias exact_smooth_removal_scale_identity := NField.Alignment.HarperSmoothCountDecay.rankin_scale_identity
+alias exact_smooth_removal_count_bound := NField.Alignment.HarperSmoothCountDecay.eventual_smoothCount_bound
+alias exact_smooth_removal_count_rate := NField.Alignment.HarperSmoothCountDecay.smoothCount_isBigO
+alias exact_smooth_removal_fractional_rate := NField.Alignment.HarperSmoothCountDecay.smoothCount_fractional_isLittleO
+alias exact_smooth_removal_prime_rate := NField.Alignment.HarperSmoothCountDecay.prime_square_smoothCount_decay
+alias exact_smooth_removal_power_mean := NField.Alignment.HarperSmoothRemoval.average_fractional_le_second
+alias exact_smooth_removal_finite_moment := NField.Alignment.HarperSmoothRemoval.finite_supported_moment_bound
+alias exact_smooth_removal_units := NField.Alignment.HarperSmoothRemoval.smooth_support_units
+alias exact_smooth_removal_character_moment := NField.Alignment.HarperSmoothRemoval.smooth_character_moment_bound
+alias exact_smooth_removal_negligible := NField.Alignment.HarperSmoothRemoval.eventual_smooth_removal
+
+#check exact_smooth_removal_support
+#check exact_smooth_removal_one
+#check exact_smooth_removal_euler_product
+#check exact_smooth_removal_rankin
+#check exact_smooth_removal_shifted_product
+#check exact_smooth_removal_product_growth
+#check exact_smooth_removal_scale_identity
+#check exact_smooth_removal_count_bound
+#check exact_smooth_removal_count_rate
+#check exact_smooth_removal_fractional_rate
+#check exact_smooth_removal_prime_rate
+#check exact_smooth_removal_power_mean
+#check exact_smooth_removal_finite_moment
+#check exact_smooth_removal_units
+#check exact_smooth_removal_character_moment
+#check exact_smooth_removal_negligible
+
+alias exact_fractional_weighted_holder := NField.Alignment.HarperFractionalConditioning.weighted_fractional_bound
+alias exact_fractional_partition := NField.Alignment.HarperFractionalConditioning.fractional_conditioning_bound
+alias exact_fractional_character_conditioning := NField.Alignment.HarperFractionalConditioning.character_fractional_conditioning
+alias exact_fractional_transfer_loss := NField.Alignment.HarperFractionalConditioning.transferLoss_isLittleO
+alias exact_fractional_character_transfer := NField.Alignment.HarperFractionalConditioning.eventual_fractional_transfer
+alias exact_fractional_retained_norm := NField.Alignment.HarperRetainedSum.retainedCoefficient_norm_le
+alias exact_fractional_support := NField.Alignment.HarperRetainedSum.smoothSet_at_base
+alias exact_fractional_sum_split := NField.Alignment.HarperRetainedSum.short_sum_split
+alias exact_fractional_moment_split := NField.Alignment.HarperRetainedSum.short_moment_split
+alias exact_fractional_moment_removal := NField.Alignment.HarperRetainedSum.short_moment_removal
+alias exact_fractional_complete_error := NField.Alignment.HarperRetainedTransfer.removalLoss_isLittleO
+alias exact_fractional_conditional_formula := NField.Alignment.HarperRetainedTransfer.random_conditioning_as_conditional
+alias exact_fractional_retained_transfer := NField.Alignment.HarperRetainedTransfer.eventual_retained_transfer
+alias exact_fractional_retained_negligible := NField.Alignment.HarperRetainedTransfer.eventual_retained_transfer_negligible
+alias exact_fractional_frequency_bounds := NField.Alignment.HarperConditioningFrequencies.frequencyIndex_bounds
+alias exact_fractional_frequency_coverage := NField.Alignment.HarperConditioningFrequencies.frequencyIndex_covers
+alias exact_fractional_coefficient_norms := NField.Alignment.HarperConditioningFrequencies.coefficient_norms
+alias exact_fractional_coefficient_formulas := NField.Alignment.HarperConditioningFrequencies.coefficient_formulas
+alias exact_fractional_actual_character_reduction := NField.Alignment.HarperConditioningFrequencies.eventual_actual_character_reduction
+alias exact_fractional_conjugation := NField.Alignment.MagnitudeShortFractionalTransfer.shortSum_norm_eq
+alias exact_fractional_normalization := NField.Alignment.MagnitudeShortFractionalTransfer.shortMagnitude_three_halves
+alias exact_fractional_family_restriction := NField.Alignment.MagnitudeShortFractionalTransfer.primitive_short_moment_restriction
+alias exact_fractional_normalized_restriction := NField.Alignment.MagnitudeShortFractionalTransfer.normalized_fractional_restriction
+alias exact_fractional_normalized_random_reduction := NField.Alignment.MagnitudeShortFractionalTransfer.eventual_normalized_random_reduction
+
+#check exact_fractional_weighted_holder
+#check exact_fractional_partition
+#check exact_fractional_character_conditioning
+#check exact_fractional_transfer_loss
+#check exact_fractional_character_transfer
+#check exact_fractional_retained_norm
+#check exact_fractional_support
+#check exact_fractional_sum_split
+#check exact_fractional_moment_split
+#check exact_fractional_moment_removal
+#check exact_fractional_complete_error
+#check exact_fractional_conditional_formula
+#check exact_fractional_retained_transfer
+#check exact_fractional_retained_negligible
+#check exact_fractional_frequency_bounds
+#check exact_fractional_frequency_coverage
+#check exact_fractional_coefficient_norms
+#check exact_fractional_coefficient_formulas
+#check exact_fractional_actual_character_reduction
+#check exact_fractional_conjugation
+#check exact_fractional_normalization
+#check exact_fractional_family_restriction
+#check exact_fractional_normalized_restriction
+#check exact_fractional_normalized_random_reduction
+
+alias exact_rough_prime_base_positive := NField.Alignment.HarperSmoothRough.primeBase_pos
+alias exact_rough_prime_base_divisors := NField.Alignment.HarperSmoothRough.prime_dvd_primeBase
+alias exact_rough_smooth_support := NField.Alignment.HarperSmoothRough.supported_iff_smooth
+alias exact_rough_smooth_part := NField.Alignment.HarperSmoothRough.canonical_smooth_part
+alias exact_rough_rough_primes := NField.Alignment.HarperSmoothRough.canonical_rough_primes
+alias exact_rough_factorization := NField.Alignment.HarperSmoothRough.canonical_decomposition
+alias exact_rough_smooth_coordinates := NField.Alignment.HarperSmoothRough.steinhaus_smooth_congr
+alias exact_rough_argument_coordinates := NField.Alignment.HarperSmoothRough.primeArgument_small_coordinates
+alias exact_rough_box_coordinates := NField.Alignment.HarperSmoothRough.smoothBox_small_coordinates
+alias exact_rough_coordinate_extension := NField.Alignment.SteinhausCoordinates.extendCoordinates_measurable
+alias exact_rough_coordinate_factorization := NField.Alignment.SteinhausCoordinates.dependsOn_factorization
+alias exact_rough_coordinate_independence := NField.Alignment.SteinhausCoordinates.independent_of_disjoint_coordinates
+alias exact_rough_coordinate_integral := NField.Alignment.SteinhausCoordinates.integral_mul_of_disjoint_coordinates
+alias exact_rough_integer_coordinates := NField.Alignment.SteinhausCoordinates.steinhaus_dependsOn
+alias exact_rough_pair_coordinates := NField.Alignment.SteinhausCoordinates.steinhaus_pair_dependsOn
+alias exact_rough_disjoint_support := NField.Alignment.HarperRoughOrthogonality.rough_coordinates_disjoint
+alias exact_rough_weighted_rough_pair := NField.Alignment.HarperRoughOrthogonality.weighted_rough_pair_integral
+alias exact_rough_weighted_pair := NField.Alignment.HarperRoughOrthogonality.weighted_pair_integral
+alias exact_rough_box_measurable := NField.Alignment.HarperRoughOrthogonality.smoothBox_measurable
+alias exact_rough_actual_box_pair := NField.Alignment.HarperRoughOrthogonality.smoothBox_pair_integral
+
+#check exact_rough_prime_base_positive
+#check exact_rough_prime_base_divisors
+#check exact_rough_smooth_support
+#check exact_rough_smooth_part
+#check exact_rough_rough_primes
+#check exact_rough_factorization
+#check exact_rough_smooth_coordinates
+#check exact_rough_argument_coordinates
+#check exact_rough_box_coordinates
+#check exact_rough_coordinate_extension
+#check exact_rough_coordinate_factorization
+#check exact_rough_coordinate_independence
+#check exact_rough_coordinate_integral
+#check exact_rough_integer_coordinates
+#check exact_rough_pair_coordinates
+#check exact_rough_disjoint_support
+#check exact_rough_weighted_rough_pair
+#check exact_rough_weighted_pair
+#check exact_rough_box_measurable
+#check exact_rough_actual_box_pair
+
+alias exact_rough_sum_same_fiber_pair_sum := NField.Alignment.HarperRoughMoment.same_fiber_pair_sum
+alias exact_rough_sum_weighted_pair_integrable := NField.Alignment.HarperRoughMoment.weighted_pair_integrable
+alias exact_rough_sum_indexed_pair_expansion := NField.Alignment.HarperRoughMoment.indexed_pair_expansion
+alias exact_rough_sum_weighted_polynomial_pair_integral := NField.Alignment.HarperRoughMoment.weighted_polynomial_pair_integral
+alias exact_rough_sum_weighted_polynomial_rough_decomposition := NField.Alignment.HarperRoughMoment.weighted_polynomial_rough_decomposition
+alias exact_rough_sum_smoothBox_norm_le_one := NField.Alignment.HarperRoughMoment.smoothBox_norm_le_one
+alias exact_rough_sum_smoothBox_second_moment_by_rough := NField.Alignment.HarperRoughMoment.smoothBox_second_moment_by_rough
+alias exact_rough_sum_smooth_mono := NField.Alignment.HarperRoughSupport.smooth_mono
+alias exact_rough_sum_roughPart_dvd := NField.Alignment.HarperRoughSupport.roughPart_dvd
+alias exact_rough_sum_smooth_iff_rough_smooth := NField.Alignment.HarperRoughSupport.smooth_iff_rough_smooth
+alias exact_rough_sum_roughPart_self := NField.Alignment.HarperRoughSupport.roughPart_self
+alias exact_rough_sum_retained_rough_image := NField.Alignment.HarperRoughSupport.retained_rough_image
+alias exact_rough_sum_smoothSet_quotient := NField.Alignment.HarperRoughSupport.smoothSet_quotient
+alias exact_rough_sum_smooth_mul_mem_fiber := NField.Alignment.HarperRoughSupport.smooth_mul_mem_fiber
+alias exact_rough_sum_smooth_part_mem_quotient := NField.Alignment.HarperRoughSupport.smooth_part_mem_quotient
+alias exact_rough_sum_smooth_fiber_sum := NField.Alignment.HarperRoughSupport.smooth_fiber_sum
+alias exact_rough_sum_rough_coprime_iff := NField.Alignment.HarperRoughSupport.rough_coprime_iff
+alias exact_rough_sum_not_smooth_iff_large_prime := NField.Alignment.HarperRoughSupport.not_smooth_iff_large_prime
+alias exact_rough_sum_roughSupport_mem := NField.Alignment.HarperRoughSupport.roughSupport_mem
+alias exact_rough_sum_roughSupport_gt_y := NField.Alignment.HarperRoughSupport.roughSupport_gt_y
+alias exact_rough_sum_retained_sum_eq_support := NField.Alignment.HarperRoughSupport.retained_sum_eq_support
+alias exact_rough_sum_roughSquare_nonneg := NField.Alignment.HarperRoughDecomposition.roughSquare_nonneg
+alias exact_rough_sum_weighted_roughSquare_integrable := NField.Alignment.HarperRoughDecomposition.weighted_roughSquare_integrable
+alias exact_rough_sum_retained_moment_sum_decomposition := NField.Alignment.HarperRoughDecomposition.retained_moment_sum_decomposition
+alias exact_rough_sum_retained_moment_decomposition := NField.Alignment.HarperRoughDecomposition.retained_moment_decomposition
+alias exact_rough_sum_randomMoment_retained_decomposition := NField.Alignment.HarperRoughDecomposition.randomMoment_retained_decomposition
+alias exact_rough_sum_random_conditioning_decomposition := NField.Alignment.HarperRoughDecomposition.random_conditioning_decomposition
+alias exact_rough_sum_actual_random_decomposition := NField.Alignment.HarperRoughDecomposition.actual_random_decomposition
+alias exact_rough_sum_eventual_actual_random_decomposition := NField.Alignment.HarperRoughDecomposition.eventual_actual_random_decomposition
+alias exact_display_short_square_total_chain := NField.Alignment.MagnitudeFiniteDisplayCorrespondence.short_square_total_chain
+alias exact_display_mixed_magnitude_bound := NField.Alignment.MagnitudeFiniteDisplayCorrespondence.mixed_magnitude_bound
+alias exact_display_centered_magnitude_bound := NField.Alignment.MagnitudeFiniteDisplayCorrespondence.centered_magnitude_bound
+alias exact_display_family_fractional_correlation_bound := NField.Alignment.MagnitudeFiniteDisplayCorrespondence.family_fractional_correlation_bound
+
+#check exact_rough_sum_same_fiber_pair_sum
+#check exact_rough_sum_weighted_pair_integrable
+#check exact_rough_sum_indexed_pair_expansion
+#check exact_rough_sum_weighted_polynomial_pair_integral
+#check exact_rough_sum_weighted_polynomial_rough_decomposition
+#check exact_rough_sum_smoothBox_norm_le_one
+#check exact_rough_sum_smoothBox_second_moment_by_rough
+#check exact_rough_sum_smooth_mono
+#check exact_rough_sum_roughPart_dvd
+#check exact_rough_sum_smooth_iff_rough_smooth
+#check exact_rough_sum_roughPart_self
+#check exact_rough_sum_retained_rough_image
+#check exact_rough_sum_smoothSet_quotient
+#check exact_rough_sum_smooth_mul_mem_fiber
+#check exact_rough_sum_smooth_part_mem_quotient
+#check exact_rough_sum_smooth_fiber_sum
+#check exact_rough_sum_rough_coprime_iff
+#check exact_rough_sum_not_smooth_iff_large_prime
+#check exact_rough_sum_roughSupport_mem
+#check exact_rough_sum_roughSupport_gt_y
+#check exact_rough_sum_retained_sum_eq_support
+#check exact_rough_sum_roughSquare_nonneg
+#check exact_rough_sum_weighted_roughSquare_integrable
+#check exact_rough_sum_retained_moment_sum_decomposition
+#check exact_rough_sum_retained_moment_decomposition
+#check exact_rough_sum_randomMoment_retained_decomposition
+#check exact_rough_sum_random_conditioning_decomposition
+#check exact_rough_sum_actual_random_decomposition
+#check exact_rough_sum_eventual_actual_random_decomposition
+#check exact_display_short_square_total_chain
+#check exact_display_mixed_magnitude_bound
+#check exact_display_centered_magnitude_bound
+#check exact_display_family_fractional_correlation_bound
+
+alias exact_smoothing_smoothSet_filter_lower := NField.Alignment.HarperSmoothIntervals.smoothSet_filter_lower
+alias exact_smoothing_smoothSum_split := NField.Alignment.HarperSmoothIntervals.smoothSum_split
+alias exact_smoothing_smoothSum_measurable := NField.Alignment.HarperSmoothIntervals.smoothSum_measurable
+alias exact_smoothing_smoothSum_square_split := NField.Alignment.HarperSmoothIntervals.smoothSum_square_split
+alias exact_smoothing_quotient_square_split := NField.Alignment.HarperSmoothIntervals.quotient_square_split
+alias exact_smoothing_smoothTail_measurable := NField.Alignment.HarperSmoothIntervals.smoothTail_measurable
+alias exact_smoothing_smoothSum_norm_le := NField.Alignment.HarperSmoothIntervals.smoothSum_norm_le
+alias exact_smoothing_smoothTail_norm_le := NField.Alignment.HarperSmoothIntervals.smoothTail_norm_le
+alias exact_smoothing_quotient_square_intervalIntegrable := NField.Alignment.HarperSmoothIntervals.quotient_square_intervalIntegrable
+alias exact_smoothing_tail_square_intervalIntegrable := NField.Alignment.HarperSmoothIntervals.tail_square_intervalIntegrable
+alias exact_smoothing_smoothing_endpoint_le := NField.Alignment.HarperSmoothIntervals.smoothing_endpoint_le
+alias exact_smoothing_smoothing_normalization := NField.Alignment.HarperSmoothIntervals.smoothing_normalization
+alias exact_smoothing_smoothAverage_nonneg := NField.Alignment.HarperSmoothIntervals.smoothAverage_nonneg
+alias exact_smoothing_tailAverage_nonneg := NField.Alignment.HarperSmoothIntervals.tailAverage_nonneg
+alias exact_smoothing_smoothSum_smoothing := NField.Alignment.HarperSmoothIntervals.smoothSum_smoothing
+alias exact_smoothing_smoothTail_card_le := NField.Alignment.HarperSmoothIntervals.smoothTail_card_le
+alias exact_smoothing_smoothing_interval_width := NField.Alignment.HarperSmoothIntervals.smoothing_interval_width
+alias exact_smoothing_quotient_tail_card_bound := NField.Alignment.HarperSmoothIntervals.quotient_tail_card_bound
+alias exact_smoothing_smoothSum_eq_fixed_support := NField.Alignment.HarperSmoothIntervals.smoothSum_eq_fixed_support
+alias exact_smoothing_intervalPolynomial_measurable := NField.Alignment.HarperSmoothingMoment.intervalPolynomial_measurable
+alias exact_smoothing_intervalPolynomial_norm_le := NField.Alignment.HarperSmoothingMoment.intervalPolynomial_norm_le
+alias exact_smoothing_intervalPolynomial_square_integrable := NField.Alignment.HarperSmoothingMoment.intervalPolynomial_square_integrable
+alias exact_smoothing_intervalPolynomial_average_integrable := NField.Alignment.HarperSmoothingMoment.intervalPolynomial_average_integrable
+alias exact_smoothing_intervalPolynomial_second_moment := NField.Alignment.HarperSmoothingMoment.intervalPolynomial_second_moment
+alias exact_smoothing_lowerCoefficient_measurable := NField.Alignment.HarperSmoothingMoment.lowerCoefficient_measurable
+alias exact_smoothing_tailCoefficient_measurable := NField.Alignment.HarperSmoothingMoment.tailCoefficient_measurable
+alias exact_smoothing_lowerCoefficient_norm_le := NField.Alignment.HarperSmoothingMoment.lowerCoefficient_norm_le
+alias exact_smoothing_tailCoefficient_norm_le := NField.Alignment.HarperSmoothingMoment.tailCoefficient_norm_le
+alias exact_smoothing_smoothSum_intervalPolynomial := NField.Alignment.HarperSmoothingMoment.smoothSum_intervalPolynomial
+alias exact_smoothing_smoothTail_intervalPolynomial := NField.Alignment.HarperSmoothingMoment.smoothTail_intervalPolynomial
+alias exact_smoothing_smoothAverage_integrable := NField.Alignment.HarperSmoothingMoment.smoothAverage_integrable
+alias exact_smoothing_tailAverage_integrable := NField.Alignment.HarperSmoothingMoment.tailAverage_integrable
+alias exact_smoothing_intervalPolynomial_energy_integrable := NField.Alignment.HarperSmoothingMoment.intervalPolynomial_energy_integrable
+alias exact_smoothing_tailCoefficient_energy := NField.Alignment.HarperSmoothingMoment.tailCoefficient_energy
+alias exact_smoothing_tailAverage_second_moment := NField.Alignment.HarperSmoothingMoment.tailAverage_second_moment
+alias exact_smoothing_tailAverage_expectation_bound := NField.Alignment.HarperSmoothingMoment.tailAverage_expectation_bound
+alias exact_smoothing_weighted_smooth_smoothing := NField.Alignment.HarperSmoothingMoment.weighted_smooth_smoothing
+alias exact_smoothing_roughAverageSupport_mem := NField.Alignment.HarperRoughSmoothing.roughAverageSupport_mem
+alias exact_smoothing_roughSupport_subset_average := NField.Alignment.HarperRoughSmoothing.roughSupport_subset_average
+alias exact_smoothing_smoothRoughAverage_nonneg := NField.Alignment.HarperRoughSmoothing.smoothRoughAverage_nonneg
+alias exact_smoothing_roughTailAverage_nonneg := NField.Alignment.HarperRoughSmoothing.roughTailAverage_nonneg
+alias exact_smoothing_smoothRoughAverage_integrable := NField.Alignment.HarperRoughSmoothing.smoothRoughAverage_integrable
+alias exact_smoothing_roughTailAverage_integrable := NField.Alignment.HarperRoughSmoothing.roughTailAverage_integrable
+alias exact_smoothing_roughSquare_le_smoothing := NField.Alignment.HarperRoughSmoothing.roughSquare_le_smoothing
+alias exact_smoothing_roughTailAverage_expectation_bound := NField.Alignment.HarperRoughSmoothing.roughTailAverage_expectation_bound
+alias exact_smoothing_boxMoment_integrable := NField.Alignment.HarperRoughSmoothing.boxMoment_integrable
+alias exact_smoothing_boxMoment_nonneg := NField.Alignment.HarperRoughSmoothing.boxMoment_nonneg
+alias exact_smoothing_boxMoment_sum := NField.Alignment.HarperRoughSmoothing.boxMoment_sum
+alias exact_smoothing_randomWeight_sum := NField.Alignment.HarperRoughSmoothing.randomWeight_sum
+alias exact_smoothing_weighted_rough_smoothing := NField.Alignment.HarperRoughSmoothing.weighted_rough_smoothing
+alias exact_smoothing_conditioning_split_bound := NField.Alignment.HarperSmoothingConditioning.conditioning_split_bound
+alias exact_smoothing_boxConditioning_smoothing := NField.Alignment.HarperSmoothingConditioning.boxConditioning_smoothing
+alias exact_smoothing_roughConditioning_eq_boxConditioning := NField.Alignment.HarperSmoothingConditioning.roughConditioning_eq_boxConditioning
+alias exact_smoothing_actual_random_smoothing := NField.Alignment.HarperSmoothingConditioning.actual_random_smoothing
+alias exact_smoothing_eventual_actual_random_smoothing := NField.Alignment.HarperSmoothingConditioning.eventual_actual_random_smoothing
+
+#check exact_smoothing_smoothSet_filter_lower
+#check exact_smoothing_smoothSum_split
+#check exact_smoothing_smoothSum_measurable
+#check exact_smoothing_smoothSum_square_split
+#check exact_smoothing_quotient_square_split
+#check exact_smoothing_smoothTail_measurable
+#check exact_smoothing_smoothSum_norm_le
+#check exact_smoothing_smoothTail_norm_le
+#check exact_smoothing_quotient_square_intervalIntegrable
+#check exact_smoothing_tail_square_intervalIntegrable
+#check exact_smoothing_smoothing_endpoint_le
+#check exact_smoothing_smoothing_normalization
+#check exact_smoothing_smoothAverage_nonneg
+#check exact_smoothing_tailAverage_nonneg
+#check exact_smoothing_smoothSum_smoothing
+#check exact_smoothing_smoothTail_card_le
+#check exact_smoothing_smoothing_interval_width
+#check exact_smoothing_quotient_tail_card_bound
+#check exact_smoothing_smoothSum_eq_fixed_support
+#check exact_smoothing_intervalPolynomial_measurable
+#check exact_smoothing_intervalPolynomial_norm_le
+#check exact_smoothing_intervalPolynomial_square_integrable
+#check exact_smoothing_intervalPolynomial_average_integrable
+#check exact_smoothing_intervalPolynomial_second_moment
+#check exact_smoothing_lowerCoefficient_measurable
+#check exact_smoothing_tailCoefficient_measurable
+#check exact_smoothing_lowerCoefficient_norm_le
+#check exact_smoothing_tailCoefficient_norm_le
+#check exact_smoothing_smoothSum_intervalPolynomial
+#check exact_smoothing_smoothTail_intervalPolynomial
+#check exact_smoothing_smoothAverage_integrable
+#check exact_smoothing_tailAverage_integrable
+#check exact_smoothing_intervalPolynomial_energy_integrable
+#check exact_smoothing_tailCoefficient_energy
+#check exact_smoothing_tailAverage_second_moment
+#check exact_smoothing_tailAverage_expectation_bound
+#check exact_smoothing_weighted_smooth_smoothing
+#check exact_smoothing_roughAverageSupport_mem
+#check exact_smoothing_roughSupport_subset_average
+#check exact_smoothing_smoothRoughAverage_nonneg
+#check exact_smoothing_roughTailAverage_nonneg
+#check exact_smoothing_smoothRoughAverage_integrable
+#check exact_smoothing_roughTailAverage_integrable
+#check exact_smoothing_roughSquare_le_smoothing
+#check exact_smoothing_roughTailAverage_expectation_bound
+#check exact_smoothing_boxMoment_integrable
+#check exact_smoothing_boxMoment_nonneg
+#check exact_smoothing_boxMoment_sum
+#check exact_smoothing_randomWeight_sum
+#check exact_smoothing_weighted_rough_smoothing
+#check exact_smoothing_conditioning_split_bound
+#check exact_smoothing_boxConditioning_smoothing
+#check exact_smoothing_roughConditioning_eq_boxConditioning
+#check exact_smoothing_actual_random_smoothing
+#check exact_smoothing_eventual_actual_random_smoothing
+
+alias exact_sieve_primeBase_squarefree := NField.Alignment.HarperIntervalSieve.primeBase_squarefree
+alias exact_sieve_reciprocalDensity_multiplicative := NField.Alignment.HarperIntervalSieve.reciprocalDensity_multiplicative
+alias exact_sieve_intervalSupport_mem := NField.Alignment.HarperIntervalSieve.intervalSupport_mem
+alias exact_sieve_interval_multiple_card := NField.Alignment.HarperIntervalSieve.interval_multiple_card
+alias exact_sieve_interval_multiple_error := NField.Alignment.HarperIntervalSieve.interval_multiple_error
+alias exact_sieve_roughIntervalSieve_siftedSum := NField.Alignment.HarperIntervalSieve.roughIntervalSieve_siftedSum
+alias exact_sieve_roughIntervalSieve_remainder := NField.Alignment.HarperIntervalSieve.roughIntervalSieve_remainder
+alias exact_sieve_sum_multiples_complement := NField.Alignment.SelbergWeights.sum_multiples_complement
+alias exact_sieve_sum_multipleMobius := NField.Alignment.SelbergWeights.sum_multipleMobius
+alias exact_sieve_multipleMobius_one := NField.Alignment.SelbergWeights.multipleMobius_one
+alias exact_sieve_multipleMobius_eq_sum := NField.Alignment.SelbergWeights.multipleMobius_eq_sum
+alias exact_sieve_normalizer_nonneg := NField.Alignment.SelbergWeights.normalizer_nonneg
+alias exact_sieve_one_le_normalizer := NField.Alignment.SelbergWeights.one_le_normalizer
+alias exact_sieve_normalizer_pos := NField.Alignment.SelbergWeights.normalizer_pos
+alias exact_sieve_weight_transform := NField.Alignment.SelbergWeights.weight_transform
+alias exact_sieve_moebius_target := NField.Alignment.SelbergWeights.moebius_target
+alias exact_sieve_weight_one := NField.Alignment.SelbergWeights.weight_one
+alias exact_sieve_mainSum_weight := NField.Alignment.SelbergWeights.mainSum_weight
+alias exact_sieve_abs_target := NField.Alignment.SelbergWeights.abs_target
+alias exact_sieve_sum_abs_target := NField.Alignment.SelbergWeights.sum_abs_target
+alias exact_sieve_abs_weight_le := NField.Alignment.SelbergWeights.abs_weight_le
+alias exact_sieve_weight_zero_of_lt := NField.Alignment.SelbergWeights.weight_zero_of_lt
+alias exact_sieve_sum_lambdaSquared := NField.Alignment.SelbergWeights.sum_lambdaSquared
+alias exact_sieve_abs_lambdaSquared_le := NField.Alignment.SelbergWeights.abs_lambdaSquared_le
+alias exact_sieve_errSum_le_sq := NField.Alignment.SelbergWeights.errSum_le_sq
+alias exact_sieve_sum_abs_weight_le := NField.Alignment.SelbergWeights.sum_abs_weight_le
+alias exact_sieve_errSum_weight_le := NField.Alignment.SelbergWeights.errSum_weight_le
+alias exact_sieve_siftedSum_le := NField.Alignment.SelbergWeights.siftedSum_le
+alias exact_sieve_harmonic_le_twice := NField.Alignment.SquarefreeHarmonic.harmonic_le_twice
+alias exact_sieve_log_le_twice := NField.Alignment.SquarefreeHarmonic.log_le_twice
+alias exact_sieve_squarefree_dvd_primeBase := NField.Alignment.HarperSieveBound.squarefree_dvd_primeBase
+alias exact_sieve_density_le_selbergTerms := NField.Alignment.HarperSieveBound.density_le_selbergTerms
+alias exact_sieve_squarefreeSum_le_normalizer := NField.Alignment.HarperSieveBound.squarefreeSum_le_normalizer
+alias exact_sieve_log_le_twice_normalizer := NField.Alignment.HarperSieveBound.log_le_twice_normalizer
+alias exact_sieve_rough_interval_bound := NField.Alignment.HarperSieveBound.rough_interval_bound
+alias exact_sieve_roughAverageSupport_card_le := NField.Alignment.HarperSieveApplications.roughAverageSupport_card_le
+alias exact_sieve_rough_reciprocal_le := NField.Alignment.HarperSieveApplications.rough_reciprocal_le
+alias exact_sieve_roughSmoothingError_bound := NField.Alignment.HarperSieveApplications.roughSmoothingError_bound
+alias exact_sieve_short_lower_identity := NField.Alignment.HarperSieveApplications.short_lower_identity
+alias exact_sieve_roughShortWeight_bound := NField.Alignment.HarperSieveApplications.roughShortWeight_bound
+alias exact_sieve_roughShortWeight_le_three := NField.Alignment.HarperSieveApplications.roughShortWeight_le_three
+alias exact_sieve_cutoffLog_le_sqrt := NField.Alignment.HarperSieveScales.cutoffLog_le_sqrt
+alias exact_sieve_eventual_primePower_mul_cutoff_le := NField.Alignment.HarperSieveScales.eventual_primePower_mul_cutoff_le
+alias exact_sieve_eventual_smoothing_polynomial_bound := NField.Alignment.HarperSieveScales.eventual_smoothing_polynomial_bound
+alias exact_sieve_eventual_roughSmoothingError_bound := NField.Alignment.HarperSieveScales.eventual_roughSmoothingError_bound
+alias exact_sieve_roughSmoothingError_isBigO := NField.Alignment.HarperSieveScales.roughSmoothingError_isBigO
+alias exact_sieve_prime_square_roughSmoothingError_isBigO := NField.Alignment.HarperSieveScales.prime_square_roughSmoothingError_isBigO
+alias exact_sieve_eventual_smoothing_sieve_scale := NField.Alignment.HarperSieveScales.eventual_smoothing_sieve_scale
+alias exact_sieve_eventual_roughShortWeight_bound := NField.Alignment.HarperSieveScales.eventual_roughShortWeight_bound
+alias exact_sieve_roughSmoothingError_fractional_isLittleO := NField.Alignment.HarperSieveScales.roughSmoothingError_fractional_isLittleO
+alias exact_sieve_prime_square_roughSmoothingError_fractional_isLittleO := NField.Alignment.HarperSieveScales.prime_square_roughSmoothingError_fractional_isLittleO
+alias exact_sieve_eventual_actual_random_smoothing_sieved := NField.Alignment.HarperSieveScales.eventual_actual_random_smoothing_sieved
+
+#check exact_sieve_primeBase_squarefree
+#check exact_sieve_reciprocalDensity_multiplicative
+#check exact_sieve_intervalSupport_mem
+#check exact_sieve_interval_multiple_card
+#check exact_sieve_interval_multiple_error
+#check exact_sieve_roughIntervalSieve_siftedSum
+#check exact_sieve_roughIntervalSieve_remainder
+#check exact_sieve_sum_multiples_complement
+#check exact_sieve_sum_multipleMobius
+#check exact_sieve_multipleMobius_one
+#check exact_sieve_multipleMobius_eq_sum
+#check exact_sieve_normalizer_nonneg
+#check exact_sieve_one_le_normalizer
+#check exact_sieve_normalizer_pos
+#check exact_sieve_weight_transform
+#check exact_sieve_moebius_target
+#check exact_sieve_weight_one
+#check exact_sieve_mainSum_weight
+#check exact_sieve_abs_target
+#check exact_sieve_sum_abs_target
+#check exact_sieve_abs_weight_le
+#check exact_sieve_weight_zero_of_lt
+#check exact_sieve_sum_lambdaSquared
+#check exact_sieve_abs_lambdaSquared_le
+#check exact_sieve_errSum_le_sq
+#check exact_sieve_sum_abs_weight_le
+#check exact_sieve_errSum_weight_le
+#check exact_sieve_siftedSum_le
+#check exact_sieve_harmonic_le_twice
+#check exact_sieve_log_le_twice
+#check exact_sieve_squarefree_dvd_primeBase
+#check exact_sieve_density_le_selbergTerms
+#check exact_sieve_squarefreeSum_le_normalizer
+#check exact_sieve_log_le_twice_normalizer
+#check exact_sieve_rough_interval_bound
+#check exact_sieve_roughAverageSupport_card_le
+#check exact_sieve_rough_reciprocal_le
+#check exact_sieve_roughSmoothingError_bound
+#check exact_sieve_short_lower_identity
+#check exact_sieve_roughShortWeight_bound
+#check exact_sieve_roughShortWeight_le_three
+#check exact_sieve_cutoffLog_le_sqrt
+#check exact_sieve_eventual_primePower_mul_cutoff_le
+#check exact_sieve_eventual_smoothing_polynomial_bound
+#check exact_sieve_eventual_roughSmoothingError_bound
+#check exact_sieve_roughSmoothingError_isBigO
+#check exact_sieve_prime_square_roughSmoothingError_isBigO
+#check exact_sieve_eventual_smoothing_sieve_scale
+#check exact_sieve_eventual_roughShortWeight_bound
+#check exact_sieve_roughSmoothingError_fractional_isLittleO
+#check exact_sieve_prime_square_roughSmoothingError_fractional_isLittleO
+#check exact_sieve_eventual_actual_random_smoothing_sieved
+
+alias exact_main_integral_short_window_iff := NField.Alignment.HarperMainIntegral.short_window_iff
+alias exact_main_integral_inverse_substitution := NField.Alignment.HarperMainIntegral.inverse_substitution
+alias exact_main_integral_windowWeight_nonneg := NField.Alignment.HarperMainIntegral.windowWeight_nonneg
+alias exact_main_integral_windowWeight_mul := NField.Alignment.HarperMainIntegral.windowWeight_mul
+alias exact_main_integral_windowWeight_le_roughShortWeight := NField.Alignment.HarperMainIntegral.windowWeight_le_roughShortWeight
+alias exact_main_integral_integral_window_indicator := NField.Alignment.HarperMainIntegral.integral_window_indicator
+alias exact_main_integral_smoothSum_zero_of_lt_one := NField.Alignment.HarperMainIntegral.smoothSum_zero_of_lt_one
+alias exact_main_integral_quotient_square_zero_past := NField.Alignment.HarperMainIntegral.quotient_square_zero_past
+alias exact_main_integral_quotient_square_clip := NField.Alignment.HarperMainIntegral.quotient_square_clip
+alias exact_main_integral_rough_average_integral := NField.Alignment.HarperMainIntegral.rough_average_integral
+alias exact_main_integral_sum_smoothAverage_le := NField.Alignment.HarperMainIntegral.sum_smoothAverage_le
+alias exact_main_integral_smoothMainIntegral_nonneg := NField.Alignment.HarperMainIntegral.smoothMainIntegral_nonneg
+alias exact_main_integral_smoothMainIntegral_eq_inverse := NField.Alignment.HarperMainIntegral.smoothMainIntegral_eq_inverse
+alias exact_main_integral_smoothMainIntegral_integrable := NField.Alignment.HarperMainIntegral.smoothMainIntegral_integrable
+alias exact_main_integral_smoothInverseIntegral_integrable := NField.Alignment.HarperMainIntegral.smoothInverseIntegral_integrable
+alias exact_main_integral_smoothInverseIntegral_nonneg := NField.Alignment.HarperMainIntegral.smoothInverseIntegral_nonneg
+alias exact_main_integral_smoothRoughAverage_one := NField.Alignment.HarperMainIntegral.smoothRoughAverage_one
+alias exact_main_integral_smoothRoughAverage_le_mainIntegral := NField.Alignment.HarperMainIntegral.smoothRoughAverage_le_mainIntegral
+alias exact_main_integral_smoothRoughAverage_le_inverseIntegral := NField.Alignment.HarperMainIntegral.smoothRoughAverage_le_inverseIntegral
+alias exact_main_integral_inverse_endpoint := NField.Alignment.HarperMainConditioning.inverse_endpoint
+alias exact_main_integral_eventual_smoothRoughAverage_le_mainIntegral := NField.Alignment.HarperMainConditioning.eventual_smoothRoughAverage_le_mainIntegral
+alias exact_main_integral_eventual_smoothRoughAverage_le_inverseIntegral := NField.Alignment.HarperMainConditioning.eventual_smoothRoughAverage_le_inverseIntegral
+alias exact_main_integral_boxMoment_mono := NField.Alignment.HarperMainConditioning.boxMoment_mono
+alias exact_main_integral_boxMoment_const_mul := NField.Alignment.HarperMainConditioning.boxMoment_const_mul
+alias exact_main_integral_boxConditioning_mono := NField.Alignment.HarperMainConditioning.boxConditioning_mono
+alias exact_main_integral_boxConditioning_const_mul := NField.Alignment.HarperMainConditioning.boxConditioning_const_mul
+alias exact_main_integral_conditioning_le_inverseIntegral := NField.Alignment.HarperMainConditioning.conditioning_le_inverseIntegral
+alias exact_main_integral_eventual_conditioning_le_inverseIntegral := NField.Alignment.HarperMainConditioning.eventual_conditioning_le_inverseIntegral
+alias exact_main_integral_eventual_actual_random_main_integral_with_error := NField.Alignment.HarperMainConditioning.eventual_actual_random_main_integral_with_error
+alias exact_main_integral_eventual_actual_random_main_integral := NField.Alignment.HarperMainConditioning.eventual_actual_random_main_integral
+
+#check exact_main_integral_short_window_iff
+#check exact_main_integral_inverse_substitution
+#check exact_main_integral_windowWeight_nonneg
+#check exact_main_integral_windowWeight_mul
+#check exact_main_integral_windowWeight_le_roughShortWeight
+#check exact_main_integral_integral_window_indicator
+#check exact_main_integral_smoothSum_zero_of_lt_one
+#check exact_main_integral_quotient_square_zero_past
+#check exact_main_integral_quotient_square_clip
+#check exact_main_integral_rough_average_integral
+#check exact_main_integral_sum_smoothAverage_le
+#check exact_main_integral_smoothMainIntegral_nonneg
+#check exact_main_integral_smoothMainIntegral_eq_inverse
+#check exact_main_integral_smoothMainIntegral_integrable
+#check exact_main_integral_smoothInverseIntegral_integrable
+#check exact_main_integral_smoothInverseIntegral_nonneg
+#check exact_main_integral_smoothRoughAverage_one
+#check exact_main_integral_smoothRoughAverage_le_mainIntegral
+#check exact_main_integral_smoothRoughAverage_le_inverseIntegral
+#check exact_main_integral_inverse_endpoint
+#check exact_main_integral_eventual_smoothRoughAverage_le_mainIntegral
+#check exact_main_integral_eventual_smoothRoughAverage_le_inverseIntegral
+#check exact_main_integral_boxMoment_mono
+#check exact_main_integral_boxMoment_const_mul
+#check exact_main_integral_boxConditioning_mono
+#check exact_main_integral_boxConditioning_const_mul
+#check exact_main_integral_conditioning_le_inverseIntegral
+#check exact_main_integral_eventual_conditioning_le_inverseIntegral
+#check exact_main_integral_eventual_actual_random_main_integral_with_error
+#check exact_main_integral_eventual_actual_random_main_integral
+
+alias exact_parseval_termHom_norm := NField.Alignment.HarperRandomEulerProduct.termHom_norm
+alias exact_parseval_smooth_hasSum := NField.Alignment.HarperRandomEulerProduct.smooth_hasSum
+alias exact_parseval_smooth_norm_hasSum := NField.Alignment.HarperRandomEulerProduct.smooth_norm_hasSum
+alias exact_parseval_smoothCoefficient_zero := NField.Alignment.HarperRandomEulerProduct.smoothCoefficient_zero
+alias exact_parseval_smoothCoefficient_partial_sum := NField.Alignment.HarperRandomEulerProduct.smoothCoefficient_partial_sum
+alias exact_parseval_smoothCoefficient_term := NField.Alignment.HarperRandomEulerProduct.smoothCoefficient_term
+alias exact_parseval_smooth_LSeries_hasSum := NField.Alignment.HarperRandomEulerProduct.smooth_LSeries_hasSum
+alias exact_parseval_smooth_LSeries_eq := NField.Alignment.HarperRandomEulerProduct.smooth_LSeries_eq
+alias exact_parseval_eulerProduct_norm_le := NField.Alignment.HarperRandomEulerProduct.eulerProduct_norm_le
+alias exact_parseval_eulerProduct_measurable := NField.Alignment.HarperRandomEulerProduct.eulerProduct_measurable
+alias exact_parseval_eulerProduct_integrable := NField.Alignment.HarperRandomEulerProduct.eulerProduct_integrable
+alias exact_parseval_smoothCoefficient_norm_sum := NField.Alignment.HarperRandomEulerProduct.smoothCoefficient_norm_sum
+alias exact_parseval_smoothCoefficient_norm_sum_isBigO := NField.Alignment.HarperRandomEulerProduct.smoothCoefficient_norm_sum_isBigO
+alias exact_parseval_eulerProduct_integral := NField.Alignment.HarperRandomEulerProduct.eulerProduct_integral
+alias exact_parseval_smoothSum_norm_le_count := NField.Alignment.HarperRandomEulerProduct.smoothSum_norm_le_count
+alias exact_parseval_smoothSum_rankin_bound := NField.Alignment.HarperRandomEulerProduct.smoothSum_rankin_bound
+alias exact_parseval_linePoint_re := NField.Alignment.HarperEulerIntegral.linePoint_re
+alias exact_parseval_linePoint_norm_sq := NField.Alignment.HarperEulerIntegral.linePoint_norm_sq
+alias exact_parseval_cauchyWeight_nonneg := NField.Alignment.HarperEulerIntegral.cauchyWeight_nonneg
+alias exact_parseval_cauchyWeight_scaled := NField.Alignment.HarperEulerIntegral.cauchyWeight_scaled
+alias exact_parseval_cauchyWeight_integrable := NField.Alignment.HarperEulerIntegral.cauchyWeight_integrable
+alias exact_parseval_verticalProduct_measurable := NField.Alignment.HarperEulerIntegral.verticalProduct_measurable
+alias exact_parseval_spectralDensity_measurable := NField.Alignment.HarperEulerIntegral.spectralDensity_measurable
+alias exact_parseval_spectralDensity_nonneg := NField.Alignment.HarperEulerIntegral.spectralDensity_nonneg
+alias exact_parseval_spectralDensity_bound := NField.Alignment.HarperEulerIntegral.spectralDensity_bound
+alias exact_parseval_spectralDensity_integrable := NField.Alignment.HarperEulerIntegral.spectralDensity_integrable
+alias exact_parseval_spectralDensity_integrable_phase := NField.Alignment.HarperEulerIntegral.spectralDensity_integrable_phase
+alias exact_parseval_spectralDensity_integrable_line := NField.Alignment.HarperEulerIntegral.spectralDensity_integrable_line
+alias exact_parseval_spectralIntegral_integrable := NField.Alignment.HarperEulerIntegral.spectralIntegral_integrable
+alias exact_parseval_spectralIntegral_nonneg := NField.Alignment.HarperEulerIntegral.spectralIntegral_nonneg
+alias exact_parseval_spectralDensity_eq := NField.Alignment.HarperEulerIntegral.spectralDensity_eq
+alias exact_parseval_fourier_integral_pairing := NField.Alignment.DirichletParseval.fourier_integral_pairing
+alias exact_parseval_fourier_toLp := NField.Alignment.DirichletParseval.fourier_toLp
+alias exact_parseval_integral_norm_sq_Lp := NField.Alignment.DirichletParseval.integral_norm_sq_Lp
+alias exact_parseval_integral_norm_sq_toLp := NField.Alignment.DirichletParseval.integral_norm_sq_toLp
+alias exact_parseval_integral_norm_sq_fourier := NField.Alignment.DirichletParseval.integral_norm_sq_fourier
+alias exact_parseval_logarithmicSum_measurable := NField.Alignment.HarperLogarithmicSum.logarithmicSum_measurable
+alias exact_parseval_logarithmicSum_zero := NField.Alignment.HarperLogarithmicSum.logarithmicSum_zero
+alias exact_parseval_logarithmicSum_norm_bound := NField.Alignment.HarperLogarithmicSum.logarithmicSum_norm_bound
+alias exact_parseval_logarithmicSum_integrable := NField.Alignment.HarperLogarithmicSum.logarithmicSum_integrable
+alias exact_parseval_logarithmicSum_sq_bound := NField.Alignment.HarperLogarithmicSum.logarithmicSum_sq_bound
+alias exact_parseval_logarithmicSum_memLp := NField.Alignment.HarperLogarithmicSum.logarithmicSum_memLp
+alias exact_parseval_mellin_smoothSum := NField.Alignment.HarperLogarithmicSum.mellin_smoothSum
+alias exact_parseval_logarithmicSum_fourier := NField.Alignment.HarperLogarithmicSum.logarithmicSum_fourier
+alias exact_parseval_logarithmicSum_fourier_norm_sq := NField.Alignment.HarperLogarithmicSum.logarithmicSum_fourier_norm_sq
+alias exact_parseval_logarithmicSum_fourier_continuous := NField.Alignment.HarperLogarithmicSum.logarithmicSum_fourier_continuous
+alias exact_parseval_logarithmicSum_fourier_memLp := NField.Alignment.HarperLogarithmicSum.logarithmicSum_fourier_memLp
+alias exact_parseval_logarithmicSum_parseval := NField.Alignment.HarperLogarithmicSum.logarithmicSum_parseval
+alias exact_parseval_smoothEnergyDensity_nonneg := NField.Alignment.HarperDirichletParseval.smoothEnergyDensity_nonneg
+alias exact_parseval_smoothEnergyDensity_change := NField.Alignment.HarperDirichletParseval.smoothEnergyDensity_change
+alias exact_parseval_smoothEnergyDensity_integrable := NField.Alignment.HarperDirichletParseval.smoothEnergyDensity_integrable
+alias exact_parseval_smoothEnergy_eq_logarithmic := NField.Alignment.HarperDirichletParseval.smoothEnergy_eq_logarithmic
+alias exact_parseval_smoothEnergy_parseval := NField.Alignment.HarperDirichletParseval.smoothEnergy_parseval
+alias exact_parseval_smoothSum_parseval := NField.Alignment.HarperDirichletParseval.smoothSum_parseval
+alias exact_parseval_smoothEnergy_integrable := NField.Alignment.HarperDirichletParseval.smoothEnergy_integrable
+alias exact_parseval_smoothInverseIntegral_le_energy := NField.Alignment.HarperDirichletParseval.smoothInverseIntegral_le_energy
+alias exact_parseval_smoothInverseIntegral_le_spectral := NField.Alignment.HarperDirichletParseval.smoothInverseIntegral_le_spectral
+alias exact_parseval_conditioning_le_spectral := NField.Alignment.HarperSpectralConditioning.conditioning_le_spectral
+alias exact_parseval_eventual_conditioning_le_spectral := NField.Alignment.HarperSpectralConditioning.eventual_conditioning_le_spectral
+alias exact_parseval_spectral_coefficient := NField.Alignment.HarperSpectralConditioning.spectral_coefficient
+alias exact_parseval_eventual_actual_random_spectral_with_error := NField.Alignment.HarperSpectralConditioning.eventual_actual_random_spectral_with_error
+alias exact_parseval_eventual_actual_random_spectral := NField.Alignment.HarperSpectralConditioning.eventual_actual_random_spectral
+
+#check exact_parseval_termHom_norm
+#check exact_parseval_smooth_hasSum
+#check exact_parseval_smooth_norm_hasSum
+#check exact_parseval_smoothCoefficient_zero
+#check exact_parseval_smoothCoefficient_partial_sum
+#check exact_parseval_smoothCoefficient_term
+#check exact_parseval_smooth_LSeries_hasSum
+#check exact_parseval_smooth_LSeries_eq
+#check exact_parseval_eulerProduct_norm_le
+#check exact_parseval_eulerProduct_measurable
+#check exact_parseval_eulerProduct_integrable
+#check exact_parseval_smoothCoefficient_norm_sum
+#check exact_parseval_smoothCoefficient_norm_sum_isBigO
+#check exact_parseval_eulerProduct_integral
+#check exact_parseval_smoothSum_norm_le_count
+#check exact_parseval_smoothSum_rankin_bound
+#check exact_parseval_linePoint_re
+#check exact_parseval_linePoint_norm_sq
+#check exact_parseval_cauchyWeight_nonneg
+#check exact_parseval_cauchyWeight_scaled
+#check exact_parseval_cauchyWeight_integrable
+#check exact_parseval_verticalProduct_measurable
+#check exact_parseval_spectralDensity_measurable
+#check exact_parseval_spectralDensity_nonneg
+#check exact_parseval_spectralDensity_bound
+#check exact_parseval_spectralDensity_integrable
+#check exact_parseval_spectralDensity_integrable_phase
+#check exact_parseval_spectralDensity_integrable_line
+#check exact_parseval_spectralIntegral_integrable
+#check exact_parseval_spectralIntegral_nonneg
+#check exact_parseval_spectralDensity_eq
+#check exact_parseval_fourier_integral_pairing
+#check exact_parseval_fourier_toLp
+#check exact_parseval_integral_norm_sq_Lp
+#check exact_parseval_integral_norm_sq_toLp
+#check exact_parseval_integral_norm_sq_fourier
+#check exact_parseval_logarithmicSum_measurable
+#check exact_parseval_logarithmicSum_zero
+#check exact_parseval_logarithmicSum_norm_bound
+#check exact_parseval_logarithmicSum_integrable
+#check exact_parseval_logarithmicSum_sq_bound
+#check exact_parseval_logarithmicSum_memLp
+#check exact_parseval_mellin_smoothSum
+#check exact_parseval_logarithmicSum_fourier
+#check exact_parseval_logarithmicSum_fourier_norm_sq
+#check exact_parseval_logarithmicSum_fourier_continuous
+#check exact_parseval_logarithmicSum_fourier_memLp
+#check exact_parseval_logarithmicSum_parseval
+#check exact_parseval_smoothEnergyDensity_nonneg
+#check exact_parseval_smoothEnergyDensity_change
+#check exact_parseval_smoothEnergyDensity_integrable
+#check exact_parseval_smoothEnergy_eq_logarithmic
+#check exact_parseval_smoothEnergy_parseval
+#check exact_parseval_smoothSum_parseval
+#check exact_parseval_smoothEnergy_integrable
+#check exact_parseval_smoothInverseIntegral_le_energy
+#check exact_parseval_smoothInverseIntegral_le_spectral
+#check exact_parseval_conditioning_le_spectral
+#check exact_parseval_eventual_conditioning_le_spectral
+#check exact_parseval_spectral_coefficient
+#check exact_parseval_eventual_actual_random_spectral_with_error
+#check exact_parseval_eventual_actual_random_spectral
+
+alias exact_localization_partialEuler_measurable := NField.Alignment.HarperEulerSecondMoment.partialEuler_measurable
+alias exact_localization_partialEuler_tendsto := NField.Alignment.HarperEulerSecondMoment.partialEuler_tendsto
+alias exact_localization_partialEuler_norm_bound := NField.Alignment.HarperEulerSecondMoment.partialEuler_norm_bound
+alias exact_localization_cpow_norm_sq := NField.Alignment.HarperEulerSecondMoment.cpow_norm_sq
+alias exact_localization_partialEuler_second_moment := NField.Alignment.HarperEulerSecondMoment.partialEuler_second_moment
+alias exact_localization_partialEuler_energy_tendsto := NField.Alignment.HarperEulerSecondMoment.partialEuler_energy_tendsto
+alias exact_localization_eulerProduct_second_moment := NField.Alignment.HarperEulerSecondMoment.eulerProduct_second_moment
+alias exact_localization_critical_second_moment := NField.Alignment.HarperEulerSecondMoment.critical_second_moment
+alias exact_localization_shiftedProduct_one := NField.Alignment.HarperEulerSecondMoment.shiftedProduct_one
+alias exact_localization_critical_second_moment_eq_inversePrimeProduct := NField.Alignment.HarperEulerSecondMoment.critical_second_moment_eq_inversePrimeProduct
+alias exact_localization_eventual_second_moment_le_log := NField.Alignment.HarperEulerSecondMoment.eventual_second_moment_le_log
+alias exact_localization_eulerProduct_norm_sq_integrable := NField.Alignment.HarperEulerSecondMoment.eulerProduct_norm_sq_integrable
+alias exact_localization_verticalEnergy_integrable := NField.Alignment.HarperEulerSecondMoment.verticalEnergy_integrable
+alias exact_localization_intervalEnergy_integrable := NField.Alignment.HarperEulerSecondMoment.intervalEnergy_integrable
+alias exact_localization_intervalEnergy_nonneg := NField.Alignment.HarperEulerSecondMoment.intervalEnergy_nonneg
+alias exact_localization_intervalEnergy_expectation := NField.Alignment.HarperEulerSecondMoment.intervalEnergy_expectation
+alias exact_localization_unitEnergy_expectation := NField.Alignment.HarperEulerSecondMoment.unitEnergy_expectation
+alias exact_localization_frequencyWeight_nonneg := NField.Alignment.HarperFrequencyIntervals.frequencyWeight_nonneg
+alias exact_localization_frequencyWeight_summable := NField.Alignment.HarperFrequencyIntervals.frequencyWeight_summable
+alias exact_localization_frequencyWeight_rpow := NField.Alignment.HarperFrequencyIntervals.frequencyWeight_rpow
+alias exact_localization_cauchyWeight_unit_bound := NField.Alignment.HarperFrequencyIntervals.cauchyWeight_unit_bound
+alias exact_localization_unitEnergy_nonneg := NField.Alignment.HarperFrequencyIntervals.unitEnergy_nonneg
+alias exact_localization_unitEnergy_integrable := NField.Alignment.HarperFrequencyIntervals.unitEnergy_integrable
+alias exact_localization_unitEnergy_mean := NField.Alignment.HarperFrequencyIntervals.unitEnergy_mean
+alias exact_localization_unitSpectral_nonneg := NField.Alignment.HarperFrequencyIntervals.unitSpectral_nonneg
+alias exact_localization_unitSpectral_integrable := NField.Alignment.HarperFrequencyIntervals.unitSpectral_integrable
+alias exact_localization_unitSpectral_hasSum := NField.Alignment.HarperFrequencyIntervals.unitSpectral_hasSum
+alias exact_localization_unitEnergy_line_integrable := NField.Alignment.HarperFrequencyIntervals.unitEnergy_line_integrable
+alias exact_localization_unitEnergy_bound := NField.Alignment.HarperFrequencyIntervals.unitEnergy_bound
+alias exact_localization_unitSpectral_le_unitEnergy := NField.Alignment.HarperFrequencyIntervals.unitSpectral_le_unitEnergy
+alias exact_localization_unitSpectral_bound := NField.Alignment.HarperFrequencyIntervals.unitSpectral_bound
+alias exact_localization_boxConditioning_le_expectation := NField.Alignment.HarperFrequencyIntervals.boxConditioning_le_expectation
+alias exact_localization_unitEnergy_conditioning_bound := NField.Alignment.HarperFrequencyIntervals.unitEnergy_conditioning_bound
+alias exact_localization_fractional_sum_le := NField.Alignment.HarperFrequencyConditioning.fractional_sum_le
+alias exact_localization_fractional_tsum_le := NField.Alignment.HarperFrequencyConditioning.fractional_tsum_le
+alias exact_localization_boxMoment_le_expectation := NField.Alignment.HarperFrequencyConditioning.boxMoment_le_expectation
+alias exact_localization_boxMoment_unitSpectral_le := NField.Alignment.HarperFrequencyConditioning.boxMoment_unitSpectral_le
+alias exact_localization_boxMoment_unitSpectral_bound := NField.Alignment.HarperFrequencyConditioning.boxMoment_unitSpectral_bound
+alias exact_localization_boxMoment_unitSpectral_hasSum := NField.Alignment.HarperFrequencyConditioning.boxMoment_unitSpectral_hasSum
+alias exact_localization_boxMoment_unitSpectral_fractional_bound := NField.Alignment.HarperFrequencyConditioning.boxMoment_unitSpectral_fractional_bound
+alias exact_localization_boxMoment_unitSpectral_fractional_summable := NField.Alignment.HarperFrequencyConditioning.boxMoment_unitSpectral_fractional_summable
+alias exact_localization_boxConditioning_nonneg := NField.Alignment.HarperFrequencyConditioning.boxConditioning_nonneg
+alias exact_localization_unitSpectral_conditioning_summable := NField.Alignment.HarperFrequencyConditioning.unitSpectral_conditioning_summable
+alias exact_localization_spectral_conditioning_le_sum := NField.Alignment.HarperFrequencyConditioning.spectral_conditioning_le_sum
+alias exact_localization_unitSpectral_conditioning_le_energy := NField.Alignment.HarperFrequencyConditioning.unitSpectral_conditioning_le_energy
+alias exact_localization_unitEnergy_weighted_conditioning_summable := NField.Alignment.HarperFrequencyConditioning.unitEnergy_weighted_conditioning_summable
+alias exact_localization_spectral_conditioning_localized := NField.Alignment.HarperFrequencyConditioning.spectral_conditioning_localized
+alias exact_localization_centralFrequencies_mem := NField.Alignment.HarperFrequencyTail.centralFrequencies_mem
+alias exact_localization_tailFrequencies_eq_compl := NField.Alignment.HarperFrequencyTail.tailFrequencies_eq_compl
+alias exact_localization_frequencyWeight_factor := NField.Alignment.HarperFrequencyTail.frequencyWeight_factor
+alias exact_localization_frequencyTail_point := NField.Alignment.HarperFrequencyTail.frequencyTail_point
+alias exact_localization_frequencyTail_bound := NField.Alignment.HarperFrequencyTail.frequencyTail_bound
+alias exact_localization_frequencyTail_nonneg := NField.Alignment.HarperFrequencyTail.frequencyTail_nonneg
+alias exact_localization_tailConstant_nonneg := NField.Alignment.HarperFrequencyTail.tailConstant_nonneg
+alias exact_localization_weighted_tail_bound := NField.Alignment.HarperFrequencyTail.weighted_tail_bound
+alias exact_localization_weighted_frequency_split := NField.Alignment.HarperFrequencyTail.weighted_frequency_split
+alias exact_localization_spectral_conditioning_split := NField.Alignment.HarperFrequencyTail.spectral_conditioning_split
+alias exact_localization_spectral_conditioning_tail_bound := NField.Alignment.HarperFrequencyTail.spectral_conditioning_tail_bound
+alias exact_localization_frequencyCutoff_nonneg := NField.Alignment.HarperFrequencyTail.frequencyCutoff_nonneg
+alias exact_localization_cutoff_tail_bound := NField.Alignment.HarperFrequencyTail.cutoff_tail_bound
+alias exact_localization_frequencyTailContribution_nonneg := NField.Alignment.HarperFrequencyScales.frequencyTailContribution_nonneg
+alias exact_localization_frequency_coefficient := NField.Alignment.HarperFrequencyScales.frequency_coefficient
+alias exact_localization_eventual_actual_random_localized_with_error := NField.Alignment.HarperFrequencyScales.eventual_actual_random_localized_with_error
+alias exact_localization_inverse_cutoff_power_isLittleO := NField.Alignment.HarperFrequencyScales.inverse_cutoff_power_isLittleO
+alias exact_localization_frequencyTailContribution_bound := NField.Alignment.HarperFrequencyScales.frequencyTailContribution_bound
+alias exact_localization_frequencyTailContribution_isBigO := NField.Alignment.HarperFrequencyScales.frequencyTailContribution_isBigO
+alias exact_localization_frequencyTailContribution_isLittleO := NField.Alignment.HarperFrequencyScales.frequencyTailContribution_isLittleO
+alias exact_localization_prime_square_frequencyTailContribution_isLittleO := NField.Alignment.HarperFrequencyScales.prime_square_frequencyTailContribution_isLittleO
+
+#check exact_localization_partialEuler_measurable
+#check exact_localization_partialEuler_tendsto
+#check exact_localization_partialEuler_norm_bound
+#check exact_localization_cpow_norm_sq
+#check exact_localization_partialEuler_second_moment
+#check exact_localization_partialEuler_energy_tendsto
+#check exact_localization_eulerProduct_second_moment
+#check exact_localization_critical_second_moment
+#check exact_localization_shiftedProduct_one
+#check exact_localization_critical_second_moment_eq_inversePrimeProduct
+#check exact_localization_eventual_second_moment_le_log
+#check exact_localization_eulerProduct_norm_sq_integrable
+#check exact_localization_verticalEnergy_integrable
+#check exact_localization_intervalEnergy_integrable
+#check exact_localization_intervalEnergy_nonneg
+#check exact_localization_intervalEnergy_expectation
+#check exact_localization_unitEnergy_expectation
+#check exact_localization_frequencyWeight_nonneg
+#check exact_localization_frequencyWeight_summable
+#check exact_localization_frequencyWeight_rpow
+#check exact_localization_cauchyWeight_unit_bound
+#check exact_localization_unitEnergy_nonneg
+#check exact_localization_unitEnergy_integrable
+#check exact_localization_unitEnergy_mean
+#check exact_localization_unitSpectral_nonneg
+#check exact_localization_unitSpectral_integrable
+#check exact_localization_unitSpectral_hasSum
+#check exact_localization_unitEnergy_line_integrable
+#check exact_localization_unitEnergy_bound
+#check exact_localization_unitSpectral_le_unitEnergy
+#check exact_localization_unitSpectral_bound
+#check exact_localization_boxConditioning_le_expectation
+#check exact_localization_unitEnergy_conditioning_bound
+#check exact_localization_fractional_sum_le
+#check exact_localization_fractional_tsum_le
+#check exact_localization_boxMoment_le_expectation
+#check exact_localization_boxMoment_unitSpectral_le
+#check exact_localization_boxMoment_unitSpectral_bound
+#check exact_localization_boxMoment_unitSpectral_hasSum
+#check exact_localization_boxMoment_unitSpectral_fractional_bound
+#check exact_localization_boxMoment_unitSpectral_fractional_summable
+#check exact_localization_boxConditioning_nonneg
+#check exact_localization_unitSpectral_conditioning_summable
+#check exact_localization_spectral_conditioning_le_sum
+#check exact_localization_unitSpectral_conditioning_le_energy
+#check exact_localization_unitEnergy_weighted_conditioning_summable
+#check exact_localization_spectral_conditioning_localized
+#check exact_localization_centralFrequencies_mem
+#check exact_localization_tailFrequencies_eq_compl
+#check exact_localization_frequencyWeight_factor
+#check exact_localization_frequencyTail_point
+#check exact_localization_frequencyTail_bound
+#check exact_localization_frequencyTail_nonneg
+#check exact_localization_tailConstant_nonneg
+#check exact_localization_weighted_tail_bound
+#check exact_localization_weighted_frequency_split
+#check exact_localization_spectral_conditioning_split
+#check exact_localization_spectral_conditioning_tail_bound
+#check exact_localization_frequencyCutoff_nonneg
+#check exact_localization_cutoff_tail_bound
+#check exact_localization_frequencyTailContribution_nonneg
+#check exact_localization_frequency_coefficient
+#check exact_localization_eventual_actual_random_localized_with_error
+#check exact_localization_inverse_cutoff_power_isLittleO
+#check exact_localization_frequencyTailContribution_bound
+#check exact_localization_frequencyTailContribution_isBigO
+#check exact_localization_frequencyTailContribution_isLittleO
+#check exact_localization_prime_square_frequencyTailContribution_isLittleO
+
+alias exact_discretization_twist_norm := NField.Alignment.HarperEulerIncrement.twist_norm
+alias exact_discretization_twist_sub_one_bound := NField.Alignment.HarperEulerIncrement.twist_sub_one_bound
+alias exact_discretization_incrementCoeff_nonneg := NField.Alignment.HarperEulerIncrement.incrementCoeff_nonneg
+alias exact_discretization_incrementCoeff_bound := NField.Alignment.HarperEulerIncrement.incrementCoeff_bound
+alias exact_discretization_coefficient_difference_norm := NField.Alignment.HarperEulerIncrement.coefficient_difference_norm
+alias exact_discretization_incrementCoeff_summable := NField.Alignment.HarperEulerIncrement.incrementCoeff_summable
+alias exact_discretization_partialIncrement_second_moment := NField.Alignment.HarperEulerIncrement.partialIncrement_second_moment
+alias exact_discretization_partialIncrement_norm_bound := NField.Alignment.HarperEulerIncrement.partialIncrement_norm_bound
+alias exact_discretization_increment_second_moment := NField.Alignment.HarperEulerIncrement.increment_second_moment
+alias exact_discretization_twist_sub_one_log_bound := NField.Alignment.HarperEulerIncrement.twist_sub_one_log_bound
+alias exact_discretization_log_square_bound := NField.Alignment.HarperEulerIncrement.log_square_bound
+alias exact_discretization_incrementCoeff_shifted_bound := NField.Alignment.HarperEulerIncrement.incrementCoeff_shifted_bound
+alias exact_discretization_increment_second_moment_bound := NField.Alignment.HarperEulerIncrement.increment_second_moment_bound
+alias exact_discretization_eventual_increment_second_moment_bound := NField.Alignment.HarperEulerIncrement.eventual_increment_second_moment_bound
+alias exact_discretization_small_increment_power_bound := NField.Alignment.HarperEulerIncrement.small_increment_power_bound
+alias exact_discretization_eventual_small_increment_bound := NField.Alignment.HarperEulerIncrement.eventual_small_increment_bound
+alias exact_discretization_incrementEnergy_measurable := NField.Alignment.HarperEulerDiscretization.incrementEnergy_measurable
+alias exact_discretization_incrementEnergy_bound := NField.Alignment.HarperEulerDiscretization.incrementEnergy_bound
+alias exact_discretization_incrementEnergy_integrable := NField.Alignment.HarperEulerDiscretization.incrementEnergy_integrable
+alias exact_discretization_incrementEnergy_integrable_line := NField.Alignment.HarperEulerDiscretization.incrementEnergy_integrable_line
+alias exact_discretization_cellError_integrable := NField.Alignment.HarperEulerDiscretization.cellError_integrable
+alias exact_discretization_cellError_nonneg := NField.Alignment.HarperEulerDiscretization.cellError_nonneg
+alias exact_discretization_cellError_expectation := NField.Alignment.HarperEulerDiscretization.cellError_expectation
+alias exact_discretization_cellError_expectation_bound := NField.Alignment.HarperEulerDiscretization.cellError_expectation_bound
+alias exact_discretization_gridCenters_mem := NField.Alignment.HarperEulerDiscretization.gridCenters_mem
+alias exact_discretization_gridCenters_card_bound := NField.Alignment.HarperEulerDiscretization.gridCenters_card_bound
+alias exact_discretization_gridError_integrable := NField.Alignment.HarperEulerDiscretization.gridError_integrable
+alias exact_discretization_gridError_nonneg := NField.Alignment.HarperEulerDiscretization.gridError_nonneg
+alias exact_discretization_gridError_expectation_bound := NField.Alignment.HarperEulerDiscretization.gridError_expectation_bound
+alias exact_discretization_eventual_gridError_expectation_bound := NField.Alignment.HarperEulerDiscretization.eventual_gridError_expectation_bound
+alias exact_discretization_gridScale_primeCutoff := NField.Alignment.HarperEulerDiscretization.gridScale_primeCutoff
+alias exact_discretization_eventual_gridError_log99_bound := NField.Alignment.HarperEulerDiscretization.eventual_gridError_log99_bound
+alias exact_discretization_actual_grid_center_is_conditioning_frequency := NField.Alignment.HarperEulerDiscretization.actual_grid_center_is_conditioning_frequency
+alias exact_discretization_eventual_gridError_conditioning_bound := NField.Alignment.HarperEulerDiscretization.eventual_gridError_conditioning_bound
+alias exact_discretization_gridCell_disjoint := NField.Alignment.HarperEulerGridComparison.gridCell_disjoint
+alias exact_discretization_gridCells_cover := NField.Alignment.HarperEulerGridComparison.gridCells_cover
+alias exact_discretization_verticalEnergy_integrable_line := NField.Alignment.HarperEulerGridComparison.verticalEnergy_integrable_line
+alias exact_discretization_shiftedEnergy_integrable := NField.Alignment.HarperEulerGridComparison.shiftedEnergy_integrable
+alias exact_discretization_verticalEnergy_le_sample_and_increment := NField.Alignment.HarperEulerGridComparison.verticalEnergy_le_sample_and_increment
+alias exact_discretization_gridCell_integral_eq := NField.Alignment.HarperEulerGridComparison.gridCell_integral_eq
+alias exact_discretization_gridCell_integral_bound := NField.Alignment.HarperEulerGridComparison.gridCell_integral_bound
+alias exact_discretization_unitEnergy_le_discrete := NField.Alignment.HarperEulerGridComparison.unitEnergy_le_discrete
+alias exact_discretization_actual_unitEnergy_le_discrete := NField.Alignment.HarperEulerGridComparison.actual_unitEnergy_le_discrete
+alias exact_discretization_discreteEnergy_integrable := NField.Alignment.HarperEulerGridComparison.discreteEnergy_integrable
+alias exact_discretization_discreteEnergy_nonneg := NField.Alignment.HarperEulerGridComparison.discreteEnergy_nonneg
+alias exact_discretization_unitEnergy_conditioning_le_discrete := NField.Alignment.HarperEulerGridComparison.unitEnergy_conditioning_le_discrete
+alias exact_discretization_actual_unitEnergy_conditioning_le_discrete := NField.Alignment.HarperEulerGridComparison.actual_unitEnergy_conditioning_le_discrete
+alias exact_discretization_gridFractionalError_nonneg := NField.Alignment.HarperDiscretizationScales.gridFractionalError_nonneg
+alias exact_discretization_actual_centralConditioning_le_discrete := NField.Alignment.HarperDiscretizationScales.actual_centralConditioning_le_discrete
+alias exact_discretization_discretization_coefficient := NField.Alignment.HarperDiscretizationScales.discretization_coefficient
+alias exact_discretization_eventual_actual_random_discrete_with_errors := NField.Alignment.HarperDiscretizationScales.eventual_actual_random_discrete_with_errors
+alias exact_discretization_eventual_gridFractionalError_bound := NField.Alignment.HarperDiscretizationScales.eventual_gridFractionalError_bound
+alias exact_discretization_discretization_scale_identity := NField.Alignment.HarperDiscretizationScales.discretization_scale_identity
+alias exact_discretization_gridErrorContribution_nonneg := NField.Alignment.HarperDiscretizationScales.gridErrorContribution_nonneg
+alias exact_discretization_gridErrorContribution_isBigO := NField.Alignment.HarperDiscretizationScales.gridErrorContribution_isBigO
+alias exact_discretization_gridErrorContribution_isLittleO := NField.Alignment.HarperDiscretizationScales.gridErrorContribution_isLittleO
+alias exact_discretization_prime_square_gridErrorContribution_isLittleO := NField.Alignment.HarperDiscretizationScales.prime_square_gridErrorContribution_isLittleO
+
+#check exact_discretization_twist_norm
+#check exact_discretization_twist_sub_one_bound
+#check exact_discretization_incrementCoeff_nonneg
+#check exact_discretization_incrementCoeff_bound
+#check exact_discretization_coefficient_difference_norm
+#check exact_discretization_incrementCoeff_summable
+#check exact_discretization_partialIncrement_second_moment
+#check exact_discretization_partialIncrement_norm_bound
+#check exact_discretization_increment_second_moment
+#check exact_discretization_twist_sub_one_log_bound
+#check exact_discretization_log_square_bound
+#check exact_discretization_incrementCoeff_shifted_bound
+#check exact_discretization_increment_second_moment_bound
+#check exact_discretization_eventual_increment_second_moment_bound
+#check exact_discretization_small_increment_power_bound
+#check exact_discretization_eventual_small_increment_bound
+#check exact_discretization_incrementEnergy_measurable
+#check exact_discretization_incrementEnergy_bound
+#check exact_discretization_incrementEnergy_integrable
+#check exact_discretization_incrementEnergy_integrable_line
+#check exact_discretization_cellError_integrable
+#check exact_discretization_cellError_nonneg
+#check exact_discretization_cellError_expectation
+#check exact_discretization_cellError_expectation_bound
+#check exact_discretization_gridCenters_mem
+#check exact_discretization_gridCenters_card_bound
+#check exact_discretization_gridError_integrable
+#check exact_discretization_gridError_nonneg
+#check exact_discretization_gridError_expectation_bound
+#check exact_discretization_eventual_gridError_expectation_bound
+#check exact_discretization_gridScale_primeCutoff
+#check exact_discretization_eventual_gridError_log99_bound
+#check exact_discretization_actual_grid_center_is_conditioning_frequency
+#check exact_discretization_eventual_gridError_conditioning_bound
+#check exact_discretization_gridCell_disjoint
+#check exact_discretization_gridCells_cover
+#check exact_discretization_verticalEnergy_integrable_line
+#check exact_discretization_shiftedEnergy_integrable
+#check exact_discretization_verticalEnergy_le_sample_and_increment
+#check exact_discretization_gridCell_integral_eq
+#check exact_discretization_gridCell_integral_bound
+#check exact_discretization_unitEnergy_le_discrete
+#check exact_discretization_actual_unitEnergy_le_discrete
+#check exact_discretization_discreteEnergy_integrable
+#check exact_discretization_discreteEnergy_nonneg
+#check exact_discretization_unitEnergy_conditioning_le_discrete
+#check exact_discretization_actual_unitEnergy_conditioning_le_discrete
+#check exact_discretization_gridFractionalError_nonneg
+#check exact_discretization_actual_centralConditioning_le_discrete
+#check exact_discretization_discretization_coefficient
+#check exact_discretization_eventual_actual_random_discrete_with_errors
+#check exact_discretization_eventual_gridFractionalError_bound
+#check exact_discretization_discretization_scale_identity
+#check exact_discretization_gridErrorContribution_nonneg
+#check exact_discretization_gridErrorContribution_isBigO
+#check exact_discretization_gridErrorContribution_isLittleO
+#check exact_discretization_prime_square_gridErrorContribution_isLittleO
+
+alias exact_sharp_primeTerm_norm := NField.Alignment.HarperEulerLogComparison.primeTerm_norm
+alias exact_sharp_primeTerm_norm_le := NField.Alignment.HarperEulerLogComparison.primeTerm_norm_le
+alias exact_sharp_localFactor_ne_zero := NField.Alignment.HarperEulerLogComparison.localFactor_ne_zero
+alias exact_sharp_eulerProduct_critical_ne_zero := NField.Alignment.HarperEulerLogComparison.eulerProduct_critical_ne_zero
+alias exact_sharp_local_log_quadratic_bound := NField.Alignment.HarperEulerLogComparison.local_log_quadratic_bound
+alias exact_sharp_prime_log_error_bound := NField.Alignment.HarperEulerLogComparison.prime_log_error_bound
+alias exact_sharp_log_eulerProduct_eq_sum := NField.Alignment.HarperEulerLogComparison.log_eulerProduct_eq_sum
+alias exact_sharp_logRemainderConstant_nonneg := NField.Alignment.HarperEulerLogComparison.logRemainderConstant_nonneg
+alias exact_sharp_log_eulerProduct_quadratic_bound := NField.Alignment.HarperEulerLogComparison.log_eulerProduct_quadratic_bound
+alias exact_sharp_primeTerm_eq_firstCoefficient := NField.Alignment.HarperEulerLogComparison.primeTerm_eq_firstCoefficient
+alias exact_sharp_primeTerm_sq_eq_secondCoefficient := NField.Alignment.HarperEulerLogComparison.primeTerm_sq_eq_secondCoefficient
+alias exact_sharp_quadraticPrimeSum_eq_primeArgument := NField.Alignment.HarperEulerLogComparison.quadraticPrimeSum_eq_primeArgument
+alias exact_sharp_actual_log_eulerProduct_primeArgument_bound := NField.Alignment.HarperEulerLogComparison.actual_log_eulerProduct_primeArgument_bound
+alias exact_sharp_eulerProduct_exp_bounds := NField.Alignment.HarperEulerLogComparison.eulerProduct_exp_bounds
+alias exact_sharp_actual_eulerProduct_exp_bounds := NField.Alignment.HarperEulerLogComparison.actual_eulerProduct_exp_bounds
+alias exact_sharp_labelWeight_regular := NField.Alignment.HarperSharpPartition.labelWeight_regular
+alias exact_sharp_rejectedLabelWeight_nonneg := NField.Alignment.HarperSharpPartition.rejectedLabelWeight_nonneg
+alias exact_sharp_rejectedLabelWeight_le := NField.Alignment.HarperSharpPartition.rejectedLabelWeight_le
+alias exact_sharp_rejectedLabelWeight_sum_bound := NField.Alignment.HarperSharpPartition.rejectedLabelWeight_sum_bound
+alias exact_sharp_boxWeight_marginal := NField.Alignment.HarperSharpPartition.boxWeight_marginal
+alias exact_sharp_boxWeight_rejected_sum_bound := NField.Alignment.HarperSharpPartition.boxWeight_rejected_sum_bound
+alias exact_sharp_moderateSample_measurableSet := NField.Alignment.HarperModerateSamples.moderateSample_measurableSet
+alias exact_sharp_moderateEnergy_integrable := NField.Alignment.HarperModerateSamples.moderateEnergy_integrable
+alias exact_sharp_extremeEnergy_integrable := NField.Alignment.HarperModerateSamples.extremeEnergy_integrable
+alias exact_sharp_moderateEnergy_nonneg := NField.Alignment.HarperModerateSamples.moderateEnergy_nonneg
+alias exact_sharp_extremeEnergy_nonneg := NField.Alignment.HarperModerateSamples.extremeEnergy_nonneg
+alias exact_sharp_moderate_extreme_split := NField.Alignment.HarperModerateSamples.moderate_extreme_split
+alias exact_sharp_moderate_log_bound := NField.Alignment.HarperModerateSamples.moderate_log_bound
+alias exact_sharp_moderate_prime_sum_bound := NField.Alignment.HarperModerateSamples.moderate_prime_sum_bound
+alias exact_sharp_eventual_moderate_prime_sum_range := NField.Alignment.HarperModerateSamples.eventual_moderate_prime_sum_range
+alias exact_sharp_eventual_actual_moderate_primeArgument_range := NField.Alignment.HarperModerateSamples.eventual_actual_moderate_primeArgument_range
+alias exact_sharp_norm_rpow_integrable := NField.Alignment.HarperModerateSamples.norm_rpow_integrable
+alias exact_sharp_moderateEnergy_le_square := NField.Alignment.HarperModerateSamples.moderateEnergy_le_square
+alias exact_sharp_moderateEnergy_size_bound := NField.Alignment.HarperModerateSamples.moderateEnergy_size_bound
+alias exact_sharp_extreme_scalar_bound := NField.Alignment.HarperModerateSamples.extreme_scalar_bound
+alias exact_sharp_extremeEnergy_point_bound := NField.Alignment.HarperModerateSamples.extremeEnergy_point_bound
+alias exact_sharp_extremeEnergy_expectation_bound := NField.Alignment.HarperModerateSamples.extremeEnergy_expectation_bound
+alias exact_sharp_sampleArgument_measurable := NField.Alignment.HarperActualSharpConditioning.sampleArgument_measurable
+alias exact_sharp_sampleSharp_measurableSet := NField.Alignment.HarperActualSharpConditioning.sampleSharp_measurableSet
+alias exact_sharp_rejectedEnergy_integrable := NField.Alignment.HarperActualSharpConditioning.rejectedEnergy_integrable
+alias exact_sharp_retainedEnergy_integrable := NField.Alignment.HarperActualSharpConditioning.retainedEnergy_integrable
+alias exact_sharp_rejectedEnergy_nonneg := NField.Alignment.HarperActualSharpConditioning.rejectedEnergy_nonneg
+alias exact_sharp_retainedEnergy_nonneg := NField.Alignment.HarperActualSharpConditioning.retainedEnergy_nonneg
+alias exact_sharp_retained_rejected_split := NField.Alignment.HarperActualSharpConditioning.retained_rejected_split
+alias exact_sharp_rejectionFactor_nonneg := NField.Alignment.HarperActualSharpConditioning.rejectionFactor_nonneg
+alias exact_sharp_eventual_weighted_rejectedEnergy_bound := NField.Alignment.HarperActualSharpConditioning.eventual_weighted_rejectedEnergy_bound
+alias exact_sharp_totalRejectedMoment_nonneg := NField.Alignment.HarperActualSharpConditioning.totalRejectedMoment_nonneg
+alias exact_sharp_eventual_totalRejectedMoment_bound := NField.Alignment.HarperActualSharpConditioning.eventual_totalRejectedMoment_bound
+alias exact_sharp_eventual_totalRejectedMoment_log_bound := NField.Alignment.HarperActualSharpConditioning.eventual_totalRejectedMoment_log_bound
+
+#check exact_sharp_primeTerm_norm
+#check exact_sharp_primeTerm_norm_le
+#check exact_sharp_localFactor_ne_zero
+#check exact_sharp_eulerProduct_critical_ne_zero
+#check exact_sharp_local_log_quadratic_bound
+#check exact_sharp_prime_log_error_bound
+#check exact_sharp_log_eulerProduct_eq_sum
+#check exact_sharp_logRemainderConstant_nonneg
+#check exact_sharp_log_eulerProduct_quadratic_bound
+#check exact_sharp_primeTerm_eq_firstCoefficient
+#check exact_sharp_primeTerm_sq_eq_secondCoefficient
+#check exact_sharp_quadraticPrimeSum_eq_primeArgument
+#check exact_sharp_actual_log_eulerProduct_primeArgument_bound
+#check exact_sharp_eulerProduct_exp_bounds
+#check exact_sharp_actual_eulerProduct_exp_bounds
+#check exact_sharp_labelWeight_regular
+#check exact_sharp_rejectedLabelWeight_nonneg
+#check exact_sharp_rejectedLabelWeight_le
+#check exact_sharp_rejectedLabelWeight_sum_bound
+#check exact_sharp_boxWeight_marginal
+#check exact_sharp_boxWeight_rejected_sum_bound
+#check exact_sharp_moderateSample_measurableSet
+#check exact_sharp_moderateEnergy_integrable
+#check exact_sharp_extremeEnergy_integrable
+#check exact_sharp_moderateEnergy_nonneg
+#check exact_sharp_extremeEnergy_nonneg
+#check exact_sharp_moderate_extreme_split
+#check exact_sharp_moderate_log_bound
+#check exact_sharp_moderate_prime_sum_bound
+#check exact_sharp_eventual_moderate_prime_sum_range
+#check exact_sharp_eventual_actual_moderate_primeArgument_range
+#check exact_sharp_norm_rpow_integrable
+#check exact_sharp_moderateEnergy_le_square
+#check exact_sharp_moderateEnergy_size_bound
+#check exact_sharp_extreme_scalar_bound
+#check exact_sharp_extremeEnergy_point_bound
+#check exact_sharp_extremeEnergy_expectation_bound
+#check exact_sharp_sampleArgument_measurable
+#check exact_sharp_sampleSharp_measurableSet
+#check exact_sharp_rejectedEnergy_integrable
+#check exact_sharp_retainedEnergy_integrable
+#check exact_sharp_rejectedEnergy_nonneg
+#check exact_sharp_retainedEnergy_nonneg
+#check exact_sharp_retained_rejected_split
+#check exact_sharp_rejectionFactor_nonneg
+#check exact_sharp_eventual_weighted_rejectedEnergy_bound
+#check exact_sharp_totalRejectedMoment_nonneg
+#check exact_sharp_eventual_totalRejectedMoment_bound
+#check exact_sharp_eventual_totalRejectedMoment_log_bound
+
+alias exact_extreme_localErrorConstant_pos := NField.Alignment.HarperLocalExponentialMoment.localErrorConstant_pos
+alias exact_extreme_exp_quadratic_remainder := NField.Alignment.HarperLocalExponentialMoment.exp_quadratic_remainder
+alias exact_extreme_quadratic_argument_bound := NField.Alignment.HarperLocalExponentialMoment.quadratic_argument_bound
+alias exact_extreme_quadratic_square_bound := NField.Alignment.HarperLocalExponentialMoment.quadratic_square_bound
+alias exact_extreme_local_exponential_point_bound := NField.Alignment.HarperLocalExponentialMoment.local_exponential_point_bound
+alias exact_extreme_primeTerm_measurable := NField.Alignment.HarperLocalExponentialMoment.primeTerm_measurable
+alias exact_extreme_primeTerm_pow_integrable := NField.Alignment.HarperLocalExponentialMoment.primeTerm_pow_integrable
+alias exact_extreme_steinhaus_mean_zero := NField.Alignment.HarperLocalExponentialMoment.steinhaus_mean_zero
+alias exact_extreme_primeTerm_pow_mean_zero := NField.Alignment.HarperLocalExponentialMoment.primeTerm_pow_mean_zero
+alias exact_extreme_primeTerm_norm_sq := NField.Alignment.HarperLocalExponentialMoment.primeTerm_norm_sq
+alias exact_extreme_primeTerm_norm_cube := NField.Alignment.HarperLocalExponentialMoment.primeTerm_norm_cube
+alias exact_extreme_primeTerm_re_square_identity := NField.Alignment.HarperLocalExponentialMoment.primeTerm_re_square_identity
+alias exact_extreme_primeTerm_re_square_integrable := NField.Alignment.HarperLocalExponentialMoment.primeTerm_re_square_integrable
+alias exact_extreme_primeTerm_re_square_mean := NField.Alignment.HarperLocalExponentialMoment.primeTerm_re_square_mean
+alias exact_extreme_localArgument_measurable := NField.Alignment.HarperLocalExponentialMoment.localArgument_measurable
+alias exact_extreme_localArgument_integrable := NField.Alignment.HarperLocalExponentialMoment.localArgument_integrable
+alias exact_extreme_localArgument_mean := NField.Alignment.HarperLocalExponentialMoment.localArgument_mean
+alias exact_extreme_localArgument_abs_le_four := NField.Alignment.HarperLocalExponentialMoment.localArgument_abs_le_four
+alias exact_extreme_localExponential_integrable := NField.Alignment.HarperLocalExponentialMoment.localExponential_integrable
+alias exact_extreme_local_exponential_mean_bound := NField.Alignment.HarperLocalExponentialMoment.local_exponential_mean_bound
+alias exact_extreme_local_exponential_mean_exp_bound := NField.Alignment.HarperLocalExponentialMoment.local_exponential_mean_exp_bound
+alias exact_extreme_momentConstant_pos := NField.Alignment.HarperEulerFractionalMoment.momentConstant_pos
+alias exact_extreme_exponentialProduct_eq_exp := NField.Alignment.HarperEulerFractionalMoment.exponentialProduct_eq_exp
+alias exact_extreme_exponentialProduct_measurable := NField.Alignment.HarperEulerFractionalMoment.exponentialProduct_measurable
+alias exact_extreme_exponentialProduct_bound := NField.Alignment.HarperEulerFractionalMoment.exponentialProduct_bound
+alias exact_extreme_exponentialProduct_integrable := NField.Alignment.HarperEulerFractionalMoment.exponentialProduct_integrable
+alias exact_extreme_exponentialProduct_expectation := NField.Alignment.HarperEulerFractionalMoment.exponentialProduct_expectation
+alias exact_extreme_exponentialProduct_expectation_exp_bound := NField.Alignment.HarperEulerFractionalMoment.exponentialProduct_expectation_exp_bound
+alias exact_extreme_exp_inverse_prime_bound := NField.Alignment.HarperEulerFractionalMoment.exp_inverse_prime_bound
+alias exact_extreme_exp_prime_reciprocal_sum_bound := NField.Alignment.HarperEulerFractionalMoment.exp_prime_reciprocal_sum_bound
+alias exact_extreme_cubic_prime_sum_bound := NField.Alignment.HarperEulerFractionalMoment.cubic_prime_sum_bound
+alias exact_extreme_exponentialProduct_expectation_bound := NField.Alignment.HarperEulerFractionalMoment.exponentialProduct_expectation_bound
+alias exact_extreme_eulerProduct_moment_point_bound := NField.Alignment.HarperEulerFractionalMoment.eulerProduct_moment_point_bound
+alias exact_extreme_eulerProduct_moment_prime_product_bound := NField.Alignment.HarperEulerFractionalMoment.eulerProduct_moment_prime_product_bound
+alias exact_extreme_eventual_eulerProduct_moment_log_bound := NField.Alignment.HarperEulerFractionalMoment.eventual_eulerProduct_moment_log_bound
+alias exact_extreme_eventual_extremeEnergy_bound := NField.Alignment.HarperEulerFractionalMoment.eventual_extremeEnergy_bound
+alias exact_extreme_eventual_actual_extremeEnergy_bound := NField.Alignment.HarperEulerFractionalMoment.eventual_actual_extremeEnergy_bound
+alias exact_extreme_moderateGridEnergy_integrable := NField.Alignment.HarperExtremeGrid.moderateGridEnergy_integrable
+alias exact_extreme_extremeGridEnergy_integrable := NField.Alignment.HarperExtremeGrid.extremeGridEnergy_integrable
+alias exact_extreme_moderateGridEnergy_nonneg := NField.Alignment.HarperExtremeGrid.moderateGridEnergy_nonneg
+alias exact_extreme_extremeGridEnergy_nonneg := NField.Alignment.HarperExtremeGrid.extremeGridEnergy_nonneg
+alias exact_extreme_moderate_extreme_grid_split := NField.Alignment.HarperExtremeGrid.moderate_extreme_grid_split
+alias exact_extreme_extremeGridEnergy_expectation_bound := NField.Alignment.HarperExtremeGrid.extremeGridEnergy_expectation_bound
+alias exact_extreme_eventual_extremeGridEnergy_bound := NField.Alignment.HarperExtremeGrid.eventual_extremeGridEnergy_bound
+alias exact_extreme_conditioning_add_bound := NField.Alignment.HarperExtremeGrid.conditioning_add_bound
+alias exact_extreme_boxMoment_add := NField.Alignment.HarperExtremeGrid.boxMoment_add
+alias exact_extreme_boxConditioning_add_bound := NField.Alignment.HarperExtremeGrid.boxConditioning_add_bound
+alias exact_extreme_discreteEnergy_conditioning_split := NField.Alignment.HarperExtremeGrid.discreteEnergy_conditioning_split
+alias exact_extreme_extremeFractionalError_nonneg := NField.Alignment.HarperExtremeScales.extremeFractionalError_nonneg
+alias exact_extreme_discreteCentralConditioning_le_moderate := NField.Alignment.HarperExtremeScales.discreteCentralConditioning_le_moderate
+alias exact_extreme_eventual_actual_random_moderate_with_errors := NField.Alignment.HarperExtremeScales.eventual_actual_random_moderate_with_errors
+alias exact_extreme_eventual_extremeFractionalError_bound := NField.Alignment.HarperExtremeScales.eventual_extremeFractionalError_bound
+alias exact_extreme_extreme_scale_identity := NField.Alignment.HarperExtremeScales.extreme_scale_identity
+alias exact_extreme_extremeErrorContribution_nonneg := NField.Alignment.HarperExtremeScales.extremeErrorContribution_nonneg
+alias exact_extreme_extremeErrorContribution_isBigO := NField.Alignment.HarperExtremeScales.extremeErrorContribution_isBigO
+alias exact_extreme_extremeErrorContribution_isLittleO := NField.Alignment.HarperExtremeScales.extremeErrorContribution_isLittleO
+alias exact_extreme_prime_square_extremeErrorContribution_isLittleO := NField.Alignment.HarperExtremeScales.prime_square_extremeErrorContribution_isLittleO
+
+#check exact_extreme_localErrorConstant_pos
+#check exact_extreme_exp_quadratic_remainder
+#check exact_extreme_quadratic_argument_bound
+#check exact_extreme_quadratic_square_bound
+#check exact_extreme_local_exponential_point_bound
+#check exact_extreme_primeTerm_measurable
+#check exact_extreme_primeTerm_pow_integrable
+#check exact_extreme_steinhaus_mean_zero
+#check exact_extreme_primeTerm_pow_mean_zero
+#check exact_extreme_primeTerm_norm_sq
+#check exact_extreme_primeTerm_norm_cube
+#check exact_extreme_primeTerm_re_square_identity
+#check exact_extreme_primeTerm_re_square_integrable
+#check exact_extreme_primeTerm_re_square_mean
+#check exact_extreme_localArgument_measurable
+#check exact_extreme_localArgument_integrable
+#check exact_extreme_localArgument_mean
+#check exact_extreme_localArgument_abs_le_four
+#check exact_extreme_localExponential_integrable
+#check exact_extreme_local_exponential_mean_bound
+#check exact_extreme_local_exponential_mean_exp_bound
+#check exact_extreme_momentConstant_pos
+#check exact_extreme_exponentialProduct_eq_exp
+#check exact_extreme_exponentialProduct_measurable
+#check exact_extreme_exponentialProduct_bound
+#check exact_extreme_exponentialProduct_integrable
+#check exact_extreme_exponentialProduct_expectation
+#check exact_extreme_exponentialProduct_expectation_exp_bound
+#check exact_extreme_exp_inverse_prime_bound
+#check exact_extreme_exp_prime_reciprocal_sum_bound
+#check exact_extreme_cubic_prime_sum_bound
+#check exact_extreme_exponentialProduct_expectation_bound
+#check exact_extreme_eulerProduct_moment_point_bound
+#check exact_extreme_eulerProduct_moment_prime_product_bound
+#check exact_extreme_eventual_eulerProduct_moment_log_bound
+#check exact_extreme_eventual_extremeEnergy_bound
+#check exact_extreme_eventual_actual_extremeEnergy_bound
+#check exact_extreme_moderateGridEnergy_integrable
+#check exact_extreme_extremeGridEnergy_integrable
+#check exact_extreme_moderateGridEnergy_nonneg
+#check exact_extreme_extremeGridEnergy_nonneg
+#check exact_extreme_moderate_extreme_grid_split
+#check exact_extreme_extremeGridEnergy_expectation_bound
+#check exact_extreme_eventual_extremeGridEnergy_bound
+#check exact_extreme_conditioning_add_bound
+#check exact_extreme_boxMoment_add
+#check exact_extreme_boxConditioning_add_bound
+#check exact_extreme_discreteEnergy_conditioning_split
+#check exact_extreme_extremeFractionalError_nonneg
+#check exact_extreme_discreteCentralConditioning_le_moderate
+#check exact_extreme_eventual_actual_random_moderate_with_errors
+#check exact_extreme_eventual_extremeFractionalError_bound
+#check exact_extreme_extreme_scale_identity
+#check exact_extreme_extremeErrorContribution_nonneg
+#check exact_extreme_extremeErrorContribution_isBigO
+#check exact_extreme_extremeErrorContribution_isLittleO
+#check exact_extreme_prime_square_extremeErrorContribution_isLittleO
+
+alias exact_sharp_grid_frequencyCutoff_primeCutoff := NField.Alignment.HarperSharpGrid.frequencyCutoff_primeCutoff
+alias exact_sharp_grid_gridSampleIndex_frequency := NField.Alignment.HarperSharpGrid.gridSampleIndex_frequency
+alias exact_sharp_grid_central_gridSampleIndex_frequency := NField.Alignment.HarperSharpGrid.central_gridSampleIndex_frequency
+alias exact_sharp_grid_retainedGridEnergy_integrable := NField.Alignment.HarperSharpGrid.retainedGridEnergy_integrable
+alias exact_sharp_grid_rejectedGridEnergy_integrable := NField.Alignment.HarperSharpGrid.rejectedGridEnergy_integrable
+alias exact_sharp_grid_retainedGridEnergy_nonneg := NField.Alignment.HarperSharpGrid.retainedGridEnergy_nonneg
+alias exact_sharp_grid_rejectedGridEnergy_nonneg := NField.Alignment.HarperSharpGrid.rejectedGridEnergy_nonneg
+alias exact_sharp_grid_retained_rejected_grid_split := NField.Alignment.HarperSharpGrid.retained_rejected_grid_split
+alias exact_sharp_grid_retainedGridMoment_nonneg := NField.Alignment.HarperSharpGrid.retainedGridMoment_nonneg
+alias exact_sharp_grid_rejectedGridMoment_nonneg := NField.Alignment.HarperSharpGrid.rejectedGridMoment_nonneg
+alias exact_sharp_grid_totalRejectedGridMoment_nonneg := NField.Alignment.HarperSharpGrid.totalRejectedGridMoment_nonneg
+alias exact_sharp_grid_rejectedGridMoment_eq_sum := NField.Alignment.HarperSharpGrid.rejectedGridMoment_eq_sum
+alias exact_sharp_grid_totalRejectedGridMoment_eq_sum := NField.Alignment.HarperSharpGrid.totalRejectedGridMoment_eq_sum
+alias exact_sharp_grid_retainedGridMoment_add_rejectedGridMoment := NField.Alignment.HarperSharpGrid.retainedGridMoment_add_rejectedGridMoment
+alias exact_sharp_grid_moderateGrid_conditioning_le_sharp := NField.Alignment.HarperSharpGrid.moderateGrid_conditioning_le_sharp
+alias exact_sharp_grid_totalRejectedGridMoment_bound := NField.Alignment.HarperSharpGrid.totalRejectedGridMoment_bound
+alias exact_sharp_grid_eventual_totalRejectedGridMoment_log_bound := NField.Alignment.HarperSharpGrid.eventual_totalRejectedGridMoment_log_bound
+alias exact_sharp_grid_eventual_totalRejectedGridMoment_power_bound := NField.Alignment.HarperSharpGrid.eventual_totalRejectedGridMoment_power_bound
+alias exact_sharp_grid_rejectionFractionalError_nonneg := NField.Alignment.HarperSharpScales.rejectionFractionalError_nonneg
+alias exact_sharp_grid_moderateCentralConditioning_le_sharp := NField.Alignment.HarperSharpScales.moderateCentralConditioning_le_sharp
+alias exact_sharp_grid_eventual_actual_random_sharp_with_errors := NField.Alignment.HarperSharpScales.eventual_actual_random_sharp_with_errors
+alias exact_sharp_grid_eventual_rejectionFractionalError_bound := NField.Alignment.HarperSharpScales.eventual_rejectionFractionalError_bound
+alias exact_sharp_grid_rejection_scale_identity := NField.Alignment.HarperSharpScales.rejection_scale_identity
+alias exact_sharp_grid_rejectionErrorContribution_nonneg := NField.Alignment.HarperSharpScales.rejectionErrorContribution_nonneg
+alias exact_sharp_grid_rejectionErrorContribution_isBigO := NField.Alignment.HarperSharpScales.rejectionErrorContribution_isBigO
+alias exact_sharp_grid_rejectionErrorContribution_isLittleO := NField.Alignment.HarperSharpScales.rejectionErrorContribution_isLittleO
+alias exact_sharp_grid_completeSharpError_isLittleO := NField.Alignment.HarperSharpScales.completeSharpError_isLittleO
+alias exact_sharp_grid_eventual_actual_random_sharp := NField.Alignment.HarperSharpScales.eventual_actual_random_sharp
+alias exact_sharp_grid_eventual_actual_character_sharp_reduction := NField.Alignment.MagnitudeSharpFractionalTransfer.eventual_actual_character_sharp_reduction
+alias exact_sharp_grid_eventual_normalized_sharp_reduction := NField.Alignment.MagnitudeSharpFractionalTransfer.eventual_normalized_sharp_reduction
+
+#check exact_sharp_grid_frequencyCutoff_primeCutoff
+#check exact_sharp_grid_gridSampleIndex_frequency
+#check exact_sharp_grid_central_gridSampleIndex_frequency
+#check exact_sharp_grid_retainedGridEnergy_integrable
+#check exact_sharp_grid_rejectedGridEnergy_integrable
+#check exact_sharp_grid_retainedGridEnergy_nonneg
+#check exact_sharp_grid_rejectedGridEnergy_nonneg
+#check exact_sharp_grid_retained_rejected_grid_split
+#check exact_sharp_grid_retainedGridMoment_nonneg
+#check exact_sharp_grid_rejectedGridMoment_nonneg
+#check exact_sharp_grid_totalRejectedGridMoment_nonneg
+#check exact_sharp_grid_rejectedGridMoment_eq_sum
+#check exact_sharp_grid_totalRejectedGridMoment_eq_sum
+#check exact_sharp_grid_retainedGridMoment_add_rejectedGridMoment
+#check exact_sharp_grid_moderateGrid_conditioning_le_sharp
+#check exact_sharp_grid_totalRejectedGridMoment_bound
+#check exact_sharp_grid_eventual_totalRejectedGridMoment_log_bound
+#check exact_sharp_grid_eventual_totalRejectedGridMoment_power_bound
+#check exact_sharp_grid_rejectionFractionalError_nonneg
+#check exact_sharp_grid_moderateCentralConditioning_le_sharp
+#check exact_sharp_grid_eventual_actual_random_sharp_with_errors
+#check exact_sharp_grid_eventual_rejectionFractionalError_bound
+#check exact_sharp_grid_rejection_scale_identity
+#check exact_sharp_grid_rejectionErrorContribution_nonneg
+#check exact_sharp_grid_rejectionErrorContribution_isBigO
+#check exact_sharp_grid_rejectionErrorContribution_isLittleO
+#check exact_sharp_grid_completeSharpError_isLittleO
+#check exact_sharp_grid_eventual_actual_random_sharp
+#check exact_sharp_grid_eventual_actual_character_sharp_reduction
+#check exact_sharp_grid_eventual_normalized_sharp_reduction
+
+alias exact_uncondition_profileConstant_pos := NField.Alignment.HarperSharpProfile.profileConstant_pos
+alias exact_uncondition_labelProfile_nonneg := NField.Alignment.HarperSharpProfile.labelProfile_nonneg
+alias exact_uncondition_labelProfile_le_exp := NField.Alignment.HarperSharpProfile.labelProfile_le_exp
+alias exact_uncondition_weighted_rejected_labelProfile := NField.Alignment.HarperSharpProfile.weighted_rejected_labelProfile
+alias exact_uncondition_boxWeight_rejected_profile := NField.Alignment.HarperSharpProfile.boxWeight_rejected_profile
+alias exact_uncondition_sampleProfile_nonneg := NField.Alignment.HarperSharpProfile.sampleProfile_nonneg
+alias exact_uncondition_exp_profileRadius := NField.Alignment.HarperSharpProfile.exp_profileRadius
+alias exact_uncondition_sampleProfile_bound := NField.Alignment.HarperSharpProfile.sampleProfile_bound
+alias exact_uncondition_sampleSharp_exp_comparison := NField.Alignment.HarperSharpProfile.sampleSharp_exp_comparison
+alias exact_uncondition_moderate_sharp_label_range := NField.Alignment.HarperSharpProfile.moderate_sharp_label_range
+alias exact_uncondition_retainedEnergy_le_sampleProfile := NField.Alignment.HarperSharpProfile.retainedEnergy_le_sampleProfile
+alias exact_uncondition_profileRejectedEnergy_nonneg := NField.Alignment.HarperSharpProfile.profileRejectedEnergy_nonneg
+alias exact_uncondition_profileRejectedEnergy_le := NField.Alignment.HarperSharpProfile.profileRejectedEnergy_le
+alias exact_uncondition_profileRejectedEnergy_integrable := NField.Alignment.HarperSharpProfile.profileRejectedEnergy_integrable
+alias exact_uncondition_sampleProfile_le_energy_add_rejected := NField.Alignment.HarperSharpProfile.sampleProfile_le_energy_add_rejected
+alias exact_uncondition_weighted_profileRejectedEnergy_bound := NField.Alignment.HarperSharpProfile.weighted_profileRejectedEnergy_bound
+alias exact_uncondition_actual_gridScale_pos := NField.Alignment.HarperProfileGrid.actual_gridScale_pos
+alias exact_uncondition_gridProfile_nonneg := NField.Alignment.HarperProfileGrid.gridProfile_nonneg
+alias exact_uncondition_profileRejectedGrid_nonneg := NField.Alignment.HarperProfileGrid.profileRejectedGrid_nonneg
+alias exact_uncondition_profileRejectedGrid_integrable := NField.Alignment.HarperProfileGrid.profileRejectedGrid_integrable
+alias exact_uncondition_retainedGridEnergy_le_profile := NField.Alignment.HarperProfileGrid.retainedGridEnergy_le_profile
+alias exact_uncondition_profileRejectedGrid_le_profile := NField.Alignment.HarperProfileGrid.profileRejectedGrid_le_profile
+alias exact_uncondition_gridProfile_le_energy_add_rejected := NField.Alignment.HarperProfileGrid.gridProfile_le_energy_add_rejected
+alias exact_uncondition_profileRejectionBound_nonneg := NField.Alignment.HarperProfileGrid.profileRejectionBound_nonneg
+alias exact_uncondition_weighted_profileRejectedGrid_bound := NField.Alignment.HarperProfileGrid.weighted_profileRejectedGrid_bound
+alias exact_uncondition_weighted_profile_identity := NField.Alignment.HarperUnconditioning.weighted_profile_identity
+alias exact_uncondition_finite_profile_comparison := NField.Alignment.HarperUnconditioning.finite_profile_comparison
+alias exact_uncondition_retainedGridMoment_le_weighted_profile := NField.Alignment.HarperUnconditioning.retainedGridMoment_le_weighted_profile
+alias exact_uncondition_sharpGridConditioning_le_profileAverage := NField.Alignment.HarperUnconditioning.sharpGridConditioning_le_profileAverage
+alias exact_uncondition_profileIntegrand_integrable := NField.Alignment.HarperUnconditioning.profileIntegrand_integrable
+alias exact_uncondition_profileAverage_eq_integral := NField.Alignment.HarperUnconditioning.profileAverage_eq_integral
+alias exact_uncondition_profileIntegrand_bound := NField.Alignment.HarperUnconditioning.profileIntegrand_bound
+alias exact_uncondition_discreteEnergy_fractional_integrable := NField.Alignment.HarperUnconditioning.discreteEnergy_fractional_integrable
+alias exact_uncondition_unconditionalGridMoment_nonneg := NField.Alignment.HarperUnconditioning.unconditionalGridMoment_nonneg
+alias exact_uncondition_profileAverage_bound := NField.Alignment.HarperUnconditioning.profileAverage_bound
+alias exact_uncondition_sharpGridConditioning_bound := NField.Alignment.HarperUnconditioning.sharpGridConditioning_bound
+alias exact_uncondition_sharpCentralConditioning_bound := NField.Alignment.HarperUnconditioningScales.sharpCentralConditioning_bound
+alias exact_uncondition_eventual_actual_random_unconditional_with_errors := NField.Alignment.HarperUnconditioningScales.eventual_actual_random_unconditional_with_errors
+alias exact_uncondition_eventual_profileRejectionBound_log_bound := NField.Alignment.HarperUnconditioningScales.eventual_profileRejectionBound_log_bound
+alias exact_uncondition_eventual_profileRejectionBound_power_bound := NField.Alignment.HarperUnconditioningScales.eventual_profileRejectionBound_power_bound
+alias exact_uncondition_profileFractionalError_nonneg := NField.Alignment.HarperUnconditioningScales.profileFractionalError_nonneg
+alias exact_uncondition_eventual_profileFractionalError_bound := NField.Alignment.HarperUnconditioningScales.eventual_profileFractionalError_bound
+alias exact_uncondition_profile_scale_identity := NField.Alignment.HarperUnconditioningScales.profile_scale_identity
+alias exact_uncondition_profileErrorContribution_nonneg := NField.Alignment.HarperUnconditioningScales.profileErrorContribution_nonneg
+alias exact_uncondition_profileErrorContribution_isBigO := NField.Alignment.HarperUnconditioningScales.profileErrorContribution_isBigO
+alias exact_uncondition_profileErrorContribution_isLittleO := NField.Alignment.HarperUnconditioningScales.profileErrorContribution_isLittleO
+alias exact_uncondition_unconditionalError_isLittleO := NField.Alignment.HarperUnconditioningScales.unconditionalError_isLittleO
+alias exact_uncondition_eventual_actual_random_unconditional := NField.Alignment.HarperUnconditioningScales.eventual_actual_random_unconditional
+alias exact_uncondition_eventual_actual_character_unconditional_reduction := NField.Alignment.MagnitudeUnconditionalFractionalTransfer.eventual_actual_character_unconditional_reduction
+alias exact_uncondition_eventual_normalized_unconditional_reduction := NField.Alignment.MagnitudeUnconditionalFractionalTransfer.eventual_normalized_unconditional_reduction
+
+#check exact_uncondition_profileConstant_pos
+#check exact_uncondition_labelProfile_nonneg
+#check exact_uncondition_labelProfile_le_exp
+#check exact_uncondition_weighted_rejected_labelProfile
+#check exact_uncondition_boxWeight_rejected_profile
+#check exact_uncondition_sampleProfile_nonneg
+#check exact_uncondition_exp_profileRadius
+#check exact_uncondition_sampleProfile_bound
+#check exact_uncondition_sampleSharp_exp_comparison
+#check exact_uncondition_moderate_sharp_label_range
+#check exact_uncondition_retainedEnergy_le_sampleProfile
+#check exact_uncondition_profileRejectedEnergy_nonneg
+#check exact_uncondition_profileRejectedEnergy_le
+#check exact_uncondition_profileRejectedEnergy_integrable
+#check exact_uncondition_sampleProfile_le_energy_add_rejected
+#check exact_uncondition_weighted_profileRejectedEnergy_bound
+#check exact_uncondition_actual_gridScale_pos
+#check exact_uncondition_gridProfile_nonneg
+#check exact_uncondition_profileRejectedGrid_nonneg
+#check exact_uncondition_profileRejectedGrid_integrable
+#check exact_uncondition_retainedGridEnergy_le_profile
+#check exact_uncondition_profileRejectedGrid_le_profile
+#check exact_uncondition_gridProfile_le_energy_add_rejected
+#check exact_uncondition_profileRejectionBound_nonneg
+#check exact_uncondition_weighted_profileRejectedGrid_bound
+#check exact_uncondition_weighted_profile_identity
+#check exact_uncondition_finite_profile_comparison
+#check exact_uncondition_retainedGridMoment_le_weighted_profile
+#check exact_uncondition_sharpGridConditioning_le_profileAverage
+#check exact_uncondition_profileIntegrand_integrable
+#check exact_uncondition_profileAverage_eq_integral
+#check exact_uncondition_profileIntegrand_bound
+#check exact_uncondition_discreteEnergy_fractional_integrable
+#check exact_uncondition_unconditionalGridMoment_nonneg
+#check exact_uncondition_profileAverage_bound
+#check exact_uncondition_sharpGridConditioning_bound
+#check exact_uncondition_sharpCentralConditioning_bound
+#check exact_uncondition_eventual_actual_random_unconditional_with_errors
+#check exact_uncondition_eventual_profileRejectionBound_log_bound
+#check exact_uncondition_eventual_profileRejectionBound_power_bound
+#check exact_uncondition_profileFractionalError_nonneg
+#check exact_uncondition_eventual_profileFractionalError_bound
+#check exact_uncondition_profile_scale_identity
+#check exact_uncondition_profileErrorContribution_nonneg
+#check exact_uncondition_profileErrorContribution_isBigO
+#check exact_uncondition_profileErrorContribution_isLittleO
+#check exact_uncondition_unconditionalError_isLittleO
+#check exact_uncondition_eventual_actual_random_unconditional
+#check exact_uncondition_eventual_actual_character_unconditional_reduction
+#check exact_uncondition_eventual_normalized_unconditional_reduction
+
+alias exact_phase_shift_phaseShift_apply := NField.Alignment.HarperPhaseShift.phaseShift_apply
+alias exact_phase_shift_phaseShift_measurePreserving := NField.Alignment.HarperPhaseShift.phaseShift_measurePreserving
+alias exact_phase_shift_phaseShift_integral := NField.Alignment.HarperPhaseShift.phaseShift_integral
+alias exact_phase_shift_fourier_shiftCoordinate := NField.Alignment.HarperPhaseShift.fourier_shiftCoordinate
+alias exact_phase_shift_phase_one_shift := NField.Alignment.HarperPhaseShift.phase_one_shift
+alias exact_phase_shift_steinhaus_prime_shift := NField.Alignment.HarperPhaseShift.steinhaus_prime_shift
+alias exact_phase_shift_eulerProduct_shift := NField.Alignment.HarperPhaseShift.eulerProduct_shift
+alias exact_phase_shift_intervalEnergy_shift := NField.Alignment.HarperPhaseShift.intervalEnergy_shift
+alias exact_phase_shift_intervalFractionalMoment_shift := NField.Alignment.HarperPhaseShift.intervalFractionalMoment_shift
+alias exact_phase_shift_discreteEnergy_shift := NField.Alignment.HarperPhaseShift.discreteEnergy_shift
+alias exact_phase_shift_unconditionalGridMoment_add := NField.Alignment.HarperPhaseShift.unconditionalGridMoment_add
+alias exact_phase_shift_unconditionalGridMoment_eq_zero := NField.Alignment.HarperPhaseShift.unconditionalGridMoment_eq_zero
+alias exact_phase_shift_unconditionalCentralMoment_eq := NField.Alignment.HarperPhaseShift.unconditionalCentralMoment_eq
+
+#check exact_phase_shift_phaseShift_apply
+#check exact_phase_shift_phaseShift_measurePreserving
+#check exact_phase_shift_phaseShift_integral
+#check exact_phase_shift_fourier_shiftCoordinate
+#check exact_phase_shift_phase_one_shift
+#check exact_phase_shift_steinhaus_prime_shift
+#check exact_phase_shift_eulerProduct_shift
+#check exact_phase_shift_intervalEnergy_shift
+#check exact_phase_shift_intervalFractionalMoment_shift
+#check exact_phase_shift_discreteEnergy_shift
+#check exact_phase_shift_unconditionalGridMoment_add
+#check exact_phase_shift_unconditionalGridMoment_eq_zero
+#check exact_phase_shift_unconditionalCentralMoment_eq
+
+alias exact_continuous_sample_le_shifted_and_increment := NField.Alignment.HarperReverseGrid.sample_le_shifted_and_increment
+alias exact_continuous_sample_div_le_gridCell := NField.Alignment.HarperReverseGrid.sample_div_le_gridCell
+alias exact_continuous_gridCell_subset_double := NField.Alignment.HarperReverseGrid.gridCell_subset_double
+alias exact_continuous_discreteEnergy_le_double_interval := NField.Alignment.HarperReverseGrid.discreteEnergy_le_double_interval
+alias exact_continuous_fractional_integrable := NField.Alignment.HarperReverseGrid.fractional_integrable
+alias exact_continuous_fractional_integral_le := NField.Alignment.HarperReverseGrid.fractional_integral_le
+alias exact_continuous_interval_fractional_integrable := NField.Alignment.HarperReverseGrid.interval_fractional_integrable
+alias exact_continuous_unitFractionalMoment_nonneg := NField.Alignment.HarperReverseGrid.unitFractionalMoment_nonneg
+alias exact_continuous_intervalFractionalMoment_unit := NField.Alignment.HarperReverseGrid.intervalFractionalMoment_unit
+alias exact_continuous_double_interval_split := NField.Alignment.HarperReverseGrid.double_interval_split
+alias exact_continuous_double_interval_fractional_bound := NField.Alignment.HarperReverseGrid.double_interval_fractional_bound
+alias exact_continuous_unconditionalGridMoment_le_unit := NField.Alignment.HarperReverseGrid.unconditionalGridMoment_le_unit
+alias exact_continuous_frequencyMass_nonneg := NField.Alignment.HarperContinuousReduction.frequencyMass_nonneg
+alias exact_continuous_central_weight_sum_le := NField.Alignment.HarperContinuousReduction.central_weight_sum_le
+alias exact_continuous_unconditionalCentralMoment_le_unit := NField.Alignment.HarperContinuousReduction.unconditionalCentralMoment_le_unit
+alias exact_continuous_unconditionalMainTerm_le_continuous := NField.Alignment.HarperContinuousReduction.unconditionalMainTerm_le_continuous
+alias exact_continuous_reverseGridContribution_isLittleO := NField.Alignment.HarperContinuousReduction.reverseGridContribution_isLittleO
+alias exact_continuous_continuousError_isLittleO := NField.Alignment.HarperContinuousReduction.continuousError_isLittleO
+alias exact_continuous_eventual_actual_random_continuous_with_errors := NField.Alignment.HarperContinuousReduction.eventual_actual_random_continuous_with_errors
+alias exact_continuous_eventual_actual_random_continuous := NField.Alignment.HarperContinuousReduction.eventual_actual_random_continuous
+alias exact_continuous_eventual_actual_character_continuous_reduction := NField.Alignment.MagnitudeContinuousFractionalTransfer.eventual_actual_character_continuous_reduction
+alias exact_continuous_eventual_normalized_continuous_reduction := NField.Alignment.MagnitudeContinuousFractionalTransfer.eventual_normalized_continuous_reduction
+
+#check exact_continuous_sample_le_shifted_and_increment
+#check exact_continuous_sample_div_le_gridCell
+#check exact_continuous_gridCell_subset_double
+#check exact_continuous_discreteEnergy_le_double_interval
+#check exact_continuous_fractional_integrable
+#check exact_continuous_fractional_integral_le
+#check exact_continuous_interval_fractional_integrable
+#check exact_continuous_unitFractionalMoment_nonneg
+#check exact_continuous_intervalFractionalMoment_unit
+#check exact_continuous_double_interval_split
+#check exact_continuous_double_interval_fractional_bound
+#check exact_continuous_unconditionalGridMoment_le_unit
+#check exact_continuous_frequencyMass_nonneg
+#check exact_continuous_central_weight_sum_le
+#check exact_continuous_unconditionalCentralMoment_le_unit
+#check exact_continuous_unconditionalMainTerm_le_continuous
+#check exact_continuous_reverseGridContribution_isLittleO
+#check exact_continuous_continuousError_isLittleO
+#check exact_continuous_eventual_actual_random_continuous_with_errors
+#check exact_continuous_eventual_actual_random_continuous
+#check exact_continuous_eventual_actual_character_continuous_reduction
+#check exact_continuous_eventual_normalized_continuous_reduction
+
+alias exact_tilt_shiftedProduct_pos := NField.Alignment.HarperTiltedMeasure.shiftedProduct_pos
+alias exact_tilt_energyDensity_measurable := NField.Alignment.HarperTiltedMeasure.energyDensity_measurable
+alias exact_tilt_energyDensity_nonneg := NField.Alignment.HarperTiltedMeasure.energyDensity_nonneg
+alias exact_tilt_energyDensity_integrable := NField.Alignment.HarperTiltedMeasure.energyDensity_integrable
+alias exact_tilt_energyDensity_integral := NField.Alignment.HarperTiltedMeasure.energyDensity_integral
+alias exact_tilt_tiltedMeasure_probability := NField.Alignment.HarperTiltedMeasure.tiltedMeasure_probability
+alias exact_tilt_integral_tilted := NField.Alignment.HarperTiltedMeasure.integral_tilted
+alias exact_tilt_setIntegral_tilted := NField.Alignment.HarperTiltedMeasure.setIntegral_tilted
+alias exact_tilt_integrable_tilted_iff := NField.Alignment.HarperTiltedMeasure.integrable_tilted_iff
+alias exact_tilt_tiltedMeasure_event := NField.Alignment.HarperTiltedMeasure.tiltedMeasure_event
+alias exact_tilt_tiltedMeasure_absolutelyContinuous := NField.Alignment.HarperTiltedMeasure.tiltedMeasure_absolutelyContinuous
+alias exact_tilt_coordinate_lintegral := NField.Alignment.SteinhausFiniteTilt.coordinate_lintegral
+alias exact_tilt_finite_density_product_law := NField.Alignment.SteinhausFiniteTilt.finite_density_product_law
+alias exact_tilt_localEnergy_measurable := NField.Alignment.HarperTiltedFactors.localEnergy_measurable
+alias exact_tilt_localTerm_norm := NField.Alignment.HarperTiltedFactors.localTerm_norm
+alias exact_tilt_localTerm_norm_lt_one := NField.Alignment.HarperTiltedFactors.localTerm_norm_lt_one
+alias exact_tilt_localDenominator_ne_zero := NField.Alignment.HarperTiltedFactors.localDenominator_ne_zero
+alias exact_tilt_localEnergy_pos := NField.Alignment.HarperTiltedFactors.localEnergy_pos
+alias exact_tilt_localEnergy_bound := NField.Alignment.HarperTiltedFactors.localEnergy_bound
+alias exact_tilt_localEnergy_integrable := NField.Alignment.HarperTiltedFactors.localEnergy_integrable
+alias exact_tilt_localMass_pos := NField.Alignment.HarperTiltedFactors.localMass_pos
+alias exact_tilt_localDensity_measurable := NField.Alignment.HarperTiltedFactors.localDensity_measurable
+alias exact_tilt_localDensity_pos := NField.Alignment.HarperTiltedFactors.localDensity_pos
+alias exact_tilt_localDensity_integrable := NField.Alignment.HarperTiltedFactors.localDensity_integrable
+alias exact_tilt_localDensity_integral := NField.Alignment.HarperTiltedFactors.localDensity_integral
+alias exact_tilt_localEnergy_phase_integral := NField.Alignment.HarperTiltedFactors.localEnergy_phase_integral
+alias exact_tilt_eulerEnergy_eq_prod := NField.Alignment.HarperTiltedFactors.eulerEnergy_eq_prod
+alias exact_tilt_localMass_product := NField.Alignment.HarperTiltedFactors.localMass_product
+alias exact_tilt_energyDensity_eq_prod := NField.Alignment.HarperTiltedFactors.energyDensity_eq_prod
+alias exact_tilt_coordinateDensity_measurable := NField.Alignment.HarperTiltedCoordinates.coordinateDensity_measurable
+alias exact_tilt_coordinateDensity_integral := NField.Alignment.HarperTiltedCoordinates.coordinateDensity_integral
+alias exact_tilt_coordinateLaw_probability := NField.Alignment.HarperTiltedCoordinates.coordinateLaw_probability
+alias exact_tilt_energyDensity_ennreal_product := NField.Alignment.HarperTiltedCoordinates.energyDensity_ennreal_product
+alias exact_tilt_tiltedMeasure_eq_product := NField.Alignment.HarperTiltedCoordinates.tiltedMeasure_eq_product
+alias exact_tilt_coordinate_law := NField.Alignment.HarperTiltedCoordinates.coordinate_law
+alias exact_tilt_unused_coordinate_law := NField.Alignment.HarperTiltedCoordinates.unused_coordinate_law
+alias exact_tilt_coordinates_independent := NField.Alignment.HarperTiltedCoordinates.coordinates_independent
+alias exact_tilt_finite_coordinate_law := NField.Alignment.HarperTiltedCoordinates.finite_coordinate_law
+alias exact_tilt_finite_coordinate_cutoff_eq := NField.Alignment.HarperTiltedCoordinates.finite_coordinate_cutoff_eq
+alias exact_tilt_integral_finite_coordinates := NField.Alignment.HarperTiltedCoordinates.integral_finite_coordinates
+alias exact_tilt_integral_cutoff_locality := NField.Alignment.HarperTiltedCoordinates.integral_cutoff_locality
+alias exact_tilt_disjoint_blocks_independent := NField.Alignment.HarperTiltedCoordinates.disjoint_blocks_independent
+alias exact_tilt_disjoint_block_functions_independent := NField.Alignment.HarperTiltedCoordinates.disjoint_block_functions_independent
+alias exact_tilt_independent_of_disjoint_coordinates := NField.Alignment.HarperTiltedCoordinates.independent_of_disjoint_coordinates
+alias exact_tilt_integral_mul_disjoint := NField.Alignment.HarperTiltedCoordinates.integral_mul_disjoint
+alias exact_tilt_block_coordinates_independent := NField.Alignment.HarperTiltedCoordinates.block_coordinates_independent
+alias exact_tilt_block_functions_independent := NField.Alignment.HarperTiltedCoordinates.block_functions_independent
+
+#check exact_tilt_shiftedProduct_pos
+#check exact_tilt_energyDensity_measurable
+#check exact_tilt_energyDensity_nonneg
+#check exact_tilt_energyDensity_integrable
+#check exact_tilt_energyDensity_integral
+#check exact_tilt_tiltedMeasure_probability
+#check exact_tilt_integral_tilted
+#check exact_tilt_setIntegral_tilted
+#check exact_tilt_integrable_tilted_iff
+#check exact_tilt_tiltedMeasure_event
+#check exact_tilt_tiltedMeasure_absolutelyContinuous
+#check exact_tilt_coordinate_lintegral
+#check exact_tilt_finite_density_product_law
+#check exact_tilt_localEnergy_measurable
+#check exact_tilt_localTerm_norm
+#check exact_tilt_localTerm_norm_lt_one
+#check exact_tilt_localDenominator_ne_zero
+#check exact_tilt_localEnergy_pos
+#check exact_tilt_localEnergy_bound
+#check exact_tilt_localEnergy_integrable
+#check exact_tilt_localMass_pos
+#check exact_tilt_localDensity_measurable
+#check exact_tilt_localDensity_pos
+#check exact_tilt_localDensity_integrable
+#check exact_tilt_localDensity_integral
+#check exact_tilt_localEnergy_phase_integral
+#check exact_tilt_eulerEnergy_eq_prod
+#check exact_tilt_localMass_product
+#check exact_tilt_energyDensity_eq_prod
+#check exact_tilt_coordinateDensity_measurable
+#check exact_tilt_coordinateDensity_integral
+#check exact_tilt_coordinateLaw_probability
+#check exact_tilt_energyDensity_ennreal_product
+#check exact_tilt_tiltedMeasure_eq_product
+#check exact_tilt_coordinate_law
+#check exact_tilt_unused_coordinate_law
+#check exact_tilt_coordinates_independent
+#check exact_tilt_finite_coordinate_law
+#check exact_tilt_finite_coordinate_cutoff_eq
+#check exact_tilt_integral_finite_coordinates
+#check exact_tilt_integral_cutoff_locality
+#check exact_tilt_disjoint_blocks_independent
+#check exact_tilt_disjoint_block_functions_independent
+#check exact_tilt_independent_of_disjoint_coordinates
+#check exact_tilt_integral_mul_disjoint
+#check exact_tilt_block_coordinates_independent
+#check exact_tilt_block_functions_independent
+
+alias exact_tilt_moment_prime_not_mem_previous := NField.Alignment.HarperTiltedNormalizer.prime_not_mem_previous
+alias exact_tilt_moment_primesUpTo_prime_insert := NField.Alignment.HarperTiltedNormalizer.primesUpTo_prime_insert
+alias exact_tilt_moment_localMass_eq := NField.Alignment.HarperTiltedNormalizer.localMass_eq
+alias exact_tilt_moment_localDensity_eq := NField.Alignment.HarperTiltedNormalizer.localDensity_eq
+alias exact_tilt_moment_localDensity_norm_form := NField.Alignment.HarperTiltedNormalizer.localDensity_norm_form
+alias exact_tilt_moment_norm_one_sub_sq := NField.Alignment.HarperTiltedLogBounds.norm_one_sub_sq
+alias exact_tilt_moment_norm_one_sub_sq_lower := NField.Alignment.HarperTiltedLogBounds.norm_one_sub_sq_lower
+alias exact_tilt_moment_kernelWeight_nonneg := NField.Alignment.HarperTiltedLogBounds.kernelWeight_nonneg
+alias exact_tilt_moment_kernelWeight_bound := NField.Alignment.HarperTiltedLogBounds.kernelWeight_bound
+alias exact_tilt_moment_kernelWeight_sub_one := NField.Alignment.HarperTiltedLogBounds.kernelWeight_sub_one
+alias exact_tilt_moment_kernelWeight_linear_error := NField.Alignment.HarperTiltedLogBounds.kernelWeight_linear_error
+alias exact_tilt_moment_logFactor_quadratic_error := NField.Alignment.HarperTiltedLogBounds.logFactor_quadratic_error
+alias exact_tilt_moment_logFactor_linear_error := NField.Alignment.HarperTiltedLogBounds.logFactor_linear_error
+alias exact_tilt_moment_logFactor_abs_bound := NField.Alignment.HarperTiltedLogBounds.logFactor_abs_bound
+alias exact_tilt_moment_logFactor_square_error := NField.Alignment.HarperTiltedLogBounds.logFactor_square_error
+alias exact_tilt_moment_weighted_log_linear_error := NField.Alignment.HarperTiltedLogBounds.weighted_log_linear_error
+alias exact_tilt_moment_weighted_log_square_error := NField.Alignment.HarperTiltedLogBounds.weighted_log_square_error
+alias exact_tilt_moment_criticalDensity_eq_kernelWeight := NField.Alignment.HarperTiltedLogBounds.criticalDensity_eq_kernelWeight
+alias exact_tilt_moment_criticalDensity_measurable := NField.Alignment.HarperTiltedLogBounds.criticalDensity_measurable
+alias exact_tilt_moment_criticalDensity_integral := NField.Alignment.HarperTiltedLogBounds.criticalDensity_integral
+alias exact_tilt_moment_criticalDensity_bounds := NField.Alignment.HarperTiltedLogBounds.criticalDensity_bounds
+alias exact_tilt_moment_primeLog_measurable := NField.Alignment.HarperTiltedLogBounds.primeLog_measurable
+alias exact_tilt_moment_primeLog_abs_bound := NField.Alignment.HarperTiltedLogBounds.primeLog_abs_bound
+alias exact_tilt_moment_primeLog_integrable := NField.Alignment.HarperTiltedLogBounds.primeLog_integrable
+alias exact_tilt_moment_primeLog_weighted_linear_error := NField.Alignment.HarperTiltedLogBounds.primeLog_weighted_linear_error
+alias exact_tilt_moment_primeLog_weighted_square_error := NField.Alignment.HarperTiltedLogBounds.primeLog_weighted_square_error
+alias exact_tilt_moment_primeTerm_frequency := NField.Alignment.HarperTiltedCrossMoment.primeTerm_frequency
+alias exact_tilt_moment_primeTerm_mixed_re_integrable := NField.Alignment.HarperTiltedCrossMoment.primeTerm_mixed_re_integrable
+alias exact_tilt_moment_primeTerm_re_im_mean := NField.Alignment.HarperTiltedCrossMoment.primeTerm_re_im_mean
+alias exact_tilt_moment_primeTerm_mixed_re_mean := NField.Alignment.HarperTiltedCrossMoment.primeTerm_mixed_re_mean
+alias exact_tilt_moment_weighted_primeLog_pow_integrable := NField.Alignment.HarperTiltedLogMoments.weighted_primeLog_pow_integrable
+alias exact_tilt_moment_weighted_primeLog_abs_pow_integrable := NField.Alignment.HarperTiltedLogMoments.weighted_primeLog_abs_pow_integrable
+alias exact_tilt_moment_primeQuadratic_integrable := NField.Alignment.HarperTiltedLogMoments.primeQuadratic_integrable
+alias exact_tilt_moment_primeQuadratic_mean := NField.Alignment.HarperTiltedLogMoments.primeQuadratic_mean
+alias exact_tilt_moment_weighted_primeLog_mean := NField.Alignment.HarperTiltedLogMoments.weighted_primeLog_mean
+alias exact_tilt_moment_weighted_primeLog_second_moment := NField.Alignment.HarperTiltedLogMoments.weighted_primeLog_second_moment
+alias exact_tilt_moment_weighted_primeLog_third_absolute_moment := NField.Alignment.HarperTiltedLogMoments.weighted_primeLog_third_absolute_moment
+alias exact_tilt_moment_integral_critical_coordinate := NField.Alignment.HarperTiltedLogMoments.integral_critical_coordinate
+alias exact_tilt_moment_integral_tilted_primeLog := NField.Alignment.HarperTiltedLogMoments.integral_tilted_primeLog
+alias exact_tilt_moment_tilted_primeLog_pow_integrable := NField.Alignment.HarperTiltedLogMoments.tilted_primeLog_pow_integrable
+alias exact_tilt_moment_tilted_primeLog_abs_pow_integrable := NField.Alignment.HarperTiltedLogMoments.tilted_primeLog_abs_pow_integrable
+alias exact_tilt_moment_tilted_primeLog_mean := NField.Alignment.HarperTiltedLogMoments.tilted_primeLog_mean
+alias exact_tilt_moment_tilted_primeLog_second_moment := NField.Alignment.HarperTiltedLogMoments.tilted_primeLog_second_moment
+alias exact_tilt_moment_tilted_primeLog_third_absolute_moment := NField.Alignment.HarperTiltedLogMoments.tilted_primeLog_third_absolute_moment
+
+#check exact_tilt_moment_prime_not_mem_previous
+#check exact_tilt_moment_primesUpTo_prime_insert
+#check exact_tilt_moment_localMass_eq
+#check exact_tilt_moment_localDensity_eq
+#check exact_tilt_moment_localDensity_norm_form
+#check exact_tilt_moment_norm_one_sub_sq
+#check exact_tilt_moment_norm_one_sub_sq_lower
+#check exact_tilt_moment_kernelWeight_nonneg
+#check exact_tilt_moment_kernelWeight_bound
+#check exact_tilt_moment_kernelWeight_sub_one
+#check exact_tilt_moment_kernelWeight_linear_error
+#check exact_tilt_moment_logFactor_quadratic_error
+#check exact_tilt_moment_logFactor_linear_error
+#check exact_tilt_moment_logFactor_abs_bound
+#check exact_tilt_moment_logFactor_square_error
+#check exact_tilt_moment_weighted_log_linear_error
+#check exact_tilt_moment_weighted_log_square_error
+#check exact_tilt_moment_criticalDensity_eq_kernelWeight
+#check exact_tilt_moment_criticalDensity_measurable
+#check exact_tilt_moment_criticalDensity_integral
+#check exact_tilt_moment_criticalDensity_bounds
+#check exact_tilt_moment_primeLog_measurable
+#check exact_tilt_moment_primeLog_abs_bound
+#check exact_tilt_moment_primeLog_integrable
+#check exact_tilt_moment_primeLog_weighted_linear_error
+#check exact_tilt_moment_primeLog_weighted_square_error
+#check exact_tilt_moment_primeTerm_frequency
+#check exact_tilt_moment_primeTerm_mixed_re_integrable
+#check exact_tilt_moment_primeTerm_re_im_mean
+#check exact_tilt_moment_primeTerm_mixed_re_mean
+#check exact_tilt_moment_weighted_primeLog_pow_integrable
+#check exact_tilt_moment_weighted_primeLog_abs_pow_integrable
+#check exact_tilt_moment_primeQuadratic_integrable
+#check exact_tilt_moment_primeQuadratic_mean
+#check exact_tilt_moment_weighted_primeLog_mean
+#check exact_tilt_moment_weighted_primeLog_second_moment
+#check exact_tilt_moment_weighted_primeLog_third_absolute_moment
+#check exact_tilt_moment_integral_critical_coordinate
+#check exact_tilt_moment_integral_tilted_primeLog
+#check exact_tilt_moment_tilted_primeLog_pow_integrable
+#check exact_tilt_moment_tilted_primeLog_abs_pow_integrable
+#check exact_tilt_moment_tilted_primeLog_mean
+#check exact_tilt_moment_tilted_primeLog_second_moment
+#check exact_tilt_moment_tilted_primeLog_third_absolute_moment
+
+alias exact_cf_phaseExponential_norm := NField.Alignment.HarperCharacteristicTaylor.phaseExponential_norm
+alias exact_cf_phaseExponential_measurable := NField.Alignment.HarperCharacteristicTaylor.phaseExponential_measurable
+alias exact_cf_phaseExponential_integrable := NField.Alignment.HarperCharacteristicTaylor.phaseExponential_integrable
+alias exact_cf_phaseExponential_quadratic_error := NField.Alignment.HarperCharacteristicTaylor.phaseExponential_quadratic_error
+alias exact_cf_meanPhase_integrable := NField.Alignment.HarperCharacteristicTaylor.meanPhase_integrable
+alias exact_cf_meanPhase_integral := NField.Alignment.HarperCharacteristicTaylor.meanPhase_integral
+alias exact_cf_characteristic_quadratic_error := NField.Alignment.HarperCharacteristicTaylor.characteristic_quadratic_error
+alias exact_cf_meanPhase_difference := NField.Alignment.HarperCharacteristicTaylor.meanPhase_difference
+alias exact_cf_sqrt_mul_neg_half := NField.Alignment.HarperGaussianFactor.sqrt_mul_neg_half
+alias exact_cf_sqrt_div_sq := NField.Alignment.HarperGaussianFactor.sqrt_div_sq
+alias exact_cf_square_le_abs_add_cube := NField.Alignment.HarperGaussianFactor.square_le_abs_add_cube
+alias exact_cf_parameter_square_bound := NField.Alignment.HarperGaussianFactor.parameter_square_bound
+alias exact_cf_parameter_fourth_remainder := NField.Alignment.HarperGaussianFactor.parameter_fourth_remainder
+alias exact_cf_gaussianExponent_re := NField.Alignment.HarperGaussianFactor.gaussianExponent_re
+alias exact_cf_gaussianExponent_norm_bound := NField.Alignment.HarperGaussianFactor.gaussianExponent_norm_bound
+alias exact_cf_gaussianExponent_square_bound := NField.Alignment.HarperGaussianFactor.gaussianExponent_square_bound
+alias exact_cf_gaussianFactor_norm_le_one := NField.Alignment.HarperGaussianFactor.gaussianFactor_norm_le_one
+alias exact_cf_gaussianFactor_zero := NField.Alignment.HarperGaussianFactor.gaussianFactor_zero
+alias exact_cf_gaussianFactor_linear_identity := NField.Alignment.HarperGaussianFactor.gaussianFactor_linear_identity
+alias exact_cf_gaussianFactor_error := NField.Alignment.HarperGaussianFactor.gaussianFactor_error
+alias exact_cf_comparisonConstant_pos := NField.Alignment.HarperWeightedCharacteristic.comparisonConstant_pos
+alias exact_cf_localCharacteristic_zero := NField.Alignment.HarperWeightedCharacteristic.localCharacteristic_zero
+alias exact_cf_localCharacteristic_norm_le_one := NField.Alignment.HarperWeightedCharacteristic.localCharacteristic_norm_le_one
+alias exact_cf_primeLog_phase_bound := NField.Alignment.HarperWeightedCharacteristic.primeLog_phase_bound
+alias exact_cf_localCharacteristic_quadratic_error := NField.Alignment.HarperWeightedCharacteristic.localCharacteristic_quadratic_error
+alias exact_cf_localCharacteristic_moment_error := NField.Alignment.HarperWeightedCharacteristic.localCharacteristic_moment_error
+alias exact_cf_localCharacteristic_gaussian_error := NField.Alignment.HarperWeightedCharacteristic.localCharacteristic_gaussian_error
+alias exact_cf_contractive_product_norm := NField.Alignment.HarperPrimeRangeCharacteristic.contractive_product_norm
+alias exact_cf_contractive_product_difference := NField.Alignment.HarperPrimeRangeCharacteristic.contractive_product_difference
+alias exact_cf_phaseExponential_sum := NField.Alignment.HarperPrimeRangeCharacteristic.phaseExponential_sum
+alias exact_cf_rangeLog_measurable := NField.Alignment.HarperPrimeRangeCharacteristic.rangeLog_measurable
+alias exact_cf_primePhase_functions_independent := NField.Alignment.HarperPrimeRangeCharacteristic.primePhase_functions_independent
+alias exact_cf_rangeCharacteristic_product := NField.Alignment.HarperPrimeRangeCharacteristic.rangeCharacteristic_product
+alias exact_cf_rangeGaussian_product := NField.Alignment.HarperPrimeRangeCharacteristic.rangeGaussian_product
+alias exact_cf_rangeCharacteristic_gaussian_error := NField.Alignment.HarperPrimeRangeCharacteristic.rangeCharacteristic_gaussian_error
+alias exact_cf_shifted_three_halves_tail := NField.Alignment.HarperCharacteristicTail.shifted_three_halves_tail
+alias exact_cf_finite_three_halves_tail := NField.Alignment.HarperCharacteristicTail.finite_three_halves_tail
+alias exact_cf_real_cutoff_three_halves_tail := NField.Alignment.HarperCharacteristicTail.real_cutoff_three_halves_tail
+alias exact_cf_rangeCharacteristic_cutoff_error := NField.Alignment.HarperCharacteristicTail.rangeCharacteristic_cutoff_error
+
+#check exact_cf_phaseExponential_norm
+#check exact_cf_phaseExponential_measurable
+#check exact_cf_phaseExponential_integrable
+#check exact_cf_phaseExponential_quadratic_error
+#check exact_cf_meanPhase_integrable
+#check exact_cf_meanPhase_integral
+#check exact_cf_characteristic_quadratic_error
+#check exact_cf_meanPhase_difference
+#check exact_cf_sqrt_mul_neg_half
+#check exact_cf_sqrt_div_sq
+#check exact_cf_square_le_abs_add_cube
+#check exact_cf_parameter_square_bound
+#check exact_cf_parameter_fourth_remainder
+#check exact_cf_gaussianExponent_re
+#check exact_cf_gaussianExponent_norm_bound
+#check exact_cf_gaussianExponent_square_bound
+#check exact_cf_gaussianFactor_norm_le_one
+#check exact_cf_gaussianFactor_zero
+#check exact_cf_gaussianFactor_linear_identity
+#check exact_cf_gaussianFactor_error
+#check exact_cf_comparisonConstant_pos
+#check exact_cf_localCharacteristic_zero
+#check exact_cf_localCharacteristic_norm_le_one
+#check exact_cf_primeLog_phase_bound
+#check exact_cf_localCharacteristic_quadratic_error
+#check exact_cf_localCharacteristic_moment_error
+#check exact_cf_localCharacteristic_gaussian_error
+#check exact_cf_contractive_product_norm
+#check exact_cf_contractive_product_difference
+#check exact_cf_phaseExponential_sum
+#check exact_cf_rangeLog_measurable
+#check exact_cf_primePhase_functions_independent
+#check exact_cf_rangeCharacteristic_product
+#check exact_cf_rangeGaussian_product
+#check exact_cf_rangeCharacteristic_gaussian_error
+#check exact_cf_shifted_three_halves_tail
+#check exact_cf_finite_three_halves_tail
+#check exact_cf_real_cutoff_three_halves_tail
+#check exact_cf_rangeCharacteristic_cutoff_error
+
+alias exact_block_primeBlock_mem := NField.Alignment.HarperPrimeBlocks.primeBlock_mem
+alias exact_block_blockLower_eq_next := NField.Alignment.HarperPrimeBlocks.blockLower_eq_next
+alias exact_block_blockUpper_zero := NField.Alignment.HarperPrimeBlocks.blockUpper_zero
+alias exact_block_blockUpper_gt_one := NField.Alignment.HarperPrimeBlocks.blockUpper_gt_one
+alias exact_block_blockLower_gt_one := NField.Alignment.HarperPrimeBlocks.blockLower_gt_one
+alias exact_block_blockUpper_antitone := NField.Alignment.HarperPrimeBlocks.blockUpper_antitone
+alias exact_block_blockLower_le_upper := NField.Alignment.HarperPrimeBlocks.blockLower_le_upper
+alias exact_block_blockUpper_le_cutoff := NField.Alignment.HarperPrimeBlocks.blockUpper_le_cutoff
+alias exact_block_later_upper_le_lower := NField.Alignment.HarperPrimeBlocks.later_upper_le_lower
+alias exact_block_blockLower_power := NField.Alignment.HarperPrimeBlocks.blockLower_power
+alias exact_block_primeBlock_subset := NField.Alignment.HarperPrimeBlocks.primeBlock_subset
+alias exact_block_primeBlock_disjoint_of_lt := NField.Alignment.HarperPrimeBlocks.primeBlock_disjoint_of_lt
+alias exact_block_primeBlock_pairwise_disjoint := NField.Alignment.HarperPrimeBlocks.primeBlock_pairwise_disjoint
+alias exact_block_blockProduct_ne_zero := NField.Alignment.HarperPrimeBlockLaw.blockProduct_ne_zero
+alias exact_block_blockProduct_measurable := NField.Alignment.HarperPrimeBlockLaw.blockProduct_measurable
+alias exact_block_blockLog_eq_rangeLog := NField.Alignment.HarperPrimeBlockLaw.blockLog_eq_rangeLog
+alias exact_block_blockLog_measurable := NField.Alignment.HarperPrimeBlockLaw.blockLog_measurable
+alias exact_block_blockProducts_independent := NField.Alignment.HarperPrimeBlockLaw.blockProducts_independent
+alias exact_block_blockLogs_independent := NField.Alignment.HarperPrimeBlockLaw.blockLogs_independent
+alias exact_block_blockLogs_strictAnti_independent := NField.Alignment.HarperPrimeBlockLaw.blockLogs_strictAnti_independent
+alias exact_block_blockCharacteristic_eq_range := NField.Alignment.HarperPrimeBlockLaw.blockCharacteristic_eq_range
+alias exact_block_blockCharacteristic_gaussian_error := NField.Alignment.HarperPrimeBlockLaw.blockCharacteristic_gaussian_error
+alias exact_block_frequencyCutoff_pos := NField.Alignment.HarperGaussianSmoothingScales.frequencyCutoff_pos
+alias exact_block_frequencyCutoff_ge_one := NField.Alignment.HarperGaussianSmoothingScales.frequencyCutoff_ge_one
+alias exact_block_frequencyCutoff_le_sqrt_lower := NField.Alignment.HarperGaussianSmoothingScales.frequencyCutoff_le_sqrt_lower
+alias exact_block_fourth_cutoff_error_bound := NField.Alignment.HarperGaussianSmoothingScales.fourth_cutoff_error_bound
+alias exact_block_integrated_cutoff_scale := NField.Alignment.HarperGaussianSmoothingScales.integrated_cutoff_scale
+alias exact_block_frequencyCutoff_inverse_sqrt := NField.Alignment.HarperGaussianSmoothingScales.frequencyCutoff_inverse_sqrt
+alias exact_block_smoothingWidth_sqrt := NField.Alignment.HarperGaussianSmoothingScales.smoothingWidth_sqrt
+alias exact_block_eventual_cutoff_conditions := NField.Alignment.HarperGaussianSmoothingScales.eventual_cutoff_conditions
+alias exact_block_blockCharacteristic_frequency_error := NField.Alignment.HarperGaussianSmoothingScales.blockCharacteristic_frequency_error
+
+#check exact_block_primeBlock_mem
+#check exact_block_blockLower_eq_next
+#check exact_block_blockUpper_zero
+#check exact_block_blockUpper_gt_one
+#check exact_block_blockLower_gt_one
+#check exact_block_blockUpper_antitone
+#check exact_block_blockLower_le_upper
+#check exact_block_blockUpper_le_cutoff
+#check exact_block_later_upper_le_lower
+#check exact_block_blockLower_power
+#check exact_block_primeBlock_subset
+#check exact_block_primeBlock_disjoint_of_lt
+#check exact_block_primeBlock_pairwise_disjoint
+#check exact_block_blockProduct_ne_zero
+#check exact_block_blockProduct_measurable
+#check exact_block_blockLog_eq_rangeLog
+#check exact_block_blockLog_measurable
+#check exact_block_blockProducts_independent
+#check exact_block_blockLogs_independent
+#check exact_block_blockLogs_strictAnti_independent
+#check exact_block_blockCharacteristic_eq_range
+#check exact_block_blockCharacteristic_gaussian_error
+#check exact_block_frequencyCutoff_pos
+#check exact_block_frequencyCutoff_ge_one
+#check exact_block_frequencyCutoff_le_sqrt_lower
+#check exact_block_fourth_cutoff_error_bound
+#check exact_block_integrated_cutoff_scale
+#check exact_block_frequencyCutoff_inverse_sqrt
+#check exact_block_smoothingWidth_sqrt
+#check exact_block_eventual_cutoff_conditions
+#check exact_block_blockCharacteristic_frequency_error
+
+alias exact_gauss_intervalWindow_empty := NField.Alignment.HarperIntervalSmoothing.intervalWindow_empty
+alias exact_gauss_intervalWindow_singleton := NField.Alignment.HarperIntervalSmoothing.intervalWindow_singleton
+alias exact_gauss_intervalWindow_nonneg := NField.Alignment.HarperIntervalSmoothing.intervalWindow_nonneg
+alias exact_gauss_intervalWindow_le_one := NField.Alignment.HarperIntervalSmoothing.intervalWindow_le_one
+alias exact_gauss_intervalWindow_measurable := NField.Alignment.HarperIntervalSmoothing.intervalWindow_measurable
+alias exact_gauss_intervalWindow_integrable_comp := NField.Alignment.HarperIntervalSmoothing.intervalWindow_integrable_comp
+alias exact_gauss_tailAllowance_nonneg := NField.Alignment.HarperIntervalSmoothing.tailAllowance_nonneg
+alias exact_gauss_central_kernel_mass := NField.Alignment.HarperIntervalSmoothing.central_kernel_mass
+alias exact_gauss_expandedWindow_lower := NField.Alignment.HarperIntervalSmoothing.expandedWindow_lower
+alias exact_gauss_contractedWindow_upper := NField.Alignment.HarperIntervalSmoothing.contractedWindow_upper
+alias exact_gauss_indicator_le_expandedWindow := NField.Alignment.HarperIntervalSmoothing.indicator_le_expandedWindow
+alias exact_gauss_contractedWindow_le_indicator := NField.Alignment.HarperIntervalSmoothing.contractedWindow_le_indicator
+alias exact_gauss_intervalIndicator_integrable := NField.Alignment.HarperIntervalFourier.intervalIndicator_integrable
+alias exact_gauss_intervalIndicator_norm_integral := NField.Alignment.HarperIntervalFourier.intervalIndicator_norm_integral
+alias exact_gauss_intervalIndicator_fourier_norm := NField.Alignment.HarperIntervalFourier.intervalIndicator_fourier_norm
+alias exact_gauss_intervalWindow_convolution := NField.Alignment.HarperIntervalFourier.intervalWindow_convolution
+alias exact_gauss_intervalWindow_complex_integrable := NField.Alignment.HarperIntervalFourier.intervalWindow_complex_integrable
+alias exact_gauss_intervalWindow_complex_continuous := NField.Alignment.HarperIntervalFourier.intervalWindow_complex_continuous
+alias exact_gauss_intervalWindow_fourier := NField.Alignment.HarperIntervalFourier.intervalWindow_fourier
+alias exact_gauss_spectralDensity_continuous := NField.Alignment.HarperIntervalFourier.spectralDensity_continuous
+alias exact_gauss_spectralDensity_norm := NField.Alignment.HarperIntervalFourier.spectralDensity_norm
+alias exact_gauss_spectralDensity_zero_of_outside := NField.Alignment.HarperIntervalFourier.spectralDensity_zero_of_outside
+alias exact_gauss_spectralDensity_compactSupport := NField.Alignment.HarperIntervalFourier.spectralDensity_compactSupport
+alias exact_gauss_spectralDensity_integrable := NField.Alignment.HarperIntervalFourier.spectralDensity_integrable
+alias exact_gauss_intervalWindow_fourier_representation := NField.Alignment.HarperIntervalFourier.intervalWindow_fourier_representation
+alias exact_gauss_spectralPhase_integrable := NField.Alignment.HarperSmoothingExpectation.spectralPhase_integrable
+alias exact_gauss_spectralCharacteristic_integrable := NField.Alignment.HarperSmoothingExpectation.spectralCharacteristic_integrable
+alias exact_gauss_intervalWindow_expectation_fourier := NField.Alignment.HarperSmoothingExpectation.intervalWindow_expectation_fourier
+alias exact_gauss_intervalWindow_expectation_error_complex := NField.Alignment.HarperSmoothingExpectation.intervalWindow_expectation_error_complex
+alias exact_gauss_intervalWindow_expectation_error := NField.Alignment.HarperSmoothingExpectation.intervalWindow_expectation_error
+alias exact_gauss_intervalProbability_le_expanded_expectation := NField.Alignment.HarperSmoothingExpectation.intervalProbability_le_expanded_expectation
+alias exact_gauss_contracted_expectation_le_intervalProbability := NField.Alignment.HarperSmoothingExpectation.contracted_expectation_le_intervalProbability
+alias exact_gauss_interval_expansion_bound := NField.Alignment.HarperIntervalProbability.interval_expansion_bound
+alias exact_gauss_interval_contraction_bound := NField.Alignment.HarperIntervalProbability.interval_contraction_bound
+alias exact_gauss_interval_probability_comparison := NField.Alignment.HarperIntervalProbability.interval_probability_comparison
+alias exact_gauss_primeBlock_eq_upperBlock := NField.Alignment.HarperPrimeBlockVariance.primeBlock_eq_upperBlock
+alias exact_gauss_upperBlock_sdiff := NField.Alignment.HarperPrimeBlockVariance.upperBlock_sdiff
+alias exact_gauss_sourceCutoff_le := NField.Alignment.HarperPrimeBlockVariance.sourceCutoff_le
+alias exact_gauss_sourceCutoff_log_log := NField.Alignment.HarperPrimeBlockVariance.sourceCutoff_log_log
+alias exact_gauss_blockVariance_nonneg := NField.Alignment.HarperPrimeBlockVariance.blockVariance_nonneg
+alias exact_gauss_blockVariance_mertens_identity := NField.Alignment.HarperPrimeBlockVariance.blockVariance_mertens_identity
+alias exact_gauss_blockVariance_tendsto := NField.Alignment.HarperPrimeBlockVariance.blockVariance_tendsto
+alias exact_gauss_eventual_blockVariance_bounds := NField.Alignment.HarperPrimeBlockVariance.eventual_blockVariance_bounds
+alias exact_gauss_source_blockVariance := NField.Alignment.HarperPrimeBlockVariance.source_blockVariance
+alias exact_gauss_gaussianPDF_le_one := NField.Alignment.HarperGaussianInterval.gaussianPDF_le_one
+alias exact_gauss_gaussian_interval_mass := NField.Alignment.HarperGaussianInterval.gaussian_interval_mass
+alias exact_gauss_gaussian_interval_comparison := NField.Alignment.HarperGaussianInterval.gaussian_interval_comparison
+alias exact_gauss_intervalComparisonConstant_pos := NField.Alignment.HarperGaussianInterval.intervalComparisonConstant_pos
+alias exact_gauss_smoothingWidth_frequency := NField.Alignment.HarperGaussianInterval.smoothingWidth_frequency
+alias exact_gauss_gaussian_smoothing_error_scale := NField.Alignment.HarperGaussianInterval.gaussian_smoothing_error_scale
+alias exact_gauss_gaussian_interval_rate := NField.Alignment.HarperGaussianInterval.gaussian_interval_rate
+alias exact_gauss_blockLaw_probability := NField.Alignment.HarperPrimeBlockGaussian.blockLaw_probability
+alias exact_gauss_blockLaw_interval := NField.Alignment.HarperPrimeBlockGaussian.blockLaw_interval
+alias exact_gauss_blockLaw_charFun := NField.Alignment.HarperPrimeBlockGaussian.blockLaw_charFun
+alias exact_gauss_blockNormal_charFun := NField.Alignment.HarperPrimeBlockGaussian.blockNormal_charFun
+alias exact_gauss_blockLaw_uniform_characteristic_error := NField.Alignment.HarperPrimeBlockGaussian.blockLaw_uniform_characteristic_error
+alias exact_gauss_blockLaw_interval_error := NField.Alignment.HarperPrimeBlockGaussian.blockLaw_interval_error
+alias exact_gauss_eventual_block_interval_error := NField.Alignment.HarperPrimeBlockGaussian.eventual_block_interval_error
+alias exact_gauss_actual_weighted_interval_error := NField.Alignment.HarperPrimeBlockGaussian.actual_weighted_interval_error
+
+#check exact_gauss_intervalWindow_empty
+#check exact_gauss_intervalWindow_singleton
+#check exact_gauss_intervalWindow_nonneg
+#check exact_gauss_intervalWindow_le_one
+#check exact_gauss_intervalWindow_measurable
+#check exact_gauss_intervalWindow_integrable_comp
+#check exact_gauss_tailAllowance_nonneg
+#check exact_gauss_central_kernel_mass
+#check exact_gauss_expandedWindow_lower
+#check exact_gauss_contractedWindow_upper
+#check exact_gauss_indicator_le_expandedWindow
+#check exact_gauss_contractedWindow_le_indicator
+#check exact_gauss_intervalIndicator_integrable
+#check exact_gauss_intervalIndicator_norm_integral
+#check exact_gauss_intervalIndicator_fourier_norm
+#check exact_gauss_intervalWindow_convolution
+#check exact_gauss_intervalWindow_complex_integrable
+#check exact_gauss_intervalWindow_complex_continuous
+#check exact_gauss_intervalWindow_fourier
+#check exact_gauss_spectralDensity_continuous
+#check exact_gauss_spectralDensity_norm
+#check exact_gauss_spectralDensity_zero_of_outside
+#check exact_gauss_spectralDensity_compactSupport
+#check exact_gauss_spectralDensity_integrable
+#check exact_gauss_intervalWindow_fourier_representation
+#check exact_gauss_spectralPhase_integrable
+#check exact_gauss_spectralCharacteristic_integrable
+#check exact_gauss_intervalWindow_expectation_fourier
+#check exact_gauss_intervalWindow_expectation_error_complex
+#check exact_gauss_intervalWindow_expectation_error
+#check exact_gauss_intervalProbability_le_expanded_expectation
+#check exact_gauss_contracted_expectation_le_intervalProbability
+#check exact_gauss_interval_expansion_bound
+#check exact_gauss_interval_contraction_bound
+#check exact_gauss_interval_probability_comparison
+#check exact_gauss_primeBlock_eq_upperBlock
+#check exact_gauss_upperBlock_sdiff
+#check exact_gauss_sourceCutoff_le
+#check exact_gauss_sourceCutoff_log_log
+#check exact_gauss_blockVariance_nonneg
+#check exact_gauss_blockVariance_mertens_identity
+#check exact_gauss_blockVariance_tendsto
+#check exact_gauss_eventual_blockVariance_bounds
+#check exact_gauss_source_blockVariance
+#check exact_gauss_gaussianPDF_le_one
+#check exact_gauss_gaussian_interval_mass
+#check exact_gauss_gaussian_interval_comparison
+#check exact_gauss_intervalComparisonConstant_pos
+#check exact_gauss_smoothingWidth_frequency
+#check exact_gauss_gaussian_smoothing_error_scale
+#check exact_gauss_gaussian_interval_rate
+#check exact_gauss_blockLaw_probability
+#check exact_gauss_blockLaw_interval
+#check exact_gauss_blockLaw_charFun
+#check exact_gauss_blockNormal_charFun
+#check exact_gauss_blockLaw_uniform_characteristic_error
+#check exact_gauss_blockLaw_interval_error
+#check exact_gauss_eventual_block_interval_error
+#check exact_gauss_actual_weighted_interval_error
+
+
+/-! Actual source interval-mass and relative Gaussian comparison. -/
+alias exact_relative_rangeMean_abs_le := NField.Alignment.HarperGaussianIntervalLower.rangeMean_abs_le
+alias exact_relative_gaussian_exponent_budget := NField.Alignment.HarperGaussianIntervalLower.gaussian_exponent_budget
+alias exact_relative_gaussianPDF_source_lower := NField.Alignment.HarperGaussianIntervalLower.gaussianPDF_source_lower
+alias exact_relative_gaussian_interval_lower := NField.Alignment.HarperGaussianIntervalLower.gaussian_interval_lower
+alias exact_relative_gaussian_interval_mass_lower := NField.Alignment.HarperGaussianIntervalLower.gaussian_interval_mass_lower
+alias exact_relative_strictAnti_index_gap := NField.Alignment.HarperPrimeBlockGrowth.strictAnti_index_gap
+alias exact_relative_blockUpper_growth := NField.Alignment.HarperPrimeBlockGrowth.blockUpper_growth
+alias exact_relative_reversed_block_growth := NField.Alignment.HarperPrimeBlockGrowth.reversed_block_growth
+alias exact_relative_reversed_block_log_growth := NField.Alignment.HarperPrimeBlockGrowth.reversed_block_log_growth
+alias exact_relative_reversed_block_log_ge := NField.Alignment.HarperPrimeBlockGrowth.reversed_block_log_ge
+alias exact_relative_reciprocal_square_width_le_one := NField.Alignment.HarperPrimeBlockGrowth.reciprocal_square_width_le_one
+alias exact_relative_reciprocal_square_width_lower := NField.Alignment.HarperPrimeBlockGrowth.reciprocal_square_width_lower
+alias exact_relative_reversed_block_width_lower := NField.Alignment.HarperPrimeBlockGrowth.reversed_block_width_lower
+alias exact_relative_relative_error_of_absolute := NField.Alignment.HarperPrimeBlockRelative.relative_error_of_absolute
+alias exact_relative_blockNormal_interval_mass_lower := NField.Alignment.HarperPrimeBlockRelative.blockNormal_interval_mass_lower
+alias exact_relative_eventual_source_interval_estimates := NField.Alignment.HarperPrimeBlockRelative.eventual_source_interval_estimates
+alias exact_relative_actual_weighted_relative_interval_error := NField.Alignment.HarperPrimeBlockRelative.actual_weighted_relative_interval_error
+
+#check exact_relative_rangeMean_abs_le
+#check exact_relative_gaussian_exponent_budget
+#check exact_relative_gaussianPDF_source_lower
+#check exact_relative_gaussian_interval_lower
+#check exact_relative_gaussian_interval_mass_lower
+#check exact_relative_strictAnti_index_gap
+#check exact_relative_blockUpper_growth
+#check exact_relative_reversed_block_growth
+#check exact_relative_reversed_block_log_growth
+#check exact_relative_reversed_block_log_ge
+#check exact_relative_reciprocal_square_width_le_one
+#check exact_relative_reciprocal_square_width_lower
+#check exact_relative_reversed_block_width_lower
+#check exact_relative_relative_error_of_absolute
+#check exact_relative_blockNormal_interval_mass_lower
+#check exact_relative_eventual_source_interval_estimates
+#check exact_relative_actual_weighted_relative_interval_error
+
+
+/-! Actual source joint relative Gaussian comparison. -/
+alias exact_joint_finite_relative_product_error := NField.Alignment.HarperRelativeProducts.finite_relative_product_error
+alias exact_joint_finite_shifted_geometric_sum := NField.Alignment.HarperRelativeProducts.finite_shifted_geometric_sum
+alias exact_joint_reversed_block_error_geometric := NField.Alignment.HarperRelativeProducts.reversed_block_error_geometric
+alias exact_joint_reversed_block_error_sum := NField.Alignment.HarperRelativeProducts.reversed_block_error_sum
+alias exact_joint_eventual_error_sum_scale := NField.Alignment.HarperRelativeProducts.eventual_error_sum_scale
+alias exact_joint_jointBlockEvent_measurable := NField.Alignment.HarperPrimeBlockJointLaw.jointBlockEvent_measurable
+alias exact_joint_normalProductLaw_probability := NField.Alignment.HarperPrimeBlockJointLaw.normalProductLaw_probability
+alias exact_joint_jointBlockEvent_probability := NField.Alignment.HarperPrimeBlockJointLaw.jointBlockEvent_probability
+alias exact_joint_normalProductLaw_rectangle := NField.Alignment.HarperPrimeBlockJointLaw.normalProductLaw_rectangle
+alias exact_joint_jointComparisonConstant_pos := NField.Alignment.HarperPrimeBlockJointRelative.jointComparisonConstant_pos
+alias exact_joint_actual_joint_relative_interval_error := NField.Alignment.HarperPrimeBlockJointRelative.actual_joint_relative_interval_error
+
+#check exact_joint_finite_relative_product_error
+#check exact_joint_finite_shifted_geometric_sum
+#check exact_joint_reversed_block_error_geometric
+#check exact_joint_reversed_block_error_sum
+#check exact_joint_eventual_error_sum_scale
+#check exact_joint_jointBlockEvent_measurable
+#check exact_joint_normalProductLaw_probability
+#check exact_joint_jointBlockEvent_probability
+#check exact_joint_normalProductLaw_rectangle
+#check exact_joint_jointComparisonConstant_pos
+#check exact_joint_actual_joint_relative_interval_error
+
+
+/-! Actual source upper partial-sum path transfer. -/
+alias exact_path_width_pos := NField.Alignment.HarperPathGrid.width_pos
+alias exact_path_width_le_one := NField.Alignment.HarperPathGrid.width_le_one
+alias exact_path_sum_width_le_two := NField.Alignment.HarperPathGrid.sum_width_le_two
+alias exact_path_partial_width_le_two := NField.Alignment.HarperPathGrid.partial_width_le_two
+alias exact_path_mem_gridCell_iff := NField.Alignment.HarperPathGrid.mem_gridCell_iff
+alias exact_path_mem_closedGridCell_iff := NField.Alignment.HarperPathGrid.mem_closedGridCell_iff
+alias exact_path_gridCell_subset_closedGridCell := NField.Alignment.HarperPathGrid.gridCell_subset_closedGridCell
+alias exact_path_exists_gridCell := NField.Alignment.HarperPathGrid.exists_gridCell
+alias exact_path_gridCell_pairwise_disjoint := NField.Alignment.HarperPathGrid.gridCell_pairwise_disjoint
+alias exact_path_partialSum_sub_abs_le_two := NField.Alignment.HarperPathGrid.partialSum_sub_abs_le_two
+alias exact_path_selected_cell_subset_expanded_path := NField.Alignment.HarperPathGrid.selected_cell_subset_expanded_path
+alias exact_path_path_subset_selected_union := NField.Alignment.HarperPathGrid.path_subset_selected_union
+alias exact_path_coordinate_abs_le_of_partialSum := NField.Alignment.HarperPathGrid.coordinate_abs_le_of_partialSum
+alias exact_path_selected_gridStart_abs_le := NField.Alignment.HarperPathGrid.selected_gridStart_abs_le
+alias exact_path_partialSum_measurable := NField.Alignment.HarperPathTransfer.partialSum_measurable
+alias exact_path_pathEvent_measurable := NField.Alignment.HarperPathTransfer.pathEvent_measurable
+alias exact_path_gridCell_measurable := NField.Alignment.HarperPathTransfer.gridCell_measurable
+alias exact_path_closedGridCell_measurable := NField.Alignment.HarperPathTransfer.closedGridCell_measurable
+alias exact_path_path_probability_transfer := NField.Alignment.HarperPathTransfer.path_probability_transfer
+alias exact_path_blockPathEvent_measurable := NField.Alignment.HarperPrimeBlockPath.blockPathEvent_measurable
+alias exact_path_source_radius_monotone := NField.Alignment.HarperPrimeBlockPath.source_radius_monotone
+alias exact_path_source_selected_start_bound := NField.Alignment.HarperPrimeBlockPath.source_selected_start_bound
+alias exact_path_blockNormal_nullSingletonClass := NField.Alignment.HarperPrimeBlockPath.blockNormal_nullSingletonClass
+alias exact_path_normalProduct_closed_eq_halfOpen := NField.Alignment.HarperPrimeBlockPath.normalProduct_closed_eq_halfOpen
+alias exact_path_eventual_joint_rectangle_upper := NField.Alignment.HarperPrimeBlockPath.eventual_joint_rectangle_upper
+alias exact_path_actual_upper_path_transfer := NField.Alignment.HarperPrimeBlockPath.actual_upper_path_transfer
+
+#check exact_path_width_pos
+#check exact_path_width_le_one
+#check exact_path_sum_width_le_two
+#check exact_path_partial_width_le_two
+#check exact_path_mem_gridCell_iff
+#check exact_path_mem_closedGridCell_iff
+#check exact_path_gridCell_subset_closedGridCell
+#check exact_path_exists_gridCell
+#check exact_path_gridCell_pairwise_disjoint
+#check exact_path_partialSum_sub_abs_le_two
+#check exact_path_selected_cell_subset_expanded_path
+#check exact_path_path_subset_selected_union
+#check exact_path_coordinate_abs_le_of_partialSum
+#check exact_path_selected_gridStart_abs_le
+#check exact_path_partialSum_measurable
+#check exact_path_pathEvent_measurable
+#check exact_path_gridCell_measurable
+#check exact_path_closedGridCell_measurable
+#check exact_path_path_probability_transfer
+#check exact_path_blockPathEvent_measurable
+#check exact_path_source_radius_monotone
+#check exact_path_source_selected_start_bound
+#check exact_path_blockNormal_nullSingletonClass
+#check exact_path_normalProduct_closed_eq_halfOpen
+#check exact_path_eventual_joint_rectangle_upper
+#check exact_path_actual_upper_path_transfer
+
+
+/-! Actual source mean drift and centered path transfer. -/
+alias exact_drift_meanMertensConstant_pos := NField.Alignment.HarperMeanDriftLocal.meanMertensConstant_pos
+alias exact_drift_rangeMean_frequency_error := NField.Alignment.HarperMeanDriftLocal.rangeMean_frequency_error
+alias exact_drift_blockVariance_mean_error := NField.Alignment.HarperMeanDriftLocal.blockVariance_mean_error
+alias exact_drift_source_mean_error := NField.Alignment.HarperMeanDriftLocal.source_mean_error
+alias exact_drift_small_frequency_square := NField.Alignment.HarperMeanDriftLocal.small_frequency_square
+alias exact_drift_frequencyError_summable := NField.Alignment.HarperMeanDrift.frequencyError_summable
+alias exact_drift_frequencyErrorTotal_nonneg := NField.Alignment.HarperMeanDrift.frequencyErrorTotal_nonneg
+alias exact_drift_cumulativeMeanConstant_pos := NField.Alignment.HarperMeanDrift.cumulativeMeanConstant_pos
+alias exact_drift_finite_frequencyError_sum := NField.Alignment.HarperMeanDrift.finite_frequencyError_sum
+alias exact_drift_reversed_inverse_log_sum := NField.Alignment.HarperMeanDrift.reversed_inverse_log_sum
+alias exact_drift_eventual_mean_parameters := NField.Alignment.HarperMeanDrift.eventual_mean_parameters
+alias exact_drift_source_cumulative_mean_error := NField.Alignment.HarperMeanDrift.source_cumulative_mean_error
+alias exact_drift_centeredPathAllowance_pos := NField.Alignment.HarperCenteredPath.centeredPathAllowance_pos
+alias exact_drift_centeredNormalProduct_probability := NField.Alignment.HarperCenteredPath.centeredNormalProduct_probability
+alias exact_drift_gaussian_product_center_map := NField.Alignment.HarperCenteredPath.gaussian_product_center_map
+alias exact_drift_normalProduct_center_map := NField.Alignment.HarperCenteredPath.normalProduct_center_map
+alias exact_drift_partialSum_sub := NField.Alignment.HarperCenteredPath.partialSum_sub
+alias exact_drift_normalProduct_path_centering := NField.Alignment.HarperCenteredPath.normalProduct_path_centering
+alias exact_drift_actual_centered_upper_path_transfer := NField.Alignment.HarperCenteredPath.actual_centered_upper_path_transfer
+
+#check exact_drift_meanMertensConstant_pos
+#check exact_drift_rangeMean_frequency_error
+#check exact_drift_blockVariance_mean_error
+#check exact_drift_source_mean_error
+#check exact_drift_small_frequency_square
+#check exact_drift_frequencyError_summable
+#check exact_drift_frequencyErrorTotal_nonneg
+#check exact_drift_cumulativeMeanConstant_pos
+#check exact_drift_finite_frequencyError_sum
+#check exact_drift_reversed_inverse_log_sum
+#check exact_drift_eventual_mean_parameters
+#check exact_drift_source_cumulative_mean_error
+#check exact_drift_centeredPathAllowance_pos
+#check exact_drift_centeredNormalProduct_probability
+#check exact_drift_gaussian_product_center_map
+#check exact_drift_normalProduct_center_map
+#check exact_drift_partialSum_sub
+#check exact_drift_normalProduct_path_centering
+#check exact_drift_actual_centered_upper_path_transfer
+
+
+/-! Gaussian overshoot and one-step killed potential. -/
+alias exact_overshoot_gaussianPDFReal_shift_le := NField.Alignment.HarperGaussianTail.gaussianPDFReal_shift_le
+alias exact_overshoot_gaussian_tail_shift := NField.Alignment.HarperGaussianTail.gaussian_tail_shift
+alias exact_overshoot_gaussian_tail_envelope_integrable := NField.Alignment.HarperGaussianTail.gaussian_tail_envelope_integrable
+alias exact_overshoot_gaussian_tail_envelope_integral := NField.Alignment.HarperGaussianTail.gaussian_tail_envelope_integral
+alias exact_overshoot_gaussian_tail_envelope_integral_le_two := NField.Alignment.HarperGaussianTail.gaussian_tail_envelope_integral_le_two
+alias exact_overshoot_gaussian_identity_integrable := NField.Alignment.HarperGaussianOvershoot.gaussian_identity_integrable
+alias exact_overshoot_gaussian_overshoot_integrable := NField.Alignment.HarperGaussianOvershoot.gaussian_overshoot_integrable
+alias exact_overshoot_gaussian_deficit_integrable := NField.Alignment.HarperGaussianOvershoot.gaussian_deficit_integrable
+alias exact_overshoot_gaussian_overshoot_layercake := NField.Alignment.HarperGaussianOvershoot.gaussian_overshoot_layercake
+alias exact_overshoot_gaussian_overshoot_le_twice_tail := NField.Alignment.HarperGaussianOvershoot.gaussian_overshoot_le_twice_tail
+alias exact_overshoot_killed_deficit_eq_positivePart := NField.Alignment.HarperGaussianOvershoot.killed_deficit_eq_positivePart
+alias exact_overshoot_gaussian_deficit_identity := NField.Alignment.HarperGaussianOvershoot.gaussian_deficit_identity
+alias exact_overshoot_gaussian_killed_deficit_one_step := NField.Alignment.HarperGaussianOvershoot.gaussian_killed_deficit_one_step
+alias exact_overshoot_killedPotential_nonneg := NField.Alignment.HarperGaussianOvershoot.killedPotential_nonneg
+alias exact_overshoot_gaussian_killedPotential_integrable := NField.Alignment.HarperGaussianOvershoot.gaussian_killedPotential_integrable
+alias exact_overshoot_gaussian_killedPotential_integral := NField.Alignment.HarperGaussianOvershoot.gaussian_killedPotential_integral
+alias exact_overshoot_gaussian_killedPotential_one_step := NField.Alignment.HarperGaussianOvershoot.gaussian_killedPotential_one_step
+
+#check exact_overshoot_gaussianPDFReal_shift_le
+#check exact_overshoot_gaussian_tail_shift
+#check exact_overshoot_gaussian_tail_envelope_integrable
+#check exact_overshoot_gaussian_tail_envelope_integral
+#check exact_overshoot_gaussian_tail_envelope_integral_le_two
+#check exact_overshoot_gaussian_identity_integrable
+#check exact_overshoot_gaussian_overshoot_integrable
+#check exact_overshoot_gaussian_deficit_integrable
+#check exact_overshoot_gaussian_overshoot_layercake
+#check exact_overshoot_gaussian_overshoot_le_twice_tail
+#check exact_overshoot_killed_deficit_eq_positivePart
+#check exact_overshoot_gaussian_deficit_identity
+#check exact_overshoot_gaussian_killed_deficit_one_step
+#check exact_overshoot_killedPotential_nonneg
+#check exact_overshoot_gaussian_killedPotential_integrable
+#check exact_overshoot_gaussian_killedPotential_integral
+#check exact_overshoot_gaussian_killedPotential_one_step
+
+
+/-! Finite Gaussian killed path and actual source bounds. -/
+alias exact_killed_path_partialSum_eq_sum_ite := NField.Alignment.HarperKilledPath.partialSum_eq_sum_ite
+alias exact_killed_path_partialSum_last := NField.Alignment.HarperKilledPath.partialSum_last
+alias exact_killed_path_partialSum_snoc_castSucc := NField.Alignment.HarperKilledPath.partialSum_snoc_castSucc
+alias exact_killed_path_survivalEvent_snoc := NField.Alignment.HarperKilledPath.survivalEvent_snoc
+alias exact_killed_path_measurableSet_survivalEvent := NField.Alignment.HarperKilledPath.measurableSet_survivalEvent
+alias exact_killed_path_sum_le_of_survival := NField.Alignment.HarperKilledPath.sum_le_of_survival
+alias exact_killed_path_pathPotential_nonneg := NField.Alignment.HarperKilledPath.pathPotential_nonneg
+alias exact_killed_path_pathPotential_snoc := NField.Alignment.HarperKilledPath.pathPotential_snoc
+alias exact_killed_path_gaussian_pathPotential_integrable := NField.Alignment.HarperKilledPath.gaussian_pathPotential_integrable
+alias exact_killed_path_gaussian_snoc_integrable := NField.Alignment.HarperGaussianKilledPath.gaussian_snoc_integrable
+alias exact_killed_path_gaussian_integral_snoc := NField.Alignment.HarperGaussianKilledPath.gaussian_integral_snoc
+alias exact_killed_path_gaussian_pathPotential_step := NField.Alignment.HarperGaussianKilledPath.gaussian_pathPotential_step
+alias exact_killed_path_gaussian_pathPotential_bound := NField.Alignment.HarperGaussianKilledPath.gaussian_pathPotential_bound
+alias exact_killed_path_gaussian_survival_deficit_tail := NField.Alignment.HarperGaussianKilledPath.gaussian_survival_deficit_tail
+alias exact_killed_path_source_comparable_variances := NField.Alignment.HarperSourceKilledPath.source_comparable_variances
+alias exact_killed_path_source_pathPotential_bound := NField.Alignment.HarperSourceKilledPath.source_pathPotential_bound
+alias exact_killed_path_source_survival_deficit_tail := NField.Alignment.HarperSourceKilledPath.source_survival_deficit_tail
+
+#check exact_killed_path_partialSum_eq_sum_ite
+#check exact_killed_path_partialSum_last
+#check exact_killed_path_partialSum_snoc_castSucc
+#check exact_killed_path_survivalEvent_snoc
+#check exact_killed_path_measurableSet_survivalEvent
+#check exact_killed_path_sum_le_of_survival
+#check exact_killed_path_pathPotential_nonneg
+#check exact_killed_path_pathPotential_snoc
+#check exact_killed_path_gaussian_pathPotential_integrable
+#check exact_killed_path_gaussian_snoc_integrable
+#check exact_killed_path_gaussian_integral_snoc
+#check exact_killed_path_gaussian_pathPotential_step
+#check exact_killed_path_gaussian_pathPotential_bound
+#check exact_killed_path_gaussian_survival_deficit_tail
+#check exact_killed_path_source_comparable_variances
+#check exact_killed_path_source_pathPotential_bound
+#check exact_killed_path_source_survival_deficit_tail
+
+
+/-! Unequal-variance Gaussian constant upper barrier. -/
+alias exact_barrier_gaussian_mass_density := NField.Alignment.HarperGaussianEndpoint.gaussian_mass_density
+alias exact_barrier_gaussian_positive_half := NField.Alignment.HarperGaussianEndpoint.gaussian_positive_half
+alias exact_barrier_gaussian_nonpositive_half := NField.Alignment.HarperGaussianEndpoint.gaussian_nonpositive_half
+alias exact_barrier_gaussian_density_le_inv_sqrt := NField.Alignment.HarperGaussianEndpoint.gaussian_density_le_inv_sqrt
+alias exact_barrier_gaussian_positive_interval_mass := NField.Alignment.HarperGaussianEndpoint.gaussian_positive_interval_mass
+alias exact_barrier_gaussian_endpoint_mass := NField.Alignment.HarperGaussianEndpoint.gaussian_endpoint_mass
+alias exact_barrier_gaussian_endpoint_contraction := NField.Alignment.HarperGaussianEndpoint.gaussian_endpoint_contraction
+alias exact_barrier_gaussian_snoc_measurePreserving := NField.Alignment.HarperGaussianEndpointLaw.gaussian_snoc_measurePreserving
+alias exact_barrier_gaussian_sum_law := NField.Alignment.HarperGaussianEndpointLaw.gaussian_sum_law
+alias exact_barrier_gaussian_sum_endpoint_mass := NField.Alignment.HarperGaussianEndpointLaw.gaussian_sum_endpoint_mass
+alias exact_barrier_gaussian_sum_endpoint_contraction := NField.Alignment.HarperGaussianEndpointLaw.gaussian_sum_endpoint_contraction
+alias exact_barrier_gaussian_append_measurePreserving := NField.Alignment.HarperGaussianPathSplit.gaussian_append_measurePreserving
+alias exact_barrier_partialSum_append_left := NField.Alignment.HarperGaussianPathSplit.partialSum_append_left
+alias exact_barrier_survival_append_prefix := NField.Alignment.HarperGaussianPathSplit.survival_append_prefix
+alias exact_barrier_survival_append_cover := NField.Alignment.HarperGaussianPathSplit.survival_append_cover
+alias exact_barrier_gaussian_survival_prefix := NField.Alignment.HarperGaussianPathSplit.gaussian_survival_prefix
+alias exact_barrier_gaussian_survival_prefix_castLE := NField.Alignment.HarperGaussianPathSplit.gaussian_survival_prefix_castLE
+alias exact_barrier_gaussian_survival_split := NField.Alignment.HarperGaussianPathSplit.gaussian_survival_split
+alias exact_barrier_gaussian_survival_contraction := NField.Alignment.HarperGaussianSurvivalContraction.gaussian_survival_contraction
+alias exact_barrier_gaussian_half_survival_contraction := NField.Alignment.HarperGaussianSurvivalContraction.gaussian_half_survival_contraction
+alias exact_barrier_gaussian_half_survival_recurrence := NField.Alignment.HarperGaussianSurvivalContraction.gaussian_half_survival_recurrence
+alias exact_barrier_source_half_survival_recurrence := NField.Alignment.HarperGaussianSurvivalContraction.source_half_survival_recurrence
+alias exact_barrier_sqrt_double_le_three_halves := NField.Alignment.HarperGaussianBarrier.sqrt_double_le_three_halves
+alias exact_barrier_gaussian_dyadic_survival_bound := NField.Alignment.HarperGaussianBarrier.gaussian_dyadic_survival_bound
+alias exact_barrier_gaussian_survival_deficit_scale_bound := NField.Alignment.HarperGaussianBarrier.gaussian_survival_deficit_scale_bound
+alias exact_barrier_gaussian_constant_barrier_upper := NField.Alignment.HarperGaussianBarrier.gaussian_constant_barrier_upper
+alias exact_barrier_source_constant_barrier_upper := NField.Alignment.HarperGaussianBarrier.source_constant_barrier_upper
+
+#check exact_barrier_gaussian_mass_density
+#check exact_barrier_gaussian_positive_half
+#check exact_barrier_gaussian_nonpositive_half
+#check exact_barrier_gaussian_density_le_inv_sqrt
+#check exact_barrier_gaussian_positive_interval_mass
+#check exact_barrier_gaussian_endpoint_mass
+#check exact_barrier_gaussian_endpoint_contraction
+#check exact_barrier_gaussian_snoc_measurePreserving
+#check exact_barrier_gaussian_sum_law
+#check exact_barrier_gaussian_sum_endpoint_mass
+#check exact_barrier_gaussian_sum_endpoint_contraction
+#check exact_barrier_gaussian_append_measurePreserving
+#check exact_barrier_partialSum_append_left
+#check exact_barrier_survival_append_prefix
+#check exact_barrier_survival_append_cover
+#check exact_barrier_gaussian_survival_prefix
+#check exact_barrier_gaussian_survival_prefix_castLE
+#check exact_barrier_gaussian_survival_split
+#check exact_barrier_gaussian_survival_contraction
+#check exact_barrier_gaussian_half_survival_contraction
+#check exact_barrier_gaussian_half_survival_recurrence
+#check exact_barrier_source_half_survival_recurrence
+#check exact_barrier_sqrt_double_le_three_halves
+#check exact_barrier_gaussian_dyadic_survival_bound
+#check exact_barrier_gaussian_survival_deficit_scale_bound
+#check exact_barrier_gaussian_constant_barrier_upper
+#check exact_barrier_source_constant_barrier_upper
+
+
+/-! Unequal-variance Gaussian maximum interval mass. -/
+alias exact_maximum_gaussian_interval_mass := NField.Alignment.HarperGaussianIntervalMass.gaussian_interval_mass
+alias exact_maximum_gaussian_sum_interval_law := NField.Alignment.HarperGaussianIntervalMass.gaussian_sum_interval_law
+alias exact_maximum_gaussian_sum_interval_mass := NField.Alignment.HarperGaussianIntervalMass.gaussian_sum_interval_mass
+alias exact_maximum_gaussian_sum_random_shift_interval := NField.Alignment.HarperGaussianIntervalMass.gaussian_sum_random_shift_interval
+alias exact_maximum_pathMaximum_le_iff := NField.Alignment.HarperPathMaximum.pathMaximum_le_iff
+alias exact_maximum_le_pathMaximum_iff := NField.Alignment.HarperPathMaximum.le_pathMaximum_iff
+alias exact_maximum_pathMaximum_measurable := NField.Alignment.HarperPathMaximum.pathMaximum_measurable
+alias exact_maximum_mem_maximumWindow_iff := NField.Alignment.HarperPathMaximum.mem_maximumWindow_iff
+alias exact_maximum_measurableSet_maximumWindow := NField.Alignment.HarperPathMaximum.measurableSet_maximumWindow
+alias exact_maximum_partialSum_append_right := NField.Alignment.HarperPathMaximum.partialSum_append_right
+alias exact_maximum_late_window_iff := NField.Alignment.HarperPathMaximum.late_window_iff
+alias exact_maximum_measurableSet_lateWindow := NField.Alignment.HarperGaussianLateMaximum.measurableSet_lateWindow
+alias exact_maximum_lateWindow_preimage := NField.Alignment.HarperGaussianLateMaximum.lateWindow_preimage
+alias exact_maximum_gaussian_late_maximum_interval := NField.Alignment.HarperGaussianLateMaximum.gaussian_late_maximum_interval
+alias exact_maximum_measurableSet_firstCrossing := NField.Alignment.HarperFirstCrossing.measurableSet_firstCrossing
+alias exact_maximum_firstCrossing_disjoint := NField.Alignment.HarperFirstCrossing.firstCrossing_disjoint
+alias exact_maximum_exists_firstCrossing := NField.Alignment.HarperFirstCrossing.exists_firstCrossing
+alias exact_maximum_firstCrossing_mass_sum_le_one := NField.Alignment.HarperFirstCrossing.firstCrossing_mass_sum_le_one
+alias exact_maximum_firstCrossing_append_iff := NField.Alignment.HarperFirstCrossing.firstCrossing_append_iff
+alias exact_maximum_crossing_window_suffix_cover := NField.Alignment.HarperFirstCrossing.crossing_window_suffix_cover
+alias exact_maximum_gaussian_firstCrossing_prefix_mass := NField.Alignment.HarperGaussianFirstCrossing.gaussian_firstCrossing_prefix_mass
+alias exact_maximum_gaussian_crossing_window_bound := NField.Alignment.HarperGaussianFirstCrossing.gaussian_crossing_window_bound
+alias exact_maximum_gaussian_crossing_window_index := NField.Alignment.HarperGaussianFirstCrossing.gaussian_crossing_window_index
+alias exact_maximum_maximumWindow_early_late_cover := NField.Alignment.HarperGaussianFirstCrossing.maximumWindow_early_late_cover
+alias exact_maximum_gaussian_early_crossing_bound := NField.Alignment.HarperGaussianMaximumInterval.gaussian_early_crossing_bound
+alias exact_maximum_gaussian_maximum_interval_balanced := NField.Alignment.HarperGaussianMaximumInterval.gaussian_maximum_interval_balanced
+alias exact_maximum_gaussian_maximum_interval := NField.Alignment.HarperGaussianMaximumInterval.gaussian_maximum_interval
+alias exact_maximum_gaussian_pathMaximum_interval := NField.Alignment.HarperGaussianMaximumInterval.gaussian_pathMaximum_interval
+alias exact_maximum_source_maximum_interval := NField.Alignment.HarperGaussianMaximumInterval.source_maximum_interval
+
+#check exact_maximum_gaussian_interval_mass
+#check exact_maximum_gaussian_sum_interval_law
+#check exact_maximum_gaussian_sum_interval_mass
+#check exact_maximum_gaussian_sum_random_shift_interval
+#check exact_maximum_pathMaximum_le_iff
+#check exact_maximum_le_pathMaximum_iff
+#check exact_maximum_pathMaximum_measurable
+#check exact_maximum_mem_maximumWindow_iff
+#check exact_maximum_measurableSet_maximumWindow
+#check exact_maximum_partialSum_append_right
+#check exact_maximum_late_window_iff
+#check exact_maximum_measurableSet_lateWindow
+#check exact_maximum_lateWindow_preimage
+#check exact_maximum_gaussian_late_maximum_interval
+#check exact_maximum_measurableSet_firstCrossing
+#check exact_maximum_firstCrossing_disjoint
+#check exact_maximum_exists_firstCrossing
+#check exact_maximum_firstCrossing_mass_sum_le_one
+#check exact_maximum_firstCrossing_append_iff
+#check exact_maximum_crossing_window_suffix_cover
+#check exact_maximum_gaussian_firstCrossing_prefix_mass
+#check exact_maximum_gaussian_crossing_window_bound
+#check exact_maximum_gaussian_crossing_window_index
+#check exact_maximum_maximumWindow_early_late_cover
+#check exact_maximum_gaussian_early_crossing_bound
+#check exact_maximum_gaussian_maximum_interval_balanced
+#check exact_maximum_gaussian_maximum_interval
+#check exact_maximum_gaussian_pathMaximum_interval
+#check exact_maximum_source_maximum_interval
+
+
+/-! Two-sided Gaussian barrier and relative perturbation. -/
+alias exact_lower_gaussian_nonnegative_mass := NField.Alignment.HarperGaussianCrossingEndpoint.gaussian_nonnegative_mass
+alias exact_lower_gaussian_sum_upper_mass := NField.Alignment.HarperGaussianCrossingEndpoint.gaussian_sum_upper_mass
+alias exact_lower_gaussian_sum_nonnegative_mass := NField.Alignment.HarperGaussianCrossingEndpoint.gaussian_sum_nonnegative_mass
+alias exact_lower_crossing_nonnegative_suffix_cover := NField.Alignment.HarperGaussianCrossingEndpoint.crossing_nonnegative_suffix_cover
+alias exact_lower_gaussian_crossing_endpoint_half := NField.Alignment.HarperGaussianCrossingEndpoint.gaussian_crossing_endpoint_half
+alias exact_lower_gaussian_crossing_endpoint_half_index := NField.Alignment.HarperGaussianCrossingEndpoint.gaussian_crossing_endpoint_half_index
+alias exact_lower_gaussian_maximal_endpoint_bound := NField.Alignment.HarperGaussianCrossingEndpoint.gaussian_maximal_endpoint_bound
+alias exact_lower_gaussian_survival_endpoint_lower := NField.Alignment.HarperGaussianCrossingEndpoint.gaussian_survival_endpoint_lower
+alias exact_lower_intervalLowerConstant_pos := NField.Alignment.HarperGaussianCentralLower.intervalLowerConstant_pos
+alias exact_lower_gaussian_density_lower := NField.Alignment.HarperGaussianCentralLower.gaussian_density_lower
+alias exact_lower_gaussian_positive_interval_lower := NField.Alignment.HarperGaussianCentralLower.gaussian_positive_interval_lower
+alias exact_lower_gaussian_positive_interval_tail := NField.Alignment.HarperGaussianCentralLower.gaussian_positive_interval_tail
+alias exact_lower_barrierLowerConstant_pos := NField.Alignment.HarperGaussianBarrierLower.barrierLowerConstant_pos
+alias exact_lower_gaussian_survival_interval_lower := NField.Alignment.HarperGaussianBarrierLower.gaussian_survival_interval_lower
+alias exact_lower_gaussian_constant_barrier_lower := NField.Alignment.HarperGaussianBarrierLower.gaussian_constant_barrier_lower
+alias exact_lower_gaussian_constant_barrier_two_sided := NField.Alignment.HarperGaussianBarrierLower.gaussian_constant_barrier_two_sided
+alias exact_lower_source_constant_barrier_lower := NField.Alignment.HarperGaussianBarrierLower.source_constant_barrier_lower
+alias exact_lower_source_constant_barrier_two_sided := NField.Alignment.HarperGaussianBarrierLower.source_constant_barrier_two_sided
+alias exact_lower_measurableSet_barrierEvent := NField.Alignment.HarperGaussianBarrierPerturbation.measurableSet_barrierEvent
+alias exact_lower_barrierEvent_mono := NField.Alignment.HarperGaussianBarrierPerturbation.barrierEvent_mono
+alias exact_lower_barrierEvent_window_cover := NField.Alignment.HarperGaussianBarrierPerturbation.barrierEvent_window_cover
+alias exact_lower_gaussian_barrier_additive := NField.Alignment.HarperGaussianBarrierPerturbation.gaussian_barrier_additive
+alias exact_lower_gaussian_constant_barrier_scaled_lower := NField.Alignment.HarperGaussianBarrierPerturbation.gaussian_constant_barrier_scaled_lower
+alias exact_lower_gaussian_barrier_relative := NField.Alignment.HarperGaussianBarrierPerturbation.gaussian_barrier_relative
+
+#check exact_lower_gaussian_nonnegative_mass
+#check exact_lower_gaussian_sum_upper_mass
+#check exact_lower_gaussian_sum_nonnegative_mass
+#check exact_lower_crossing_nonnegative_suffix_cover
+#check exact_lower_gaussian_crossing_endpoint_half
+#check exact_lower_gaussian_crossing_endpoint_half_index
+#check exact_lower_gaussian_maximal_endpoint_bound
+#check exact_lower_gaussian_survival_endpoint_lower
+#check exact_lower_intervalLowerConstant_pos
+#check exact_lower_gaussian_density_lower
+#check exact_lower_gaussian_positive_interval_lower
+#check exact_lower_gaussian_positive_interval_tail
+#check exact_lower_barrierLowerConstant_pos
+#check exact_lower_gaussian_survival_interval_lower
+#check exact_lower_gaussian_constant_barrier_lower
+#check exact_lower_gaussian_constant_barrier_two_sided
+#check exact_lower_source_constant_barrier_lower
+#check exact_lower_source_constant_barrier_two_sided
+#check exact_lower_measurableSet_barrierEvent
+#check exact_lower_barrierEvent_mono
+#check exact_lower_barrierEvent_window_cover
+#check exact_lower_gaussian_barrier_additive
+#check exact_lower_gaussian_constant_barrier_scaled_lower
+#check exact_lower_gaussian_barrier_relative
+
+
+/-! Logarithmic upper barrier and actual block paths. -/
+alias exact_logbarrier_measurableSet_movingEvent := NField.Alignment.HarperMovingKilledPath.measurableSet_movingEvent
+alias exact_logbarrier_movingEvent_snoc := NField.Alignment.HarperMovingKilledPath.movingEvent_snoc
+alias exact_logbarrier_sum_le_of_moving := NField.Alignment.HarperMovingKilledPath.sum_le_of_moving
+alias exact_logbarrier_movingEvent_subset_constant := NField.Alignment.HarperMovingKilledPath.movingEvent_subset_constant
+alias exact_logbarrier_movingPotential_nonneg := NField.Alignment.HarperMovingKilledPath.movingPotential_nonneg
+alias exact_logbarrier_movingPotential_snoc := NField.Alignment.HarperMovingKilledPath.movingPotential_snoc
+alias exact_logbarrier_gaussian_movingPotential_integrable := NField.Alignment.HarperMovingKilledPath.gaussian_movingPotential_integrable
+alias exact_logbarrier_gaussian_moving_survival_upper := NField.Alignment.HarperGaussianMovingPotential.gaussian_moving_survival_upper
+alias exact_logbarrier_gaussian_movingPotential_step := NField.Alignment.HarperGaussianMovingPotential.gaussian_movingPotential_step
+alias exact_logbarrier_gaussian_movingPotential_recurrence := NField.Alignment.HarperGaussianMovingPotential.gaussian_movingPotential_recurrence
+alias exact_logbarrier_gaussian_movingPotential_budget := NField.Alignment.HarperGaussianMovingPotential.gaussian_movingPotential_budget
+alias exact_logbarrier_gaussian_moving_deficit_tail := NField.Alignment.HarperGaussianMovingPotential.gaussian_moving_deficit_tail
+alias exact_logbarrier_logBoundary_zero := NField.Alignment.HarperLogarithmicDrift.logBoundary_zero
+alias exact_logbarrier_logBoundary_one := NField.Alignment.HarperLogarithmicDrift.logBoundary_one
+alias exact_logbarrier_logBoundary_mono := NField.Alignment.HarperLogarithmicDrift.logBoundary_mono
+alias exact_logbarrier_logBoundary_positive_time := NField.Alignment.HarperLogarithmicDrift.logBoundary_positive_time
+alias exact_logbarrier_logBoundary_increment := NField.Alignment.HarperLogarithmicDrift.logBoundary_increment
+alias exact_logbarrier_logBoundary_power_envelope := NField.Alignment.HarperLogarithmicDrift.logBoundary_power_envelope
+alias exact_logbarrier_logarithmic_drift_majorant := NField.Alignment.HarperLogarithmicDrift.logarithmic_drift_majorant
+alias exact_logbarrier_logarithmic_majorant_summable := NField.Alignment.HarperLogarithmicDrift.logarithmic_majorant_summable
+alias exact_logbarrier_logDeficitConstant_pos := NField.Alignment.HarperLogarithmicDrift.logDeficitConstant_pos
+alias exact_logbarrier_logarithmic_driftBudget_bound := NField.Alignment.HarperLogarithmicDrift.logarithmic_driftBudget_bound
+alias exact_logbarrier_gaussian_logarithmic_deficit_bound := NField.Alignment.HarperLogarithmicDrift.gaussian_logarithmic_deficit_bound
+alias exact_logbarrier_gaussian_logarithmic_deficit_tail := NField.Alignment.HarperLogarithmicDrift.gaussian_logarithmic_deficit_tail
+alias exact_logbarrier_moving_append_prefix := NField.Alignment.HarperGaussianMovingSplit.moving_append_prefix
+alias exact_logbarrier_moving_append_cover := NField.Alignment.HarperGaussianMovingSplit.moving_append_cover
+alias exact_logbarrier_gaussian_moving_prefix := NField.Alignment.HarperGaussianMovingSplit.gaussian_moving_prefix
+alias exact_logbarrier_gaussian_moving_prefix_castLE := NField.Alignment.HarperGaussianMovingSplit.gaussian_moving_prefix_castLE
+alias exact_logbarrier_gaussian_moving_split := NField.Alignment.HarperGaussianMovingSplit.gaussian_moving_split
+alias exact_logbarrier_logBoundary_doubling := NField.Alignment.HarperLogarithmicContraction.logBoundary_doubling
+alias exact_logbarrier_gaussian_logarithmic_half_recurrence := NField.Alignment.HarperLogarithmicContraction.gaussian_logarithmic_half_recurrence
+alias exact_logbarrier_logSurvivalConstant_one_le := NField.Alignment.HarperLogarithmicBarrier.logSurvivalConstant_one_le
+alias exact_logbarrier_gaussian_logarithmic_dyadic_bound := NField.Alignment.HarperLogarithmicBarrier.gaussian_logarithmic_dyadic_bound
+alias exact_logbarrier_gaussian_logarithmic_scale_bound := NField.Alignment.HarperLogarithmicBarrier.gaussian_logarithmic_scale_bound
+alias exact_logbarrier_gaussian_logarithmic_barrier_upper := NField.Alignment.HarperLogarithmicBarrier.gaussian_logarithmic_barrier_upper
+alias exact_logbarrier_gaussian_logarithmic_barrier_array := NField.Alignment.HarperLogarithmicBarrier.gaussian_logarithmic_barrier_array
+alias exact_logbarrier_source_logarithmic_barrier_upper := NField.Alignment.HarperLogarithmicBarrier.source_logarithmic_barrier_upper
+alias exact_logbarrier_source_logarithmic_barrier_array := NField.Alignment.HarperLogarithmicBarrier.source_logarithmic_barrier_array
+alias exact_logbarrier_actual_logarithmic_path_upper := NField.Alignment.HarperLogarithmicSourcePath.actual_logarithmic_path_upper
+alias exact_logbarrier_actual_logarithmic_block_barrier := NField.Alignment.HarperLogarithmicSourcePath.actual_logarithmic_block_barrier
+
+#check exact_logbarrier_measurableSet_movingEvent
+#check exact_logbarrier_movingEvent_snoc
+#check exact_logbarrier_sum_le_of_moving
+#check exact_logbarrier_movingEvent_subset_constant
+#check exact_logbarrier_movingPotential_nonneg
+#check exact_logbarrier_movingPotential_snoc
+#check exact_logbarrier_gaussian_movingPotential_integrable
+#check exact_logbarrier_gaussian_moving_survival_upper
+#check exact_logbarrier_gaussian_movingPotential_step
+#check exact_logbarrier_gaussian_movingPotential_recurrence
+#check exact_logbarrier_gaussian_movingPotential_budget
+#check exact_logbarrier_gaussian_moving_deficit_tail
+#check exact_logbarrier_logBoundary_zero
+#check exact_logbarrier_logBoundary_one
+#check exact_logbarrier_logBoundary_mono
+#check exact_logbarrier_logBoundary_positive_time
+#check exact_logbarrier_logBoundary_increment
+#check exact_logbarrier_logBoundary_power_envelope
+#check exact_logbarrier_logarithmic_drift_majorant
+#check exact_logbarrier_logarithmic_majorant_summable
+#check exact_logbarrier_logDeficitConstant_pos
+#check exact_logbarrier_logarithmic_driftBudget_bound
+#check exact_logbarrier_gaussian_logarithmic_deficit_bound
+#check exact_logbarrier_gaussian_logarithmic_deficit_tail
+#check exact_logbarrier_moving_append_prefix
+#check exact_logbarrier_moving_append_cover
+#check exact_logbarrier_gaussian_moving_prefix
+#check exact_logbarrier_gaussian_moving_prefix_castLE
+#check exact_logbarrier_gaussian_moving_split
+#check exact_logbarrier_logBoundary_doubling
+#check exact_logbarrier_gaussian_logarithmic_half_recurrence
+#check exact_logbarrier_logSurvivalConstant_one_le
+#check exact_logbarrier_gaussian_logarithmic_dyadic_bound
+#check exact_logbarrier_gaussian_logarithmic_scale_bound
+#check exact_logbarrier_gaussian_logarithmic_barrier_upper
+#check exact_logbarrier_gaussian_logarithmic_barrier_array
+#check exact_logbarrier_source_logarithmic_barrier_upper
+#check exact_logbarrier_source_logarithmic_barrier_array
+#check exact_logbarrier_actual_logarithmic_path_upper
+#check exact_logbarrier_actual_logarithmic_block_barrier
+
+
+/-! Critical source barrier with comparison radii discharged. -/
+alias exact_sourcebarrier_partialSum_suffix := NField.Alignment.HarperPathSuffix.partialSum_suffix
+alias exact_sourcebarrier_prefix_endpoint := NField.Alignment.HarperPathSuffix.prefix_endpoint
+alias exact_sourcebarrier_pathEvent_suffix := NField.Alignment.HarperPathSuffix.pathEvent_suffix
+alias exact_sourcebarrier_blockPathEvent_suffix := NField.Alignment.HarperPathSuffix.blockPathEvent_suffix
+alias exact_sourcebarrier_suffix_strictAnti := NField.Alignment.HarperPathSuffix.suffix_strictAnti
+alias exact_sourcebarrier_suffix_frequency_bound := NField.Alignment.HarperPathSuffix.suffix_frequency_bound
+alias exact_sourcebarrier_exp_ge_quarter_square := NField.Alignment.HarperSourceBarrierRadii.exp_ge_quarter_square
+alias exact_sourcebarrier_source_radius_linear := NField.Alignment.HarperSourceBarrierRadii.source_radius_linear
+alias exact_sourcebarrier_log_add_le_log_prefix_add_log := NField.Alignment.HarperSourceBarrierRadii.log_add_le_log_prefix_add_log
+alias exact_sourcebarrier_suffix_lower_radius := NField.Alignment.HarperSourceBarrierRadii.suffix_lower_radius
+alias exact_sourcebarrier_suffix_upper_radius := NField.Alignment.HarperSourceBarrierRadii.suffix_upper_radius
+alias exact_sourcebarrier_suffix_upper_logarithmic := NField.Alignment.HarperSourceBarrierRadii.suffix_upper_logarithmic
+alias exact_sourcebarrier_sourceBarrierEvent_measurable := NField.Alignment.HarperSourceBarrier.sourceBarrierEvent_measurable
+alias exact_sourcebarrier_actual_source_barrier_suffix := NField.Alignment.HarperSourceBarrier.actual_source_barrier_suffix
+alias exact_sourcebarrier_sourceBarrierConstant_ge_two := NField.Alignment.HarperSourceBarrierBound.sourceBarrierConstant_ge_two
+alias exact_sourcebarrier_exists_amplitude_split := NField.Alignment.HarperSourceBarrierBound.exists_amplitude_split
+alias exact_sourcebarrier_actual_source_barrier_scale := NField.Alignment.HarperSourceBarrierBound.actual_source_barrier_scale
+alias exact_sourcebarrier_actual_source_barrier_upper := NField.Alignment.HarperSourceBarrierBound.actual_source_barrier_upper
+alias exact_sourcebarrier_actual_source_barrier_array := NField.Alignment.HarperSourceBarrierBound.actual_source_barrier_array
+
+#check exact_sourcebarrier_partialSum_suffix
+#check exact_sourcebarrier_prefix_endpoint
+#check exact_sourcebarrier_pathEvent_suffix
+#check exact_sourcebarrier_blockPathEvent_suffix
+#check exact_sourcebarrier_suffix_strictAnti
+#check exact_sourcebarrier_suffix_frequency_bound
+#check exact_sourcebarrier_exp_ge_quarter_square
+#check exact_sourcebarrier_source_radius_linear
+#check exact_sourcebarrier_log_add_le_log_prefix_add_log
+#check exact_sourcebarrier_suffix_lower_radius
+#check exact_sourcebarrier_suffix_upper_radius
+#check exact_sourcebarrier_suffix_upper_logarithmic
+#check exact_sourcebarrier_sourceBarrierEvent_measurable
+#check exact_sourcebarrier_actual_source_barrier_suffix
+#check exact_sourcebarrier_sourceBarrierConstant_ge_two
+#check exact_sourcebarrier_exists_amplitude_split
+#check exact_sourcebarrier_actual_source_barrier_scale
+#check exact_sourcebarrier_actual_source_barrier_upper
+#check exact_sourcebarrier_actual_source_barrier_array
+
+
+/-! Actual recursive frequencies and critical good event. -/
+alias exact_goodevent_roundDown_le := NField.Alignment.HarperFrequencyRounding.roundDown_le
+alias exact_goodevent_sub_roundDown_lt := NField.Alignment.HarperFrequencyRounding.sub_roundDown_lt
+alias exact_goodevent_rounded_succ_code := NField.Alignment.HarperFrequencyRounding.rounded_succ_code
+alias exact_goodevent_rounded_step := NField.Alignment.HarperFrequencyRounding.rounded_step
+alias exact_goodevent_rounded_error := NField.Alignment.HarperFrequencyRounding.rounded_error
+alias exact_goodevent_sum_doubling_width := NField.Alignment.HarperFrequencyRounding.sum_doubling_width
+alias exact_goodevent_rounded_error_le_two := NField.Alignment.HarperFrequencyRounding.rounded_error_le_two
+alias exact_goodevent_rounded_tail_congr := NField.Alignment.HarperFrequencyRounding.rounded_tail_congr
+alias exact_goodevent_rounded_tail_from_code := NField.Alignment.HarperFrequencyRounding.rounded_tail_from_code
+alias exact_goodevent_roundDown_measurable := NField.Alignment.HarperFrequencyRounding.roundDown_measurable
+alias exact_goodevent_rounded_measurable := NField.Alignment.HarperFrequencyRounding.rounded_measurable
+alias exact_goodevent_roundCode_measurable := NField.Alignment.HarperFrequencyRounding.roundCode_measurable
+alias exact_goodevent_logScale_eq := NField.Alignment.HarperFrequencyMesh.logScale_eq
+alias exact_goodevent_logScale_succ := NField.Alignment.HarperFrequencyMesh.logScale_succ
+alias exact_goodevent_logScale_antitone := NField.Alignment.HarperFrequencyMesh.logScale_antitone
+alias exact_goodevent_mesh_pos := NField.Alignment.HarperFrequencyMesh.mesh_pos
+alias exact_goodevent_mesh_doubling := NField.Alignment.HarperFrequencyMesh.mesh_doubling
+alias exact_goodevent_approximation_error := NField.Alignment.HarperFrequencyMesh.approximation_error
+alias exact_goodevent_approximation_le := NField.Alignment.HarperFrequencyMesh.approximation_le
+alias exact_goodevent_mesh_le_quarter := NField.Alignment.HarperFrequencyMesh.mesh_le_quarter
+alias exact_goodevent_approximation_abs_le_one := NField.Alignment.HarperFrequencyMesh.approximation_abs_le_one
+alias exact_goodevent_representative_spec := NField.Alignment.HarperFrequencyCodes.representative_spec
+alias exact_goodevent_representative_suffix := NField.Alignment.HarperFrequencyCodes.representative_suffix
+alias exact_goodevent_mem_codeBox_of_abs := NField.Alignment.HarperFrequencyCodes.mem_codeBox_of_abs
+alias exact_goodevent_codeBox_card := NField.Alignment.HarperFrequencyCodes.codeBox_card
+alias exact_goodevent_codeBox_card_bound := NField.Alignment.HarperFrequencyCodes.codeBox_card_bound
+alias exact_goodevent_source_roundCode_mem := NField.Alignment.HarperFrequencyCodes.source_roundCode_mem
+alias exact_goodevent_attainableCodes_subset_box := NField.Alignment.HarperFrequencyCodes.attainableCodes_subset_box
+alias exact_goodevent_attainableCodes_finite := NField.Alignment.HarperFrequencyCodes.attainableCodes_finite
+alias exact_goodevent_attainableCodes_card := NField.Alignment.HarperFrequencyCodes.attainableCodes_card
+alias exact_goodevent_suffixLog_measurable := NField.Alignment.HarperCriticalGoodEvent.suffixLog_measurable
+alias exact_goodevent_suffixProduct_ne_zero := NField.Alignment.HarperCriticalGoodEvent.suffixProduct_ne_zero
+alias exact_goodevent_suffixLog_eq_log_norm := NField.Alignment.HarperCriticalGoodEvent.suffixLog_eq_log_norm
+alias exact_goodevent_suffix_barrier_iff := NField.Alignment.HarperCriticalGoodEvent.suffix_barrier_iff
+alias exact_goodevent_suffixLog_eq_of_code := NField.Alignment.HarperCriticalGoodEvent.suffixLog_eq_of_code
+alias exact_goodevent_goodEvent_iff_codes := NField.Alignment.HarperCriticalGoodEvent.goodEvent_iff_codes
+alias exact_goodevent_goodEvent_eq_iInter := NField.Alignment.HarperCriticalGoodEvent.goodEvent_eq_iInter
+alias exact_goodevent_goodEvent_measurable := NField.Alignment.HarperCriticalGoodEvent.goodEvent_measurable
+alias exact_goodevent_goodEvent_product_iff := NField.Alignment.HarperCriticalGoodEvent.goodEvent_product_iff
+alias exact_goodevent_exp_sourceAllowance := NField.Alignment.HarperCriticalGoodEvent.exp_sourceAllowance
+alias exact_goodevent_sourceGoodEvent_measurable := NField.Alignment.HarperCriticalGoodEvent.sourceGoodEvent_measurable
+alias exact_goodevent_sourceGoodEvent_product_iff := NField.Alignment.HarperCriticalGoodEvent.sourceGoodEvent_product_iff
+alias exact_goodevent_two_thirds_power_bound := NField.Alignment.HarperRoundedSourcePath.two_thirds_power_bound
+alias exact_goodevent_reversed_logScale_frequency := NField.Alignment.HarperRoundedSourcePath.reversed_logScale_frequency
+alias exact_goodevent_approximation_frequency_bound := NField.Alignment.HarperRoundedSourcePath.approximation_frequency_bound
+alias exact_goodevent_actual_rounded_source_barrier := NField.Alignment.HarperRoundedSourcePath.actual_rounded_source_barrier
+alias exact_goodevent_goodEvent_iff_finite := NField.Alignment.HarperGoodEventUnion.goodEvent_iff_finite
+alias exact_goodevent_goodEvent_compl_subset := NField.Alignment.HarperGoodEventUnion.goodEvent_compl_subset
+alias exact_goodevent_goodEvent_failure_union_bound := NField.Alignment.HarperGoodEventUnion.goodEvent_failure_union_bound
+alias exact_goodevent_goodEvent_failure_card_bound := NField.Alignment.HarperGoodEventUnion.goodEvent_failure_card_bound
+
+#check exact_goodevent_roundDown_le
+#check exact_goodevent_sub_roundDown_lt
+#check exact_goodevent_rounded_succ_code
+#check exact_goodevent_rounded_step
+#check exact_goodevent_rounded_error
+#check exact_goodevent_sum_doubling_width
+#check exact_goodevent_rounded_error_le_two
+#check exact_goodevent_rounded_tail_congr
+#check exact_goodevent_rounded_tail_from_code
+#check exact_goodevent_roundDown_measurable
+#check exact_goodevent_rounded_measurable
+#check exact_goodevent_roundCode_measurable
+#check exact_goodevent_logScale_eq
+#check exact_goodevent_logScale_succ
+#check exact_goodevent_logScale_antitone
+#check exact_goodevent_mesh_pos
+#check exact_goodevent_mesh_doubling
+#check exact_goodevent_approximation_error
+#check exact_goodevent_approximation_le
+#check exact_goodevent_mesh_le_quarter
+#check exact_goodevent_approximation_abs_le_one
+#check exact_goodevent_representative_spec
+#check exact_goodevent_representative_suffix
+#check exact_goodevent_mem_codeBox_of_abs
+#check exact_goodevent_codeBox_card
+#check exact_goodevent_codeBox_card_bound
+#check exact_goodevent_source_roundCode_mem
+#check exact_goodevent_attainableCodes_subset_box
+#check exact_goodevent_attainableCodes_finite
+#check exact_goodevent_attainableCodes_card
+#check exact_goodevent_suffixLog_measurable
+#check exact_goodevent_suffixProduct_ne_zero
+#check exact_goodevent_suffixLog_eq_log_norm
+#check exact_goodevent_suffix_barrier_iff
+#check exact_goodevent_suffixLog_eq_of_code
+#check exact_goodevent_goodEvent_iff_codes
+#check exact_goodevent_goodEvent_eq_iInter
+#check exact_goodevent_goodEvent_measurable
+#check exact_goodevent_goodEvent_product_iff
+#check exact_goodevent_exp_sourceAllowance
+#check exact_goodevent_sourceGoodEvent_measurable
+#check exact_goodevent_sourceGoodEvent_product_iff
+#check exact_goodevent_two_thirds_power_bound
+#check exact_goodevent_reversed_logScale_frequency
+#check exact_goodevent_approximation_frequency_bound
+#check exact_goodevent_actual_rounded_source_barrier
+#check exact_goodevent_goodEvent_iff_finite
+#check exact_goodevent_goodEvent_compl_subset
+#check exact_goodevent_goodEvent_failure_union_bound
+#check exact_goodevent_goodEvent_failure_card_bound
+
+
+/-! Actual restricted critical energy and moments. -/
+alias exact_restricted_primeTerm_shift := NField.Alignment.HarperBlockPhaseShift.primeTerm_shift
+alias exact_restricted_blockProduct_shift := NField.Alignment.HarperBlockPhaseShift.blockProduct_shift
+alias exact_restricted_blockLog_shift := NField.Alignment.HarperBlockPhaseShift.blockLog_shift
+alias exact_restricted_blockPathEvent_shift := NField.Alignment.HarperBlockPhaseShift.blockPathEvent_shift
+alias exact_restricted_weighted_event_shift := NField.Alignment.HarperBlockPhaseShift.weighted_event_shift
+alias exact_restricted_critical_weighted_event := NField.Alignment.HarperBlockPhaseShift.critical_weighted_event
+alias exact_restricted_weighted_path_tilted := NField.Alignment.HarperBlockPhaseShift.weighted_path_tilted
+alias exact_restricted_reverseIndex_strictAnti := NField.Alignment.HarperReversedGoodPath.reverseIndex_strictAnti
+alias exact_restricted_reverseIndex_zero := NField.Alignment.HarperReversedGoodPath.reverseIndex_zero
+alias exact_restricted_reverseIndex_le := NField.Alignment.HarperReversedGoodPath.reverseIndex_le
+alias exact_restricted_reversed_partialSum := NField.Alignment.HarperReversedGoodPath.reversed_partialSum
+alias exact_restricted_fixedGoodPath_measurable := NField.Alignment.HarperReversedGoodPath.fixedGoodPath_measurable
+alias exact_restricted_fixedGoodPath_iff := NField.Alignment.HarperReversedGoodPath.fixedGoodPath_iff
+alias exact_restricted_sourceGoodEvent_subset_fixed := NField.Alignment.HarperReversedGoodPath.sourceGoodEvent_subset_fixed
+alias exact_restricted_log_logScale_eq := NField.Alignment.HarperGoodAllowance.log_logScale_eq
+alias exact_restricted_reversed_log_logScale := NField.Alignment.HarperGoodAllowance.reversed_log_logScale
+alias exact_restricted_pathAmplitude_ge_one := NField.Alignment.HarperGoodAllowance.pathAmplitude_ge_one
+alias exact_restricted_allowance_upper_arithmetic := NField.Alignment.HarperGoodAllowance.allowance_upper_arithmetic
+alias exact_restricted_sourceAllowance_upper := NField.Alignment.HarperGoodAllowance.sourceAllowance_upper
+alias exact_restricted_sourceAllowance_lower := NField.Alignment.HarperGoodAllowance.sourceAllowance_lower
+alias exact_restricted_restricted_frequency_energy := NField.Alignment.HarperRestrictedEnergy.restricted_frequency_energy
+alias exact_restricted_restricted_interval_fubini := NField.Alignment.HarperRestrictedEnergy.restricted_interval_fubini
+alias exact_restricted_restricted_fiber_integrable := NField.Alignment.HarperRestrictedEnergy.restricted_fiber_integrable
+alias exact_restricted_restricted_unitEnergy_le := NField.Alignment.HarperRestrictedEnergy.restricted_unitEnergy_le
+alias exact_restricted_actual_restricted_unitEnergy := NField.Alignment.HarperRestrictedEnergy.actual_restricted_unitEnergy
+alias exact_restricted_terminalBlock_add := NField.Alignment.HarperGoodEventCutoff.terminalBlock_add
+alias exact_restricted_terminalLogScale_bounds := NField.Alignment.HarperGoodEventCutoff.terminalLogScale_bounds
+alias exact_restricted_terminalBlock_large_condition := NField.Alignment.HarperGoodEventCutoff.terminalBlock_large_condition
+alias exact_restricted_terminalBlock_length := NField.Alignment.HarperGoodEventCutoff.terminalBlock_length
+alias exact_restricted_blockUpper_eq_double_exp := NField.Alignment.HarperGoodEventCutoff.blockUpper_eq_double_exp
+alias exact_restricted_terminalBlock_threshold := NField.Alignment.HarperGoodEventCutoff.terminalBlock_threshold
+alias exact_restricted_terminal_pathAmplitude := NField.Alignment.HarperGoodEventCutoff.terminal_pathAmplitude
+alias exact_restricted_restricted_energy_fixed_offset := NField.Alignment.HarperRestrictedMoment.restricted_energy_fixed_offset
+alias exact_restricted_nonnegative_fractional_integrable := NField.Alignment.HarperRestrictedMoment.nonnegative_fractional_integrable
+alias exact_restricted_nonnegative_fractional_jensen := NField.Alignment.HarperRestrictedMoment.nonnegative_fractional_jensen
+alias exact_restricted_restricted_fractional_fixed_offset := NField.Alignment.HarperRestrictedMoment.restricted_fractional_fixed_offset
+alias exact_restricted_sourceCutoff_tendsto := NField.Alignment.HarperRestrictedLogMoment.sourceCutoff_tendsto
+alias exact_restricted_restricted_energy_log := NField.Alignment.HarperRestrictedLogMoment.restricted_energy_log
+alias exact_restricted_restricted_fractional_log := NField.Alignment.HarperRestrictedLogMoment.restricted_fractional_log
+
+#check exact_restricted_primeTerm_shift
+#check exact_restricted_blockProduct_shift
+#check exact_restricted_blockLog_shift
+#check exact_restricted_blockPathEvent_shift
+#check exact_restricted_weighted_event_shift
+#check exact_restricted_critical_weighted_event
+#check exact_restricted_weighted_path_tilted
+#check exact_restricted_reverseIndex_strictAnti
+#check exact_restricted_reverseIndex_zero
+#check exact_restricted_reverseIndex_le
+#check exact_restricted_reversed_partialSum
+#check exact_restricted_fixedGoodPath_measurable
+#check exact_restricted_fixedGoodPath_iff
+#check exact_restricted_sourceGoodEvent_subset_fixed
+#check exact_restricted_log_logScale_eq
+#check exact_restricted_reversed_log_logScale
+#check exact_restricted_pathAmplitude_ge_one
+#check exact_restricted_allowance_upper_arithmetic
+#check exact_restricted_sourceAllowance_upper
+#check exact_restricted_sourceAllowance_lower
+#check exact_restricted_restricted_frequency_energy
+#check exact_restricted_restricted_interval_fubini
+#check exact_restricted_restricted_fiber_integrable
+#check exact_restricted_restricted_unitEnergy_le
+#check exact_restricted_actual_restricted_unitEnergy
+#check exact_restricted_terminalBlock_add
+#check exact_restricted_terminalLogScale_bounds
+#check exact_restricted_terminalBlock_large_condition
+#check exact_restricted_terminalBlock_length
+#check exact_restricted_blockUpper_eq_double_exp
+#check exact_restricted_terminalBlock_threshold
+#check exact_restricted_terminal_pathAmplitude
+#check exact_restricted_restricted_energy_fixed_offset
+#check exact_restricted_nonnegative_fractional_integrable
+#check exact_restricted_nonnegative_fractional_jensen
+#check exact_restricted_restricted_fractional_fixed_offset
+#check exact_restricted_sourceCutoff_tendsto
+#check exact_restricted_restricted_energy_log
+#check exact_restricted_restricted_fractional_log
+
+
+/-! Actual actual exceptional-event decay and common good event. -/
+alias exact_exceptional_inverseEnergy_measurable := NField.Alignment.HarperUnweightedFactors.inverseEnergy_measurable
+alias exact_exceptional_norm_one_sub_sq := NField.Alignment.HarperUnweightedFactors.norm_one_sub_sq
+alias exact_exceptional_inverse_factor_mean := NField.Alignment.HarperUnweightedFactors.inverse_factor_mean
+alias exact_exceptional_positive_factor_mean := NField.Alignment.HarperUnweightedFactors.positive_factor_mean
+alias exact_exceptional_inverseEnergy_integral := NField.Alignment.HarperUnweightedFactors.inverseEnergy_integral
+alias exact_exceptional_prime_inverse_mass_bound := NField.Alignment.HarperUnweightedFactors.prime_inverse_mass_bound
+alias exact_exceptional_prime_positive_mass_ge_one := NField.Alignment.HarperUnweightedFactors.prime_positive_mass_ge_one
+alias exact_exceptional_integral_distinct_coordinates := NField.Alignment.HarperUnweightedCoordinateProducts.integral_distinct_coordinates
+alias exact_exceptional_integral_nested_coordinates := NField.Alignment.HarperUnweightedCoordinateProducts.integral_nested_coordinates
+alias exact_exceptional_suffixProduct_measurable := NField.Alignment.HarperSuffixSecondMoments.suffixProduct_measurable
+alias exact_exceptional_suffix_energy_eq_nested := NField.Alignment.HarperSuffixSecondMoments.suffix_energy_eq_nested
+alias exact_exceptional_suffix_inverse_energy_eq_nested := NField.Alignment.HarperSuffixSecondMoments.suffix_inverse_energy_eq_nested
+alias exact_exceptional_suffix_positive_moment := NField.Alignment.HarperSuffixSecondMoments.suffix_positive_moment
+alias exact_exceptional_suffix_inverse_moment := NField.Alignment.HarperSuffixSecondMoments.suffix_inverse_moment
+alias exact_exceptional_suffix_prime_normalizer_le := NField.Alignment.HarperSuffixSecondMoments.suffix_prime_normalizer_le
+alias exact_exceptional_suffix_positive_moment_le := NField.Alignment.HarperSuffixSecondMoments.suffix_positive_moment_le
+alias exact_exceptional_suffix_inverse_moment_le := NField.Alignment.HarperSuffixSecondMoments.suffix_inverse_moment_le
+alias exact_exceptional_positive_factor_bound := NField.Alignment.HarperSuffixIntegrability.positive_factor_bound
+alias exact_exceptional_inverse_factor_bound := NField.Alignment.HarperSuffixIntegrability.inverse_factor_bound
+alias exact_exceptional_suffix_positive_integrable := NField.Alignment.HarperSuffixIntegrability.suffix_positive_integrable
+alias exact_exceptional_suffix_inverse_integrable := NField.Alignment.HarperSuffixIntegrability.suffix_inverse_integrable
+alias exact_exceptional_norm_log_tail_subset := NField.Alignment.HarperSuffixLogTail.norm_log_tail_subset
+alias exact_exceptional_suffix_log_tail_normalizer := NField.Alignment.HarperSuffixLogTail.suffix_log_tail_normalizer
+alias exact_exceptional_suffix_normalizer_log_bound := NField.Alignment.HarperSuffixLogTail.suffix_normalizer_log_bound
+alias exact_exceptional_suffix_source_tail := NField.Alignment.HarperSuffixLogTail.suffix_source_tail
+alias exact_exceptional_scaleTailConstant_pos := NField.Alignment.HarperExceptionalScaleSum.scaleTailConstant_pos
+alias exact_exceptional_shifted_inverse_cube_summable := NField.Alignment.HarperExceptionalScaleSum.shifted_inverse_cube_summable
+alias exact_exceptional_inverse_cube_scale_sum := NField.Alignment.HarperExceptionalScaleSum.inverse_cube_scale_sum
+alias exact_exceptional_code_weight_tail_bound := NField.Alignment.HarperExceptionalScaleSum.code_weight_tail_bound
+alias exact_exceptional_source_failure_exponential := NField.Alignment.HarperExceptionalEvent.source_failure_exponential
+alias exact_exceptional_source_failure_fixed_offset := NField.Alignment.HarperExceptionalEvent.source_failure_fixed_offset
+alias exact_exceptional_source_failure_eventually := NField.Alignment.HarperExceptionalEvent.source_failure_eventually
+alias exact_exceptional_restricted_energy_all_large_offsets := NField.Alignment.HarperJointGoodEvent.restricted_energy_all_large_offsets
+alias exact_exceptional_joint_good_event_bounds := NField.Alignment.HarperJointGoodEvent.joint_good_event_bounds
+alias exact_exceptional_joint_fractional_good_event_bounds := NField.Alignment.HarperJointGoodEvent.joint_fractional_good_event_bounds
+
+#check exact_exceptional_inverseEnergy_measurable
+#check exact_exceptional_norm_one_sub_sq
+#check exact_exceptional_inverse_factor_mean
+#check exact_exceptional_positive_factor_mean
+#check exact_exceptional_inverseEnergy_integral
+#check exact_exceptional_prime_inverse_mass_bound
+#check exact_exceptional_prime_positive_mass_ge_one
+#check exact_exceptional_integral_distinct_coordinates
+#check exact_exceptional_integral_nested_coordinates
+#check exact_exceptional_suffixProduct_measurable
+#check exact_exceptional_suffix_energy_eq_nested
+#check exact_exceptional_suffix_inverse_energy_eq_nested
+#check exact_exceptional_suffix_positive_moment
+#check exact_exceptional_suffix_inverse_moment
+#check exact_exceptional_suffix_prime_normalizer_le
+#check exact_exceptional_suffix_positive_moment_le
+#check exact_exceptional_suffix_inverse_moment_le
+#check exact_exceptional_positive_factor_bound
+#check exact_exceptional_inverse_factor_bound
+#check exact_exceptional_suffix_positive_integrable
+#check exact_exceptional_suffix_inverse_integrable
+#check exact_exceptional_norm_log_tail_subset
+#check exact_exceptional_suffix_log_tail_normalizer
+#check exact_exceptional_suffix_normalizer_log_bound
+#check exact_exceptional_suffix_source_tail
+#check exact_exceptional_scaleTailConstant_pos
+#check exact_exceptional_shifted_inverse_cube_summable
+#check exact_exceptional_inverse_cube_scale_sum
+#check exact_exceptional_code_weight_tail_bound
+#check exact_exceptional_source_failure_exponential
+#check exact_exceptional_source_failure_fixed_offset
+#check exact_exceptional_source_failure_eventually
+#check exact_exceptional_restricted_energy_all_large_offsets
+#check exact_exceptional_joint_good_event_bounds
+#check exact_exceptional_joint_fractional_good_event_bounds
+
+
+/-! Actual unconditional short-moment theorem. -/
+alias exact_low_moment_indicator_rpow := NField.Alignment.HarperFractionalEventSplit.indicator_rpow
+alias exact_low_moment_bounded_fractional_memLp := NField.Alignment.HarperFractionalEventSplit.bounded_fractional_memLp
+alias exact_low_moment_restricted_fractional_holder := NField.Alignment.HarperFractionalEventSplit.restricted_fractional_holder
+alias exact_low_moment_fractional_event_split := NField.Alignment.HarperFractionalEventSplit.fractional_event_split
+alias exact_low_moment_normalizedEnergy_nonneg := NField.Alignment.HarperNormalizedEnergy.normalizedEnergy_nonneg
+alias exact_low_moment_normalizedEnergy_integrable := NField.Alignment.HarperNormalizedEnergy.normalizedEnergy_integrable
+alias exact_low_moment_normalizedEnergy_bound := NField.Alignment.HarperNormalizedEnergy.normalizedEnergy_bound
+alias exact_low_moment_normalizedMoment_nonneg := NField.Alignment.HarperNormalizedEnergy.normalizedMoment_nonneg
+alias exact_low_moment_normalizedMoment_eq := NField.Alignment.HarperNormalizedEnergy.normalizedMoment_eq
+alias exact_low_moment_normalizedMoment_le_one := NField.Alignment.HarperNormalizedEnergy.normalizedMoment_le_one
+alias exact_low_moment_joint_normalized_bounds := NField.Alignment.HarperNormalizedEnergy.joint_normalized_bounds
+alias exact_low_moment_nextExponent_bounds := NField.Alignment.HarperMomentRecursion.nextExponent_bounds
+alias exact_low_moment_interpolationExponent_bounds := NField.Alignment.HarperMomentRecursion.interpolationExponent_bounds
+alias exact_low_moment_actual_normalized_recursion := NField.Alignment.HarperMomentRecursion.actual_normalized_recursion
+alias exact_low_moment_rpow_le_max_one := NField.Alignment.HarperRecursionWeights.rpow_le_max_one
+alias exact_low_moment_momentWeight_ge_one := NField.Alignment.HarperRecursionWeights.momentWeight_ge_one
+alias exact_low_moment_momentWeight_le := NField.Alignment.HarperRecursionWeights.momentWeight_le
+alias exact_low_moment_momentWeight_next := NField.Alignment.HarperRecursionWeights.momentWeight_next
+alias exact_low_moment_next_weight_power := NField.Alignment.HarperRecursionWeights.next_weight_power
+alias exact_low_moment_recursion_amplitude_ge_one := NField.Alignment.HarperRecursionWeights.recursion_amplitude_ge_one
+alias exact_low_moment_weighted_good_term := NField.Alignment.HarperRecursionWeights.weighted_good_term
+alias exact_low_moment_contractionAmplitude_ge_one := NField.Alignment.HarperRecursionContraction.contractionAmplitude_ge_one
+alias exact_low_moment_contraction_coefficient := NField.Alignment.HarperRecursionContraction.contraction_coefficient
+alias exact_low_moment_recursive_exponential_bound := NField.Alignment.HarperRecursionContraction.recursive_exponential_bound
+alias exact_low_moment_recursive_failure_power := NField.Alignment.HarperRecursionContraction.recursive_failure_power
+alias exact_low_moment_weighted_next_moment_le := NField.Alignment.HarperRecursionContraction.weighted_next_moment_le
+alias exact_low_moment_weighted_bad_term := NField.Alignment.HarperRecursionContraction.weighted_bad_term
+alias exact_low_moment_weighted_recursion_bound := NField.Alignment.HarperRecursionContraction.weighted_recursion_bound
+alias exact_low_moment_recursionConstant_pos := NField.Alignment.HarperClosedMomentRecursion.recursionConstant_pos
+alias exact_low_moment_weightedMoment_bound := NField.Alignment.HarperClosedMomentRecursion.weightedMoment_bound
+alias exact_low_moment_weightedMoment_small := NField.Alignment.HarperClosedMomentRecursion.weightedMoment_small
+alias exact_low_moment_uniform_weighted_moment_bound := NField.Alignment.HarperClosedMomentRecursion.uniform_weighted_moment_bound
+alias exact_low_moment_uniform_moment_bound := NField.Alignment.HarperClosedMomentRecursion.uniform_moment_bound
+alias exact_low_moment_actual_normalized_moment_bound := NField.Alignment.HarperCriticalLowMoment.actual_normalized_moment_bound
+alias exact_low_moment_actual_source_moment_bound := NField.Alignment.HarperCriticalLowMoment.actual_source_moment_bound
+alias exact_low_moment_sourceCutoff_power := NField.Alignment.HarperCriticalLowMoment.sourceCutoff_power
+alias exact_low_moment_log_log_source_power := NField.Alignment.HarperCriticalLowMoment.log_log_source_power
+alias exact_low_moment_critical_low_moment := NField.Alignment.HarperCriticalLowMoment.critical_low_moment
+alias exact_low_moment_primeCutoff_tendsto := NField.Alignment.HarperLowMomentScales.primeCutoff_tendsto
+alias exact_low_moment_eventual_log_cutoff_bounds := NField.Alignment.HarperLowMomentScales.eventual_log_cutoff_bounds
+alias exact_low_moment_denominator_bounds := NField.Alignment.HarperLowMomentScales.denominator_bounds
+alias exact_low_moment_targetScale_eq_quotient := NField.Alignment.HarperLowMomentScales.targetScale_eq_quotient
+alias exact_low_moment_eventual_scale_comparison := NField.Alignment.HarperLowMomentScales.eventual_scale_comparison
+alias exact_low_moment_logarithm_cancellation := NField.Alignment.HarperLowMomentApplication.logarithm_cancellation
+alias exact_low_moment_eventual_continuous_main_bound := NField.Alignment.HarperLowMomentApplication.eventual_continuous_main_bound
+alias exact_low_moment_eventual_continuous_target_bound := NField.Alignment.HarperLowMomentApplication.eventual_continuous_target_bound
+alias exact_low_moment_eventual_loglog_shift := NField.Alignment.MagnitudeLogarithmicScale.eventual_loglog_shift
+alias exact_low_moment_shifted_negative_power := NField.Alignment.MagnitudeLogarithmicScale.shifted_negative_power
+alias exact_low_moment_eventual_normalized_target_bound := NField.Alignment.MagnitudeLogarithmicScale.eventual_normalized_target_bound
+alias exact_low_moment_eventual_full_character_intermediate_bound := NField.Alignment.MagnitudeShortMomentBound.eventual_full_character_intermediate_bound
+alias exact_low_moment_eventual_full_character_target_bound := NField.Alignment.MagnitudeShortMomentBound.eventual_full_character_target_bound
+alias exact_low_moment_eventual_short_moment_bound := NField.Alignment.MagnitudeShortMomentBound.eventual_short_moment_bound
+alias exact_low_moment_short_moment_isBigO := NField.Alignment.MagnitudeShortMomentBound.short_moment_isBigO
+alias exact_low_moment_short_moment_tendsto_zero := NField.Alignment.MagnitudeShortMomentBound.short_moment_tendsto_zero
+
+#check exact_low_moment_indicator_rpow
+#check exact_low_moment_bounded_fractional_memLp
+#check exact_low_moment_restricted_fractional_holder
+#check exact_low_moment_fractional_event_split
+#check exact_low_moment_normalizedEnergy_nonneg
+#check exact_low_moment_normalizedEnergy_integrable
+#check exact_low_moment_normalizedEnergy_bound
+#check exact_low_moment_normalizedMoment_nonneg
+#check exact_low_moment_normalizedMoment_eq
+#check exact_low_moment_normalizedMoment_le_one
+#check exact_low_moment_joint_normalized_bounds
+#check exact_low_moment_nextExponent_bounds
+#check exact_low_moment_interpolationExponent_bounds
+#check exact_low_moment_actual_normalized_recursion
+#check exact_low_moment_rpow_le_max_one
+#check exact_low_moment_momentWeight_ge_one
+#check exact_low_moment_momentWeight_le
+#check exact_low_moment_momentWeight_next
+#check exact_low_moment_next_weight_power
+#check exact_low_moment_recursion_amplitude_ge_one
+#check exact_low_moment_weighted_good_term
+#check exact_low_moment_contractionAmplitude_ge_one
+#check exact_low_moment_contraction_coefficient
+#check exact_low_moment_recursive_exponential_bound
+#check exact_low_moment_recursive_failure_power
+#check exact_low_moment_weighted_next_moment_le
+#check exact_low_moment_weighted_bad_term
+#check exact_low_moment_weighted_recursion_bound
+#check exact_low_moment_recursionConstant_pos
+#check exact_low_moment_weightedMoment_bound
+#check exact_low_moment_weightedMoment_small
+#check exact_low_moment_uniform_weighted_moment_bound
+#check exact_low_moment_uniform_moment_bound
+#check exact_low_moment_actual_normalized_moment_bound
+#check exact_low_moment_actual_source_moment_bound
+#check exact_low_moment_sourceCutoff_power
+#check exact_low_moment_log_log_source_power
+#check exact_low_moment_critical_low_moment
+#check exact_low_moment_primeCutoff_tendsto
+#check exact_low_moment_eventual_log_cutoff_bounds
+#check exact_low_moment_denominator_bounds
+#check exact_low_moment_targetScale_eq_quotient
+#check exact_low_moment_eventual_scale_comparison
+#check exact_low_moment_logarithm_cancellation
+#check exact_low_moment_eventual_continuous_main_bound
+#check exact_low_moment_eventual_continuous_target_bound
+#check exact_low_moment_eventual_loglog_shift
+#check exact_low_moment_shifted_negative_power
+#check exact_low_moment_eventual_normalized_target_bound
+#check exact_low_moment_eventual_full_character_intermediate_bound
+#check exact_low_moment_eventual_full_character_target_bound
+#check exact_low_moment_eventual_short_moment_bound
+#check exact_low_moment_short_moment_isBigO
+#check exact_low_moment_short_moment_tendsto_zero
+
+
+/-! Unconditional correlation, concentration and remaining finite displays. -/
+alias exact_completion_powered_short_moment_bound := NField.Alignment.MagnitudeShortMeanRate.powered_short_moment_bound
+alias exact_completion_powered_short_moment_isBigO := NField.Alignment.MagnitudeShortMeanRate.powered_short_moment_isBigO
+alias exact_completion_short_mean_bound := NField.Alignment.MagnitudeShortMeanRate.short_mean_bound
+alias exact_completion_short_mean_isBigO := NField.Alignment.MagnitudeShortMeanRate.short_mean_isBigO
+alias exact_completion_short_mean_tendsto_zero := NField.Alignment.MagnitudeShortMeanRate.short_mean_tendsto_zero
+alias exact_completion_short_variance_tendsto_one := NField.Alignment.MagnitudeShortMeanRate.short_variance_tendsto_one
+alias exact_completion_eventual_short_variance_positive := NField.Alignment.MagnitudeShortMeanRate.eventual_short_variance_positive
+alias exact_completion_eventual_variances_positive := NField.Alignment.MagnitudeCorrelationRate.eventual_variances_positive
+alias exact_completion_eventual_correlation_moment_bound := NField.Alignment.MagnitudeCorrelationRate.eventual_correlation_moment_bound
+alias exact_completion_eventual_correlation_rate := NField.Alignment.MagnitudeCorrelationRate.eventual_correlation_rate
+alias exact_completion_correlation_isBigO := NField.Alignment.MagnitudeCorrelationRate.correlation_isBigO
+alias exact_completion_correlation_tendsto_zero := NField.Alignment.MagnitudeCorrelationRate.correlation_tendsto_zero
+alias exact_completion_magnitude_correlation_theorem := NField.Alignment.MagnitudeCorrelationRate.magnitude_correlation_theorem
+alias exact_completion_actual_decay_inputs := NField.Alignment.MagnitudeCorrelationRate.actual_decay_inputs
+alias exact_completion_tail_proportion_eq := NField.Alignment.MagnitudeActualConcentration.tail_proportion_eq
+alias exact_completion_upper_indicator_eq := NField.Alignment.MagnitudeActualConcentration.upper_indicator_eq
+alias exact_completion_lower_indicator_eq := NField.Alignment.MagnitudeActualConcentration.lower_indicator_eq
+alias exact_completion_tail_proportion_bound := NField.Alignment.MagnitudeActualConcentration.tail_proportion_bound
+alias exact_completion_tail_proportion_tendsto_zero := NField.Alignment.MagnitudeActualConcentration.tail_proportion_tendsto_zero
+alias exact_completion_lower_square_mass_bound := NField.Alignment.MagnitudeActualConcentration.lower_square_mass_bound
+alias exact_completion_lower_square_mass_tendsto_zero := NField.Alignment.MagnitudeActualConcentration.lower_square_mass_tendsto_zero
+alias exact_completion_upper_square_mass_tendsto_one := NField.Alignment.MagnitudeActualConcentration.upper_square_mass_tendsto_one
+alias exact_completion_square_mass_concentration := NField.Alignment.MagnitudeActualConcentration.square_mass_concentration
+alias exact_completion_lower_square_mass_upper_bound_tendsto_zero := NField.Alignment.MagnitudeActualConcentration.lower_square_mass_upper_bound_tendsto_zero
+alias exact_completion_complex_average_re := NField.Alignment.MagnitudeVarianceDisplays.complex_average_re
+alias exact_completion_real_twist_inputs := NField.Alignment.MagnitudeVarianceDisplays.real_twist_inputs
+alias exact_completion_centered_twist_chain := NField.Alignment.MagnitudeVarianceDisplays.centered_twist_chain
+alias exact_completion_actual_centered_twist_chain := NField.Alignment.MagnitudeVarianceDisplays.actual_centered_twist_chain
+alias exact_completion_odd_projector := NField.Alignment.MagnitudeKernelDisplays.odd_projector
+alias exact_completion_primitive_odd_prime_square_projector := NField.Alignment.MagnitudeKernelDisplays.primitive_odd_prime_square_projector
+
+#check exact_completion_powered_short_moment_bound
+#check exact_completion_powered_short_moment_isBigO
+#check exact_completion_short_mean_bound
+#check exact_completion_short_mean_isBigO
+#check exact_completion_short_mean_tendsto_zero
+#check exact_completion_short_variance_tendsto_one
+#check exact_completion_eventual_short_variance_positive
+#check exact_completion_eventual_variances_positive
+#check exact_completion_eventual_correlation_moment_bound
+#check exact_completion_eventual_correlation_rate
+#check exact_completion_correlation_isBigO
+#check exact_completion_correlation_tendsto_zero
+#check exact_completion_magnitude_correlation_theorem
+#check exact_completion_actual_decay_inputs
+#check exact_completion_tail_proportion_eq
+#check exact_completion_upper_indicator_eq
+#check exact_completion_lower_indicator_eq
+#check exact_completion_tail_proportion_bound
+#check exact_completion_tail_proportion_tendsto_zero
+#check exact_completion_lower_square_mass_bound
+#check exact_completion_lower_square_mass_tendsto_zero
+#check exact_completion_upper_square_mass_tendsto_one
+#check exact_completion_square_mass_concentration
+#check exact_completion_lower_square_mass_upper_bound_tendsto_zero
+#check exact_completion_complex_average_re
+#check exact_completion_real_twist_inputs
+#check exact_completion_centered_twist_chain
+#check exact_completion_actual_centered_twist_chain
+#check exact_completion_odd_projector
+#check exact_completion_primitive_odd_prime_square_projector
+
+end NField.Papers.MagnitudeDecorrelationInTheCollisionSpectrum
