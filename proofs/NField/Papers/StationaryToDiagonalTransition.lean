@@ -12,28 +12,28 @@ import NField.Alignment.StationaryZetaConstants
 /-!
 # The Stationary-to-Diagonal Transition in Collision Capacity
 
-This partial companion selects the precise cumulative-weight expansion,
-the exact moving-diagonal identities, the full uniform tail comparison,
-the periodic first and second moments, including bounded-variation weights
-for the first moment, and the signed Bernoulli boundary term. These are the five named claims
-`lem:weight`, `prop:exact`, `lem:tail`, `lem:periodic`, and `lem:boundary`.
-All cutoffs, integer atoms, signs, and error terms retain their stated scope.
+## Coverage
 
-The supporting results evaluate both conditional sawtooth integrals,
-the actual zeta derivatives in the centering constants, and the negative
-logarithmic drift. Conditional integrals are limits of finite integrals;
-they are not asserted to be absolutely integrable.
+Five of the 22 named results are formalized: the cumulative-weight expansion,
+moving-diagonal identities, uniform tail comparison, periodic first and second
+moments, and signed Bernoulli boundary term. Bounded-variation weights are
+covered for the first moment. The growing-modulus prime estimates and the
+later transition laws are not formalized here.
 
-## Coverage boundary
+## Scope and assumptions
 
-Five of the paper's 22 named claims are covered here. The growing-cutoff
-Gram estimate, centered empirical law and rates, capacity residual law,
-unit-Haar prime law, growing-modulus prime estimates, frozen-cutoff
-transition, and later exceptional-set and perturbation conclusions are
-not formalized here. Fixed-modulus prime results do not supply the required uniform
-prime estimates. The prime-square sampling defect and the sharper
+The raw sawtooth retains its stated integer-atom values, cutoffs and endpoint
+terms. The two conditional sawtooth integrals are limits of finite integrals;
+absolute integrability is not asserted. Bounded-variation weighting is proved
+for the first moment, not for the second moment.
+
+The growing-cutoff Gram estimate, centered empirical law and rates, capacity
+residual law, unit-Haar prime law, growing-modulus prime estimates,
+frozen-cutoff transition and later exceptional-set and perturbation
+conclusions are not formalized. Fixed-modulus prime results do not supply the
+required uniform estimates. The prime-square sampling defect and sharper
 unit-Haar questions remain open. Decimal approximations are not certified
-interval enclosures. This index does not claim whole-paper completion.
+interval enclosures.
 -/
 
 namespace NField.Papers.StationaryToDiagonalTransition

@@ -12,59 +12,22 @@ import NField.Alignment.SawtoothCharacterExpansion
 /-!
 # The Cubic Law for Digit-Collision Energy
 
-Reader-facing theorem map for the Lean companion to
-`papers/the_cubic_law_for_digit_collision_energy.tex`.
+## Coverage
 
-## Fully proved cubic theorem
+For every odd prime `p`, the finite carry energy satisfies `|E_p - p³| ≤ 24 p²
+H_p²` and `|E_p - p³| ≤ 96 p² (log p)²`. Every named lemma, proposition,
+theorem and corollary is formalized; asymptotic statements use explicit finite
+bounds.
 
-* The centered sawtooth is odd, its character transform is the generalized
-  Bernoulli sum, and primitive carry transforms factor through their signed
-  finite boundary.
-* The concrete prime-square lag-one boundary is assembled from the first
-  digit window.  Every odd character has the exact phase-sensitive flux
-  `-2 * chi(p+1) * shortWindowSum`, and the squared magnitude is exactly four
-  times the short-window mass.
-* Every nonprincipal odd character lifted from the prime level has zero short
-  window and zero lag-one boundary flux.
-* The actual centered lag-one collision table is reflection-odd, has zero
-  total mass, admits only primitive odd active channels at a prime base, and
-  satisfies finite Parseval.
-* The classical Dedekind sum is defined directly from the centered sawtooth.
-  Negation, inversion, common-unit ratio cancellation, the zero sum over all
-  unit arguments, and the exact ratio-one value are proved.
-* The collision weight is removed exactly by finite reindexing into a
-  weight-free double sum.  The diagonal and off-diagonal parts split exactly,
-  and the diagonal has the manuscript's closed value.
-* Reduction from the prime-square first window to the prime-level unit group
-  is an explicit equivalence.  It proves that the complete collision-weighted
-  lower-modulus Dedekind correction is exactly zero.
-* The carry-table column law and threshold normalization are proved from the
-  floor-jump definitions.  The concrete carry energy is then identified
-  exactly with the Dedekind collision energy.
-* GCD reduction gives the floor-weighted primitive-ratio triangle.
-  Rademacher's three-term relation is proved from finite sawtooth sums and
-  yields the exact four-way off-diagonal decomposition.
-* The coprime Euler mass is proved by an exact Calkin--Wilf telescoping law,
-  including a quantitative frontier estimate.
-* The Dedekind first moment is proved by finite Fourier inversion.  Finite Abel
-  summation gives the surviving smaller-modulus remainder bound, while the
-  larger-modulus remainder cancels exactly.
-* The diagonal is within `p²` of its one-third cubic pole.  The off-diagonal
-  main pole is within `6 p² H_p²` of its two-thirds cubic pole.  The remaining
-  terms are bounded explicitly.
-* The primitive odd Bernoulli special value is proved from Mathlib's
-  analytically continued Dirichlet `L`-function at `s = 1`.  Character
-  inversion then gives the exact `L(1)`-weighted window moment.
-* The spectral window diagonal and off-diagonal split exactly and obey the
-  explicit one-third and two-thirds pole estimates.
-* Consequently, for every odd prime `p`, the concrete carry energy satisfies
-  `|E_p - p³| ≤ 24 p² H_p²`, and hence also the manuscript-scale bound
-  `|E_p - p³| ≤ 96 p² (log p)²`.
+## Scope and assumptions
 
-Every named lemma, proposition, theorem, and corollary in the manuscript has
-a declaration-level theorem map below.  The historical prose, bibliography,
-and `O` notation are not themselves Lean objects; every use of `O` in a named
-result is represented by an explicit finite bound.
+The bounds concern the original finite carry energy at an odd prime, with its
+signed boundary weights and prime-square normalization. The harmonic quantity
+`H_p` and natural logarithm retain the definitions in the formal statements.
+The proof keeps the diagonal and off-diagonal contributions and the exact
+lower-modulus cancellation. Every use of `O` in a named result is represented
+by an explicit finite bound. No composite-modulus extension is asserted by the
+odd-prime theorem.
 -/
 
 namespace NField.Papers.TheCubicLawForDigitCollisionEnergy

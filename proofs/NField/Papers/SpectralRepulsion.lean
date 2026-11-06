@@ -16,52 +16,23 @@ import NField.Alignment.SpectralPaperDetails
 /-!
 # The Spectral Repulsion
 
-Reader-facing theorem map for the Lean companion to
-`papers/spectral_repulsion.tex`.
+## Coverage
 
-## Checked here
+Finite spectral masses satisfy the sector factorization and permutation moment
+formulas. The additive odd-signal identities give negative square sums for the
+stated ordered prime representations. The target densities count divisibility
+conditions, not prime representations; the limiting spectral assignment
+remains open.
 
-* The concrete all-lag collision table, finite determination, raw and centered
-  reflection, reflected fiber means, zero fiber sums, zero total, and the even
-  and base-factored character gates are inherited and exported for this title.
-* Its zero extension from the unit group to the full residue ring agrees on
-  units, vanishes on nonunits, remains odd, and retains zero total.
-* The full odd-sector overlap factors exactly into sector occupancy and the
-  normalized overlap inside the eligible sector.
-* Centered probability masses have zero total.  Lean proves the exact
-  one-point and two-point moments of the full finite permutation group, then
-  derives mean one and the manuscript's exact variance normalization for the
-  uncentered overlap.  The one-label case is pointwise equal to one.
-* The additive self-convolution of any finite odd real signal is even, has
-  zero total when the signal does, and takes the negative square energy at the
-  reflection shift.  Every other shift therefore supplies the exact positive
-  compensation.
-* On `ZMod N`, the additive transform of an odd real signal is purely
-  imaginary.  Its self-convolution transform is its square, hence the negative
-  norm square at every frequency.
-* Every finite family of reflected additive pairs contributes a negative sum
-  of squares and is therefore nonpositive.
+## Scope and assumptions
 
-* The actual primitive odd sector, its character and pair counts, and its
-  fixed-point-free conjugation are proved using the existing conductor theory.
-  The actual collision coefficients and finite prime sums have conjugate
-  magnitudes. Their normalized masses regroup into pair masses of total one,
-  with the exact sector factorization and permutation moments.
-* Actual ordered prime representations satisfy the required residue relation.
-  Their weighted sum is the negative square sum, strictly negative when a
-  representation has nonzero weight. The printed target densities are limits
-  of exact counts among the positive even integers.
-
-## Boundary
-
-The manuscript's underlap and entropy rows remain finite nfield evidence and
-are not recomputed by Lean.
-
-The additive theorem is proved for an arbitrary odd real signal on `ZMod N`
-and specialized here to the zero-extended centered collision table. Actual
-ordered prime pairs are a finite subtype with primality and sum conditions.
-The target density counts divisibility conditions, without asserting a density
-of prime representations. The limiting spectral assignment remains open.
+The permutation moments concern the full finite permutation group. The
+additive identity applies to an odd real signal on `ZMod N`; the prime-pair
+specialization retains primality and sum conditions. Strict negativity
+requires a nonzero weight. Target-density formulas count divisibility among
+positive even integers and do not assert a density of prime representations.
+Underlap and entropy rows remain numerical evidence. The limiting spectral
+assignment remains open.
 -/
 
 namespace NField.Papers.SpectralRepulsion

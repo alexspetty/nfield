@@ -267,29 +267,26 @@ import NField.Alignment.CollisionDirichletRationalEnclosure
 /-!
 # Conservation and profinite dynamics in digit-collision energy
 
-This companion formalizes all 27 numbered results and all 122 displayed
-blocks of the September 11, 2026 manuscript. It includes the original
-positive collision mass and exact readout, the profinite Haar potential
-and coboundary, conductor and mixed L-value identities, maximal orders,
-finite extrema, stationary tails, concentration and the integer-orbit
-singularity. The title claim and equation inventories record the exact
-statement correspondence and validation evidence.
+## Coverage
+
+All 27 numbered results and 122 displayed blocks of the September 11, 2026
+manuscript are formalized. They cover collision mass and readout, the
+profinite Haar potential and coboundary, conductor and mixed L-value
+identities, maximal orders, finite extrema, stationary tails, concentration
+and the integer-orbit singularity.
+
+## Scope and assumptions
 
 The stationary probability statements retain their Haar or almost-everywhere
 scope. They do not assert pointwise control on the exceptional integer orbit
-or an RH/GRH theorem. Formal proof coverage and the nfield software's finite
-computational coverage have separate validation records. Checking a Lean
-statement and reviewing its correspondence with the manuscript are distinct
-steps in publication.
+or an RH/GRH theorem.
 
-This companion also exposes 262 supporting results recovered from the
-September 13, 2026 computational-enclosure milestone, for 2,690 selected
-results in total. They provide rational error bounds, finite-cutoff
-identities and enclosures for the already proved analytic quantities.
-They add no numbered manuscript claim or displayed block and do not
-change the 27-result and 122-display correspondence or its hypotheses.
-The Lean enclosures do not certify every nfield software implementation
-or replace its separate computation and correspondence checks.
+The library includes 262 supporting results for rational error bounds,
+finite-cutoff identities and enclosures, bringing the selected total to 2,690.
+These support the analytic quantities already counted in the 27 numbered
+results and 122 displays; they introduce no additional manuscript claim or
+displayed block. Finite numerical software evaluations have separate
+computational scope.
 -/
 
 namespace NField.Papers.ConservationAndProfiniteDynamicsInDigitCollisionEnergy

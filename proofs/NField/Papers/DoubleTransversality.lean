@@ -12,38 +12,23 @@ import NField.Alignment.CenteredPowerFibers
 /-!
 # The Double Transversality
 
-Reader-facing theorem map for the Lean companion to
-`papers/double_transversality.tex`.
+## Coverage
 
-## Checked here
+Centered collision signals for coprime bases are orthogonal on the joint unit
+group, with weighted energy and recovery formulas. For general bases, the
+cross term is the inner product of conditional fiber means. The finite-family
+results retain their finite scope; cutoff-uniform assignment control and
+convergence below one remain open.
 
-* The exact all-lag collision table, its reflection law, coarse-fiber
-  centering, centered oddness, even-character gate, and base-factored
-  character gate are inherited and exported for this title.
-* Every finite weighted packet has the exact character pairing used by the
-  manuscript.  It is a finite identity and assumes no infinite prime sum.
-* Centered collision tables have global sum zero.
-* Powers of coprime bases remain coprime.  The actual unit-group Chinese
-  remainder equivalence then makes two centered base signals exactly
-  orthogonal on their complete joint unit group.
-* Their normalized energies are preserved, arbitrary complex weights satisfy
-  the exact two-coordinate Pythagorean identity, and averaging over the other
-  coordinate recovers either weighted component.
-* Product-character coefficients of a coordinate lift vanish off that
-  coordinate axis whenever the other character factor has zero total.
-* For two surjective finite reductions with uniform fibers, the normalized
-  cross term is exactly the inner product of their conditional fiber means.
-  This is specialized below to the actual unit group modulo `lcm(m,n)` through
-  its exact generalized Chinese-remainder equivalence.
+## Scope and assumptions
 
-## Boundary
-
-The fourteen higher-lag prime-cutoff rows, Pearson coefficients, five-cutoff
-monotonicity table, and ten-base implementation audit are finite software
-evidence and are not recomputed in Lean.  The arbitrary finite-family CRT,
-character factorization, disjoint support, weighted energy, recovery, and
-probabilistic independence are encoded below. Cutoff-uniform assignment control and convergence
-below one remain open.  No unchecked declaration is used.
+The orthogonality and independence results concern finite unit groups and
+retain the coprimality or compatible-fiber conditions stated in each theorem.
+The character decomposition of a weighted packet is finite and assumes no
+infinite prime sum. Prime-cutoff rows, Pearson coefficients and observed
+monotonicity are finite software evidence, not Lean interval or asymptotic
+results. Cutoff-uniform assignment control and convergence below one remain
+open.
 -/
 
 namespace NField.Papers.DoubleTransversality

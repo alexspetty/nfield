@@ -9,9 +9,20 @@ import NField.Alignment.CanonicalThreeTierClassification
 /-!
 # The Three-Tier Theorem
 
-Thin manuscript-facing theorem map.  Reusable mathematics lives in modules
-named after the supported-rough decomposition, synchronized alignment, radix
-complement, and canonical classification objects.
+## Coverage
+
+The supported-rough decomposition, complementary-digit bound and three-tier
+classification are formalized. The results include the golden crossing,
+endpoint denominators, decimal cases and odd-base obstructions.
+
+## Scope and assumptions
+
+The canonical factorization separates the supported denominator from its rough
+core. The classification retains its base and denominator hypotheses,
+including the conditions on the three-core family and the odd-base
+obstructions. Complement pairing and the forbidden interval concern the
+synchronized digit model. The decimal classification is a specialization,
+while the odd-base cases retain their separate restrictions.
 -/
 
 namespace NField.Papers.ThreeTierTheorem

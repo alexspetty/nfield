@@ -11,10 +11,20 @@ import NField.Alignment.EventuallyPeriodicDigitBlocks
 /-!
 # The Alignment Deficit Lattice and Musical Tuning
 
-Thin manuscript-facing correspondence map for the canonical JMM round-two
-source.  Reusable mathematics lives in modules named after the alignment
-deficit, supported prime-exponent cone, and eventually periodic digit-block
-objects.
+## Coverage
+
+The alignment deficit and its prime-exponent lattice are formalized, together
+with rational digit-block bounds, musical-scale identities and their finite
+errors and limits.
+
+## Scope and assumptions
+
+Prime-exponent coordinates describe supported integers and their group
+completion. The periodic-block and omitted-block statements concern rational
+expansions. Musical-scale identities distinguish finite alignment errors from
+their limits, and retain the support and scaling hypotheses used to identify
+their lattice points. The exact comma and scale examples do not assert
+normality or statistical independence of rational digits.
 -/
 
 namespace NField.Papers.AlignmentDeficitLattice

@@ -12,48 +12,21 @@ import NField.Alignment.TwoLevelFourierRigidity
 /-!
 # The Spectral Structure of Fractional Fields
 
-Reader-facing theorem map for the Lean companion to
-`papers/spectral_structure.tex`.
+## Coverage
 
-## Checked here
+The finite spectral structure is formalized through digit-bin rank and nullity
+bounds, Fourier Gram blocks, the squared-eigenvalue identity and two-level
+rigidity. The results apply to the actual prime cross-alignment matrix under
+the stated prime and coprimality hypotheses.
 
-* The number of occupied first-digit bins is exactly `min b (p - 1)` under
-  the manuscript's prime and coprimality hypotheses.
-* A symbol matrix has rank at most the smaller of its column count and its
-  occupied-digit count.  If every column sums to zero, its rank loses one
-  further digit direction.
-* Summing those fiber bounds gives the manuscript's global rank bound.  The
-  companion defines nullity fiber by fiber, proves rank plus nullity equals
-  `C * L`, derives the sharp forced-nullity formula, and proves positivity of
-  that nullity when `L > 1` and `C ≥ ν`.
-* The kernel of each normalized Fourier Gram block is exactly the kernel of
-  the corresponding synthesis map.
-* The two-coset square-root branches have the claimed sum, product, and
-  characteristic polynomial.
-* The nonnegative overlap argument is an if-and-only-if theorem.  Vanishing
-  at every nonzero shift forces the overlap function to be a single point
-  mass, and a point mass has that vanishing property.
-* Off-diagonal square energy vanishes exactly for the identity matrix.  For
-  the actual prime cross-alignment matrix this is equivalent to `p ≤ b + 1`.
-* Kernel-free certificates check the literal words `001`, `011`, `021`, and
-  `123`; the base-two rank/nullity bound; and all rational levels in the
-  prime-thirteen and base-four prime-seven contrasts.
-* The actual prime matrix is reindexed into its exact block-circulant form,
-  every Fourier symbol is the declared Gram matrix, and simultaneous Fourier
-  synthesis gives the complete direct sum.
-* Changing an orbit representative contributes exactly the expected unit
-  phase, while opposite frequencies give conjugate coefficients.
-* The full reindexed prime action is kernel-free exactly when every finite
-  Fourier symbol is kernel-free.
-* The Hermitian spectral theorem gives the full squared-eigenvalue excess
-  identity for the actual real prime matrix, together with its sharp zero
-  boundary.
-* Constant Fourier magnitude is equivalent to a single-shift nonnegative
-  overlap, closing the complete two-level rigidity argument.
+## Scope and assumptions
 
-The paper-facing declarations below close the manuscript's proof-bearing
-finite claims.  The additive digit-bin transform and any later analytic
-objects remain outside this multiplicative orbit-frequency module.
+The occupied-bin and prime-matrix statements retain their prime and
+coprimality hypotheses. The overlap rigidity theorem uses nonnegative overlap;
+its converse is also proved. The forced-nullity conclusion retains the
+conditions `L > 1` and `C ≥ ν`. The finite examples have exact rational
+values. The additive digit-bin transform and later analytic objects are
+outside this multiplicative orbit-frequency formalization.
 -/
 
 namespace NField.Papers.SpectralStructure

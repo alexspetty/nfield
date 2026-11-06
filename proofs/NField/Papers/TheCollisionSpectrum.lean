@@ -11,31 +11,22 @@ import NField.Papers.CollisionSpectrumLandscape
 /-!
 # The Collision Spectrum
 
-Reader-facing theorem map for the Lean companion to
-`papers/the_collision_spectrum.tex`.
+## Coverage
 
-## Proved in Lean
+Every named mathematical claim has a formal counterpart, including the
+phase-sensitive coefficient formula, weighted special-value moment and
+base-five energy and fourth moment. The declared population of 14,372 channels
+is proved exactly. Base-asymptotic co-variation remains open.
 
-The finite collision table, reflection, fiber cancellation, primitive odd
-kernel, actual Bernoulli coefficient product, and phase-separated coefficient
-are proved for the manuscript's definitions. The root number uses the stated
-positive exponential Gauss sum, and its magnitude is proved to be one. The
-analytic special value is Mathlib's Dirichlet L-function at one.
+## Scope and assumptions
 
-The diagonal squares sum to `2b(b-1)^2`, have mean `4b`, and define probability
-weights. Parseval gives the actual weighted special-value moment and its
-normalized expectation. The base-five primitive-root correspondence,
-cyclotomic identity, coefficient formula, energy `48`, and fourth L-value
-moment `192π^4/625` are proved with the actual character family. The original
-twenty-seven result declarations remain available with unchanged statements.
-
-## Formalization boundary
-
-Every named mathematical claim has a concrete theorem below. The four-decimal
-Pearson correlations in the finite nfield ledger remain numerical records.
-The declared eighteen-base population of 14,372 channels is proved exactly.
-The final question about base-asymptotic co-variation remains open. Neither
-that question nor the rounded table is promoted to an exact theorem.
+The root number uses the stated positive-exponential Gauss sum, and the
+special value is Mathlib's Dirichlet `L`-function at one. The diagonal weights
+have the proved probability normalization. The base-five energy and fourth
+moment are exact identities for the actual character family. The population of
+14,372 channels covers the declared eighteen bases. Rounded Pearson
+correlations are finite numerical records. Base-asymptotic co-variation
+remains open.
 -/
 
 namespace NField.Papers.TheCollisionSpectrum

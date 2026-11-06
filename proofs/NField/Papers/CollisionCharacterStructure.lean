@@ -10,38 +10,21 @@ import NField.Papers.BinDerangements
 /-!
 # The Character Structure of the Collision Fluctuation
 
-Reader-facing theorem map for the Lean companion to
-`papers/collision_character_structure.tex`.
+## Coverage
 
-## Checked here
+Finite collision fluctuations have an invertible Dirichlet-character transform
+with the stated Parseval normalization and conjugation law. The theorem
+applies to any finite packet of unit residues and complex weights. The cutoff
+question remains open.
 
-* Grouping any finite weighted packet by unit residue class gives its
-  character transform exactly.
-* Complex Dirichlet characters satisfy the conjugated orthogonality relation
-  used in the manuscript.
-* The inverse transform reconstructs every residue stream, so the transform
-  is injective and loses no finite information.
-* The principal component is the total finite fluctuation.
-* The squared-magnitude Parseval identity holds with the exact factor
-  `Nat.totient b`.
-* Conjugating the signal and character conjugates the transform.  For a
-  real-valued signal, conjugate characters therefore have equal magnitudes.
-* The number of complex characters is `Nat.totient b`; in base ten it is
-  exactly four.
-* The constructive-total and constructive-mean algebra used before the
-  character decomposition, including the actual constructive set, is inherited
-  from the checked gate-width companion.
+## Scope and assumptions
 
-## Proof boundary
-
-The character theorem is finite and is formalized for an arbitrary finite
-packet of unit residues and complex weights.  This is stronger than fixing a
-cutoff, lag, or the particular weight `Delta / p^s`: once those finite data
-are supplied, the checked theorem applies exactly.
-
-The displayed decimal table is a finite numerical evaluation rather than a
-proof premise and is not reproduced as floating-point Lean data.  The exact
-finite equations are checked here; the cutoff question remains open.
+The character theorem applies to an arbitrary finite packet of unit residues
+and complex weights, with Parseval factor `Nat.totient b`. A cutoff, lag or
+weight `Delta / p^s` supplies finite data for this theorem; it does not turn
+it into an infinite-series convergence statement. The displayed decimal table
+is a numerical evaluation, not floating-point Lean data. The cutoff question
+remains open.
 -/
 
 namespace NField.Papers.CollisionCharacterStructure

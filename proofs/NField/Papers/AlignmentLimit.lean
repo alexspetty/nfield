@@ -11,8 +11,21 @@ import NField.Alignment.DigitPartitioningClassification
 /-!
 # The Alignment Limit for All Primes
 
-This is a thin title-level correspondence manifest.  Reusable proofs are
-organized by mathematical object under `NField.Alignment`.
+## Coverage
+
+The all-prime alignment formula includes its collision correction, fixed-coset
+subsequential limits and global limits under the stated equidistribution or
+primitive-root conditions. The decimal prime-fifty-three examples distinguish
+different subsequential limits.
+
+## Scope and assumptions
+
+A global limit uses the stated coset-equidistribution hypothesis or
+primitive-root condition. General fixed cosets have subsequential limits,
+which need not coincide; the prime-fifty-three examples exhibit that
+distinction. The finite bound and sharpness family retain their base and prime
+conditions. Exact finite tables and the Fourier-energy identities do not
+replace the hypotheses needed for a global limit.
 -/
 
 namespace NField.Papers.AlignmentLimit

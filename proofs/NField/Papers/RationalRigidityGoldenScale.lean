@@ -13,28 +13,21 @@ import NField.Golden.PeriodicRepetendClosure
 /-!
 # Repetend Rigidity at the Golden Scale
 
-The thirty results cover the one-digit block profile, finite weighted
-score, Fibonacci-coordinate calculation, rational and real one-digit
-classifications, depth and finite-weight qualifications, cyclic-shift
-partition, unit-order gap and rational rigidity for arbitrary coprime bases.
-The final five results establish cumulative closure, its independence of
-numerator and phase, the period-one and base-two cases, and closure at the
-rational golden endpoints on the actual cleared denominator.
+## Coverage
 
-## Coverage boundary
+All numbered mathematical claims are formalized, including cumulative closure
+and the rational golden endpoints. Arbitrary-period rigidity concerns rational
+weights; the real-weight classification remains one-digit only. The
+finite-score statements retain the scale-one exception.
 
-All numbered mathematical claims of the September 5 manuscript are
-formalized, including the closure proposition and its endpoint corollary.
-The least closure is defined by the literal digit stream and its digit sum;
-the order formula is a theorem about that definition. No finite computation
-replaces a universal result.
+## Scope and assumptions
 
-The original one-digit classification keeps its original hypotheses and
-meaning. The arbitrary-period theorem concerns rational weights and the
-actual modular orbit. The real-weight classification remains one-digit only.
-Both finite-score interpretations retain the scale-one exception and the
+The least closure is defined from the literal digit stream and its digit sum;
+the order formula is a theorem about that definition. Arbitrary-period
+rigidity concerns rational weights and the actual modular orbit for coprime
+bases. The real-weight classification remains one-digit only. Both
+finite-score interpretations retain the scale-one exception and the
 rationality converse above scale one. No primality conclusion is inferred.
-Every result's hypotheses and scope remain part of its formal statement.
 -/
 
 namespace NField.Papers.RationalRigidityGoldenScale

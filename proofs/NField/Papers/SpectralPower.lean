@@ -10,34 +10,21 @@ import NField.Alignment.IntervalSineKernel
 /-!
 # The Spectral Power of the Digit Function
 
-Reader-facing theorem map for the Lean companion to
-`papers/spectral_power.tex`.
+## Coverage
 
-## Checked here
+The digit function's collision profile and additive spectral power are related
+by Fourier inversion and Parseval. The two-kernel formula, real sine quotient,
+triangular profiles and spectral-flatness criterion are formalized, with the
+printed finite examples.
 
-* The long-division digit function is encoded intrinsically as one coordinate
-  for each digit, with residue zero omitted.
-* The zero Fourier mode is exactly the ordered same-bin collision mass.
-* The additive collision profile transforms exactly into spectral power, and
-  inverse DFT recovers the profile with the manuscript's normalization.
-* Parseval gives total power `p * (p - 1)` for the intrinsic prime word.
-* Translation changes an interval coefficient only by a unit phase.  The
-  interval coefficient is an exact finite geometric sum and, away from zero
-  frequency, the exact geometric quotient.
-* The floor-arithmetic bridge proves that every intrinsic prime digit bin is
-  the required cyclic interval and has one of the two quotient/remainder
-  lengths.  The exact two-kernel spectral formula therefore applies directly
-  to the manuscript's digit word.
-* The complex interval quotient is converted to the printed real sine ratio.
-* Short intrinsic intervals give the exact sum of two triangular profiles.
-* Spectral flatness is equivalent to digit partitioning and hence, under the
-  manuscript's hypotheses, to `p ≤ b + 1`.  The constant value is `p - 1`.
-* Exact certificates check every decimal-prime-thirteen bin size, its zero
-  mode and collision profile, and the flat base-eight/base-ten contrast modulo
-  seven with multiplicative orders one and six.
+## Scope and assumptions
 
-The reusable additions extend the cumulative Lean stack.  They do not reorder
-its dependency structure to imitate the manuscript chronology.
+The intrinsic digit function omits residue zero. Fourier inversion and
+Parseval use the manuscript's normalization, giving total power `p * (p - 1)`.
+The geometric quotient and sine ratio exclude zero frequency where required.
+Spectral flatness is equivalent to digit partitioning, and hence to `p ≤ b +
+1` under the stated hypotheses. The printed prime-thirteen and prime-seven
+examples are finite exact evaluations.
 -/
 
 namespace NField.Papers.SpectralPower

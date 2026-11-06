@@ -14,33 +14,21 @@ import NField.Alignment.CollisionInvariantDetails
 /-!
 # The Collision Invariant
 
-Reader-facing theorem map for the Lean companion to
-`papers/the_collision_invariant.tex`.
+## Coverage
 
-## Checked here
+The intrinsic collision count has the stated congruence conjugation, evenness
+and collision-free multiplier family. The all-lag residue table, reflection
+mean, composite coprime extensions and sharpness witnesses are formalized.
+Numerical sweeps remain finite computational evidence.
 
-* The prime digit-bin partition is conjugated to an ordinary congruence
-  partition, and the intrinsic collision count equals the transformed count.
-* Every nonzero prime multiplier has an even collision count.  This is proved
-  directly by a fixed-point-free negation pairing.
-* The collision-free multipliers are exactly the displayed rational family,
-  and that family has cardinality `b-1` independently of the prime.
-* At every positive lag, the exact diagonal has `b^ell` entries and the
-  endpoint-corrected direct digit-collision deviation reduces to a table
-  modulo `b^(ell+1)`.
-* The concrete all-lag table has exact reflection sum `-1`; its average over
-  all unit classes is therefore exactly `-1/2`.
-* Negation carries every interior wrapping set bijectively to its complement.
-  Lean derives the exact cardinality `phi(m)/2` for all `m >= 3` and
-  `1 <= n <= m-2`.
+## Scope and assumptions
 
-## Complete finite correspondence
-
-The composite coprime conjugation, positive-displacement count and both
-sharpness witnesses are proved for the actual digit word and all-lag table.
-The lower-power obstruction and diagonal half-group corollary are explicit.
-The manuscript's numerical sweeps remain finite computational evidence.
-
+The prime-multiplier statements retain their nonzero and primality conditions.
+Composite extensions require the stated coprimality. The all-lag table uses
+the original digit model, its endpoint correction and modulus `b^(ell+1)`. The
+interior wrapping-set identity has domain `m ≥ 3` and `1 ≤ n ≤ m-2`. The
+sharpness witnesses are exact; numerical sweeps have finite computational
+scope.
 -/
 
 namespace NField.Papers.CollisionInvariant

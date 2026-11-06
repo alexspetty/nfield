@@ -38,21 +38,27 @@ import NField.Alignment.UnitySpineSource
 /-!
 # Unity, Refinement, and Signed Capture
 
-This is a partial companion for both published editions. It contains the
-actual reciprocal-weight Hilbert model, primitive mass, integer copying,
-mixed carries, finite projection and pseudoinverse gain, uncertain-reading
-corrections, the complete sharp shallow-spine forcing and its equality
-witnesses, the prescribed shallow detector, its full signed terminal
-response, all stated uniform detector costs and scalar certificates, and
-the conditional cumulative-capture theorems.
+## Coverage
 
-The Wold and arithmetic-detail claims, clock and mask formulas,
-packet estimates and classical analytic equivalences are unfinished.
-The website has the sufficient packet criterion; Zenodo Version 2 adds
-its converse. Neither direction is claimed completed here. The stated
-cumulative-capture lower bounds and packet-growth condition remain open.
-This index does not establish whole-paper completion or the Riemann hypothesis.
-Reader labels are owned by the source declarations selected below.
+Partial coverage of both published editions includes the reciprocal-weight
+Hilbert model, primitive mass, integer copying, finite projection,
+shallow-spine forcing, signed detector response and conditional cumulative
+capture. The packet criterion and its converse are not formalized here. The
+stated cumulative-capture lower bounds and packet-growth condition remain
+open.
+
+## Scope and assumptions
+
+The signed terminal response and detector costs concern the prescribed shallow
+detector and its stated hypotheses. Cumulative-capture results are
+conditional.
+
+The Wold and arithmetic-detail results, clock and mask formulas, packet
+estimates and classical analytic equivalences are not formalized. The website
+edition states the sufficient packet criterion; Zenodo Version 2 adds its
+converse. Neither direction is formalized here. The stated cumulative-capture
+lower bounds and packet-growth condition remain open. The conditional results
+do not give an unconditional Riemann hypothesis theorem.
 -/
 
 namespace NField.Papers.UnityRefinementAndSignedCapture

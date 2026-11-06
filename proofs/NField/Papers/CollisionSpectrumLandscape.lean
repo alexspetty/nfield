@@ -27,52 +27,22 @@ import NField.Papers.SpectralRepulsion
 /-!
 # The Collision Spectrum and the L-Function Landscape
 
-Reader-facing theorem map for the Lean companion to
-`papers/collision_spectrum_landscape.tex`.
+## Coverage
 
-## Checked here
+The actual primitive collision coefficient factors through its Bernoulli and
+diagonal terms. The primitive-odd `L(1,χ)` magnitude relation, weighted
+special-value moment and exact base-five identities are formalized. The
+observed correlations across bases remain finite numerical evidence.
 
-* The direct collision deviation is exactly determined by the finite table.
-  The raw table, reflected fiber means, centered fiber sums, and centered
-  reflection identities are all exact.  Even and base-factored channels
-  vanish, and every active prime-square channel is primitive and odd.
-* The generalized Bernoulli sum is defined directly on the finite unit group.
-  Multiplication by any unit proves the manuscript's exact fractional-part
-  reindexing, with the inverse-character factor exposed explicitly.
-* Reflection of the two diagonal halves gives the exact factor two and its
-  magnitude form.  The floor and diagonal moments cancel their base-sized
-  terms, leaving the signed Bernoulli-diagonal product.  Normalization gives
-  the displayed coefficient factorization algebra.
-* The primitive floor transform and the primitive-odd population formula are
-  exact.  Factored coefficients satisfy the exact weighted finite moment identity.
-  Independently, the concrete normalized collision coefficients satisfy the
-  manuscript's exact Parseval normalization on the full character group.
-* The classical primitive-odd Bernoulli-to-`L(1,chi)` magnitude relation is
-  proved against Mathlib's analytically continued Dirichlet `L`-function.
-* Lean expands and proves the complete base-five Laurent-polynomial identity.
-  At a nonzero twentieth-cyclotomic root on the unit circle, this forces the
-  exact magnitude-square ratio five.  With the Bernoulli and diagonal scales,
-  it gives `|S_G|^2 = 5 |B_1|^2`.
-* Exact evaluation of all twenty unit classes modulo twenty-five gives
-  centered collision energy forty-eight and checks zero total on every coarse
-  fiber.
+## Scope and assumptions
 
-## Exact source assembly
-
-The actual primitive coefficient, diagonal reduction, weighted special-value
-moment and exact base-five fourth moment are proved without factorization
-hypotheses. Primitive reduction fibers, every natural floor multiplier, the
-separate floor and diagonal moments, actual generator exponents, Bernoulli
-polynomials and the literal Laurent/Ramanujan ledger are connected explicitly.
-The original twenty-five declarations retain their statements; the additional
-forty-six selected results supply the concrete source correspondences.
-
-The correlations for bases five through seventy-one remain exhaustive nfield
-evidence rather than Lean theorems.  No asymptotic correlation, decay law,
-critical-strip statement, or zero-location claim is asserted.
-
-No manuscript contradiction appeared in the formalized finite layer, and no
-unchecked declaration is used.
+The primitive-odd magnitude relation uses Mathlib's analytically continued
+Dirichlet `L`-function at one. Bernoulli and diagonal factors retain their
+printed normalizations. The base-five cyclotomic argument uses a nonzero
+twentieth-cyclotomic root on the unit circle, and the moment formulas use the
+actual primitive character family. Correlations for bases five through
+seventy-one remain finite numerical evidence. No asymptotic correlation, decay
+law or zero-location conclusion is asserted.
 -/
 
 namespace NField.Papers.CollisionSpectrumLandscape

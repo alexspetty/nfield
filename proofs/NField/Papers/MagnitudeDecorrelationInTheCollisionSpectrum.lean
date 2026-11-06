@@ -71,13 +71,21 @@ import NField.Alignment.MagnitudeFiniteDisplayCorrespondence
 /-!
 # Magnitude Decorrelation in the Collision Spectrum
 
-Exact theorem aliases expose the reusable proofs with their literal
-hypotheses. All twelve named result blocks and all eighty inventoried
-mathematical displays now have checked correspondence. The secondary
-mixed square moment, square ratio, and collision energy use the proved
-Saffari–Vaughan distribution estimate, with the printed error scales.
-The complete primitive odd-character family and the odd-prime filter are
-retained. The separate rounded numerical table remains computational.
+## Coverage
+
+All twelve named result blocks and eighty mathematical displays are covered.
+The secondary mixed square moment, square ratio and collision energy use the
+proved Saffari–Vaughan distribution estimate with the printed error scales.
+The rounded numerical table remains computational evidence.
+
+## Scope and assumptions
+
+The moment and ratio statements retain the complete primitive odd-character
+family and the odd-prime filter. Their Saffari–Vaughan input is proved, and
+the printed error scales are preserved. The rounded numerical table remains a
+finite computation rather than a Lean interval enclosure. Coverage counts
+refer to the named mathematical blocks and displays, not to additional
+empirical precision claims.
 -/
 
 namespace NField.Papers.MagnitudeDecorrelationInTheCollisionSpectrum

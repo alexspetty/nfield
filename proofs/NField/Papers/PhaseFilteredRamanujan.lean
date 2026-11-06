@@ -9,48 +9,21 @@ import NField.Alignment.PhaseFilteredRamanujanClosure
 /-!
 # Phase-Filtered Ramanujan Sums and the Spectral Gate
 
-Reader-facing theorem map for the Lean companion to
-`papers/phase_filtered_ramanujan.tex`.
+## Coverage
 
-## Checked here
+The finite Ramanujan kernel gives the spectral-line collision formula and the
+phase gate, including its bounds, zero criterion and identity value. The digit
+populations, Euclidean excess words and four printed decimal
+continued-fraction values are formalized.
 
-* The nonzero-residue additive character sum has the two prime-modulus
-  Ramanujan values `p - 1` and `-1`.
-* The collision count is exactly a Ramanujan-weighted slice of the full
-  two-dimensional cross-spectrum, with normalization `1 / p^2`.
-* The two-valued Ramanujan kernel collapses to the exact multiplicative line
-  slice from the autocorrelation companion.
-* The surviving complex line mass and the unsigned phase mass are defined
-  directly from the bin Fourier coefficients.
-* Triangle inequality bounds the surviving mass by the unsigned mass.
-  A finite Cauchy--Schwarz argument and Parseval bound the unsigned mass by
-  `p` times the assigned digit mass.
-* A nonempty digit partition gives a positive denominator.  The phase gate
-  lies between the collision proportion and one, vanishes exactly at
-  collision-free multipliers, equals one at the identity, and has the stated
-  reciprocal gap whenever a collision exists.
-* These gate statements are specialized to the intrinsic prime digit word,
-  whose assigned mass is exactly `p - 1`.
-* Collision freedom is equivalent to every digit bin being moved away from
-  itself.  Digit partitioning gives the exact identity-versus-zero collision
-  profile.
-* The intrinsic floor-digit populations equal the Euclidean quotient plus the
-  exact ceiling-increment word.  That word is binary, has exactly `r - 1`
-  entries equal to one, and determines the remainder.
-* The intrinsic zero-frequency cross-spectrum is the exact Euclidean
-  square-mass polynomial.  The four decimal excess words and their exact
-  rational continued-fraction tail values are certified directly.
-* A canonical primitive-root power orbit has both the Ramanujan double-sum and
-  spectral-line autocorrelation readouts.  Singleton digit bins have the
-  exact prime Ramanujan cross-spectrum.
+## Scope and assumptions
 
-## External background
-
-The classical Ramanujan Dirichlet-series identity in the introduction is a
-cited background theorem and is not used in the finite collision proof.  The
-finite simple-continued-fraction notation uses the standard Euclidean
-algorithm convention; the companion proves its exact rational source and all
-four displayed decimal values.
+The phase gate has a positive denominator for a nonempty digit partition; the
+intrinsic prime digit word has assigned mass `p - 1`. Its collision formula
+retains normalization `1 / p^2`. The classical Ramanujan Dirichlet-series
+identity is cited background and is not used in the finite collision proof.
+Continued fractions use the standard finite Euclidean convention; the four
+printed decimal values are checked exactly.
 -/
 
 namespace NField.Papers.PhaseFilteredRamanujan

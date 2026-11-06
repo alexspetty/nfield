@@ -11,46 +11,20 @@ import NField.Papers.BinDerangements
 /-!
 # Silent Primes and the Variance of the Collision Count
 
-Reader-facing theorem map for the Lean companion to
-`papers/silent_primes.tex`.
+## Coverage
 
-## Checked here
+The silent-prime recipe, repetend bound, decimal seven-prime classification
+and exact variance ledger are formalized. The diagonal term has the stated
+bounded remainder. The conjectured full variance limit remains open.
 
-* The positive silent integer is exactly the manuscript's displayed
-  subtraction formula.
-* A prime is globally silent at a fixed lag exactly when it divides one of
-  the `b-1` silent integers.
-* Repetend silence is represented over the full Fermat window, which repeats
-  the multiplicative orbit without changing its zero predicate.
-* Every repetend-silent prime satisfies the exact bound
-  `p <= b^(ell+1)`.
-* At base ten and lag one, the nine silent integers and the complete seven
-  globally silent and repetend-silent primes are certified exactly.
-* The collision coordinate and its displayed inverse are proved mutually
-  inverse on their manuscript domains.
-* The intrinsic collision count is exactly twice the positive-comparison
-  count and has the displayed signed sawtooth form.
-* The pointwise collision profile is exactly `2Q - 2 sum Y_m`.
-* Floor crossings are exactly the ceiling-interval events.  The interval
-  families are disjoint, have the displayed cardinalities, and their
-  intersections equal the complete double-sum overlap ledger.
-* The exact constructive mean algebra is inherited from the checked
-  gate-width companion, and its two displayed rational forms are proved
-  equal.
-* Population variance is translation invariant and quadratic under scaling,
-  which gives the exact overlap-ledger formula.
-* The diagonal expression differs from `2Q/3` by at most ten in every
-  admissible finite instance, which proves the stated fixed-base bounded
-  remainder.
+## Scope and assumptions
 
-## Proof boundary
-
-The silent-prime recipe, repetend bound, seven-prime classification,
-coordinate formula, interval ledger, exact variance algebra, and diagonal
-bounded remainder are checked against intrinsic long-division digits and the
-proved zero gate.  The finite table values are executable certificates in
-nfield.  The conjectured full variance limit remains a conjecture.  No theorem
-below represents that limit as proved.
+Silence is defined using intrinsic long-division digits and the proved zero
+gate. Repetend silence is tested over the full Fermat window, which repeats
+the orbit without changing the zero predicate. The diagonal expression differs
+from `2Q/3` by at most ten on every admissible finite instance. The numerical
+tables have finite computational scope. The full variance limit remains a
+conjecture.
 -/
 
 namespace NField.Papers.SilentPrimes

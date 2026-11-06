@@ -9,47 +9,21 @@ import NField.Alignment.BinDerangementsClosure
 /-!
 # Bin Derangements and the Gate Width Theorem
 
-Reader-facing theorem map for the Lean companion to
-`papers/bin_derangements.tex`.
+## Coverage
 
-## Checked here
+The intrinsic long-division digit word has a collision-free multiplier exactly
+when the gate parameter satisfies `c < b`. The multiplier family, its
+cardinality, collision mass, quotient/remainder bin distribution and uniform
+asymptotic bounds are formalized without a primitive-root hypothesis.
 
-* Euclidean division by `p` is written exactly in terms of the transformed
-  residue `[b r]_p`.
-* Multiplication by `b` sends equality of intrinsic digit bins to equality of
-  ordinary residue classes modulo `b`, in both directions.
-* The intrinsic collision count is exactly the transformed congruence count.
-* The parameter `c=[b(1-g)⁻¹]_p` is positive, lies below `p`, cannot equal
-  `b`, and satisfies `c(1-g)=b` for every nonzero nonidentity multiplier.
-* The lower side `c<b` has no collision.  Both quotient orders in the
-  manuscript's contradiction are proved.  The upper side `b<c` has the
-  manuscript's explicit collision at `x=p-c`.
-* Collision freedom is therefore equivalent to `c<b`.
-* The collision-free multipliers are exactly `-u/(b-u)` for `1≤u<b`.
-  The parametrization is injective, has cardinality `b-1`, and pairs `u`
-  with `b-u` under inversion.
-* The collision-mass sum rule is proved by an exact finite double count and
-  specialized to the intrinsic prime digit word.
-* The constructive-total and rational-mean algebra is checked from the
-  Euclidean two-length mass.  The first constructive range has mean two.
-* A full nonzero-residue orbit reads the same zero gate as cyclic
-  autocorrelation.  The primitive-root content is isolated in the explicit
-  orbit and motion hypotheses.
-* Kernel-reduced certificates reproduce the complete decimal prime-thirteen
-  bin sizes, zero set, and both positive collision counts.
+## Scope and assumptions
 
-## Proof boundary
-
-The central gate-width theorem is proved against the intrinsic long-division
-digit word, without an assumed gate classification and without a
-primitive-root hypothesis.
-
-The publication closure now proves the displayed floor-difference formula,
-the complete `Q`/`Q+1` distribution with exactly `R` long bins, the literal
-within-bin ratio characterization and its cardinality, the constructive set's
-exact count and collision mass, both special ranges, the uniform asymptotic
-bound and ratio limit, and the shorter-orbit counterexample.  No manuscript
-claim remains outside the checked finite and asymptotic theorem map.
+The gate theorem concerns the intrinsic long-division digit word under its
+stated prime and base conditions. The parameter `c=[b(1-g)⁻¹]_p` is used for
+nonzero, nonidentity multipliers. No primitive-root hypothesis or assumed gate
+classification is needed. The full-orbit autocorrelation interpretation
+retains its orbit and motion hypotheses. The shorter-orbit counterexample
+prevents extending that interpretation without those hypotheses.
 -/
 
 namespace NField.Papers.BinDerangements

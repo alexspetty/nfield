@@ -14,31 +14,21 @@ import NField.Papers.CollisionFluctuationSum
 /-!
 # The Centered Collision Sum
 
-Reader-facing theorem map for `papers/centered_collision_sum.tex`.
+## Coverage
 
-## Closed finite structure
+The all-lag collision table, fiber centering and character gates are
+formalized. Fixed-progression prime and Mertens results give the centered
+little-o estimate, harmonic limit, gated character formula and unconditional
+all-lag drift.
 
-* The first/last-digit diagonal has exactly `b^ell` coordinates.
-* The intrinsic digit collision at every positive lag is proved equal to the
-  endpoint-corrected diagonal slice score.  Its deviation is therefore the
-  exact table modulo `b^(ell+1)` on every coprime progression.
-* The concrete table obeys reflection, has grand mean `-1/2`, and has exactly
-  `b^ell` representatives in every coarse reduction fiber.
-* Natural fiber centering has zero sum on every fiber, is odd under
-  reflection, and kills every even or base-factored character channel.
-* The constructive mean uses the literal population of unit multipliers
-  other than one with positive collision count.  Its correction and the
-  lag-independent drift coefficient are exact rational identities.
-* Every prime-base lag-one column, including the base-two column, has exact
-  sum `s-p` and mean `s/p-1`.
+## Scope and assumptions
 
-## Analytic inputs
-
-The prime number theorem and Mertens theorem in fixed progressions are now
-proved from pinned Mathlib and the attributed Tauberian bridge. Their exact
-real-cutoff consequences give the centered little-o estimate, the harmonic
-limit, its gated character formula, and the unconditional all-lag drift.
-The four decimal rows remain separately checked finite computations.
+The all-lag table is defined modulo `b^(ell+1)` and uses the actual coarse
+reduction fibers. The prime and Mertens results apply at fixed modulus and
+give limits for the original real cutoffs. They do not supply a
+growing-modulus uniform estimate. The constructive mean uses unit multipliers
+other than one with positive collision count. The four decimal rows remain
+finite computations.
 -/
 
 namespace NField.Papers.CenteredCollisionSum

@@ -10,9 +10,21 @@ import NField.Alignment.DigitPartitioningClassification
 /-!
 # Digit-Partitioning Primes and the Alignment Formula
 
-This thin title-level manifest records the exact correspondence between the
-manuscript and reusable theorem objects.  Proof implementations are organized
-under `NField.Alignment` by mathematical object.
+## Coverage
+
+The results characterize digit-partitioning primes and prove the alignment
+formula, supported-denominator classification and reciprocal-golden selection.
+They also cover the prime-two case and the uniform bound beyond digit
+partitioning.
+
+## Scope and assumptions
+
+The digit-partitioning statements use the prime and coprimality hypotheses of
+the intrinsic long-division model. Supported scaling and synchronized clearing
+depth remain explicit in the alignment formulas. The prime-two case is treated
+separately. Decimal boundary and repetend examples are finite exact
+evaluations; the uniform bound beyond digit partitioning is a theorem on its
+stated domain.
 -/
 
 namespace NField.Papers.DigitPartitionPrimes

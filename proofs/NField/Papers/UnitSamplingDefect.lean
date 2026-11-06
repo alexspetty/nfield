@@ -97,17 +97,22 @@ import NField.Alignment.CommonResetWeightedSources
 /-!
 # The Common Reset in the Cubic Law
 
-The companion uses the published Version 2 manuscript, whose canonical
-source title is The Unit Sampling Defect in Digit-Collision Energy.
-It contains the actual all-base carry representation, weighted continuous
-energy, sampling on arbitrary grids, exact conductor and frequency
-identities, determinant tails, averaged twists and the quarter-power
-estimate for the original finite carry energy.
+## Coverage
 
-The detailed claim and display inventories retain the manuscript's exact
-labels, text and digests. The explicit square-root-rate conjecture remains
-open. Numerical illustrations are recorded separately from the uniform
-theorems. Reader titles belong to the source declarations below.
+The all-base carry representation, weighted continuous energy and
+arbitrary-grid sampling formulas are formalized, together with conductor and
+frequency identities, determinant tails, averaged twists and the quarter-power
+estimate for the original finite carry energy. The square-root-rate conjecture
+remains open.
+
+## Scope and assumptions
+
+The source is Version 2, titled The Unit Sampling Defect in Digit-Collision
+Energy. The bounds retain the actual finite carry weights, endpoint
+corrections and stated parameter ranges. Arbitrary-grid sampling is not
+replaced by Haar sampling. The square-root-rate conjecture remains open.
+Numerical illustrations have finite computational scope, separate from the
+uniform theorems.
 -/
 
 namespace NField.Papers.UnitSamplingDefect

@@ -24,50 +24,21 @@ import NField.Alignment.SubgroupOrbitJacobiExpansion
 /-!
 # Additive Boundaries and Conductor Energies of Periodic Remainder Orbits
 
-Reader-facing theorem map for the Lean companion to
-`papers/additive_boundaries_and_conductor_energies_of_periodic_remainder_orbits.tex`.
+## Coverage
 
-## Proved in Lean
+The named results and displays cover exact conductor energies, full-unit orbit
+concentration, subgroup boundary formulas and eventual finite-state cycles.
+The printed finite examples are checked. The higher-index closed-form question
+remains open.
 
-* The centered sawtooth transform, twisted evaluation, carry-boundary
-  factorization, parity gate, and unit-visible boundary reconstruction used in
-  the opening sections are imported from their theorem-object modules.
-* The complete odd-character energy is a disjoint sum of nonnegative exact
-  conductor energies.  Primitive odd sources after pushdown are proved
-  equivalent to ambient characters of that exact conductor.
-* Top-conductor concentration is equivalent to vanishing of every proper
-  conductor level.
-* The complete base-fifteen pushdown ledger and all nine exact-conductor values
-  are executable exact certificates.  Proper energy is `1024`, top energy is
-  `896`, and full energy is `1920`.
-* For a full unit orbit modulo `p^e`, the visible boundary is the negative
-  indicator of the reduction-one kernel.  Its conductor-`p` energy is
-  `(p-1)p^(2e-2)/2`; conductor one and every higher prime-power conductor
-  vanish.  Thus all energy is supported exactly at `p`.
-* Quotient-dual orthogonality proves the subgroup indicator formula.  The
-  subgroup boundary flux is then proved equal to the manuscript's exact
-  finite combination of shifted Jacobi sums for every subgroup of a prime
-  unit group.
-* The quadratic-residue indicator has the exact endpoint reduction
-  `S=(J-1)/2`.  Lean proves the Jacobi norm, the odd-family first moment, the
-  resonant removal, the supplementary values at `-1` and `-2`, and the full
-  four-branch off-resonance law modulo eight.  The prime-seven energy is
-  checked exactly as `2`.
-* Coupled long division and deterministic finite-state evolution is proved
-  eventually periodic on its finite lifted state space.  On the eventual
-  cycle, predecessor minus current value is the dynamical boundary, and its
-  total mass is zero.
+## Scope and assumptions
 
-## Source correspondence and evidence
-
-The November continuation assembles the parity criterion and literal
-modulus-25 witness, denominator CRT and exact period/coset, arbitrary-divisor
-ledger, and connections from the actual digit/orbit indicators to the
-character energies. It constructs the actual eventual cycle permutation and
-checks the printed finite examples. The separate source inventories cover
-all named results and displays; the higher-index closed-form question remains
-explicitly open. Native package and local reader admission have their own
-receipts. A build alone does not establish source correspondence.
+Prime-power concentration concerns a full unit orbit under the stated prime
+and exponent hypotheses. Subgroup boundary formulas use actual subgroups of
+the prime unit group. Eventual periodicity concerns a deterministic system on
+a finite lifted state space. The base-fifteen energies `1024`, `896` and
+`1920`, and the prime-seven energy `2`, are exact finite examples. The
+higher-index closed-form question remains open.
 -/
 
 namespace NField.Papers.AdditiveBoundariesAndConductorEnergiesOfPeriodicRemainderOrbits

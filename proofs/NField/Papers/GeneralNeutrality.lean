@@ -15,47 +15,21 @@ import NField.Alignment.CenteredCollisionClosure
 /-!
 # The General Neutrality Theorem
 
-Reader-facing theorem map for the Lean companion to
-`papers/general_neutrality.tex`.
+## Coverage
 
-## Checked here
+The results prove neutrality for true prime channels and simultaneous
+squarefree channels, including their cardinalities, raw means and harmonic
+limits. The conductor-four silence and active-character decomposition are
+formalized. Convergence below one remains open.
 
-* The direct digit collision is identified with the finite table throughout
-  every coprime progression.  Reflection, the raw global mean, exact fiber
-  cardinality, fiber centering, centered oddness, and the zero total all close
-  on the concrete table.
-* For every odd prime, the internal reflection label exists uniquely.
-  Reflection carries each internal slice to its exact partner, while the fixed
-  slice has the claimed raw total, centered total, and nonempty raw mean.
-* For every prime not dividing the base, the actual unit-group Chinese
-  remainder equivalence identifies each true channel with one complete copy
-  of the finite table.  The channel is centered-neutral, has cardinality
-  `phi(m)`, and has raw mean `-1/2`.
-* For every prime dividing the base, the true channel is a selected union of
-  complete coarse fibers.  It is centered-neutral and has cardinality
-  `phi(m)/(q-1)`.
-* Generalized CRT identifies the channel modulo `lcm(m,Q)` with its compatible
-  channel inside `U_m`.  For squarefree `Q`, simultaneous neutrality and both
-  totient-quotient cardinality formulas follow.  The coprime raw mean is
-  `-1/2`.
-* Even characters and characters descending to the base vanish.  Every
-  finite weighted packet has the exact character decomposition.
-* Kernel-reduced exact evaluation proves the extra conductor-four silence in
-  the decimal lag-one table and proves that this sign does not descend modulo
-  ten.
-* Given the classwise Mertens residual limits, the finite centered-limit
-  assembly is proved without adding an analytic axiom.
+## Scope and assumptions
 
-## Boundary
-
-The actual Mertens progression limit and every squarefree true-channel
-harmonic limit are now proved from pinned Mathlib and the attributed Tauberian
-bridge. The printed conductor-four proof has exact integer-frequency lift,
-support and floor identities, the all-real Bernoulli distribution formula,
-and the coefficient of the lifted Mathlib character. The finite real-exponent
-prime decomposition is restricted exactly to active characters. Bounded
-numerical ledgers retain their separate status. Convergence below one remains
-an explicit open question.
+The channel formulas distinguish primes dividing the base from primes coprime
+to it. The simultaneous-channel theorem requires squarefree `Q` and uses the
+compatible classes modulo `lcm(m,Q)`. The harmonic limits use fixed
+progressions. The conductor-four silence is for the stated decimal lag-one
+table, not a claim for every base. Numerical ledgers retain finite
+computational scope. Convergence below one remains open.
 -/
 
 namespace NField.Papers.GeneralNeutrality

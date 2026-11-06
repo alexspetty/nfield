@@ -12,16 +12,20 @@ import NField.Alignment.SupportedBlockRealSpectrum
 /-!
 # The Cross-Alignment Matrix
 
-Reader-facing correspondence manifest for the stable manuscript title.  The
-reusable modules retain their dependency-driven order; this file only gathers
-the exact declarations that support the manuscript's claims.
+## Coverage
 
-The checked boundary includes the canonical supported/rough factorization,
-the literal synchronized matrix and its clearing-depth independence, Gram
-realization and scalar recovery, the prime identity characterization, exact
-multiplicative-coset ordering, complete Fourier conjugation, the full decimal
-spectra at thirteen and seventeen, and the real rank/kernel/eigenvalue ledger
-for supported lifts.  No numerical eigensolver output is used as a proof.
+The synchronized cross-alignment matrix has a Gram realization, exact Fourier
+decomposition and a rank, kernel and eigenvalue description for supported
+lifts. The results include clearing-depth independence, the prime identity
+criterion and the decimal spectra at thirteen and seventeen.
+
+## Scope and assumptions
+
+The matrix is the literal synchronized cross-alignment matrix on the
+supported-rough factorization. Its independence of clearing depth and its Gram
+and Fourier normalizations are part of the formal statements. The rank, kernel
+and eigenvalue formulas concern supported lifts under their stated hypotheses.
+The decimal spectra at thirteen and seventeen are exact identities.
 -/
 
 namespace NField.Papers.CrossAlignmentMatrix

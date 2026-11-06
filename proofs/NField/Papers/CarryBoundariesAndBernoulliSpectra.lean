@@ -31,80 +31,24 @@ import NField.Alignment.TerminalCollisionBoundary
 /-!
 # Carry Boundaries and Bernoulli Spectra in Long Division
 
-Reader-facing theorem map for the Lean companion to
-`papers/carry_boundaries_and_bernoulli_spectra.tex`.
+## Coverage
 
-## Proved in Lean
+The finite carry identities, conductor decomposition, printed examples and
+analytic magnitude identity are formalized with their stated normalizations.
+The results include nonunit vanishing, boundary reconstruction, primitive odd
+means and the prime-power energy decomposition. The higher-agreement mean and
+whole-orbit boundary questions remain open.
 
-* The centered sawtooth is odd, and its nonprincipal character transform is
-  exactly the first generalized Bernoulli sum in the manuscript's convention.
-* Primitive Gauss-sum separation is assembled with finite Fourier inversion to
-  prove the twisted-sawtooth identity for every multiplier.  Nonunit
-  multipliers are included and vanish through primitivity rather than through
-  an extra coprimality assumption.
-* The primitive carry-boundary factorization is proved with the manuscript's
-  sign and normalization.
-* Every even character channel vanishes, and constant weights have no carry
-  spectrum.
-* The cell-difference flux is exactly the signed-boundary pairing.  Ordinary
-  character fluxes reconstruct the boundary on every unit residue and detect
-  no boundary mass on nonunits.
-* Parseval is proved for the complete finite carry spectrum.
-* The interval Stokes formula is proved by finite telescoping.
-* Actual long-division digits are connected to padded prefix cells.  The exact
-  finite-prefix slice identity, cylinder-to-carry reduction, bulk term,
-  terminal endpoint, and centered reduction are all proved.
-* Endpoint normalization is exact, including both cyclic endpoint corrections,
-  and its unitwise constant discrepancy is proved spectrally invisible.
-* The conductor-depth weight is defined intrinsically from the canonical
-  p-adic depth of every residue.  Its response theorem includes the zero
-  residue, every depth inside the conductor budget, and exact over-depth
-  vanishing.
-* The induced-character carry transform is factored through both cell
-  differences and the signed boundary chain using that intrinsic weight.
-* A block lift has exactly the pushforward boundary claimed in the manuscript.
-  Every surviving endpoint is nonunit after positive prime dilation, so every
-  higher primitive transform vanishes.
-* The complete primitive-odd kernel, boundary mean criterion, exact
-  primitive-odd population, and terminal-collision mean law are universal
-  theorems, not finite certificates.
-* The general Mobius conductor ledger and its pushdown terms are proved by
-  finite character orthogonality.
-* Every ambient odd prime-power character is proved to have a unique positive
-  primitive odd source.  An explicit finite equivalence reindexes Parseval by
-  those sources and proves the complete prime-power energy decomposition.
-* Executable exact certificates verify the terminal support size, singleton
-  structure, formal boundary size, unit-boundary norm, conductor balance, and
-  antipodal oddness for bases 3, 5, 7, and 11 at depths 2 and 3.
-* The base-15 calculation proves the nonzero pushdowns modulo 45 and 75, all
-  four conductor-ledger differences, total moment 896, primitive-odd mean 28,
-  and formal boundary size 30.
+## Scope and assumptions
 
-* The actual first/last digit indicator is identified with the terminal unit
-  boundary before the mean law is applied. Its support population and the
-  leading-lag block pullback are proved from the printed digit relation.
-* Proper conductor cancellation and the nonnegative odd-part conductor
-  bracket are explicit theorems. The centered floor table has its own
-  primitive spectral factorization.
-* Every printed modulus-six and modulus-nine example is checked against the
-  actual carry observable, including the complete tables, exact character,
-  Bernoulli value, transforms, energy, and lifted-support invisibility.
-* The quadratic boundary energy and the finite Mobius-Dedekind unit
-  correlation are proved. The primitive Bernoulli/L-value magnitude follows
-  from the checked Mathlib analytic special-value stack.
-
-## Formalization boundary
-
-Every named definition, lemma, proposition, theorem, and corollary in the
-finite algebraic argument now has a corresponding Lean construction or
-theorem.  The exact finite examples remain executable certificates in addition
-to the universal proofs.
-
-The historical discussion, literature comparisons, and open-ended outlook are
-not propositions. The manuscript's higher-agreement mean question and
-whole-orbit boundary outlook remain explicitly open. Every named finite
-claim, printed finite example, and analytic magnitude identity now has a
-checked source correspondence. No unchecked declaration is used.
+The centered sawtooth, signed boundary and character transforms retain their
+printed signs and normalizations, including cyclic endpoint corrections.
+Primitive transforms include nonunit multipliers; their vanishing follows from
+primitivity. Induced characters use the intrinsic conductor-depth weight,
+including zero and over-depth cases. The prime-power decomposition and mean
+laws are universal under their stated hypotheses. Printed finite examples are
+checked separately. The higher-agreement mean and whole-orbit boundary
+questions remain open.
 -/
 
 namespace NField.Papers.CarryBoundariesAndBernoulliSpectra

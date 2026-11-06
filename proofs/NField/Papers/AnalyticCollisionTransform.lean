@@ -9,18 +9,24 @@ import NField.Alignment.PrimitiveAnalyticSpecialValues
 import NField.Alignment.LandscapeSourceMoments
 import NField.Alignment.CenteredCollisionClosure
 
-/-! # The Analytic Collision Transform
+/-!
+# The Analytic Collision Transform
 
-The original ten title declarations below are preserved. Additional selections
-assemble the actual finite coefficient, primitive fibers, paired analytic
-observable, periodic-zeta model, main factorization, both boundaries and
-zero multiplicities from existing NField and Mathlib theorems.
+## Coverage
 
-All nine named manuscript results have concrete checked counterparts. The
-cotangent kernel endpoint is checked for every real argument strictly between
-zero and one, including irrational arguments. All 63 display blocks have
-checked counterparts. Cross-conductor control and zero location remain
-outside the claims.
+All nine named results and all 63 display blocks have formal counterparts. The
+cotangent kernel endpoint holds for every real argument strictly between zero
+and one, including irrational arguments. Cross-conductor control and zero
+location remain outside these claims.
+
+## Scope and assumptions
+
+The cotangent endpoint theorem has domain `0 < x < 1`; it does not include the
+endpoints zero and one. It applies to every real argument in that interval,
+not only rational residues. The coefficient, primitive fibers and analytic
+observable use the manuscript's definitions and normalizations. Zero
+multiplicities are those of the specified analytic observable. Cross-conductor
+control and any zero-location assertion are outside the formalized claims.
 -/
 
 namespace NField.Papers.AnalyticCollisionTransform

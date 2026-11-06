@@ -12,36 +12,21 @@ import NField.Papers.SilentPrimes
 /-!
 # The Collision Fluctuation Sum
 
-Reader-facing theorem map for the Lean companion to
-`papers/collision_fluctuation_sum.tex`.
+## Coverage
 
-## Checked here
+The intrinsic collision count reduces to its finite residue table, with the
+stated reflection law, means and drift coefficient. Fixed-progression prime
+and Mertens results give the original-cutoff drift, divergence, drift-removed
+convergence and printed limiting prime-class means.
 
-* The exact zero gate, its width, collision evenness, and the literal
-  constructive mean are inherited through their earlier finite proofs.
-* The intrinsic lag-one collision count is proved equal to the
-  endpoint-corrected diagonal slice count for every admissible base and
-  coprime square residue.  The finite table is therefore universal on its
-  stated domain, not a decimal regression.
-* Complementation proves the floor-table reflection law in every base.  The
-  literal unit table has exact mean `-1/2`, while the literal reduced residue
-  system modulo `b` has exact remainder mean `1/2-1/b`.
-* The constructive correction expansion, sharp finite range, drift
-  coefficient, and integrality boundary are proved exactly.
-* The forty base-ten unit entries, four class cardinalities, class sums, and
-  rational means are kernel-reduced exact certificates.
-* A general residual-limit theorem proves the final subtraction step.  When
-  the two Mertens-progression component limits used in the manuscript are
-  supplied, the coefficient is exactly `-(b-1)/b`.
+## Scope and assumptions
 
-## Proved analytic inputs and consequences
-
-The fixed-progression prime and Mertens theorems are now proved from pinned
-Mathlib and the attributed Tauberian bridge. The actual component sums,
-original-cutoff drift, divergence, drift-removed series and absolute
-convergence are proved. Exact unit-fiber transport also gives the four
-printed limiting prime-class means. The original conditional theorem remains
-unchanged, and the observed finite numerical columns retain separate checks.
+The residue-table identities retain their admissible-base and coprimality
+conditions. The prime and Mertens asymptotics are for fixed progressions; no
+growing-modulus uniform estimate is asserted. The general residual-limit
+theorem retains its component-limit hypotheses, which the fixed-progression
+applications supply. The displayed limiting prime-class means are limits,
+while the observed finite numerical columns are separate computations.
 -/
 
 namespace NField.Papers.CollisionFluctuationSum

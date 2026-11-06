@@ -12,32 +12,29 @@ import NField.Alignment.AngularGridFourier
 /-!
 # Finite Generation of Collision Capacity
 
-This partial companion selects exact scalar-capacity differences and
-finite divisor inversion, equality of capacity and positive-mass prefixes,
-signed-current reconstruction, and recognition of the actual collision
-mass by the von Mangoldt current. The current result retains the explicit
-normalization at addresses zero and one, a nonzero second mass, and unit
-total mass. It also applies to signed masses satisfying these hypotheses.
+## Coverage
 
-Supporting Fourier results give absolute inversion over multiples under
-quadratic decay, interval coefficient decay with the derivative endpoint
-jump retained, positive coefficient recovery, and exact complete-grid
-orthogonality. The Fourier-series grid identity explicitly assumes absolute
-summability. The interval recovery explicitly assumes two derivatives and
-equal endpoint values.
+Partial coverage formalizes individual capacity-inversion and
+current-recognition clauses, with finite divisor and supporting Fourier
+identities. The full symmetric regular-kernel inverse and current statements,
+other generating and rigidity results, and asymptotic controls are not
+formalized here.
 
-## Coverage boundary
+## Scope and assumptions
 
-The capacity-to-mass clause of `thm:inverse` and the mass-recognition
-clauses of `thm:current` are proved. Their full symmetric regular-kernel
-claims are not formalized here: the endpoint regularization from the original
-C3 kernel, recovery of the scalar endpoint term, and complete symmetric
-angular reconstruction are not proved by these selections. These selections
-formalize individual clauses of the named results. The other generating
-and rigidity results, asymptotic controls and sensitivity examples are not
-formalized here. Finite
-computational examples are not all-scale theorems or Lean interval
-certificates. This index does not claim whole-paper completion.
+Current recognition assumes zero mass at addresses zero and one, a nonzero
+second mass, and total mass one; signed masses satisfying these conditions are
+allowed. Multiple inversion assumes quadratic decay. The Fourier-series grid
+identity assumes absolute summability. Interval recovery assumes two
+derivatives and equal endpoint values, with the derivative endpoint jump
+retained.
+
+Only individual clauses of the inverse and current results are formalized. The
+endpoint regularization from the original C3 kernel, scalar endpoint term and
+full symmetric angular reconstruction are not formalized. The other generating
+and rigidity results, asymptotic controls and sensitivity examples are also
+not formalized. Finite computations are not all-scale theorems or certified
+interval enclosures.
 -/
 
 namespace NField.Papers.FiniteGenerationOfCollisionCapacity

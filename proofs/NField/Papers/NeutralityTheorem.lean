@@ -11,41 +11,20 @@ import NField.Alignment.CenteredCollisionClosure
 /-!
 # The Neutrality Theorem
 
-Reader-facing theorem map for the Lean companion to
-`papers/neutrality_theorem.tex`.
+## Coverage
 
-## Checked here
+Each true residue-three channel is centered-neutral, with the stated raw means
+and exact finite character identities. The fixed-progression Mertens
+asymptotic and separate harmonic prime-channel limits at `s = 1` are proved.
+Convergence below one remains open.
 
-* The direct digit-collision deviation is exactly the finite table on every
-  coprime progression.  The all-lag diagonal has `b^ell` entries, and the
-  table obeys `T(a) + T(q-a) = -1`.
-* Every coarse unit fiber has exactly `b^ell` representatives.  Natural fiber
-  centering has zero sum, reflected fiber means add to `-1`, and the centered
-  table is odd with zero total mass.
-* Canonical residue-three reflection preserves the unique fixed slice and
-  exchanges the other two slices.  The fixed slice has raw mean `-1/2` when
-  nonempty, while the paired raw and centered sums have the stated totals.
-* When three is coprime to the base, the actual unit-group Chinese remainder
-  equivalence identifies either true residue-three channel with one complete
-  copy of the collision table.  Each centered channel is independently zero,
-  and each raw channel has mean `-1/2`.
-* When three divides the base, reduction to the coarse unit group preserves
-  the true residue-three coordinate.  Each true channel is therefore a union
-  of complete zero-sum fibers.
-* A zero channel sum gives a zero principal finite coefficient.  At every
-  finite cutoff, either nonzero residue-three channel is exactly the half-sum
-  or half-difference of the total and its nontrivial mod-three twist.
-* A structural exact theorem checks both independently neutral lag-one
-  channels for every base from `2` through `40`.
+## Scope and assumptions
 
-## Analytic and computational boundary
-
-The actual Mertens progression asymptotic and each separate prime-channel
-limit at `s = 1` are now proved. The actual finite prime packets satisfy the
-half-sum, sum, and difference identities, and both total and twisted harmonic
-packets converge. The proof reuses pinned Mathlib and the attributed local
-Tauberian bridge. The decimal prime window remains finite software evidence.
-Convergence below one and the historical wider-coordinate question remain open.
+The channel statements concern the actual residue-three congruence classes,
+with separate arguments according to whether three divides the base. Empty or
+nonempty conditions on raw means remain explicit. The Mertens and harmonic
+limits use fixed progressions. The decimal prime window is finite software
+evidence. Convergence below one and the wider-coordinate question remain open.
 -/
 
 namespace NField.Papers.NeutralityTheorem

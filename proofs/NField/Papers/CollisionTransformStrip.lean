@@ -11,72 +11,35 @@ import NField.Alignment.CollisionZeroObstruction
 /-!
 # The Collision Transform and the Critical Strip
 
-Reader-facing theorem map for the Lean companion to
-`papers/collision_transform_strip.tex`.
+## Coverage
 
-## Checked here
+Partial coverage includes the finite collision structure, actual
+Euler-logarithm expansion, convergence for `Re(s) > 1` and the ordered
+reciprocal-prime limit at `s = 1`. Holomorphic continuation retains its domain
+and nonvanishing assumptions. The prime-sum estimates needed for ordinary
+convergence farther left are not formalized here.
 
-* The first/last-digit diagonal has exactly `b^ell` indices.  The intrinsic
-  digit collision is proved equal to its diagonal slice score, and the direct
-  deviation is the exact finite table modulo `b^(ell+1)`.
-* Complementary floor increments are proved at every diagonal index.  Their
-  sum gives the concrete all-lag reflection law
-  `T(b,ell,a) + T(b,ell,q-a) = -1` on every unit class.
-* Every coarse unit fiber has exactly `b^ell` representatives.  The table is
-  also realized on the actual unit group modulo `q`, where negation obeys the
-  same reflection law.
-* Natural reduction to the base unit group is surjective.  Its fiber
-  centering has zero sum on every fiber and makes the unit-group signal
-  exactly odd.
-* The normalized Dirichlet-character coefficient is inverted exactly.  Even
-  channels and channels factored through the coarse reduction have zero
-  coefficient for the centered signal.
-* Every finite weighted prime packet decomposes exactly into its character
-  channels.  The Euler-product signs and zero-ledger residue algebra are
-  checked exactly.  A positive multiplicity in one isolated active channel
-  gives a nonzero ledger.
-* Exact evaluation checks the manuscript's 468 direct collision/table cases
-  across bases `3, 5, 7, 10, 12` and three representatives per unit class.
+## Scope and assumptions
 
-## Checked analytic results
+The analytic expansion uses characters at the original collision modulus,
+actual Euler-product logarithms and the finite prime correction. The
+higher-prime-power series converges absolutely and uniformly on each smaller
+half-plane to the right of one half.
 
-The intrinsic collision series converges absolutely for `Re(s) > 1` and has
-an ordinary ordered reciprocal-prime limit at `s = 1`.  Its expansion in
-characters at the original collision modulus uses the actual Euler-product
-logarithms and exact finite prime correction.  The logarithms exponentiate
-to the Dirichlet `L`-functions and tend to zero as the real part tends to
-infinity.  The higher-prime-power double series converges absolutely and
-uniformly on each smaller half-plane to the right of one half; its sum is
-holomorphic there, and the finite correction is entire.
+Continuation requires an open simply connected domain to the right of one
+half, a nonempty connected overlap with `Re(s) > 1`, and nonvanishing of every
+active `L`-function. Holomorphic continuation alone does not establish
+ordinary convergence there. The zero-obstruction theorem uses actual analytic
+multiplicities: ordinary convergence at real `sigma ≥ 1/2` forces the weighted
+zero ledger to vanish at points with real part greater than `sigma`.
 
-The selected continuation theorem uses an open simply connected domain to
-the right of one half, a nonempty connected overlap with `Re(s) > 1`, and
-nonvanishing of every active `L`-function.  Its conclusion is holomorphic
-continuation on that domain.  The ordinary Dirichlet-series theorem proves
-holomorphy and locally uniform convergence to the right of an ordinary
-convergence point.  The zero-obstruction theorem uses actual analytic zero
-multiplicities: ordinary convergence at a real `sigma >= 1/2` forces the
-weighted zero ledger to vanish at every point with real part greater than
-`sigma`.  The selected supporting theorems prove the logarithmic residues,
-cleared analytic identity, and finite weighted multiplicity cancellation.
-
-## Remaining analytic boundary
-
-The explicit-formula estimates for prime character sums and their
-zero-free-penetration consequence remain unformalized here.  In particular,
-holomorphic continuation alone is not a proof of ordinary convergence on
-the continued domain.  The stated conditional convergence in the open
-half-plane to the right of one half still requires the prime-sum estimates.
-
-The analytic expansions and weighted zero ledger selected here use the
-active characters at the original collision modulus.  The passage from
-an isolated zero of a primitive ancestor to the corresponding original-
-modulus zero multiplicities remains an assembly obligation.  The exact
-finite isolated-channel ledger argument is retained separately.
-
-The prime-window computation through ten million is software evidence and
-is not a Lean proof premise.  The collision-boundary statement remains a
-conjecture.  This companion does not claim full manuscript coverage.
+The explicit-formula prime-sum estimates and zero-free-penetration consequence
+are not formalized. They are still needed for the stated conditional
+convergence in the open half-plane to the right of one half. Transfer of an
+isolated primitive-ancestor zero to the original-modulus multiplicities is
+also not formalized. The prime-window computation through ten million is
+finite software evidence. The collision-boundary statement remains a
+conjecture.
 -/
 
 namespace NField.Papers.CollisionTransformStrip

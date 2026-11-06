@@ -10,25 +10,22 @@ import NField.Alignment.CollisionSpectrumSourceDetails
 /-!
 # The Structure That Survives
 
-All seven named claims in the unchanged published manuscript are represented
-by checked Lean proofs. The original thirteen statements remain unchanged.
+## Coverage
 
-The concrete exponential kernel is positive definite and has the printed
-irreducible tridiagonal inverse, including its complex Hermitian quadratic
-form. Its literal population-weighted quotient has simple eigenvalues
-strictly decreasing from one to a positive endpoint. The actual particle
-matrix has the exact quotient-plus-bulk spectral multiset and multiplicity,
-and its matrix exponential satisfies the printed heat-trace identity and
-sharp bounds. Sorting actual integer labels supplies the hypotheses rather
-than assuming a spectral model. Mathlib Dirichlet coverage gives eventual
-occurrence of all labels, exact eventual bulk multiplicity, and vanishing
-actual nontrivial-mode proportion. All three first-three-hundred-prime
-examples have exactly twelve labels and bulk multiplicity two hundred
-eighty eight, for every positive kernel scale.
+All seven named results are formalized for the concrete exponential kernel and
+population-weighted quotient. They include the spectral decomposition,
+heat-trace bounds, eventual bulk multiplicity and three finite examples.
+Asymptotic universality beyond the quotient remains open.
 
-The separate numerical tolerance checks remain bounded computational
-records. The kinetic analogy is interpretive, and the manuscript explicitly
-leaves asymptotic universality beyond the quotient open.
+## Scope and assumptions
+
+The exponential kernel retains its positive scale parameter, and the quotient
+uses the actual population weights. Eventual label occurrence and
+multiplicities follow from the stated arithmetic model. Each of the three
+first-three-hundred-prime examples has twelve labels and bulk multiplicity 288
+for every positive kernel scale. Numerical tolerance tests are bounded
+computations. The kinetic analogy is interpretive; asymptotic universality
+beyond the quotient remains open.
 -/
 
 namespace NField.Papers.TheStructureThatSurvives

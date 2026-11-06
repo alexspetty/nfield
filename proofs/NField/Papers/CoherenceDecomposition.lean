@@ -10,9 +10,21 @@ import NField.Alignment.SynchronizedPeriodAlignment
 /-!
 # The Coherence Decomposition
 
-Thin manuscript-facing correspondence map.  Reusable mathematics is owned by
-the synchronized pairwise alignment, supported-rough factorization, digit
-partitioning, period, and golden-threshold objects.
+## Coverage
+
+The results prove the coherence decomposition and its normalized class
+contributions, supported limits and golden gap. They include the prime-two
+case, finite threshold bounds and the distinction between reference and
+pairwise alignment.
+
+## Scope and assumptions
+
+The decomposition uses synchronized pairwise alignment and the canonical
+supported-rough factorization. Its prime and digit-partitioning hypotheses
+remain explicit. The degenerate prime-two case, finite deficits and finite
+threshold bounds are separate from the limiting golden-gap statements.
+Reference alignment and pairwise alignment remain distinct quantities
+throughout the formulas.
 -/
 
 namespace NField.Papers.CoherenceDecomposition

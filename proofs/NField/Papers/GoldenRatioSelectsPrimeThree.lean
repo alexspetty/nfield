@@ -12,10 +12,19 @@ import NField.Golden.SelfReferentialThreshold
 /-!
 # Why the Golden Ratio Selects the Prime Three
 
-This is the manuscript-facing theorem manifest.  Every declaration below
-restates a proof-bearing manuscript claim and discharges it from reusable
-theorem-object modules.  No published estimate, conjecture, or paper-specific
-mathematical assumption is imported.
+## Coverage
+
+The alignment formulas, golden threshold and prime-three selection are
+formalized, together with the supported-denominator classification,
+complementary-digit pairing and exact decimal examples.
+
+## Scope and assumptions
+
+The alignment statements retain their base, primality, divisibility and
+clearing-depth hypotheses. The general prime threshold and separating-window
+results concern their stated admissible domains; the prime-two obstruction is
+a separate case. The displayed decimal alignment table is a finite exact
+evaluation.
 -/
 
 namespace NField.Papers.GoldenRatioSelectsPrimeThree

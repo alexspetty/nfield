@@ -165,18 +165,22 @@ import NField.Alignment.KaratsubaScaledFourierMoment
 /-!
 # The Secondary Term in Digit-Collision Energy
 
-The manuscript's 35 proof-bearing statements and 194 displays have an
-individual source correspondence ledger. All 308 preceding title statements
-and proof bodies are preserved. Additional compiler references below expose
-the actual real-variable identities, unconditional analytic estimates,
-endpoint cases, signed-frequency formulas, and exact examples.
+## Coverage
 
-SEC-01 through SEC-05 are proved. Conditional signed damping, the separate
-sharpened capacity premise, and the three correlation implications retain
-their source assumptions. The proposed sampling limit remains an open
-question. The 36 rounded table cells have a separate computed reproduction;
-they are not Lean interval certificates. No numerical constant 60 occurs
-in this manuscript's asserted estimates.
+The 35 proof-bearing statements and 194 displays are covered, including the
+five analytic inputs, real-variable identities, endpoint cases and
+signed-frequency formulas. Conditional signed damping, the sharpened capacity
+premise and the three correlation implications retain their assumptions. The
+proposed sampling limit remains open.
+
+## Scope and assumptions
+
+The five analytic inputs are proved. Conditional signed damping, the separate
+sharpened-capacity premise and the three correlation implications retain their
+stated assumptions. Endpoint cases and signed frequencies keep their original
+parameter ranges. The proposed sampling limit remains an open question. The 36
+rounded table cells have a separate computed reproduction; they are not Lean
+interval certificates.
 -/
 
 namespace NField.Papers.TheSecondaryTermInDigitCollisionEnergy

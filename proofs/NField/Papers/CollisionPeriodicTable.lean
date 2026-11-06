@@ -9,36 +9,20 @@ import NField.Alignment.CollisionPeriodicTableClosure
 /-!
 # The Collision Periodic Table
 
-Reader-facing theorem map for the Lean companion to
-`papers/collision_periodic_table.tex`.
+## Coverage
 
-## Checked here
+The lag-one collision deviation is determined by the table modulo `b²`,
+including the range below `b²`. Its reflection law, sharp extrema, sign
+balance and mean are proved for every base `b ≥ 2`; the printed finite tables
+are checked by exact evaluation.
 
-* The direct lag-one collision deviation depends only on the residue modulo
-  `b^2`, including the quotient-zero range below `b^2`.
-* The complementary floor increments are proved locally at the first,
-  interior, and last diagonal slices.  Summing them proves the concrete table
-  reflection law `T_b(a) + T_b(b^2-a) = -1` for every unit class.
-* Every table value lies in the sharp interval from `-(b-1)` through `b-2`.
-  Both endpoint formulas are proved for every base `b >= 2`.
-* Complementation is constructed as an involution on the actual finite type
-  of unit representatives.  It proves that exactly `phi(b^2)/2` values are
-  negative and that the exact grand mean is `-1/2`.
-* The complete forty-cell decimal table and all displayed selected-base sign
-  counts are checked by exact evaluation.
-* A direct digit-collision regression independently compares the original
-  collision definition with the finite table for every coprime input `N`
-  satisfying `2 ≤ N < 4b^2` in bases two through twelve.
+## Scope and assumptions
 
-## Proof boundary
-
-The direct-count bijection, endpoint-corrected diagonal-slice score, finite
-table reduction, reflection law, extrema, sign balance, and mean are all
-encoded for the manuscript's stated domains.  The bounded regression remains
-as an independent executable certificate of the direct definitions.
-
-No manuscript claim failed during formalization, and no unchecked declaration
-is used here.
+The table theorem applies on the stated coprime domain for every base `b ≥ 2`,
+including the quotient-zero range below `b²`. The reflected partner and sign
+balance use the actual finite unit representatives. The direct-count
+regression is bounded to `2 ≤ N < 4b²` in bases two through twelve. It is
+separate from the universal table, reflection and extrema theorems.
 -/
 
 namespace NField.Papers.CollisionPeriodicTable
