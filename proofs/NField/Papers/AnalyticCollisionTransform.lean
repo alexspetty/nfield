@@ -4,6 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.RealPeriodicZetaEndpointLimit
 import NField.Alignment.PrimitiveAnalyticSpecialValues
 import NField.Alignment.LandscapeSourceMoments
 import NField.Alignment.CenteredCollisionClosure
@@ -16,9 +17,10 @@ observable, periodic-zeta model, main factorization, both boundaries and
 zero multiplicities from existing NField and Mathlib theorems.
 
 All nine named manuscript results have concrete checked counterparts. The
-cotangent kernel value is checked at every rational argument used by the
-observable. Its standalone arbitrary-real argument display is not claimed
-closed. Cross-conductor control and zero location remain outside the claims.
+cotangent kernel endpoint is checked for every real argument strictly between
+zero and one, including irrational arguments. All 63 display blocks have
+checked counterparts. Cross-conductor control and zero location remain
+outside the claims.
 -/
 
 namespace NField.Papers.AnalyticCollisionTransform
@@ -194,3 +196,5 @@ end NField.Papers.AnalyticCollisionTransform
 #check NField.Alignment.PrimitiveReductionFiber.primitive_reduction_weight_sum_zero
 #check NField.Alignment.CenteredPowerFibers.coarseUnitReduction_fiber_card
 #check NField.Alignment.SawtoothLValue.primitiveOdd_gaussSum_normSq
+
+#check NField.Alignment.RealPeriodicZetaEndpoint.real_kernel_right_cotangent

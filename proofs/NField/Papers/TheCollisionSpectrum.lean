@@ -4,6 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.CollisionSpectrumSource
 import NField.Alignment.TheCollisionSpectrum
 import NField.Papers.CollisionSpectrumLandscape
 
@@ -15,51 +16,26 @@ Reader-facing theorem map for the Lean companion to
 
 ## Proved in Lean
 
-* The actual centered lag-one finite collision transform is zero-sum and odd
-  under reflection.
-* At an odd prime base, every nonzero channel of that actual transform is a
-  primitive odd Dirichlet character.
-* The direct finite table, raw reflection, reflected fiber means, centered
-  fiber zero, and generalized Bernoulli floor and fractional-part transforms
-  are inherited from the earlier spectrum map.
-* The reflection reduction gives the exact factor two.  The floor and diagonal
-  terms give the signed Bernoulli-diagonal coefficient product.
-* The manuscript's phase-separated coefficient formula follows with the exact
-  sign and normalization from the stated classical Bernoulli-to-`L(1,chi)`
-  identity.
-* Parseval is proved for the actual normalized collision coefficients.
-* The primitive-odd population, Bernoulli-to-`L(1,chi)` magnitude identity,
-  normalized-weight consequences, and weighted-mean algebra are exact.
-* The complete base-five Laurent-polynomial certificate and its magnitude
-  consequence are inherited.  The exact centered collision energy is checked
-  over all twenty unit classes and equals forty-eight.  The final fourth-moment
-  scale is checked as exact algebra from the stated coefficient identity and
-  Parseval.
-* The Ramanujan arithmetic ledger gives 300 and the diagonal fourth-power
-  ledger gives 4,800.
-* The declared eighteen-base population formula sums to exactly 14,372
-  channels.
+The finite collision table, reflection, fiber cancellation, primitive odd
+kernel, actual Bernoulli coefficient product, and phase-separated coefficient
+are proved for the manuscript's definitions. The root number uses the stated
+positive exponential Gauss sum, and its magnitude is proved to be one. The
+analytic special value is Mathlib's Dirichlet L-function at one.
+
+The diagonal squares sum to `2b(b-1)^2`, have mean `4b`, and define probability
+weights. Parseval gives the actual weighted special-value moment and its
+normalized expectation. The base-five primitive-root correspondence,
+cyclotomic identity, coefficient formula, energy `48`, and fourth L-value
+moment `192π^4/625` are proved with the actual character family. The original
+twenty-seven result declarations remain available with unchanged statements.
 
 ## Formalization boundary
 
-This is a partial companion, not a claim that every result in the manuscript is
-formalized.  The primitive-odd population formula is proved, but the displayed
-primitive-odd character kernel is not yet assembled in Lean.  Consequently the
-universal exact diagonal moment is checked only through its downstream
-normalization algebra, not from the concrete primitive-character sum.
-
-The direct floor-jump-to-Bernoulli coefficient bridge is still split across
-finite lemmas rather than assembled as one theorem about the concrete
-coefficient.  The squared-magnitude Bernoulli-to-`L(1,chi)` relation is proved
-against Mathlib's analytically continued Dirichlet `L`-function.  The
-phase-complete root-number convention remains an explicit hypothesis in the
-phase-separated algebra, and the fourth `L`-value moment is proved as a
-consequence of that input plus Parseval.
-
-The rounded Pearson correlations are exhaustive nfield computations, not Lean
-theorems.  No limiting correlation, decay law, critical-strip statement, or
-zero-location claim is made.  No unchecked declaration is used, and no
-manuscript contradiction appeared in the formalized layer.
+Every named mathematical claim has a concrete theorem below. The four-decimal
+Pearson correlations in the finite nfield ledger remain numerical records.
+The declared eighteen-base population of 14,372 channels is proved exactly.
+The final question about base-asymptotic co-variation remains open. Neither
+that question nor the rounded table is promoted to an exact theorem.
 -/
 
 namespace NField.Papers.TheCollisionSpectrum
@@ -360,5 +336,64 @@ theorem exact_declared_channel_count :
 #check exact_base_five_fourth_power_ledgers
 #check exact_base_five_fourth_moment_from_parseval
 #check exact_declared_channel_count
+
+/-! ## Literal source correspondences -/
+
+#check NField.Alignment.PrimitiveReductionFiber.primitive_nontrivial_kernel
+#check NField.Alignment.PrimitiveReductionFiber.primitive_fiber_sum_zero
+#check NField.Alignment.PrimitiveReductionFiber.primitive_reduction_weight_sum_zero
+#check NField.Alignment.LandscapeActualSpectrum.diagonalBoundary_eq_short_sum
+#check NField.Alignment.LandscapeActualSpectrum.diagonalBoundary_norm
+#check NField.Alignment.LandscapeActualSpectrum.actual_collision_coefficient
+#check NField.Alignment.LandscapeActualSpectrum.actual_centered_collision_coefficient
+#check NField.Alignment.LandscapeActualSpectrum.bernoulli_l_value_norm
+#check NField.Alignment.LandscapeActualSpectrum.actual_coefficient_l_value_norm
+#check NField.Alignment.LandscapeSpecialValueMoment.actual_primitive_parseval
+#check NField.Alignment.LandscapeSpecialValueMoment.actual_special_value_moment
+#check NField.Alignment.BaseFiveCharacterPolynomial.short_character_polynomial
+#check NField.Alignment.BaseFiveCharacterPolynomial.bernoulli_character_polynomial
+#check NField.Alignment.BaseFiveCharacterPolynomial.primitive_odd_cyclotomic_twenty
+#check NField.Alignment.BaseFiveCollisionEnergy.base_five_actual_collision_energy
+#check NField.Alignment.BaseFiveSpecialValue.actual_short_bernoulli_norm_sq
+#check NField.Alignment.BaseFiveSpecialValue.actual_diagonal_bernoulli_norm
+#check NField.Alignment.BaseFiveSpecialValue.actual_coefficient_l_value
+#check NField.Alignment.BaseFiveSpecialValue.actual_l_value_fourth_moment
+#check NField.Alignment.BaseFiveLaurentLedger.short_laurent_expansion
+#check NField.Alignment.BaseFiveLaurentLedger.even_square_mod_twenty
+#check NField.Alignment.BaseFiveLaurentLedger.actual_ramanujan_twenty_values
+#check NField.Alignment.BaseFiveLaurentLedger.actual_ramanujan_twenty_odd_zero
+#check NField.Alignment.BaseFiveCharacterRoots.generator_order
+#check NField.Alignment.BaseFiveCharacterRoots.character_value_isPrimitiveRoot
+#check NField.Alignment.BaseFiveCharacterRoots.characterExponent_bijective
+#check NField.Alignment.BaseFiveFourthMomentDetails.actual_short_bernoulli_norm
+#check NField.Alignment.BaseFiveFourthMomentDetails.actual_coefficient_diagonal_fourth
+#check NField.Alignment.BaseFiveFourthMomentDetails.actual_diagonal_fourth_moment
+#check NField.Alignment.BaseFiveFourthMomentDetails.actual_initial_fourth_moment
+#check NField.Alignment.BaseFiveFourthMomentDetails.primitive_root_fourth_moment
+#check NField.Alignment.PrimitiveNaturalFloorTransform.primitive_fractional_transform
+#check NField.Alignment.PrimitiveNaturalFloorTransform.primitive_natural_floor_transform
+#check NField.Alignment.PrimitiveNaturalFloorTransform.primitive_floor_jump_transform
+#check NField.Alignment.LandscapeSourceMoments.prime_base_character_zero
+#check NField.Alignment.LandscapeSourceMoments.primitive_base_floor_moment
+#check NField.Alignment.LandscapeSourceMoments.primitive_diagonal_floor_moment
+#check NField.Alignment.LandscapeSourceMoments.primitive_centering_removal
+#check NField.Alignment.LandscapeSourceMoments.primitive_raw_coefficient_sum
+#check NField.Alignment.LandscapeSourceMoments.actual_coefficient_short_l_norm
+#check NField.Alignment.BaseFiveArithmeticDetails.residue_power_list
+#check NField.Alignment.BaseFiveArithmeticDetails.primitive_exponent_list
+#check NField.Alignment.BaseFiveArithmeticDetails.paired_residue_powers
+#check NField.Alignment.BaseFiveArithmeticDetails.paired_character_powers
+#check NField.Alignment.BaseFiveArithmeticDetails.paired_bernoulli_polynomial
+#check NField.Alignment.LandscapeCorrelationScaling.actual_bernoulli_l_correlation
+#check NField.Alignment.CollisionSpectrumSource.upperDiagonalSum_eq_short_sum
+#check NField.Alignment.CollisionSpectrumSource.diagonalBoundary_eq_twice_upper
+#check NField.Alignment.CollisionSpectrumSource.collisionRootNumber_norm
+#check NField.Alignment.CollisionSpectrumSource.bernoulli_rootNumber_l_value
+#check NField.Alignment.CollisionSpectrumSource.actual_phase_separated_coefficient
+#check NField.Alignment.CollisionSpectrumSource.actual_diagonal_second_moment
+#check NField.Alignment.CollisionSpectrumSource.actual_diagonal_mean
+#check NField.Alignment.CollisionSpectrumSource.actual_collision_weights_sum
+#check NField.Alignment.CollisionSpectrumSource.actual_collision_weighted_l_value_mean
+#check NField.Alignment.PrimitiveOddBoundaryMean.primitiveOddKernel_eq_primePowerKernel
 
 end NField.Papers.TheCollisionSpectrum
