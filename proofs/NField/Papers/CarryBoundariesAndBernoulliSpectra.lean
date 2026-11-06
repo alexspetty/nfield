@@ -4,6 +4,20 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.CarryCompositeExample
+import NField.Alignment.CarryBoundaryFamily
+import NField.Alignment.CarrySawtoothParity
+import NField.Alignment.TerminalSingletonSupport
+import NField.Alignment.CarryNineChannels
+import NField.Alignment.CarryQuadraticLayer
+import NField.Alignment.CarryBoundaryEnergy
+import NField.Alignment.CarryNineCharacter
+import NField.Alignment.CarryFiniteExamples
+import NField.Alignment.CarrySourceCorollaries
+import NField.Alignment.TerminalCarrySource
+import NField.Alignment.TerminalSupportSource
+import NField.Alignment.CarryFiniteExampleDetails
+import NField.Alignment.CarryFormalBoundary
 import NField.Alignment.AmbientConductorDepthWeight
 import NField.Alignment.CarryBoundarySpectra
 import NField.Alignment.ConductorBoundaryLedger
@@ -66,6 +80,19 @@ Reader-facing theorem map for the Lean companion to
   four conductor-ledger differences, total moment 896, primitive-odd mean 28,
   and formal boundary size 30.
 
+* The actual first/last digit indicator is identified with the terminal unit
+  boundary before the mean law is applied. Its support population and the
+  leading-lag block pullback are proved from the printed digit relation.
+* Proper conductor cancellation and the nonnegative odd-part conductor
+  bracket are explicit theorems. The centered floor table has its own
+  primitive spectral factorization.
+* Every printed modulus-six and modulus-nine example is checked against the
+  actual carry observable, including the complete tables, exact character,
+  Bernoulli value, transforms, energy, and lifted-support invisibility.
+* The quadratic boundary energy and the finite Mobius-Dedekind unit
+  correlation are proved. The primitive Bernoulli/L-value magnitude follows
+  from the checked Mathlib analytic special-value stack.
+
 ## Formalization boundary
 
 Every named definition, lemma, proposition, theorem, and corollary in the
@@ -74,12 +101,10 @@ theorem.  The exact finite examples remain executable certificates in addition
 to the universal proofs.
 
 The historical discussion, literature comparisons, and open-ended outlook are
-not propositions.  The classical analytic remark identifying primitive
-Bernoulli magnitudes with Dirichlet L-values is cited from the standard
-functional equation rather than rebuilt here from Mathlib's analytic
-continuation stack.  The finite carry, boundary, conductor, mean, ledger, and
-energy results do not assume that remark.  No unchecked declaration is used,
-and no contradiction with the manuscript appeared.
+not propositions. The manuscript's higher-agreement mean question and
+whole-orbit boundary outlook remain explicitly open. Every named finite
+claim, printed finite example, and analytic magnitude identity now has a
+checked source correspondence. No unchecked declaration is used.
 -/
 
 namespace NField.Papers.CarryBoundariesAndBernoulliSpectra
@@ -275,5 +300,66 @@ theorem exact_base_fifteen_conductor_ledger :
 #check odd_character_has_primitive_source
 #check primitiveOddSourceEquiv
 #check primePower_energy_decomposition
+
+
+-- Completed source correspondences and literal finite examples.
+#check NField.Alignment.CarryQuadraticLayer.unit_sawtooth_correlation_moebius
+#check NField.Alignment.CarryQuadraticLayer.primitive_bernoulli_l_value_norm
+#check NField.Alignment.CarryBoundaryEnergy.actual_carry_boundary_potential
+#check NField.Alignment.CarryBoundaryEnergy.actual_quadratic_boundary_energy
+#check NField.Alignment.CarryNineCharacter.chiNine_odd
+#check NField.Alignment.CarryNineCharacter.chiNine_primitive
+#check NField.Alignment.CarryNineCharacter.sixthRoot_eq_exp
+#check NField.Alignment.CarryFiniteExamples.nine_prefix_numerators
+#check NField.Alignment.CarryFiniteExamples.nine_intrinsic_digit_count
+#check NField.Alignment.CarryFiniteExamples.nine_slice_counts
+#check NField.Alignment.CarryFiniteExamples.nine_signed_boundary
+#check NField.Alignment.CarryFiniteExamples.six_signed_boundary
+#check NField.Alignment.CarryFiniteExamples.nine_carry_table
+#check NField.Alignment.CarryFiniteExamples.six_carry_table
+#check NField.Alignment.CarryFiniteExamples.six_ordinary_flux_zero
+#check NField.Alignment.CarryFiniteExamples.six_induced_transform
+#check NField.Alignment.CarryFiniteExamples.nine_boundary_flux
+#check NField.Alignment.CarryFiniteExamples.nine_bernoulli_value
+#check NField.Alignment.CarryFiniteExamples.nine_carry_transform
+#check NField.Alignment.CarryFiniteExamples.nine_carry_energy
+#check NField.Alignment.CarrySourceCorollaries.centered_floor_spectral_factorization
+#check NField.Alignment.CarrySourceCorollaries.proper_pushdowns_moment
+#check NField.Alignment.CarrySourceCorollaries.conductor_bracket_odd_energy
+#check NField.Alignment.TerminalCarrySource.terminal_digit_unit_boundary
+#check NField.Alignment.TerminalCarrySource.terminal_digit_flux
+#check NField.Alignment.TerminalCarrySource.actual_terminal_collision_mean
+#check NField.Alignment.TerminalSupportSource.terminal_digit_support_eq
+#check NField.Alignment.TerminalSupportSource.terminal_digit_support_card
+#check NField.Alignment.TerminalSupportSource.terminal_formal_boundary_card
+#check NField.Alignment.TerminalSupportSource.leading_digit_block_lift
+#check NField.Alignment.TerminalSupportSource.leading_digit_flux_zero
+#check NField.Alignment.TerminalSupportSource.leading_digit_primitive_transform_zero
+#check NField.Alignment.CarryFiniteExampleDetails.carryStep_zero_or_one
+#check NField.Alignment.CarryFiniteExampleDetails.nine_digit_support
+#check NField.Alignment.CarryFiniteExampleDetails.nine_raw_carry_table
+#check NField.Alignment.CarryFiniteExampleDetails.nine_character_table
+#check NField.Alignment.CarryFiniteExampleDetails.nine_inverse_carry_transform
+#check NField.Alignment.CarryFiniteExampleDetails.nine_primitive_coefficient_norms
+#check NField.Alignment.CarryFiniteExampleDetails.nine_induced_transform_zero
+#check NField.Alignment.CarryFiniteExampleDetails.twenty_seven_lifted_support
+#check NField.Alignment.CarryFiniteExampleDetails.twenty_seven_primitive_invisibility
+#check NField.Alignment.CarryFormalBoundary.formal_boundary_endpoint_count
+#check NField.Alignment.CarryFormalBoundary.formal_boundary_stokes
+
+#check NField.Alignment.CarryNineChannels.nine_primitive_odd_packet
+#check NField.Alignment.CarryNineChannels.nine_all_primitive_coefficient_norms
+
+#check NField.Alignment.TerminalSingletonSupport.terminal_support_no_adjacent
+
+#check NField.Alignment.CarrySawtoothParity.sawtooth_transform_reflection
+#check NField.Alignment.CarrySawtoothParity.sawtooth_even_transform_zero
+
+#check NField.Alignment.CarryBoundaryFamily.family_flux_equality_iff
+#check NField.Alignment.CarryBoundaryFamily.family_flux_span_kernel
+
+#check NField.Alignment.CarryCompositeExample.actual_base_fifteen_moment
+#check NField.Alignment.CarryCompositeExample.actual_base_fifteen_population
+#check NField.Alignment.CarryCompositeExample.actual_base_fifteen_mean
 
 end NField.Papers.CarryBoundariesAndBernoulliSpectra
