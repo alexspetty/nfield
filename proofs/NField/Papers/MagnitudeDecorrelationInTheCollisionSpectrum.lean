@@ -4,6 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.MagnitudeSecondaryUnconditional
 import NField.Alignment.MagnitudeCorrelationRate
 import NField.Alignment.MagnitudeActualConcentration
 import NField.Alignment.MagnitudeVarianceDisplays
@@ -70,37 +71,13 @@ import NField.Alignment.MagnitudeFiniteDisplayCorrespondence
 /-!
 # Magnitude Decorrelation in the Collision Spectrum
 
-The 1616 theorem aliases expose reusable proofs with their original statements
-and hypotheses. The actual primitive odd character family is used throughout
-the manuscript-facing results, including both members of every conjugate pair.
-
-Eleven of the twelve numbered manuscript results are formalized. They include
-the exact marginal and mixed square moments, the primitive odd kernel,
-the base-seven obstruction, both complex twists at two, the positive
-L-magnitude variance, the uniform fourth and third L-value moments, and the
-finite fractional-moment criterion. The prime-square short-sum estimate is
-proved with its literal exponent -3/8. Its random comparison, conditioning,
-critical Euler-product low-moment bound, and family restriction are assembled
-without an unproved analytic input. The resulting magnitude correlation has
-eventually positive variances, the exact quarter-logarithmic rate, and limit
-zero along all growing odd primes. The square-mass concentration theorem and
-the leading mixed-square, square-ratio and covariance limits are also proved.
-
-The exact inventory records 78 of 80 mathematical display blocks as closed.
-Earlier deductions from explicit inputs remain available as supporting
-theorems; the unconditional actual-family results supply the completed claims.
-
-## Formalization boundary
-
-The two secondary expansions in Corollary 6, together with their sharper
-collision-energy source expansion, remain unproved here. These occupy
-display blocks 032 and 034. The leading limits do not prove the secondary
-coefficients or their printed remainder rates. No full-paper closure is claimed.
-
-The separate six-row rounded numerical table is computed-only, not
-kernel-certified, and is outside the 80-display inventory. Its floating-point
-checks do not certify the printed decimal cells. The additional numerical
-examples and plots in the article retain their computational status.
+Exact theorem aliases expose the reusable proofs with their literal
+hypotheses. All twelve named result blocks and all eighty inventoried
+mathematical displays now have checked correspondence. The secondary
+mixed square moment, square ratio, and collision energy use the proved
+Saffari–Vaughan distribution estimate, with the printed error scales.
+The complete primitive odd-character family and the odd-prime filter are
+retained. The separate rounded numerical table remains computational.
 -/
 
 namespace NField.Papers.MagnitudeDecorrelationInTheCollisionSpectrum
@@ -3497,5 +3474,29 @@ alias exact_completion_primitive_odd_prime_square_projector := NField.Alignment.
 #check exact_completion_actual_centered_twist_chain
 #check exact_completion_odd_projector
 #check exact_completion_primitive_odd_prime_square_projector
+
+
+/-! Unconditional secondary expansions at the printed scale. -/
+
+/--
+Title: `Mixed square-moment secondary expansion`.
+-/
+alias mixed_secondary_expansion := NField.Alignment.MagnitudeSecondaryUnconditional.mixed_secondary_expansion
+
+#check mixed_secondary_expansion
+
+/--
+Title: `Square-ratio secondary expansion`.
+-/
+alias ratio_secondary_expansion := NField.Alignment.MagnitudeSecondaryUnconditional.ratio_secondary_expansion
+
+#check ratio_secondary_expansion
+
+/--
+Title: `Collision-energy secondary expansion`.
+-/
+alias energy_secondary_expansion := NField.Alignment.MagnitudeSecondaryUnconditional.energy_secondary_expansion
+
+#check energy_secondary_expansion
 
 end NField.Papers.MagnitudeDecorrelationInTheCollisionSpectrum

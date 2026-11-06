@@ -5,56 +5,30 @@ Author: Alexander S. Petty
 -/
 
 import NField.Alignment.TheStructureThatSurvives
+import NField.Alignment.CollisionSpectrumSourceDetails
 
 /-!
 # The Structure That Survives
 
-Reader-facing theorem map for the Lean companion to
-`papers/the_structure_that_survives.tex`.
+All seven named claims in the unchanged published manuscript are represented
+by checked Lean proofs. The original thirteen statements remain unchanged.
 
-## Proved in Lean
+The concrete exponential kernel is positive definite and has the printed
+irreducible tridiagonal inverse, including its complex Hermitian quadratic
+form. Its literal population-weighted quotient has simple eigenvalues
+strictly decreasing from one to a positive endpoint. The actual particle
+matrix has the exact quotient-plus-bulk spectral multiset and multiplicity,
+and its matrix exponential satisfies the printed heat-trace identity and
+sharp bounds. Sorting actual integer labels supplies the hypotheses rather
+than assuming a spectral model. Mathlib Dirichlet coverage gives eventual
+occurrence of all labels, exact eventual bulk multiplicity, and vanishing
+actual nontrivial-mode proportion. All three first-three-hundred-prime
+examples have exactly twelve labels and bulk multiplicity two hundred
+eighty eight, for every positive kernel scale.
 
-* After the diagonal-slice reduction, finite determination holds for every
-  positive integer coprime to the base, including the quotient-zero case.
-* The intrinsic digit-collision deviation is joined to that all-size table by
-  the exact direct collision-to-slice bridge.
-* A prime dividing the base has direct collision deviation exactly zero at
-  every positive lag.
-* The finite unit table obeys the exact reflection law. Adding one half makes
-  it odd, and every even Dirichlet-character coefficient vanishes.
-* A normalized block-constant particle kernel factors exactly through its
-  finite label coordinates.
-* The normalized block lift intertwines the full kernel with the quotient
-  matrix exactly.
-* Every vector with zero sum on each label block is annihilated by the kernel
-  and fixed by the squared normalized Laplacian.
-* That within-block zero-sum space has exact dimension `N-q`. Thus Lean proves
-  the manuscript's exact `N-q`-dimensional eigenvalue-one subspace.
-* Dirichlet's theorem, as supplied by Mathlib, gives arbitrarily large primes
-  in every unit class.
-* A fixed finite number of nontrivial modes has asymptotic proportion zero.
-* The scalar heat terms satisfy the manuscript's sharp interval bounds once
-  the quotient squared-Laplacian eigenvalues lie in `[0,1]`.
-* Exhaustive exact evaluation gives the displayed twelve-element label sets
-  for bases seven, ten, and twelve.
-
-## Formalization boundary
-
-This companion is partial. The direct digit-collision-to-diagonal-slice bridge
-and the all-size finite table are both closed. The block compression itself
-and the `N-q` bulk subspace are exact. The rest
-of the manuscript's spectral theorem additionally uses positive definiteness
-of the exponential distance matrix, its tridiagonal inverse, irreducibility,
-simple spectrum, and Perron--Frobenius. Those facts are not yet assembled for
-this concrete kernel. Lean therefore does not yet claim that the eigenvalue
-one multiplicity is no larger than `N-q`, nor that all quotient modes are
-simple, distinct, and strictly below one.
-
-The full matrix-exponential heat-trace identity and the first-three-hundred-
-prime quotient-spectrum regressions are also outside Lean. The displayed
-finite label sets themselves are exact Lean certificates. No unchecked
-declaration is used, and no manuscript contradiction appeared in the
-formalized layer.
+The separate numerical tolerance checks remain bounded computational
+records. The kinetic analogy is interpretive, and the manuscript explicitly
+leaves asymptotic universality beyond the quotient open.
 -/
 
 namespace NField.Papers.TheStructureThatSurvives
@@ -191,5 +165,54 @@ theorem exact_displayed_label_counts :
 #check exact_heat_term_bounds
 #check exact_displayed_label_sets
 #check exact_displayed_label_counts
+
+#check NField.Alignment.ExponentialDistanceKernel.kernel_chain
+#check NField.Alignment.ExponentialDistanceKernel.adjacentRatio_formula
+#check NField.Alignment.ExponentialDistanceKernel.adjacentRatio_bounds
+#check NField.Alignment.ExponentialDistanceKernel.kernel_posDef
+#check NField.Alignment.ExponentialDistanceKernel.precision_mul_kernel
+#check NField.Alignment.ExponentialDistanceKernel.kernel_inverse
+#check NField.Alignment.ExponentialDistanceKernel.kernel_inverse_quadratic
+#check NField.Alignment.ExponentialDistanceKernel.precision_tridiagonal
+#check NField.Alignment.ExponentialDistanceKernel.kernel_inverse_adjacent_ne_zero
+#check NField.Alignment.ExponentialDistanceKernel.kernel_interval_product
+#check NField.Alignment.ExponentialDistanceKernel.kernel_inverse_complex_quadratic
+#check NField.Alignment.TridiagonalSimpleSpectrum.eigenvector_zero_of_first_zero
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_factor
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_posDef
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_inverse
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_inverse_tridiagonal
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_inverse_adjacent
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_eigenvalues_injective
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_perron
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_eigenvalues_bounds
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_exists_eigenvalue_one
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_modes_bounds
+#check NField.Alignment.ExponentialSpectralQuotient.quotient_modes_injective
+#check NField.Alignment.ConcreteCollisionBlocks.particleDegree_eq
+#check NField.Alignment.ConcreteCollisionBlocks.particleNormalized_eq_blockKernel
+#check NField.Alignment.ConcreteCollisionBlocks.blockEmbedding_orthonormal
+#check NField.Alignment.ConcreteCollisionBlocks.particleNormalized_factor
+#check NField.Alignment.BlockSpectralMultiplicity.particle_spectral_multiset
+#check NField.Alignment.ConcreteCollisionSpectrum.particle_bulk_multiplicity
+#check NField.Alignment.ConcreteCollisionSpectrum.particle_heat_trace
+#check NField.Alignment.ConcreteCollisionSpectrum.particle_heat_trace_bounds
+#check NField.Alignment.CanonicalCollisionSpectrum.sorted_label_representation
+#check NField.Alignment.CanonicalCollisionSpectrum.integer_bulk_multiplicity
+#check NField.Alignment.CanonicalCollisionSpectrum.first_prime_bulk_multiplicity
+#check NField.Alignment.CanonicalCollisionSpectrum.eventually_first_prime_bulk
+#check NField.Alignment.EventualCollisionLabels.firstPrimeLabelSet_subset
+#check NField.Alignment.EventualCollisionLabels.eventually_firstPrimeLabelSet_eq
+#check NField.Alignment.DisplayedPrimeSpectra.base_seven_first_three_hundred_labels
+#check NField.Alignment.DisplayedPrimeSpectra.base_ten_first_three_hundred_labels
+#check NField.Alignment.DisplayedPrimeSpectra.base_twelve_first_three_hundred_labels
+#check NField.Alignment.DisplayedPrimeSpectra.displayed_first_three_hundred_counts
+#check NField.Alignment.DisplayedPrimeSpectra.displayed_bulk_multiplicities
+#check NField.Alignment.CollisionSpectrumSourceDetails.scale_sqrt_ratio
+#check NField.Alignment.CollisionSpectrumSourceDetails.particle_diagonal_normalization
+#check NField.Alignment.CollisionSpectrumSourceDetails.quotient_ordered_spectrum
+#check NField.Alignment.CollisionSpectrumSourceDetails.integer_nontrivial_mode_count
+#check NField.Alignment.CollisionSpectrumSourceDetails.first_prime_nontrivial_mode_bound
+#check NField.Alignment.CollisionSpectrumSourceDetails.actual_nontrivial_proportion_tendsto_zero
 
 end NField.Papers.TheStructureThatSurvives
