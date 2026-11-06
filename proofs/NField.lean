@@ -39,3 +39,4 @@ import NField.Papers.RationalRigidityGoldenScale
 import NField.Papers.TheSecondaryTermInDigitCollisionEnergy
 import NField.Papers.MagnitudeDecorrelationInTheCollisionSpectrum
 import NField.Papers.ConservationAndProfiniteDynamicsInDigitCollisionEnergy
+import NField.Papers.UnitSamplingDefect

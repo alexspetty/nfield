@@ -4,6 +4,11 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.TrueChannelPrimeLimits
+import NField.Alignment.UnitFiberMeans
+import NField.Alignment.ConductorFourCoefficient
+import NField.Alignment.PeriodicBernoulliDistribution
+import NField.Alignment.FiniteActivePrimeDecomposition
 import NField.Alignment.GeneralNeutrality
 import NField.Alignment.CenteredCollisionClosure
 
@@ -43,12 +48,14 @@ Reader-facing theorem map for the Lean companion to
 
 ## Boundary
 
-Mertens' theorem in arithmetic progressions remains a named external input.
-Lean proves the finite cancellation and limiting deduction once its classwise
-residual statement is supplied.  The manuscript's bounded implementation
-counts and lag-one numerical assignment are nfield certificates rather than
-symbolic Lean theorems.  No convergence below one or zero-location statement
-is claimed, and no unchecked declaration is used.
+The actual Mertens progression limit and every squarefree true-channel
+harmonic limit are now proved from pinned Mathlib and the attributed Tauberian
+bridge. The printed conductor-four proof has exact integer-frequency lift,
+support and floor identities, the all-real Bernoulli distribution formula,
+and the coefficient of the lifted Mathlib character. The finite real-exponent
+prime decomposition is restricted exactly to active characters. Bounded
+numerical ledgers retain their separate status. Convergence below one remains
+an explicit open question.
 -/
 
 namespace NField.Papers.GeneralNeutrality
@@ -518,3 +525,16 @@ theorem channel_convergence_from_class_residuals
 #check channel_convergence_from_class_residuals
 
 end NField.Papers.GeneralNeutrality
+
+/-! Additional source-owned analytic and conductor-four conclusions. -/
+
+#check NField.Alignment.ProgressionMertens.real_cutoff_mertens_progression
+#check NField.Alignment.CollisionPrimeLimits.squarefree_real_true_channel_limit
+#check NField.Alignment.ConductorFourLifts.signedConductorFourLift_gcd
+#check NField.Alignment.ConductorFourHundred.signedUnitSawtoothSum_sub_lifts
+#check NField.Alignment.ConductorFourHundred.signedUnitSawtoothSum_support
+#check NField.Alignment.ConductorFourFloors.unitFloorSum_eq_linear_sub_sawtooth
+#check NField.Alignment.ConductorFourFloors.decimal_diagonal_floor_cancellation
+#check NField.Alignment.ConductorFourCoefficient.literal_decimal_conductor_four_coefficient
+#check NField.Alignment.PeriodicBernoulliDistribution.periodicSawtooth_distribution
+#check NField.Alignment.FiniteActivePrimeDecomposition.finite_prime_active_decomposition

@@ -4,6 +4,115 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.BernoulliAbelLimit
+import NField.Alignment.BernoulliAbelPhase
+import NField.Alignment.BernoulliAbelSeries
+import NField.Alignment.BernoulliFourierIdentity
+import NField.Alignment.BernoulliSmoothingFourier
+import NField.Alignment.BernoulliSymmetricSmoothing
+import NField.Alignment.BoundaryDistributionalDerivative
+import NField.Alignment.BoundaryFourierCoefficients
+import NField.Alignment.BoundaryJumpFlux
+import NField.Alignment.CarrierDwellCounts
+import NField.Alignment.CarrierPrefixPeriod
+import NField.Alignment.CarrierTriangularIdentity
+import NField.Alignment.ComplementaryHalfPacket
+import NField.Alignment.ComplementaryHalfSums
+import NField.Alignment.CotangentDedekindFormula
+import NField.Alignment.CotangentGrid
+import NField.Alignment.CotangentOrbitBound
+import NField.Alignment.CyclicLogarithmicLadder
+import NField.Alignment.DivisorHarmonicMain
+import NField.Alignment.DivisorHyperbolaIdentity
+import NField.Alignment.DivisorSawtoothIdentity
+import NField.Alignment.DivisorSmoothingScales
+import NField.Alignment.DivisorVoronoiEstimate
+import NField.Alignment.DivisorWindowCount
+import NField.Alignment.DivisorWindowPairing
+import NField.Alignment.DivisorWindowResidue
+import NField.Alignment.FejerSmallArc
+import NField.Alignment.FiniteDifferenceEnergy
+import NField.Alignment.FiniteDifferenceRows
+import NField.Alignment.HalfPacketSignGeometry
+import NField.Alignment.IntegerCotangentTransforms
+import NField.Alignment.IntegerDedekindTransform
+import NField.Alignment.IntegerFullTransformBound
+import NField.Alignment.IntegerInversePrefix
+import NField.Alignment.IntegerInverseResidue
+import NField.Alignment.IntegerInverseSeriesLiteral
+import NField.Alignment.IntegerNumeratorDescent
+import NField.Alignment.IntegerSignedDamping
+import NField.Alignment.IntegerTransformBounds
+import NField.Alignment.JordanCapacityFormula
+import NField.Alignment.KorolevRealCutoff
+import NField.Alignment.KorolevShortRangeAsymptotic
+import NField.Alignment.KorolevWeakRange
+import NField.Alignment.MobiusLogarithmicMain
+import NField.Alignment.PrimeSquareGridSeparation
+import NField.Alignment.QuadraticWeakDerivative
+import NField.Alignment.RealBernoulliBoundaryLimits
+import NField.Alignment.RealBernoulliCapacityIntegral
+import NField.Alignment.RealBernoulliJumpData
+import NField.Alignment.RealBoundaryUniformCells
+import NField.Alignment.RealCarrierGridAlias
+import NField.Alignment.RealDedekindGram
+import NField.Alignment.RealFractionalFirstMoment
+import NField.Alignment.RealLogWeightedFractionalParts
+import NField.Alignment.RealSaffariVaughanDistribution
+import NField.Alignment.RealSawtoothDistribution
+import NField.Alignment.RealSawtoothIntegralSymmetry
+import NField.Alignment.RealSawtoothLimits
+import NField.Alignment.RealSawtoothPairIntegral
+import NField.Alignment.ReciprocalArcBlock
+import NField.Alignment.ReciprocalDifferenceBound
+import NField.Alignment.ReciprocalFloorSmoothing
+import NField.Alignment.ReciprocalMomentEulerFactor
+import NField.Alignment.ReciprocalMomentInfiniteSeries
+import NField.Alignment.ReciprocalSawtoothGlobal
+import NField.Alignment.ReciprocalSawtoothSmoothing
+import NField.Alignment.ReciprocalSecondMoment
+import NField.Alignment.ReciprocalSmoothedBlock
+import NField.Alignment.ReciprocalSmoothingCutoff
+import NField.Alignment.RemovedCarrierLogBound
+import NField.Alignment.SecondaryCarrierExample
+import NField.Alignment.SecondaryCarrierLogarithmicBounds
+import NField.Alignment.SecondaryCollarBounds
+import NField.Alignment.SecondaryCurvatureBounds
+import NField.Alignment.SecondaryEulerHarmonicSeries
+import NField.Alignment.SecondaryFiniteConsequences
+import NField.Alignment.SecondaryLocalizationUnconditional
+import NField.Alignment.SecondaryPrintedBounds
+import NField.Alignment.SecondaryRealFractionalParts
+import NField.Alignment.SecondaryRealStraightening
+import NField.Alignment.SecondaryReservoirIntermediate
+import NField.Alignment.SecondarySamplingAsymptotics
+import NField.Alignment.SecondarySeriesConsequences
+import NField.Alignment.SecondarySwitchingLedger
+import NField.Alignment.SecondaryTermUnconditional
+import NField.Alignment.SignedDivisorWindow
+import NField.Alignment.SmoothingCoefficientSums
+import NField.Alignment.SmoothingFiniteFrequency
+import NField.Alignment.SmoothingSeriesBounds
+import NField.Alignment.SquareLockAsymptoticScales
+import NField.Alignment.SquareLockCountBound
+import NField.Alignment.SquareLockCountScales
+import NField.Alignment.SquareLockCutoffLimits
+import NField.Alignment.SquareLockDivisorInjection
+import NField.Alignment.SquareLockRemainingStrip
+import NField.Alignment.SquareLockResidueArc
+import NField.Alignment.TriangularAdditiveConvolution
+import NField.Alignment.KorolevRangeEstimate
+import NField.Alignment.KorolevCanonicalTruncatedPrefix
+import NField.Alignment.KorolevUncutPrimeRectangle
+import NField.Alignment.KorolevCanonicalSawtoothSlices
+import NField.Alignment.KorolevSourceLogarithmicPartition
+import NField.Alignment.KorolevBlockResidualVolume
+import NField.Alignment.KorolevCanonicalInversePrefix
+import NField.Alignment.KaratsubaSourceCancellation
+import NField.Alignment.KaratsubaWindowMomentRange
+import NField.Alignment.KorolevSourceWindowDensity
+import NField.Alignment.KaratsubaProductPhase
+import NField.Alignment.KaratsubaJointPopulation
 import NField.Alignment.BernoulliCurvature
 import NField.Alignment.CarrierJumpData
 import NField.Alignment.CarrierSamplingReservoir
@@ -50,61 +159,24 @@ import NField.Alignment.KorolevMissingPrimeDecay
 import NField.Alignment.KorolevSelectedPrimeCount
 import NField.Alignment.KorolevSourceWindowCount
 import NField.Alignment.KorolevLemmaA
+import NField.Alignment.KaratsubaPrimeMoment
+import NField.Alignment.KaratsubaScaledFourierMoment
 
 /-!
 # The Secondary Term in Digit-Collision Energy
 
-Reader-facing declaration map for every named mathematical object in the
-manuscript. Exact finite identities already closed by this companion are
-proved in theorem-object modules. Analytic source estimates are explicit
-hypotheses of the declarations that consume them; the finite reductions,
-limit passages, and final assembly are proved here without unchecked
-declarations.
+The manuscript's 35 proof-bearing statements and 194 displays have an
+individual source correspondence ledger. All 308 preceding title statements
+and proof bodies are preserved. Additional compiler references below expose
+the actual real-variable identities, unconditional analytic estimates,
+endpoint cases, signed-frequency formulas, and exact examples.
 
-There are 281 checked theorem declarations and one explicitly open problem.
-The forty original interfaces are preserved. Eight SEC-04 declarations prove
-divisor growth and supply consumers without that hypothesis. Two main
-analytic inputs (Saffari-Vaughan and Korolev) and the separate localization
-counting input remain open. SEC-03 and SEC-04 are proved.
-Six further declarations expose finite Kloosterman completion; the source
-estimate is now supplied by the full-modulus proof below.
-Six supporting Stepanov declarations expose derivative and root-count algebra;
-six further declarations prove auxiliary nonvanishing, coefficient existence
-from dimension counting and the resulting root bound. Six more declarations
-prove rounded parameter optimization, translation and the final finite-field
-point-count estimate. Twelve further declarations specialize it to the actual
-Kloosterman curve, prove the trace-fiber and character-sum identities, and
-bound the frequency aggregate. Twelve more declarations prove the actual
-polynomial character, every monic-degree coefficient, and the quadratic
-formal L-series and its factors. Twelve more prove actual unique-factorization
-reindexing, the finite Euler product and its formal logarithmic-derivative
-coefficients. The irreducible prime-power sum now equals the negative
-root-power sum at every positive degree. Twelve more prove the minimal-
-polynomial trace formulas and actual root-fiber cardinalities, identify
-the extension-field sums with those same root powers, and obtain the
-curve-count root-power aggregate bound. Ten more declarations prove the
-growth-to-individual-root argument, the exact odd-prime root moduli, and
-the complete inverse-sum square-root estimate for every prime, including
-zero completion frequency and characteristic two. Fifteen more prove
-exact square-zero unit shifts, stationary filtering at prime powers,
-and the exact unit-lift multiplicity. The actual prime-power sum is
-bounded by p^s times a reduced quadratic root count. Sixteen more prove
-the two-root bound at odd prime powers, the primitive even-exponent
-square-root estimate, and the exact quadratic Gauss norm and cube-zero
-phase formula needed for odd exponents. Twenty more declarations prove
-the actual lift/Gauss identity, discharge its arithmetic conditions, and
-prove the odd-exponent square-root bound for odd primes, exponent >=3
-and unit j*r. Unit j and coprime r suffice for every t. Twenty-two more
-prove the powers-of-two four-root count, all positive prime-power
-primitive estimates with either parameter a unit, and exact reduction
-by specified common content. Thirty-seven more supply canonical prime
-descent, the full gcd estimate including zero local frequencies, exact CRT
-with standard-character twists, and the all-modulus divisor/gcd bound.
-Seven consumers discharge SEC-03: completed prefixes are unconditional,
-and the final printed secondary expansion retains only SEC-01 and SEC-02.
-Three additional interfaces prove the smooth/rough exclusion needed in
-Korolev's source proof, reusing the existing Rankin, Mertens and Selberg
-proofs. SEC-02 itself remains open.
+SEC-01 through SEC-05 are proved. Conditional signed damping, the separate
+sharpened capacity premise, and the three correlation implications retain
+their source assumptions. The proposed sampling limit remains an open
+question. The 36 rounded table cells have a separate computed reproduction;
+they are not Lean interval certificates. No numerical constant 60 occurs
+in this manuscript's asserted estimates.
 -/
 
 namespace NField.Papers.TheSecondaryTermInDigitCollisionEnergy
@@ -138,6 +210,22 @@ open NField.Alignment.ReciprocalDivisorMomentBound
 open NField.Alignment.SecondaryCapacityAnalyticInputs
 open NField.Alignment.SecondaryCapacityLedger
 open NField.Alignment.WeightedFractionalPartTransfer
+
+open scoped Classical
+open NField.Alignment.KorolevCanonicalPrimeSlices
+open NField.Alignment.KorolevCanonicalPhaseSlices
+open NField.Alignment.KorolevCanonicalSelectedSum
+open NField.Alignment.KorolevLogarithmicPartition
+open NField.Alignment.KorolevBlockResidualRange
+open NField.Alignment.KaratsubaProductCutoffCompletion
+open NField.Alignment.KorolevPrimeWindows
+open NField.Alignment.CarryBoundarySpectra
+
+open NField.Alignment
+open NField.Alignment.KorolevCanonicalTruncatedPrefix
+open NField.Alignment.KorolevWindowParameters
+open NField.Alignment.KorolevPrimeIntervals
+open NField.Alignment.DedekindReciprocity
 
 /-- Manuscript Lemma `Floor-to-fractional response`. -/
 theorem floor_to_fractional_response
@@ -2392,4 +2480,398 @@ theorem korolev_actual_representation_failure_count (C : ℝ) (hC : 1 ≤ C) :
           K*x*Real.log (Real.log x)*(Real.log x)^(-NField.Alignment.KorolevSourceWindowCount.sourceGamma C m x) :=
   NField.Alignment.KorolevLemmaA.eventual_actual_failure_count C hC
 
+/-- In the short range, equal prime reciprocal sums differ only by a permutation of positions. -/
+theorem karatsuba_prime_reciprocal_rigidity {P : Finset ℕ} {m k : ℕ} {X : ℝ}
+    (hX : 1 ≤ X) (hprime : ∀ p ∈ P, p.Prime) (hcop : ∀ p ∈ P, p.Coprime m)
+    (hlower : ∀ p ∈ P, k < p) (hupper : ∀ p ∈ P, (p : ℝ) ≤ X)
+    (hsize : (k : ℝ) * X ^ (2 * k - 1) < m)
+    (u v : NField.Alignment.KaratsubaPrimeMoment.PrimeTuple P k)
+    (heq : NField.Alignment.KaratsubaPrimeMoment.reciprocalSum m (fun i => (u i).val) =
+      NField.Alignment.KaratsubaPrimeMoment.reciprocalSum m (fun i => (v i).val)) :
+    ∃ e : Equiv.Perm (Fin k), ∀ i, v (e i) = u i := by
+  have hc := NField.Alignment.KaratsubaPrimeMoment.tupleCount_eq_of_reciprocalSum_eq hX
+    (fun i => (u i).val) (fun i => (v i).val)
+    (fun i => hprime _ (u i).property) (fun i => hprime _ (v i).property)
+    (fun i => hcop _ (u i).property) (fun i => hcop _ (v i).property)
+    (fun i => hlower _ (u i).property) (fun i => hlower _ (v i).property)
+    (fun i => hupper _ (u i).property) (fun i => hupper _ (v i).property) hsize heq
+  obtain ⟨e, he⟩ := NField.Alignment.KaratsubaPrimeMoment.exists_perm_of_tupleCount_eq _ _ hc
+  exact ⟨e, fun i => Subtype.ext (he i)⟩
+
+/-- The actual ordered-pair count is at most k! times the kth power of the prime population. -/
+theorem karatsuba_prime_reciprocal_moment_count {P : Finset ℕ} {m k : ℕ} {X : ℝ}
+    (hX : 1 ≤ X) (hprime : ∀ p ∈ P, p.Prime) (hcop : ∀ p ∈ P, p.Coprime m)
+    (hlower : ∀ p ∈ P, k < p) (hupper : ∀ p ∈ P, (p : ℝ) ≤ X)
+    (hsize : (k : ℝ) * X ^ (2 * k - 1) < m) :
+    (Finset.univ.filter (fun uv :
+      NField.Alignment.KaratsubaPrimeMoment.PrimeTuple P k ×
+        NField.Alignment.KaratsubaPrimeMoment.PrimeTuple P k =>
+      NField.Alignment.KaratsubaPrimeMoment.reciprocalSum m (fun i => (uv.2 i).val) =
+        NField.Alignment.KaratsubaPrimeMoment.reciprocalSum m (fun i => (uv.1 i).val))).card ≤
+      k.factorial * P.card ^ k := by
+  rw [← NField.Alignment.KaratsubaPrimeMoment.reciprocalCollisionCount_eq_pair_count]
+  exact NField.Alignment.KaratsubaPrimeMoment.reciprocalCollisionCount_le
+    hX hprime hcop hlower hupper hsize
+
+/-- The actual prime exponential sum has an exact ordered-tuple even moment. -/
+theorem karatsuba_prime_even_moment (P : Finset ℕ) (m k : ℕ) [NeZero m] :
+    (∑ a : ZMod m, ‖NField.Alignment.KaratsubaFourierMoment.primeExponentialSum P m a‖ ^ (2*k)) =
+      (m : ℝ) * NField.Alignment.KaratsubaPrimeMoment.reciprocalCollisionCount P m k :=
+  NField.Alignment.KaratsubaFourierMoment.prime_norm_even_moment P m k
+
+/-- The short-range even moment at any scaled frequency retains the exact gcd cost. -/
+theorem karatsuba_scaled_prime_even_moment {P : Finset ℕ} {m k : ℕ} [NeZero m] {X : ℝ}
+    (hX : 1 ≤ X) (hprime : ∀ p ∈ P, p.Prime) (hcop : ∀ p ∈ P, p.Coprime m)
+    (hlower : ∀ p ∈ P, k < p) (hupper : ∀ p ∈ P, (p : ℝ) ≤ X)
+    (hsize : (k : ℝ) * X ^ (2*k-1) < m) (a : ZMod m) :
+    (∑ t : ZMod m,
+      ‖NField.Alignment.KaratsubaFourierMoment.primeExponentialSum P m (t*a)‖ ^ (2*k)) ≤
+        (m : ℝ) * (a.val.gcd m * (k.factorial * P.card ^ k)) :=
+  NField.Alignment.KaratsubaScaledFourierMoment.scaled_prime_norm_moment_le
+    hX hprime hcop hlower hupper hsize a
+
+/-- The finite bilinear prime sum obeys a power bound with both actual populations and the exact frequency gcd. -/
+theorem karatsuba_bilinear_power_bound {P Q : Finset ℕ} {m s k L U : ℕ}
+    [NeZero m] {X Y : ℝ} (hs : 1 ≤ s) (hk : 1 ≤ k)
+    (hL : ∀ q ∈ Q, L < q) (hU : ∀ q ∈ Q, q ≤ U)
+    (hX : 1 ≤ X) (hP : ∀ p ∈ P, p.Prime) (hPc : ∀ p ∈ P, p.Coprime m)
+    (hPl : ∀ p ∈ P, k < p) (hPu : ∀ p ∈ P, (p : ℝ) ≤ X)
+    (hPs : (k : ℝ)*X^(2*k-1) < m)
+    (hY : 1 ≤ Y) (hQ : ∀ q ∈ Q, q.Prime) (hQc : ∀ q ∈ Q, q.Coprime m)
+    (hQl : ∀ q ∈ Q, s < q) (hQu : ∀ q ∈ Q, (q : ℝ) ≤ Y)
+    (hQs : (s : ℝ)*Y^(2*s-1) < m) (a b : ZMod m) :
+    ‖NField.Alignment.KaratsubaBilinearReduction.bilinearPrimeSum P Q a b‖ ^ (2*s*k) ≤
+      (((P.card : ℝ) ^ (s-1)) ^ k * ((Q.card : ℝ) ^ s) ^ (k-1)) ^ 2 *
+        (((s.factorial * Q.card ^ s : ℕ) : ℝ) *
+          (((s*(U-L) : ℕ) : ℝ) *
+            ((m : ℝ) * (a.val.gcd m * (k.factorial * P.card ^ k))))) :=
+  NField.Alignment.KaratsubaJointPopulation.bilinear_power_bound hs hk hL hU
+    hX hP hPc hPl hPu hPs hY hQ hQc hQl hQu hQs a b
+
+/-- The bilinear sum is the literal inverse-product character sum over ordered prime pairs. -/
+theorem karatsuba_ordered_product_phase {P Q : Finset ℕ} {m : ℕ} [NeZero m]
+    (hP : ∀ p ∈ P, p.Coprime m) (hQ : ∀ q ∈ Q, q.Coprime m) (a b : ZMod m) :
+    NField.Alignment.KaratsubaBilinearReduction.bilinearPrimeSum P Q a b =
+      ∑ p : {p // p ∈ P}, ∑ q : {q // q ∈ Q},
+        ZMod.stdAddChar (a * ((p.val*q.val : ℕ) : ZMod m)⁻¹ +
+          b * ((p.val*q.val : ℕ) : ZMod m)) :=
+  NField.Alignment.KaratsubaProductPhase.bilinear_eq_ordered_inverse_sum hP hQ a b
+
+/-- The actual coprime prime populations obey a uniform lower bound throughout the paper's full modulus and shorter-sum range. -/
+theorem korolev_source_prime_population (C : ℝ) (hC : 1 ≤ C) : ∀ᶠ m : ℕ in Filter.atTop,
+    ∀ x : ℝ,
+      Real.exp ((Real.log m)^(4/5 : ℝ)*(Real.log (Real.log m))^5) ≤ x →
+      x ≤ (m : ℝ)^(4/7 : ℝ) → ∀ k : ℕ, 1 ≤ k →
+        (k ≤ NField.Alignment.KorolevWindowParameters.pLast (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) ∨
+          k ≤ NField.Alignment.KorolevWindowParameters.qLast (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C)) →
+        NField.Alignment.KorolevPrimeWindows.lowerEndpoint (Real.log m) k / (8*(k : ℝ)) ≤
+          (((NField.Alignment.KorolevPrimeWindows.windowPrimes (Real.log m) k).filter (fun p => p.Coprime m)).card : ℝ) ∧
+        NField.Alignment.KorolevPrimeWindows.lowerEndpoint (Real.log m) k / (8*(k : ℝ)) ≤
+          (((NField.Alignment.KorolevPrimeIntervals.intervalPrimes (NField.Alignment.KorolevPrimeWindows.upperEndpoint (Real.log m) (k+1))
+            (NField.Alignment.KorolevPrimeWindows.upperEndpoint (Real.log m) k)).filter (fun p => p.Coprime m)).card : ℝ) :=
+  NField.Alignment.KorolevSourceWindowDensity.eventual_source_population_nat C hC
+
+/-- The literal source upper endpoint satisfies the strict reciprocal-moment size condition. -/
+theorem karatsuba_source_window_moment_range {M : ℝ} (hM : 0 < M) {k : ℕ} (hk : 1 ≤ k) :
+    (k : ℝ)*(NField.Alignment.KorolevPrimeWindows.upperEndpoint (Real.log M) k)^(2*k-1) < M :=
+  NField.Alignment.KaratsubaWindowMomentRange.upperEndpoint_short_moment hM hk
+
+/-- The actual source-window bilinear sum has uniform exponential power decay with its exact frequency gcd. -/
+theorem karatsuba_source_bilinear_power_bound (C : ℝ) (hC : 1 ≤ C) : ∀ᶠ m : ℕ in Filter.atTop,
+    ∀ [NeZero m], ∀ x : ℝ,
+      Real.exp ((Real.log m)^(4/5 : ℝ)*(Real.log (Real.log m))^5) ≤ x →
+      x ≤ (m : ℝ)^(4/7 : ℝ) → ∀ k s : ℕ,
+        NField.Alignment.KorolevWindowParameters.pFirst (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) ≤ k →
+        k ≤ NField.Alignment.KorolevWindowParameters.pLast (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) →
+        NField.Alignment.KorolevWindowParameters.qFirst (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) ≤ s →
+        s ≤ NField.Alignment.KorolevWindowParameters.qLast (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) →
+        ∀ a b : ZMod m,
+          (‖NField.Alignment.KaratsubaBilinearReduction.bilinearPrimeSum (NField.Alignment.KaratsubaSourceWindows.pPrimes m k) (NField.Alignment.KaratsubaSourceWindows.qPrimes m s) a b‖ /
+            (((NField.Alignment.KaratsubaSourceWindows.pPrimes m k).card : ℝ)*((NField.Alignment.KaratsubaSourceWindows.qPrimes m s).card : ℝ)))^(2*s*k) ≤
+              (a.val.gcd m : ℝ)*Real.exp (-Real.log m/(48*(k : ℝ)^2)) :=
+  NField.Alignment.KaratsubaSourceCancellation.eventual_source_bilinear_power_bound C hC
+
+/-- The normalized source-window bilinear norm has uniform exponential decay for every coprime inverse frequency. -/
+theorem karatsuba_source_bilinear_coprime_bound (C : ℝ) (hC : 1 ≤ C) : ∀ᶠ m : ℕ in Filter.atTop,
+    ∀ [NeZero m], ∀ x : ℝ,
+      Real.exp ((Real.log m)^(4/5 : ℝ)*(Real.log (Real.log m))^5) ≤ x →
+      x ≤ (m : ℝ)^(4/7 : ℝ) → ∀ k s : ℕ,
+        NField.Alignment.KorolevWindowParameters.pFirst (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) ≤ k →
+        k ≤ NField.Alignment.KorolevWindowParameters.pLast (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) →
+        NField.Alignment.KorolevWindowParameters.qFirst (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) ≤ s →
+        s ≤ NField.Alignment.KorolevWindowParameters.qLast (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) →
+        ∀ a b : ZMod m, a.val.Coprime m →
+          ‖NField.Alignment.KaratsubaBilinearReduction.bilinearPrimeSum (NField.Alignment.KaratsubaSourceWindows.pPrimes m k) (NField.Alignment.KaratsubaSourceWindows.qPrimes m s) a b‖ /
+            (((NField.Alignment.KaratsubaSourceWindows.pPrimes m k).card : ℝ)*((NField.Alignment.KaratsubaSourceWindows.qPrimes m s).card : ℝ)) ≤
+              Real.exp (-Real.log m/(96*(s : ℝ)*(k : ℝ)^3)) :=
+  NField.Alignment.KaratsubaSourceCancellation.eventual_source_bilinear_bound C hC
+
+/-- The actual centered inverse-residue prefix is exactly the canonical selected-factor sum plus its actual failure-set contribution. -/
+theorem korolev_canonical_inverse_prefix {P Q : Finset ℕ} (hP : ∀ p ∈ P, p.Prime)
+    (hQ : ∀ p ∈ Q, p.Prime) (hdis : Disjoint P Q) (q r X : ℕ) (hX : 1 ≤ X) :
+    NField.Alignment.DedekindInverseResidueTransform.inverseResiduePrefix q r X = NField.Alignment.KorolevCanonicalInversePrefix.canonicalPrefix P Q q r X +
+      ∑ n ∈ NField.Alignment.KorolevCanonicalSelectedSum.failure (X : ℝ) P Q q, (NField.Alignment.DedekindReciprocity.rationalSawtooth (r*NField.Alignment.DedekindInverseResidueTransform.inverseResidue n q) q : ℝ) :=
+  NField.Alignment.KorolevCanonicalInversePrefix.prefix_eq_canonical_add_failure hP hQ hdis q r X hX
+
+/-- The omitted part of the centered inverse-residue prefix costs at most one half per failed selected representation. -/
+theorem korolev_canonical_prefix_remainder {P Q : Finset ℕ} (hP : ∀ p ∈ P, p.Prime)
+    (hQ : ∀ p ∈ Q, p.Prime) (hdis : Disjoint P Q) (q r X : ℕ) (hq : 0 < q) (hX : 1 ≤ X) :
+    |NField.Alignment.DedekindInverseResidueTransform.inverseResiduePrefix q r X - NField.Alignment.KorolevCanonicalInversePrefix.canonicalPrefix P Q q r X| ≤
+      ((NField.Alignment.KorolevCanonicalSelectedSum.failure (X : ℝ) P Q q).card : ℝ)/2 :=
+  NField.Alignment.KorolevCanonicalInversePrefix.prefix_remainder_bound hP hQ hdis q r X hq hX
+
+/-- The actual selected-representation failures have the uniform source gamma decay; no exception predicate enters the canonical sum. -/
+theorem korolev_selected_representation_failure_count (C : ℝ) (hC : 1 ≤ C) :
+    ∃ K : ℝ, 0 < K ∧ ∀ᶠ M : ℝ in Filter.atTop, ∀ x : ℝ,
+      Real.exp ((Real.log M)^(4/5 : ℝ)*(Real.log (Real.log M))^5) ≤ x →
+      x ≤ M^(4/7 : ℝ) → ∀ m : ℕ,
+        ((NField.Alignment.KorolevCanonicalSelectedSum.failure x (NField.Alignment.KorolevSourceWindowCount.sourcePPrimes C M x) (NField.Alignment.KorolevSourceWindowCount.sourceQPrimes C M x) m).card : ℝ) ≤
+          K*x*Real.log (Real.log x)*(Real.log x)^(-NField.Alignment.KorolevSourceWindowCount.sourceGamma C M x) :=
+  NField.Alignment.KorolevCanonicalSelectedSum.eventual_failure_count C hC
+
+/-- The actual inverse-residue prefix has an exact block-dependent residual truncation and its actual omitted set. -/
+theorem korolev_truncated_inverse_prefix {P Q : Finset ℕ} (hP : ∀ p ∈ P, p.Prime)
+    (hQ : ∀ p ∈ Q, p.Prime) (hdis : Disjoint P Q) (q r X : ℕ) (hX : 1 ≤ X)
+    (lp lq : ℝ) {Dp Dq A : ℝ} (hA : 0 < A) (hDp : A ≤ Dp) (hDq : A ≤ Dq)
+    (hPI : P = KorolevPrimeIntervals.intervalPrimes (Real.exp lp) (Real.exp (lp+Dp)))
+    (hQI : Q = KorolevPrimeIntervals.intervalPrimes (Real.exp lq) (Real.exp (lq+Dq))) :
+    inverseResiduePrefix q r X = truncatedPrefix P Q q r X lp lq Dp Dq A +
+      ∑ n ∈ failure (X : ℝ) P Q q, (rationalSawtooth (r*inverseResidue n q) q : ℝ) :=
+  NField.Alignment.KorolevCanonicalTruncatedPrefix.prefix_eq_truncated_add_failure hP hQ hdis q r X hX lp lq hA hDp hDq hPI hQI
+
+/-- Exact residual truncation preserves the half-per-failure prefix remainder bound. -/
+theorem korolev_truncated_prefix_remainder {P Q : Finset ℕ} (hP : ∀ p ∈ P, p.Prime)
+    (hQ : ∀ p ∈ Q, p.Prime) (hdis : Disjoint P Q) (q r X : ℕ) (hq : 0 < q) (hX : 1 ≤ X)
+    (lp lq : ℝ) {Dp Dq A : ℝ} (hA : 0 < A) (hDp : A ≤ Dp) (hDq : A ≤ Dq)
+    (hPI : P = KorolevPrimeIntervals.intervalPrimes (Real.exp lp) (Real.exp (lp+Dp)))
+    (hQI : Q = KorolevPrimeIntervals.intervalPrimes (Real.exp lq) (Real.exp (lq+Dq))) :
+    |inverseResiduePrefix q r X - truncatedPrefix P Q q r X lp lq Dp Dq A| ≤
+      ((failure (X : ℝ) P Q q).card : ℝ)/2 :=
+  NField.Alignment.KorolevCanonicalTruncatedPrefix.prefix_truncated_remainder_bound hP hQ hdis q r X hq hX lp lq hA hDp hDq hPI hQI
+
+/-- Every prime product in the full uncut source rectangle is below the modulus throughout the source range. -/
+theorem korolev_uncut_source_rectangle (C : ℝ) (hC : 1 ≤ C) : ∀ᶠ m : ℕ in Filter.atTop,
+    ∀ x : ℝ,
+      Real.exp ((Real.log m)^(4/5 : ℝ)*(Real.log (Real.log m))^5) ≤ x →
+      x ≤ (m : ℝ)^(4/7 : ℝ) → ∀ k s : ℕ,
+      NField.Alignment.KorolevWindowParameters.pFirst (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) ≤ k →
+      NField.Alignment.KorolevWindowParameters.qFirst (Real.log (Real.log m)) (Real.log (Real.log x)) (Real.log C) ≤ s →
+      ∀ p ∈ NField.Alignment.KorolevPrimeWindows.windowPrimes (Real.log m) k,
+      ∀ q ∈ NField.Alignment.KorolevPrimeIntervals.intervalPrimes (NField.Alignment.KorolevPrimeWindows.upperEndpoint (Real.log m) (s+1)) (NField.Alignment.KorolevPrimeWindows.upperEndpoint (Real.log m) s),
+        p*q < m :=
+  NField.Alignment.KorolevUncutPrimeRectangle.eventual_source_rectangle C hC
+
+/-- The coupled product cutoff costs at most one plus the harmonic sum against the full shifted bilinear family. -/
+theorem karatsuba_product_cutoff_harmonic_bound (P Q : Finset ℕ) {m : ℕ} [NeZero m]
+    (l h X : ℕ) (hl : 0 < l) (hh : 0 < h) (a b : ZMod m)
+    (hrect : ∀ p ∈ P, ∀ q ∈ Q, p*q < m) {B : ℝ}
+    (hbound : ∀ c : ZMod m, ‖KaratsubaBilinearReduction.bilinearPrimeSum P Q a (b+c)‖ ≤ B) :
+    ‖productCutoffSum P Q l h X a b‖ ≤ (1+(harmonic m : ℝ))*B :=
+  NField.Alignment.KaratsubaProductCutoffCost.norm_productCutoffSum_le_harmonic P Q l h X hl hh a b hrect hbound
+
+/-- The actual canonical sawtooth slice reduces to the frequency-dependent completed bilinear bounds. -/
+theorem korolev_canonical_sawtooth_slice_bound {m : ℕ} [NeZero m]
+    (P Q P₀ Q₀ : Finset ℕ) (l h X r : ℕ)
+    (hlpos : 0 < l) (hhpos : 0 < h) (hl : l.Coprime m) (hh : h.Coprime m)
+    (hrect : ∀ p ∈ P₀, ∀ q ∈ Q₀, p*q < m) (B : ZMod m → ℝ)
+    (hbound : ∀ j c : ZMod m,
+      ‖KaratsubaBilinearReduction.bilinearPrimeSum (canonicalDomain P P₀ h m) (canonicalDomain Q Q₀ h m)
+        ((j*(r : ZMod m))*((l^2*h : ℕ) : ZMod m)⁻¹) c‖ ≤ B j) :
+    ‖primeSliceOn P Q P₀ Q₀ l h X m
+      (fun n => ((rationalSawtooth (r*inverseResidue n m) m : ℚ) : ℂ))‖ ≤
+      (1+(harmonic m : ℝ))/(m : ℝ) *
+        ∑ j : ZMod m, ‖ZMod.dft (centeredSawtooth : ZMod m → ℂ) j‖ * B j :=
+  NField.Alignment.KorolevCanonicalSawtoothSlices.norm_sawtooth_slice_le P Q P₀ Q₀ l h X r hlpos hhpos hl hh hrect B hbound
+
+/-- Unit numerator and square-residual scalings preserve each original sawtooth frequency gcd exactly. -/
+theorem korolev_sawtooth_frequency_gcd {m l h r : ℕ} [NeZero m] (j : ZMod m)
+    (hl : l.Coprime m) (hh : h.Coprime m) (hr : r.Coprime m) :
+    (((j*(r : ZMod m))*((l^2*h : ℕ) : ZMod m)⁻¹).val).gcd m = j.val.gcd m :=
+  NField.Alignment.KorolevCanonicalSawtoothSlices.sawtooth_frequency_gcd j hl hh hr
+
+/-- Actual coprime populations of the logarithmic blocks have their uniform lower bounds throughout the source range. -/
+theorem korolev_source_logarithmic_block_population (C : ℝ) (hC : 1 ≤ C) (A : ℝ)
+    (hA : 1 ≤ A) (herror : 8*KorolevPrimeIntervals.errorConstant ≤ A) :
+    ∀ᶠ m : ℕ in Filter.atTop, ∀ x : ℝ,
+      Real.exp ((Real.log m)^(4/5 : ℝ)*(Real.log (Real.log m))^5) ≤ x →
+      x ≤ (m : ℝ)^(4/7 : ℝ) → ∀ k : ℕ, 1 ≤ k →
+      (k ≤ KorolevWindowParameters.pLast (Real.log (Real.log m))
+        (Real.log (Real.log x)) (Real.log C) ∨
+       k ≤ KorolevWindowParameters.qLast (Real.log (Real.log m))
+        (Real.log (Real.log x)) (Real.log C)) →
+      ∀ l D : ℝ, NField.Alignment.KorolevPrimeWindows.upperEndpoint (Real.log m) (k+1) ≤ Real.exp l → A ≤ D → ∀ i : ℕ,
+      NField.Alignment.KorolevLogarithmicPartition.point l D A i * NField.Alignment.KorolevLogarithmicPartition.width D A / (4*Real.log (NField.Alignment.KorolevLogarithmicPartition.point l D A (i+1))) ≤
+        (((NField.Alignment.KorolevLogarithmicPartition.block l D A i).filter (fun p => p.Coprime m)).card : ℝ) :=
+  by simpa using NField.Alignment.KorolevSourceLogarithmicPartition.eventual_partition_population_nat C hC A hA herror
+
+/-- The exact residual support cancels the two block populations at a fixed endpoint-ratio cost. -/
+theorem karatsuba_block_residual_population_cost (l X : ℕ) (hl : 0 < l) (lp lq : ℝ)
+    {Dp Dq A : ℝ} (hA : 0 < A) (hDp : A ≤ Dp) (hDq : A ≤ Dq) (i j : ℕ) :
+    ((block lp Dp A i).card : ℝ) * ((block lq Dq A j).card : ℝ) *
+      (residualBound l X (point lp Dp A i) (point lq Dq A j) : ℝ) ≤
+        Real.exp (4*A) * (X : ℝ) / (l : ℝ)^2 :=
+  NField.Alignment.KorolevBlockResidualVolume.residual_population_cost l X hl lp lq hA hDp hDq i j
+
+
+/-- The published arbitrary-modulus inverse-fraction range estimate, with all analytic inputs discharged. -/
+theorem korolev_inverse_fraction_range_estimate : KorolevInverseFractionRangeEstimate :=
+  NField.Alignment.KorolevRangeEstimate.korolev_range_estimate
+
+/-- The inverse-residue harmonic estimate with Korolev and completion both proved. -/
+theorem inverse_residue_harmonic_bound_unconditional : InverseResidueHarmonicEstimate :=
+  inverse_residue_harmonic_bound_from_korolev korolev_inverse_fraction_range_estimate
+
+/-- The full uniform additive transform estimate with its source estimates proved. -/
+theorem uniform_additive_transform_bound_unconditional : UniformAdditiveTransformEstimate :=
+  uniform_additive_transform_bound_from_korolev korolev_inverse_fraction_range_estimate
+
+/-- All-prime carrier damping and its sampling consequence with the inverse-residue input discharged. -/
+theorem all_prime_carrier_damping_unconditional :
+    PrimeUniformBound lowerModulusReservoir logarithmicCarrierReservoirScale ∧
+      ∃ C : ℝ, 0 ≤ C ∧ ∀ p, p.Prime → p ≠ 2 →
+        |primeSamplingDefect p| ≤ C * (1 + logarithmicCarrierSamplingScale p) :=
+  all_prime_carrier_damping_from_korolev korolev_inverse_fraction_range_estimate
+
+/-- The live-sector estimate retains only the separate square-lock counting input. -/
+theorem live_sector_damping_from_count (hcount : SquareLockCountEstimate) :
+    CarrierFamilyPrimeEventualBound liveCarrierSet logarithmicCarrierReservoirScale :=
+  live_sector_damping_from_korolev_and_count korolev_inverse_fraction_range_estimate hcount
+
+/-- The printed secondary expansion retains only Saffari-Vaughan as its main analytic input. -/
+theorem finite_secondary_coefficient_from_saffari_vaughan
+    (hSaffariVaughan : SaffariVaughanDistributionEstimate) :
+    PrimeEventualErrorBound primeCollisionEnergy primeDisplayedSecondaryMain
+      (fun p => (p : ℝ) ^ 2 * primePrintedSamplingScale p) :=
+  finite_secondary_coefficient_from_two_inputs hSaffariVaughan korolev_inverse_fraction_range_estimate
+
 end NField.Papers.TheSecondaryTermInDigitCollisionEnergy
+
+-- Additional source-titled results; the publisher reads compiler references.
+#check NField.Alignment.BernoulliAbelLimit.bernoulli_one_symmetric_abel
+#check NField.Alignment.BernoulliAbelSeries.abel_hasSum
+#check NField.Alignment.BernoulliFourierIdentity.bernoulli_two_fourier
+#check NField.Alignment.BoundaryDistributionalDerivative.boundary_distributional_second_derivative
+#check NField.Alignment.BoundaryFourierCoefficients.boundary_fourier_jump_formula
+#check NField.Alignment.CarrierDwellCounts.floor_state_count
+#check NField.Alignment.CarrierDwellCounts.floor_state_upper_count
+#check NField.Alignment.CarrierTriangularIdentity.triangular_carrier_identity
+#check NField.Alignment.CarrierTriangularIdentity.literal_collar_triangular_identity
+#check NField.Alignment.ComplementaryHalfPacket.partition_packet_half
+#check NField.Alignment.ComplementaryHalfSums.reciprocal_half_sum
+#check NField.Alignment.ComplementaryHalfSums.ratio_half_sum
+#check NField.Alignment.CotangentDedekindFormula.arithmetic_dedekind_cotangent
+#check NField.Alignment.CotangentGrid.cotangent_circular_bound
+#check NField.Alignment.CotangentOrbitBound.cot_mass_logarithmic
+#check NField.Alignment.CotangentOrbitBound.unit_cotangent_orbit_bound
+#check NField.Alignment.CyclicLogarithmicLadder.quadratic_correlation_rung
+#check NField.Alignment.CyclicLogarithmicLadder.logarithmic_correlation_rung
+#check NField.Alignment.CyclicLogarithmicLadder.bounded_correlation_rung
+#check NField.Alignment.DivisorVoronoiEstimate.divisor_error_isBigO
+#check NField.Alignment.DivisorWindowCount.prime_square_divisor_window_bound
+#check NField.Alignment.HalfPacketSignGeometry.half_packet_no_opposite
+#check NField.Alignment.IntegerCotangentTransforms.integer_series_cotangent
+#check NField.Alignment.IntegerCotangentTransforms.integer_inverse_cotangent_identity
+#check NField.Alignment.IntegerCotangentTransforms.integer_full_cotangent
+#check NField.Alignment.IntegerDedekindTransform.integer_additive_transform
+#check NField.Alignment.IntegerDedekindTransform.integer_unit_mobius
+#check NField.Alignment.IntegerFullTransformBound.integer_full_transform_bound
+#check NField.Alignment.IntegerInversePrefix.completed_integer_real_prefixes
+#check NField.Alignment.IntegerInversePrefix.completed_integer_real_prefixes_small_power
+#check NField.Alignment.IntegerInverseResidue.integer_inverse_series_tendsto
+#check NField.Alignment.IntegerInverseSeriesLiteral.integer_literal_series_tendsto
+#check NField.Alignment.IntegerNumeratorDescent.integer_numerator_descent
+#check NField.Alignment.IntegerNumeratorDescent.integer_numerator_descent_bound
+#check NField.Alignment.IntegerSignedDamping.signed_damping_iff_integer_intervals
+#check NField.Alignment.IntegerSignedDamping.sampling_under_integer_signed_damping
+#check NField.Alignment.IntegerSignedDamping.secondary_under_integer_signed_damping
+#check NField.Alignment.IntegerSignedDamping.secondary_under_sharp_capacity_and_integer_signed_damping
+#check NField.Alignment.IntegerTransformBounds.integer_inverse_harmonic_bound
+#check NField.Alignment.IntegerTransformBounds.integer_uniform_transform_bound
+#check NField.Alignment.JordanCapacityFormula.capacity_jordan_formula
+#check NField.Alignment.KorolevRealCutoff.korolev_real_cutoff
+#check NField.Alignment.KorolevShortRangeAsymptotic.short_range_isLittleO
+#check NField.Alignment.MobiusLogarithmicMain.mobius_log_main_bound
+#check NField.Alignment.PrimeSquareGridSeparation.nonzero_grid_halfJump
+#check NField.Alignment.PrimeSquareGridSeparation.boundary_derivative_on_grid
+#check NField.Alignment.RealBernoulliBoundaryLimits.rational_boundary_limits
+#check NField.Alignment.RealBernoulliBoundaryLimits.origin_boundary_limits
+#check NField.Alignment.RealBernoulliCapacityIntegral.integral_capacity_eq_continuous_capacity
+#check NField.Alignment.RealBernoulliCapacityIntegral.integral_capacity_secondary_coefficient
+#check NField.Alignment.RealBernoulliJumpData.rational_square_jump_limits
+#check NField.Alignment.RealBernoulliJumpData.origin_square_jump_limits
+#check NField.Alignment.RealCarrierGridAlias.actual_periodic_jump_aliasing
+#check NField.Alignment.RealCarrierGridAlias.actual_endpoint_reservoir_alias
+#check NField.Alignment.RealDedekindGram.realGram_eq_arithmetic
+#check NField.Alignment.RealDedekindGram.realGram_eq_ratio
+#check NField.Alignment.RealDedekindGram.partition_packet_real_half
+#check NField.Alignment.RealFractionalFirstMoment.real_first_moment_error
+#check NField.Alignment.RealLogWeightedFractionalParts.log_weighted_fractional_parts
+#check NField.Alignment.RealSaffariVaughanDistribution.normalized_real_distribution
+#check NField.Alignment.RealSawtoothDistribution.sawtooth_distribution
+#check NField.Alignment.RealSawtoothPairIntegral.sawtooth_pair_integral
+#check NField.Alignment.ReciprocalMomentEulerFactor.local_euler_factor
+#check NField.Alignment.ReciprocalMomentInfiniteSeries.third_moment_infinite_majorant
+#check NField.Alignment.ReciprocalSawtoothGlobal.floor_global_log_bound
+#check NField.Alignment.RemovedCarrierLogBound.full_live_difference
+#check NField.Alignment.RemovedCarrierLogBound.removed_carrier_log_bound
+#check NField.Alignment.SecondaryCarrierExample.displacement
+#check NField.Alignment.SecondaryCarrierExample.coefficient_cutoff
+#check NField.Alignment.SecondaryCarrierExample.floor_residues
+#check NField.Alignment.SecondaryCarrierExample.collar_values
+#check NField.Alignment.SecondaryCarrierExample.collar_sign_and_sum
+#check NField.Alignment.SecondaryCarrierLogarithmicBounds.integer_carrier_prefix_log_bound
+#check NField.Alignment.SecondaryCarrierLogarithmicBounds.one_carrier_log_bound
+#check NField.Alignment.SecondaryCarrierLogarithmicBounds.absolute_carrier_sum_log_bound
+#check NField.Alignment.SecondaryCollarBounds.slice_re_eq_prefix_layers
+#check NField.Alignment.SecondaryCollarBounds.small_displacement_reservoir_bound
+#check NField.Alignment.SecondaryCollarBounds.absolute_collar_own_logarithm
+#check NField.Alignment.SecondaryCurvatureBounds.curvature_log_bound
+#check NField.Alignment.SecondaryCurvatureBounds.scaled_curvature_log_bound
+#check NField.Alignment.SecondaryCurvatureBounds.endpoint_alias_log_remainder
+#check NField.Alignment.SecondaryEulerHarmonicSeries.harmonic_reciprocal_square_has_sum
+#check NField.Alignment.SecondaryEulerHarmonicSeries.coprime_euler_harmonic_identity
+#check NField.Alignment.SecondaryFiniteConsequences.bounded_reciprocal_divisor_moments
+#check NField.Alignment.SecondaryFiniteConsequences.elementary_reservoir_log_bound
+#check NField.Alignment.SecondaryFiniteConsequences.sampling_correction_bound
+#check NField.Alignment.SecondaryFiniteConsequences.primitive_convolution_eq_packet
+#check NField.Alignment.SecondaryLocalizationUnconditional.square_lock_localization
+#check NField.Alignment.SecondaryLocalizationUnconditional.live_sector_damping
+#check NField.Alignment.SecondaryLocalizationUnconditional.finite_secondary_coefficient_under_signed_damping
+#check NField.Alignment.SecondaryPrintedBounds.one_carrier_harmonic_bound
+#check NField.Alignment.SecondaryPrintedBounds.first_absolute_moment_logarithmic
+#check NField.Alignment.SecondaryPrintedBounds.one_carrier_quadratic_logarithmic
+#check NField.Alignment.SecondaryPrintedBounds.sampling_bound_printed
+#check NField.Alignment.SecondaryPrintedBounds.sampling_bound_quadratic_logarithmic
+#check NField.Alignment.SecondaryRealFractionalParts.mobius_reduction
+#check NField.Alignment.SecondaryRealFractionalParts.weighted_fractional_parts
+#check NField.Alignment.SecondaryRealStraightening.real_collision_straightening
+#check NField.Alignment.SecondaryRealStraightening.real_sampled_energy
+#check NField.Alignment.SecondaryReservoirIntermediate.elementary_reservoir_intermediate
+#check NField.Alignment.SecondaryReservoirIntermediate.elementary_upper_sum_quadratic_logarithmic
+#check NField.Alignment.SecondarySamplingAsymptotics.sampling_defect_isLittleO_log_square
+#check NField.Alignment.SecondarySeriesConsequences.coprime_euler_series
+#check NField.Alignment.SecondarySeriesConsequences.reduced_euler_tail_series
+#check NField.Alignment.SecondarySeriesConsequences.logarithmic_reciprocal_square_summable
+#check NField.Alignment.SecondarySeriesConsequences.gcd_lcm_logarithmic_error
+#check NField.Alignment.SecondarySwitchingLedger.exact_selected_ledger
+#check NField.Alignment.SecondarySwitchingLedger.fresh_collision_all_states
+#check NField.Alignment.SecondarySwitchingLedger.selected_linear_ledger
+#check NField.Alignment.SecondaryTermUnconditional.weighted_fractional_parts
+#check NField.Alignment.SecondaryTermUnconditional.fractional_floor_asymptotic
+#check NField.Alignment.SecondaryTermUnconditional.continuous_secondary_coefficient
+#check NField.Alignment.SecondaryTermUnconditional.secondary_term_for_gcd_lcm_square
+#check NField.Alignment.SecondaryTermUnconditional.secondary_term_for_gcd_lcm_triangular
+#check NField.Alignment.SecondaryTermUnconditional.finite_secondary_coefficient
+#check NField.Alignment.SignedDivisorWindow.signed_divisor_window_bound
+#check NField.Alignment.SquareLockAsymptoticScales.collarMass_tendsto_zero
+#check NField.Alignment.SquareLockAsymptoticScales.collarMass_isLittleO_log_square
+#check NField.Alignment.SquareLockCountBound.square_lock_count_estimate
+#check NField.Alignment.SquareLockCutoffLimits.fine_collar_tendsto_zero
+#check NField.Alignment.SquareLockCutoffLimits.coefficient_collar_isLittleO_log_square
+#check NField.Alignment.SquareLockCutoffLimits.coefficient_collar_isBigO_log
+#check NField.Alignment.SquareLockDivisorInjection.centered_residue_divisor_lock
+#check NField.Alignment.SquareLockDivisorInjection.carrier_count_le_signed_divisor_count
+#check NField.Alignment.SquareLockRemainingStrip.remaining_carrier_strip
+#check NField.Alignment.SquareLockRemainingStrip.remaining_floor_levels
+#check NField.Alignment.TriangularAdditiveConvolution.primitive_lifetime_triangle
+#check NField.Alignment.SaffariVaughanDistribution.saffari_vaughan_distribution
