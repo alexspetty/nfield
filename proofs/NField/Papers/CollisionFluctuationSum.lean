@@ -4,6 +4,8 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.DecimalPrimeMeans
+import NField.Alignment.FluctuationSourceDetails
 import NField.Alignment.CollisionFluctuationClosure
 import NField.Papers.SilentPrimes
 
@@ -32,13 +34,14 @@ Reader-facing theorem map for the Lean companion to
   the two Mertens-progression component limits used in the manuscript are
   supplied, the coefficient is exactly `-(b-1)/b`.
 
-## Analytic boundary
+## Proved analytic inputs and consequences
 
-The classical Mertens theorem for reciprocal primes in reduced arithmetic
-progressions is cited by the manuscript and is not redeclared as a Lean
-premise.  The result below formalizes the exact finite coefficients and the
-logical assembly of the two component residual limits.  It does not report
-the external Mertens input as a theorem proved inside this repository.
+The fixed-progression prime and Mertens theorems are now proved from pinned
+Mathlib and the attributed Tauberian bridge. The actual component sums,
+original-cutoff drift, divergence, drift-removed series and absolute
+convergence are proved. Exact unit-fiber transport also gives the four
+printed limiting prime-class means. The original conditional theorem remains
+unchanged, and the observed finite numerical columns retain separate checks.
 -/
 
 namespace NField.Papers.CollisionFluctuationSum
@@ -260,3 +263,19 @@ theorem exact_drift_from_component_limits
 #check exact_drift_from_component_limits
 
 end NField.Papers.CollisionFluctuationSum
+
+/-! Analytic results selected from their defining source modules. -/
+
+#check NField.Alignment.ProgressionMertens.real_cutoff_mertens_progression
+#check NField.Alignment.CollisionPrimeLimits.lag_one_constructive_prime_drift
+#check NField.Alignment.CollisionPrimeLimits.lag_one_drift_removed_limit
+#check NField.Alignment.CollisionPrimeLimits.lag_one_prime_sum_tendsto_atBot
+#check NField.Alignment.CollisionPrimeLimits.lag_one_raw_prime_drift
+#check NField.Alignment.CollisionPrimeLimits.lag_one_correction_prime_drift
+#check NField.Alignment.CollisionPrimeLimits.constructive_fluctuation_uniform_bound
+#check NField.Alignment.CollisionPrimeLimits.collision_prime_series_absolute_convergence
+#check NField.Alignment.CollisionPrimeLimits.decimal_class_prime_mean_limits
+#check NField.Alignment.CollisionPrimeLimits.decimal_coarse_constructive_means
+#check NField.Alignment.CollisionPrimeLimits.decimal_limiting_means_negative
+#check NField.Alignment.CollisionPrimeLimits.raw_collision_uniform_bound
+#check NField.Alignment.CollisionPrimeLimits.lag_one_partial_sum_at_one

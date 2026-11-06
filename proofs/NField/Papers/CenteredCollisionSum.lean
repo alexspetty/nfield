@@ -4,6 +4,10 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.CenteredSourceDetails
+import NField.Alignment.PrimeLogarithmicIntegral
+import NField.Alignment.CollisionCharacterPrimeLimit
+import NField.Alignment.AllLagPrimeDrift
 import NField.Alignment.CenteredCollisionClosure
 import NField.Papers.CollisionFluctuationSum
 
@@ -30,12 +34,11 @@ Reader-facing theorem map for `papers/centered_collision_sum.tex`.
 
 ## Analytic inputs
 
-The prime number theorem and Mertens' theorem in arithmetic progressions are
-named external inputs.  Lean checks the finite cancellation that turns their
-classwise statements into the two centered limits and checks the exact
-assembly of the all-lag drift once the two component residual limits are
-supplied.  The four base-ten prime-sum rows remain bounded computation in
-nfield rather than premises of these theorems.
+The prime number theorem and Mertens theorem in fixed progressions are now
+proved from pinned Mathlib and the attributed Tauberian bridge. Their exact
+real-cutoff consequences give the centered little-o estimate, the harmonic
+limit, its gated character formula, and the unconditional all-lag drift.
+The four decimal rows remain separately checked finite computations.
 -/
 
 namespace NField.Papers.CenteredCollisionSum
@@ -425,3 +428,15 @@ theorem exact_centered_residual_class_limit
 #check exact_centered_residual_class_limit
 
 end NField.Papers.CenteredCollisionSum
+
+/-! Analytic conclusions selected from their defining source modules. -/
+
+#check NField.Alignment.PrimePeriodicLimits.prime_progression_logarithmic_integral_limit
+#check NField.Alignment.ProgressionMertens.real_cutoff_mertens_progression
+#check NField.Alignment.CollisionPrimeLimits.real_centered_collision_prime_littleO
+#check NField.Alignment.CollisionPrimeLimits.real_centered_collision_harmonic_limit
+#check NField.Alignment.CollisionPrimeLimits.centered_harmonic_character_formula
+#check NField.Alignment.CollisionPrimeLimits.all_lag_constructive_prime_drift
+#check NField.Alignment.CenteredSourceDetails.nonidentity_collision_sum
+#check NField.Alignment.CenteredSourceDetails.raw_table_principal_coefficient
+#check NField.Alignment.CenteredSourceDetails.raw_table_nonprincipal_even_zero

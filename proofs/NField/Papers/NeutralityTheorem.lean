@@ -4,6 +4,8 @@ SPDX-License-Identifier: Apache-2.0
 Author: Alexander S. Petty
 -/
 
+import NField.Alignment.ResidueThreePrimeSplit
+import NField.Alignment.NeutralitySourceDetails
 import NField.Alignment.CenteredCollisionClosure
 
 /-!
@@ -38,11 +40,12 @@ Reader-facing theorem map for the Lean companion to
 
 ## Analytic and computational boundary
 
-Mertens' theorem in arithmetic progressions is not formalized in this
-repository.  The separate convergence theorem at `s = 1` remains an analytic
-result whose finite zero-mean premise is machine checked here.  The prime
-window from one million through ten million is exact software evidence and is
-not recomputed inside Lean.  Convergence below one remains open.
+The actual Mertens progression asymptotic and each separate prime-channel
+limit at `s = 1` are now proved. The actual finite prime packets satisfy the
+half-sum, sum, and difference identities, and both total and twisted harmonic
+packets converge. The proof reuses pinned Mathlib and the attributed local
+Tauberian bridge. The decimal prime window remains finite software evidence.
+Convergence below one and the historical wider-coordinate question remain open.
 -/
 
 namespace NField.Papers.NeutralityTheorem
@@ -385,3 +388,14 @@ theorem declared_base_range_check :
 #check declared_base_range_check
 
 end NField.Papers.NeutralityTheorem
+
+/-! Additional analytic results, selected from their defining source modules. -/
+
+#check NField.Alignment.ProgressionMertens.real_cutoff_mertens_progression
+#check NField.Alignment.CollisionPrimeLimits.residue_three_channel_nat_limit
+#check NField.Alignment.CollisionPrimeLimits.actual_prime_channel_half_split
+#check NField.Alignment.CollisionPrimeLimits.actual_prime_packet_channel_sum
+#check NField.Alignment.CollisionPrimeLimits.actual_twisted_prime_packet_channel_difference
+#check NField.Alignment.CollisionPrimeLimits.residue_three_total_and_twisted_limits
+#check NField.Alignment.NeutralityTheorem.existsUnique_fixed_internal_label
+#check NField.Alignment.NeutralityTheorem.internal_fixed_slice_raw_twice
