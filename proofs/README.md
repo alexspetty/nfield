@@ -10,18 +10,17 @@ upstream source retains its separate attribution and license notices.
 The library builds on [Mathlib](https://github.com/leanprover-community/mathlib4),
 using its mathematical definitions, existing theorems, and proof tactics.
 Mathlib is installed as a pinned dependency; its source is not copied into
-this package. Fifteen additional analytic number theory modules are adapted from
+this package. Additional analytic number theory modules are adapted from
 PrimeNumberTheoremAnd. Their authorship, source revision, exact source hashes,
 and adaptations are documented in
 [the upstream provenance note](NField/External/ConservationPNT/README.md).
 
-The root module imports the formal paper maps in reading order, ending with
-*Conservation and Profinite Dynamics in Digit-Collision Energy*. The reusable definitions and
-proofs under `NField/Alignment/`, `NField/Golden/`, and the other object-named
-directories are included when one of those paper maps imports them.
+`NField.lean` imports the paper companions. Each companion selects results
+from the reusable definitions and proofs under `NField/Alignment/`,
+`NField/Golden/`, and the other object-named directories.
 
-Draft manuscripts, correspondence bundles, generated build files, and current
-private work are not part of this package.
+The library contains complete and partial formalizations. Each companion
+states its mathematical coverage and the hypotheses of its selected results.
 
 ## Build
 
@@ -44,6 +43,5 @@ NField/Golden/       reusable threshold and finite-orbit proofs
 NField/External/     attributed upstream proof inputs
 ```
 
-The public release check builds this root from source and rejects unchecked
-declarations, private repository paths, compiled Lean files, and unpublished
-paper modules.
+A successful build checks the selected Lean statements and their hypotheses.
+It does not extend a companion's stated mathematical coverage.

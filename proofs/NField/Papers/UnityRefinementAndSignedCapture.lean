@@ -27,17 +27,26 @@ import NField.Alignment.UnitySelectedDetectors
 import NField.Alignment.UnityDetectorHorizon
 import NField.Alignment.UnityDetectorResponse
 
+import NField.Alignment.UnitySpineBasis
+import NField.Alignment.UnityHorizonBounds
+import NField.Alignment.UnitySpineExpansion
+import NField.Alignment.UnityShallowSpine
+import NField.Alignment.UnitySharpSpine
+import NField.Alignment.UnitySpineTailDirection
+import NField.Alignment.UnitySpineAttainment
+import NField.Alignment.UnitySpineSource
 /-!
 # Unity, Refinement, and Signed Capture
 
 This is a partial companion for both published editions. It contains the
 actual reciprocal-weight Hilbert model, primitive mass, integer copying,
 mixed carries, finite projection and pseudoinverse gain, uncertain-reading
-corrections, the prescribed shallow detector, its full signed terminal
+corrections, the complete sharp shallow-spine forcing and its equality
+witnesses, the prescribed shallow detector, its full signed terminal
 response, all stated uniform detector costs and scalar certificates, and
 the conditional cumulative-capture theorems.
 
-The Wold/spine and arithmetic-detail claims, clock and mask formulas,
+The Wold and arithmetic-detail claims, clock and mask formulas,
 packet estimates and classical analytic equivalences are unfinished.
 The website has the sufficient packet criterion; Zenodo Version 2 adds
 its converse. Neither direction is claimed completed here. The stated
@@ -141,5 +150,38 @@ namespace NField.Papers.UnityRefinementAndSignedCapture
 #check NField.Alignment.UnityDetectorResponse.pulled_residual_orthogonal
 #check NField.Alignment.UnityDetectorResponse.prescribed_terminal_response
 #check NField.Alignment.UnityDetectorResponse.binary_clock_lift
+
+#check NField.Alignment.UnitySpineBasis.spine_orthonormal
+#check NField.Alignment.UnitySpineBasis.coefficient_sq_sum
+#check NField.Alignment.UnitySpineBasis.copied_boundary_spine
+#check NField.Alignment.UnitySpineBasis.head_add_tail
+#check NField.Alignment.UnitySpineBasis.tail_norm_sq
+#check NField.Alignment.UnitySpineBasis.head_norm_sq
+#check NField.Alignment.UnityHorizonBounds.horizon_power_bounds
+#check NField.Alignment.UnityHorizonBounds.horizon_tail_bound
+#check NField.Alignment.UnityHorizonBounds.shallow_coarseCutoff_lower
+#check NField.Alignment.UnityHorizonBounds.eligible_eq_range_of_size
+#check NField.Alignment.UnitySpineExpansion.unity_spine_inner
+#check NField.Alignment.UnitySpineExpansion.tail_spine_inner
+#check NField.Alignment.UnitySpineExpansion.unity_spine_hasSum
+#check NField.Alignment.UnitySpineExpansion.coefficient_rpow
+#check NField.Alignment.UnityShallowSpine.head_tail_energy_lower
+#check NField.Alignment.UnityShallowSpine.prescribed_shallow_energy
+#check NField.Alignment.UnityShallowSpine.prescribed_shallow_quarter
+#check NField.Alignment.UnitySharpSpine.normalized_head_response
+#check NField.Alignment.UnitySharpSpine.sharp_spine_forcing
+#check NField.Alignment.UnitySpineTailDirection.tailDirection_norm_sq
+#check NField.Alignment.UnitySpineTailDirection.tail_combination_energy
+#check NField.Alignment.UnitySpineAttainment.highVector_mean
+#check NField.Alignment.UnitySpineAttainment.highVector_norm_sq
+#check NField.Alignment.UnitySpineAttainment.highVector_attains
+#check NField.Alignment.UnitySpineAttainment.lowVector_mean
+#check NField.Alignment.UnitySpineAttainment.lowVector_norm_sq
+#check NField.Alignment.UnitySpineAttainment.lowVector_attains
+#check NField.Alignment.UnitySpineAttainment.sharp_spine_equality_attainable
+#check NField.Alignment.UnitySpineSource.one_shallow_reading
+#check NField.Alignment.UnitySpineSource.shallow_spine_source
+#check NField.Alignment.UnitySpineSource.unity_forcing_and_admissible_cost
+#check NField.Alignment.UnitySpineSource.sharp_spine_source
 
 end NField.Papers.UnityRefinementAndSignedCapture

@@ -6,6 +6,8 @@ Author: Alexander S. Petty
 
 import NField.Alignment.CollisionTransform
 import NField.Alignment.CenteredCollisionClosure
+import NField.Alignment.CollisionPrimeAnalyticModel
+import NField.Alignment.CollisionZeroObstruction
 
 /-!
 # The Collision Transform
@@ -33,28 +35,49 @@ Reader-facing theorem map for the Lean companion to
   channel with positive multiplicity has a nonzero ledger.
 * The declared 468 direct collision/table comparisons are checked exactly.
 
-## Analytic boundary
+## Checked analytic results
 
-The proof that the reciprocal-prime series converges uses Mertens' theorem in
-arithmetic progressions.  Zero-free penetration uses the explicit formula and
-partial summation.  The converse obstruction uses the holomorphy theorem for
-an ordinarily convergent Dirichlet series, meromorphic continuation of the
-weighted logarithmic derivatives, and their local residues.  These analytic
-inputs are not currently packaged in Mathlib in the manuscript's required
-form.  This companion therefore checks the exact finite cancellation,
-Euler-product bookkeeping, active-channel classification, residue-to-ledger
-identity, and isolated-channel contradiction, but it does not claim the
-ordinary convergence, zero-free penetration, continuation, or analytic
-zero-cancellation theorems themselves.
+The intrinsic collision series converges absolutely for `Re(s) > 1` and has
+an ordinary ordered reciprocal-prime limit at `s = 1`.  Its expansion in
+characters at the original collision modulus uses the actual Euler-product
+logarithms and exact finite prime correction.  The logarithms exponentiate
+to the Dirichlet `L`-functions and tend to zero as the real part tends to
+infinity.  The higher-prime-power double series converges absolutely and
+uniformly on each smaller half-plane to the right of one half; its sum is
+holomorphic there, and the finite correction is entire.
 
-The general direct digit-collision-to-slice bridge is now closed in the
-reusable finite-determination layer.  The reindexing from active characters at
-the displayed modulus to their unique primitive ancestors remains an explicit
-assembly boundary for the general primitive-inversion formula.  The terminal
-prime window is software evidence and is not a Lean proof premise.  The
-collision-boundary statement remains a conjecture.  No manuscript
-contradiction appeared in the formalized layer, and no unchecked declaration
-is used.
+The selected continuation theorem uses an open simply connected domain to
+the right of one half, a nonempty connected overlap with `Re(s) > 1`, and
+nonvanishing of every active `L`-function.  Its conclusion is holomorphic
+continuation on that domain.  The ordinary Dirichlet-series theorem proves
+holomorphy and locally uniform convergence to the right of an ordinary
+convergence point.  The zero-obstruction theorem uses actual analytic zero
+multiplicities: ordinary convergence at a real `sigma >= 1/2` forces the
+weighted zero ledger to vanish at every point with real part greater than
+`sigma`.  The selected supporting theorems prove the logarithmic residues,
+cleared analytic identity, and finite weighted multiplicity cancellation.
+
+## Remaining analytic boundary
+
+The explicit-formula estimates for prime character sums and their
+zero-free-penetration consequence remain unformalized here.  In particular,
+holomorphic continuation alone is not a proof of ordinary convergence on
+the continued domain.  The stated conditional convergence in the open
+half-plane to the right of one half still requires the prime-sum estimates.
+
+The manuscript rewrites its analytic formulas using the unique primitive
+ancestors of the active characters.  The selected analytic formulas and
+zero-obstruction theorem currently use characters at the original collision
+modulus.  Reindexing the coefficients, finite prime correction, and zero
+multiplicities through primitive ancestors remains an explicit assembly
+obligation.  The general primitive-inversion formula and the printed
+primitive-ancestor versions of the analytic claims are therefore not
+reported as closed by these selections.  The existing prime-base, lag-one
+primitive gate remains proved.
+
+The terminal prime window is software evidence and is not a Lean proof
+premise.  The collision-boundary statement remains a conjecture.  This
+companion does not claim full manuscript coverage.
 -/
 
 namespace NField.Papers.CollisionTransform
@@ -273,5 +296,38 @@ theorem declared_direct_table_agreement :
 #check isolated_effective_zero_cannot_hide
 #check declared_direct_check_count
 #check declared_direct_table_agreement
+
+
+/-! ## Analytic results and their proved dependencies -/
+
+#check NField.Alignment.PrimeEulerLog.higherPower_norm_summable
+#check NField.Alignment.PrimeEulerLog.exp_eulerLog_eq_LFunction
+#check NField.Alignment.PrimeEulerLog.primeSeries_eq_eulerLog_sub_higherPower
+#check NField.Alignment.PrimeEulerLog.higherPower_analyticOnNhd
+#check NField.Alignment.PrimeHigherPowers.higherTerm_norm_summable
+#check NField.Alignment.PrimeHigherPowers.higherTerm_tendstoUniformlyOn
+#check NField.Alignment.EulerLogNormalization.eulerLog_tendsto_zero
+#check NField.Alignment.ComplexPrimeCharacterExpansion.periodicPrimeSeries_euler_expansion
+#check NField.Alignment.ComplexPrimeCharacterExpansion.finiteCorrection_differentiable
+#check NField.Alignment.HolomorphicLogBranch.exists_analytic_log_branch
+#check NField.Alignment.CollisionHolomorphicContinuation.exists_collision_continuation
+#check NField.Alignment.CollisionPrimeAnalyticModel.directSeries_summable
+#check NField.Alignment.CollisionPrimeAnalyticModel.directSeries_euler_expansion
+#check NField.Alignment.CollisionPrimeAnalyticModel.directSeries_continuation
+#check NField.Alignment.CollisionPrimeAnalyticModel.direct_harmonic_boundary
+#check NField.Alignment.AnalyticLogarithmicMultiplicity.tendsto_mul_logDeriv_order
+#check NField.Alignment.AnalyticLogarithmicMultiplicity.LFunction_logarithmic_residue
+#check NField.Alignment.AnalyticLogarithmicMultiplicity.collision_ledger_is_logarithmic_residue
+#check NField.Alignment.WeightedLogarithmicIdentity.continue_cleared_identity
+#check NField.Alignment.WeightedLogarithmicIdentity.weighted_order_zero
+#check NField.Alignment.OrdinaryDirichletKernel.norm_difference_le
+#check NField.Alignment.OrdinaryDirichletKernel.abelSum_analyticOnNhd
+#check NField.Alignment.OrdinaryDirichletKernel.ordinary_convergence
+#check NField.Alignment.OrdinaryDirichletKernel.ordinary_uniform_convergence
+#check NField.Alignment.OrdinaryDirichletConvergence.bounded_partial_sums
+#check NField.Alignment.OrdinaryDirichletConvergence.holomorphic_of_ordinary_convergence
+#check NField.Alignment.OrdinaryCollisionPrimeSeries.ordinary_limit_above_one
+#check NField.Alignment.OrdinaryCollisionPrimeSeries.analytic_model_of_convergence
+#check NField.Alignment.CollisionZeroObstruction.ordinary_convergence_zero_ledger
 
 end NField.Papers.CollisionTransform

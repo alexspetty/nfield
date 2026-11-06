@@ -5,6 +5,8 @@ Author: Alexander S. Petty
 -/
 
 import NField.Alignment.CenteredCollisionClosure
+import NField.Alignment.CollisionPrimeAnalyticModel
+import NField.Alignment.CollisionZeroObstruction
 
 /-!
 # The Collision Transform and the Critical Strip
@@ -36,20 +38,45 @@ Reader-facing theorem map for the Lean companion to
 * Exact evaluation checks the manuscript's 468 direct collision/table cases
   across bases `3, 5, 7, 10, 12` and three representatives per unit class.
 
-## Analytic boundary
+## Checked analytic results
 
-Mertens' theorem in arithmetic progressions, logarithms of Dirichlet
-`L`-functions, the explicit formula, partial summation for prime character
-series, analytic continuation, and the general holomorphy theorem for an
-ordinarily convergent Dirichlet series remain named external analytic inputs.
-Lean proves the direct finite engine, the natural spectral gate, the exact
-Euler-product bookkeeping, and the residue-to-ledger implication used after
-those inputs.  It does not report the external analytic theorems as finite
-formalization.
+The intrinsic collision series converges absolutely for `Re(s) > 1` and has
+an ordinary ordered reciprocal-prime limit at `s = 1`.  Its expansion in
+characters at the original collision modulus uses the actual Euler-product
+logarithms and exact finite prime correction.  The logarithms exponentiate
+to the Dirichlet `L`-functions and tend to zero as the real part tends to
+infinity.  The higher-prime-power double series converges absolutely and
+uniformly on each smaller half-plane to the right of one half; its sum is
+holomorphic there, and the finite correction is entire.
 
-The prime-window computation through ten million is software evidence, not a
-proof premise, and is not reproduced inside Lean.  No manuscript claim failed
-during this finite formalization, and no unchecked declaration is used.
+The selected continuation theorem uses an open simply connected domain to
+the right of one half, a nonempty connected overlap with `Re(s) > 1`, and
+nonvanishing of every active `L`-function.  Its conclusion is holomorphic
+continuation on that domain.  The ordinary Dirichlet-series theorem proves
+holomorphy and locally uniform convergence to the right of an ordinary
+convergence point.  The zero-obstruction theorem uses actual analytic zero
+multiplicities: ordinary convergence at a real `sigma >= 1/2` forces the
+weighted zero ledger to vanish at every point with real part greater than
+`sigma`.  The selected supporting theorems prove the logarithmic residues,
+cleared analytic identity, and finite weighted multiplicity cancellation.
+
+## Remaining analytic boundary
+
+The explicit-formula estimates for prime character sums and their
+zero-free-penetration consequence remain unformalized here.  In particular,
+holomorphic continuation alone is not a proof of ordinary convergence on
+the continued domain.  The stated conditional convergence in the open
+half-plane to the right of one half still requires the prime-sum estimates.
+
+The analytic expansions and weighted zero ledger selected here use the
+active characters at the original collision modulus.  The passage from
+an isolated zero of a primitive ancestor to the corresponding original-
+modulus zero multiplicities remains an assembly obligation.  The exact
+finite isolated-channel ledger argument is retained separately.
+
+The prime-window computation through ten million is software evidence and
+is not a Lean proof premise.  The collision-boundary statement remains a
+conjecture.  This companion does not claim full manuscript coverage.
 -/
 
 namespace NField.Papers.CollisionTransformStrip
@@ -242,5 +269,38 @@ theorem direct_collision_table_check :
 #check isolated_channel_ledger_nonzero
 #check direct_check_count
 #check direct_collision_table_check
+
+
+/-! ## Analytic results and their proved dependencies -/
+
+#check NField.Alignment.PrimeEulerLog.higherPower_norm_summable
+#check NField.Alignment.PrimeEulerLog.exp_eulerLog_eq_LFunction
+#check NField.Alignment.PrimeEulerLog.primeSeries_eq_eulerLog_sub_higherPower
+#check NField.Alignment.PrimeEulerLog.higherPower_analyticOnNhd
+#check NField.Alignment.PrimeHigherPowers.higherTerm_norm_summable
+#check NField.Alignment.PrimeHigherPowers.higherTerm_tendstoUniformlyOn
+#check NField.Alignment.EulerLogNormalization.eulerLog_tendsto_zero
+#check NField.Alignment.ComplexPrimeCharacterExpansion.periodicPrimeSeries_euler_expansion
+#check NField.Alignment.ComplexPrimeCharacterExpansion.finiteCorrection_differentiable
+#check NField.Alignment.HolomorphicLogBranch.exists_analytic_log_branch
+#check NField.Alignment.CollisionHolomorphicContinuation.exists_collision_continuation
+#check NField.Alignment.CollisionPrimeAnalyticModel.directSeries_summable
+#check NField.Alignment.CollisionPrimeAnalyticModel.directSeries_euler_expansion
+#check NField.Alignment.CollisionPrimeAnalyticModel.directSeries_continuation
+#check NField.Alignment.CollisionPrimeAnalyticModel.direct_harmonic_boundary
+#check NField.Alignment.AnalyticLogarithmicMultiplicity.tendsto_mul_logDeriv_order
+#check NField.Alignment.AnalyticLogarithmicMultiplicity.LFunction_logarithmic_residue
+#check NField.Alignment.AnalyticLogarithmicMultiplicity.collision_ledger_is_logarithmic_residue
+#check NField.Alignment.WeightedLogarithmicIdentity.continue_cleared_identity
+#check NField.Alignment.WeightedLogarithmicIdentity.weighted_order_zero
+#check NField.Alignment.OrdinaryDirichletKernel.norm_difference_le
+#check NField.Alignment.OrdinaryDirichletKernel.abelSum_analyticOnNhd
+#check NField.Alignment.OrdinaryDirichletKernel.ordinary_convergence
+#check NField.Alignment.OrdinaryDirichletKernel.ordinary_uniform_convergence
+#check NField.Alignment.OrdinaryDirichletConvergence.bounded_partial_sums
+#check NField.Alignment.OrdinaryDirichletConvergence.holomorphic_of_ordinary_convergence
+#check NField.Alignment.OrdinaryCollisionPrimeSeries.ordinary_limit_above_one
+#check NField.Alignment.OrdinaryCollisionPrimeSeries.analytic_model_of_convergence
+#check NField.Alignment.CollisionZeroObstruction.ordinary_convergence_zero_ledger
 
 end NField.Papers.CollisionTransformStrip

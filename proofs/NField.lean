@@ -41,3 +41,5 @@ import NField.Papers.MagnitudeDecorrelationInTheCollisionSpectrum
 import NField.Papers.ConservationAndProfiniteDynamicsInDigitCollisionEnergy
 import NField.Papers.UnitSamplingDefect
 import NField.Papers.UnityRefinementAndSignedCapture
+import NField.Papers.StationaryToDiagonalTransition
+import NField.Papers.FiniteGenerationOfCollisionCapacity
