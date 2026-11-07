@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Rounded from the displayed zeta-derivative formulas at 80-digit precision.
- * The revision evidence records the independent evaluation, not a fit to data. */
+/* Rounded from zeta-derivative formulas evaluated at 80-digit precision.
+ * These constants are numerical approximations. */
 static const long double ALPHA = 0.6079271018540266286632767792583658334262L;
 static const long double BETA = 0.6973997810101360840584026216412933419767L;
 static const long double CA = -0.3688298639487917399892080502961228762403L;

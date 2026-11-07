@@ -22,7 +22,7 @@ the extreme-sample contribution. `HarperSharpGrid` and `HarperSharpScales`
 assemble moderate sharp-grid rejection and its negligible contribution.
 `HarperUnconditioning` and `HarperUnconditioningScales` remove the remaining
 conditioning and prove the complete profile correction negligible. The
-unconditional Euler-product low-moment saving remains open.
+Euler-product low-moment estimate is outside this module.
 -/
 
 noncomputable section

@@ -9,7 +9,7 @@ import NField.Alignment.MagnitudeMomentArithmetic
 /-! # Exact rational normalization of the secondary energy expansion
 
 These estimates retain the energy error as an explicit input. They do not
-assert the still-unproved Saffari--Vaughan input. The rational denominators
+assert the Saffari--Vaughan estimate. The rational denominators
 are the exact denominators of the manuscript's two magnitude observables.
 -/
 

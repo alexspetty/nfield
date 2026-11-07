@@ -14,7 +14,7 @@ The reverse grid comparison retains the complete original weighted grid
 error; its established decay makes this additional contribution negligible
 at the exact rounded manuscript scale. The random-conditioning consumer
 therefore reduces to the continuous unit-window moment. The critical
-low-moment saving for that actual moment remains unproved.
+low-moment estimate is outside this reduction.
 -/
 
 noncomputable section

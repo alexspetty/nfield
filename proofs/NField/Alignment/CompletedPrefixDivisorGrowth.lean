@@ -10,10 +10,10 @@ import NField.Alignment.DivisorSmallPowerBound
 /-!
 # Subpower growth of the completed inverse-prefix scale
 
-The divisor and logarithmic factors in the printed completed-prefix bound
-cost an arbitrarily small positive power. This proves SEC-04 from the
-elementary divisor-count theorem; the Weil--Estermann and Korolev estimates
-remain separate inputs.
+The divisor and logarithmic factors in the completed-prefix bound cost
+an arbitrarily small positive power, by the elementary divisor-count
+theorem. The Weil--Estermann and Korolev estimates are separate inputs.
+
 -/
 
 set_option autoImplicit false

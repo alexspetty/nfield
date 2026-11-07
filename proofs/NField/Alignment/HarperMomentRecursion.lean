@@ -7,11 +7,11 @@ Author: Alexander S. Petty
 import NField.Alignment.HarperNormalizedEnergy
 
 /-!
-# The actual critical fractional-moment recursion
+# The critical fractional-moment recursion
 
-The next exponent is (1+q)/2. Both event contributions use the same
-proved source good event; all probability and restricted-moment inputs
-are discharged before the recursion is exported.
+The next exponent is (1+q)/2. Both event contributions use the same good
+event, with probability and restricted-moment bounds proved for that event.
+
 -/
 
 noncomputable section

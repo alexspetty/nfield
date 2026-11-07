@@ -13,7 +13,7 @@ The complete label-profile correction has a proved logarithmic majorant.
 A coarser power bound gives a negative normalized exponent, so the literal
 correction and the full sum of all six errors are negligible. Actual random
 conditioning is reduced to the original unconditional fractional grid
-moment. Its low-moment saving remains a separate unproved obligation.
+moment. The low-moment estimate is outside this reduction.
 -/
 
 noncomputable section

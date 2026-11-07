@@ -86,7 +86,7 @@ int finite_prefix_slice_identity(
     return intrinsic == first_identity && left == right;
 }
 
-/* All-denominator ceiling form.  Unlike the published floor form above,
+/* All-denominator ceiling form. Unlike the floor form above,
  * this identity includes nonunit denominator phases and a = 0. */
 int finite_prefix_slice_identity_all_denominators(
         int denominator, int base, int depth,

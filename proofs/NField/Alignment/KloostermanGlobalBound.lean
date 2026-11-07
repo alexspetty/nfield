@@ -161,7 +161,7 @@ theorem complete_inverse_sum_estimate : CompleteInverseSumEstimate := by
   intro r j hr _hj t
   exact complete_inverse_sum_bound q r j t hr
 
-/-- SEC-03's exact incomplete-prefix source estimate follows without an analytic input. -/
+/-- The incomplete-prefix estimate follows without an analytic hypothesis. -/
 theorem weil_estermann_inverse_prefix_estimate :
     NField.Alignment.InverseResiduePrefixCompletion.WeilEstermannInversePrefixEstimate :=
   weil_estermann_prefix_of_complete complete_inverse_sum_estimate

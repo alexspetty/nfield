@@ -39,8 +39,8 @@ theorem rational_centered_identity (N d Y : ℕ) (α : ℝ) :
   intro n hn
   ring
 
-/-- The existing SEC-01 predicate follows from the uniform real reciprocal
-prefix estimate. This theorem does not discharge that analytic premise. -/
+/-- The Saffari--Vaughan distribution bound follows from the uniform real
+reciprocal-prefix estimate, which is an explicit hypothesis here. -/
 theorem saffari_vaughan_of_reciprocal (C γ : ℝ) (hC : 0 ≤ C) (hγ : 0 < γ) (hγ1 : γ ≤ 1)
     (hR : ReciprocalPrefixEstimate C γ) : SaffariVaughanDistributionEstimate := by
   let K := distributionConstant C γ

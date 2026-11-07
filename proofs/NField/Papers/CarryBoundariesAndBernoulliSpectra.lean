@@ -246,7 +246,7 @@ theorem exact_base_fifteen_conductor_ledger :
 #check primePower_energy_decomposition
 
 
--- Completed source correspondences and literal finite examples.
+-- Finite examples and conductor identities.
 #check NField.Alignment.CarryQuadraticLayer.unit_sawtooth_correlation_moebius
 #check NField.Alignment.CarryQuadraticLayer.primitive_bernoulli_l_value_norm
 #check NField.Alignment.CarryBoundaryEnergy.actual_carry_boundary_potential

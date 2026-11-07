@@ -9,8 +9,8 @@ import NField.Alignment.FiniteMagnitudeDecorrelation
 /-!
 # Normalizations in the magnitude moment identities
 
-These are exact algebraic consequences of the manuscript's character sums.
-The finite character sums that supply their inputs are audited separately.
+These algebraic identities normalize the marginal and mixed moments.
+
 -/
 
 namespace NField.Alignment.MagnitudeMomentArithmetic

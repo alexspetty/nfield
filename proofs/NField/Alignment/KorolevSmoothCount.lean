@@ -15,7 +15,7 @@ is only O(x/log(log x)). A fixed shift of two in the existing Rankin
 argument gives the stronger O(x/(log x * log(log x))) estimate.
 The Mertens theorem, Euler product, Rankin inequality, and cutoff limits
 are reused. This proves only the smooth-number removal component;
-Korolev's short exponential-sum estimate remains open.
+Korolev's short exponential-sum estimate is outside this module.
 -/
 
 noncomputable section

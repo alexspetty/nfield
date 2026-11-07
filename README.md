@@ -1,12 +1,11 @@
 # nfield
 
-`nfield` is a command-line tool for digit fields, alignment, collision tables,
-finite character transforms, and the arithmetic that grows out of them.
+`nfield` is a command-line tool for digit fields, alignment, collision tables
+and finite character transforms.
 
-The commands name mathematical objects and operations. Start with a field,
-change its base, inspect a collision table, or follow a reading into its
-boundary terms. Exact integer and rational results, numerical comparisons,
-and directed intervals are identified in the output.
+Start with a field, change its base, or inspect a collision table. The output
+distinguishes exact integer and rational results, numerical comparisons and
+directed intervals.
 
 ## Build and explore
 
@@ -14,7 +13,7 @@ You need a C99 compiler, Make, POSIX threads, LAPACK, BLAS, GMP and MPFR.
 On Debian or Ubuntu:
 
 ```sh
-sudo apt install gcc make liblapack-dev libblas-dev libgmp-dev libmpfr-dev python3
+sudo apt install gcc make liblapack-dev libblas-dev libgmp-dev libmpfr-dev
 make
 ./nfield field 7
 ./nfield align 21 --base 2
@@ -30,15 +29,13 @@ are installed elsewhere. `make parallel` builds with OpenMP support.
 ./nfield help reading-map
 ```
 
-Most command families offer `inspect` and `verify`. Focused help lists the
-actual operations, input conventions and resource bounds. `__complete`
-provides the same command and action registry used by the web reference.
+Most command families offer `inspect` and `verify`. Each command's help lists
+its operations, inputs and limits.
 
 ## Grids, readings and energy
 
-A field's value at a boundary is an input. It can differ from either trace.
-These examples retain the actual readings and the signed interaction between
-components:
+A field's boundary values are supplied separately from its one-sided traces.
+The calculations include the signed cross terms between components.
 
 ```sh
 ./nfield field-observation clocks 4 0 1,2 0,0 1,-1
@@ -97,8 +94,7 @@ reverses that reading: supply square prefixes at cutoffs one through the list
 length, with the zero-cutoff prefix understood to be zero. Recovery retains
 signed rational values and checks the full reconstructed prefix sequence.
 Either mode accepts at most 256 readings and returns the same shell and
-prime-log coefficient format. Finite identities and variation checks do not
-establish an asymptotic rate.
+prime-log coefficient format.
 
 ## Native refinement and complete tails
 
@@ -117,9 +113,8 @@ Its response retains the signed commutator and terminal pairing.
 `probe-transport` follows the same probes to four times the cutoff, retaining
 the signed response drift and every entry of the old, new and removed cost
 matrices. It admits cutoffs 2 through 8; start with 2 in the web tool.
-`mask-capture` reports numerical rank and capture for masks, address controls
-and their joint span. Those numerical results have a different status from
-interval bounds. `divisor-work` includes the removed shell and a complete
+`mask-capture` gives numerical rank and capture estimates for masks, address
+controls and their joint span. `divisor-work` includes the removed shell and a complete
 allowance for the omitted tail. `native-cycle` sums the entire native tail of
 a periodic field. `tail-bound` is conditional on the supplied global envelopes.
 
@@ -139,15 +134,13 @@ cutoff and conductor calculations, alignment products and finite laws:
 ./nfield weighted-remainder-state law-characteristic 5 1
 ```
 
-The help distinguishes finite laws, rational identities and full enclosures.
 `capacity-resolution`, `capacity-generation` and `boundary-spectrum` provide
 related observation, source and conductor operations.
 
 ## Web tool and daemon
 
-The [web tool](https://alexpetty.com/terminal) uses the same public command
-registry and C dispatcher. The site runs bounded commands through its HTTP
-service. The local JSON/TCP daemon is another interface to that dispatcher:
+The commands are also available in the [web tool](https://alexpetty.com/terminal).
+To run the local JSON/TCP daemon:
 
 ```sh
 ./nfield daemon --port 9090 --threads 1
@@ -155,28 +148,18 @@ service. The local JSON/TCP daemon is another interface to that dispatcher:
 
 Send one JSON object per line, such as `{"cmd":"field 7"}`. The response
 contains the command output. See `nfield help daemon` for the protocol.
-The website limits input components to 10,000, execution to 15 seconds and
-output to 256 KiB. Local help gives each calculation's own limits.
-File output and daemon startup are local operations; JSON results can be
-copied from the web tool.
 
-## Verification and correspondence
+## Tests
 
 ```sh
 make test
 make verify
 ```
 
-The default suite includes independent rational and high-precision oracles,
-CLI and daemon parity, published numerical fixtures, and frozen correspondence
-gates. Python 3 is needed for the oracles. Daemon tests need loopback sockets.
-`VERIFICATION_COVERAGE.md` connects the companion papers with their objects.
-The files in `coverage/` record version hashes, admitted domains, checks and
-analytic boundaries. Public builds check the frozen maps and code; they do
-not claim to reread manuscript sources that are absent from this package.
+Daemon tests need local loopback sockets.
 
-A finite check is not a proof of an infinite theorem. The separate Lean
-library has its own declared scope in `proofs/README.md`.
+The [Lean proof library](proofs/README.md) contains the formal statements and
+instructions for checking them.
 
 ## License
 

@@ -190,7 +190,7 @@ int collision_spectrum_factorization_verify(void)
             spectrum_bases[index], &transform_cases,
             &maximum_transform_error);
     }
-    /* Base 73 is deliberately outside the published eighteen-base ledger. */
+    /* Base 73 tests the transform beyond the eighteen bases listed above. */
     transform_failures += transform_probe(
         73, &transform_cases, &maximum_transform_error);
     printf("  every primitive odd character for 18 prime bases     %s\n",

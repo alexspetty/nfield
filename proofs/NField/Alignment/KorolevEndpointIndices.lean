@@ -8,10 +8,10 @@ import NField.Alignment.KorolevPrimeWindows
 import Mathlib.Algebra.Order.Floor.Ring
 
 /-!
-# Endpoint comparisons and rounded source indices
+# Endpoint comparisons and rounded indices
 
-The endpoint definitions determine the rounding bounds directly. We do
-not assume the extracted source's disputed final-index rounding line.
+The endpoint definitions imply the rounding bounds directly.
+
 -/
 
 

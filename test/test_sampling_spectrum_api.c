@@ -1,4 +1,4 @@
-/* C caller-contract tests. Independent mathematical oracles live in Python. */
+/* C caller-contract tests for sampling, spectra and kernels. */
 #include "../src/collision_sampling.h"
 #include "../src/boundary_spectrum.h"
 #include "../src/collision_kernel_readout.h"
@@ -83,7 +83,7 @@ int main(int argc,char **argv)
     CHECK(!collision_kernel_measurement_q(&measurement,5,1,1,14,d));
     collision_measurement_clear(&measurement);
     mpq_clears(a,b,c,d,NULL);
-    printf("Recent-paper C caller contracts: %u checks, %u failures\n",checks,failed);
+    printf("Sampling and spectrum C caller contracts: %u checks, %u failures\n",checks,failed);
     return failed?1:0;
 #undef CHECK
 }

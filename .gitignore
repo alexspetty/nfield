@@ -4,8 +4,7 @@
 nfield
 libnfield.a
 test/test_nfield
-test/native_refinement_runner
-test/test_recent_paper_api
+test/test_sampling_spectrum_api
 test/test_weighted_remainder_primitive
 test/test_weighted_remainder_sawtooth
 test/test_weighted_remainder_floor
@@ -52,5 +51,13 @@ texput.log
 /test/test_native_api
 /test/test_weighted_remainder_alignment_growth
 /test/test_weighted_remainder_law
-__pycache__/
 core
+/test/test_weighted_remainder_activation
+/test/test_weighted_remainder_alignment
+/test/test_weighted_remainder_alignment_local
+/test/test_weighted_remainder_conductor
+/test/test_weighted_remainder_cylinder
+/test/test_weighted_remainder_exact
+/test/test_weighted_remainder_joint
+/test/test_weighted_remainder_pairing
+/test/test_weighted_remainder_transcendental

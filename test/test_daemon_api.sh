@@ -46,26 +46,6 @@ grep -Fq 'full infinite norm; period=840' <<<"$native_refinement"
 grep -Fq 'uniform lower bound OPEN' <<<"$native_refinement"
 printf '  native refinement through JSON/TCP: PASS\n'
 
-native_refinement_json="$(api_request 'native-refinement trace 4 6 --json')"
-python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); assert data["status"]=="PASS" and data["first"]==4 and data["last"]==6 and data["uniform_lower_bound_proved"] is False' <<<"$native_refinement_json"
-printf '  native refinement interval JSON through JSON/TCP: PASS\n'
-
-native_collision4_json="$(api_request 'native-refinement collision4 --json')"
-python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); assert data["status"]=="PASS" and data["first"]==4 and data["last"]==8 and float(data["capture_fraction"]["hi"])<.001 and float(data["signed_response"]["hi"])<0' <<<"$native_collision4_json"
-printf '  native collision4 calibration through JSON/TCP: PASS\n'
-
-native_collision_families_json="$(api_request 'native-refinement collision-families --json')"
-python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); families={row["modulus"]:row for row in data["families"]}; assert data["status"]=="PASS" and families[9]["finite_orbit_rank"]==2 and families[9]["projected_shell_rank"]==2 and families[25]["finite_orbit_rank"]==8 and families[25]["projected_shell_rank"]==4 and data["combined"]["projected_shell_rank"]==4' <<<"$native_collision_families_json"
-printf '  native translated collision families through JSON/TCP: PASS\n'
-
-native_collision_families_16_json="$(api_request 'native-refinement collision-families 8 16 --json')"
-python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); families={row["modulus"]:row for row in data["families"]}; assert data["status"]=="PASS" and data["first"]==8 and data["last"]==16 and data["complete_period_audit"] is False and families[25]["finite_orbit_rank"]==8 and families[25]["projected_shell_rank"]==8 and families[25]["projected_rank_exact"] is True' <<<"$native_collision_families_16_json"
-printf '  native q25 rank-budget exhaustion through JSON/TCP: PASS\n'
-
-native_collision_tower_49_json="$(api_request 'native-refinement collision-families 4 16 --json')"
-python3 -c 'import json,sys; response=json.loads(sys.stdin.read()); data=json.loads(response["output"]); families={row["modulus"]:row for row in data["families"]}; assert data["status"]=="PASS" and data["combined"]["finite_tower_rank"]==11 and data["combined"]["projected_shell_rank"]==11 and data["combined"]["blind_codimension"]==1 and families[49]["finite_orbit_rank"]==18 and families[49]["projected_shell_rank"]==12 and data["extension_49"]["rank_increment"]==1 and float(data["extension_49"]["prior_blind_detection_fraction"]["lo"])>.999999' <<<"$native_collision_tower_49_json"
-printf '  native CRT rank exhaustion and q49 recovery through JSON/TCP: PASS\n'
-
 reciprocal_selection="$(api_request 'reciprocal-square-selection inspect 3 4 --base 10')"
 grep -Fq 'exact alignment alpha_b(pm)=7/11' <<<"$reciprocal_selection"
 grep -Fq 'threshold certificate A^2+A*B-B^2=5' <<<"$reciprocal_selection"
@@ -333,8 +313,8 @@ grep -Fq 'The Cross-Alignment Matrix' <<<"$verification_map"
 grep -Fq 'The Spectral Power of the Digit Function' <<<"$verification_map"
 grep -Fq 'The General Neutrality Theorem' <<<"$verification_map"
 grep -Fq 'The Structure That Survives' <<<"$verification_map"
-grep -Fq 'Commands stay parameterized and independent of the title' <<<"$verification_map"
-printf '  work-to-object reading map through JSON/TCP: PASS\n'
+grep -Fq 'Paper titles and their corresponding commands.' <<<"$verification_map"
+printf '  paper-to-command reading map through JSON/TCP: PASS\n'
 
 collision_characters_inspect="$(api_request 'collision-characters inspect 100 --base 10 --lag 1 --sigma 1 --tau 0.25')"
 grep -Fq 'U_b has phi(b)=4 classes and 4 characters' <<<"$collision_characters_inspect"

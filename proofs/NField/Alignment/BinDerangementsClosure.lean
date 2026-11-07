@@ -9,11 +9,11 @@ import NField.Alignment.AutocorrelationClosure
 import NField.Alignment.FloorDigitSpectralModel
 
 /-!
-# Publication closure for bin derangements and gate width
+# Bin derangements and gate width
 
-This module supplies the exact floor-cardinality, ratio-set, special-range,
-and asymptotic bridges used by the manuscript-facing theorem map.  It extends
-the reusable gate machinery without changing the cumulative proof sequence.
+Exact floor-cardinality, ratio-set, special-range and asymptotic formulas
+connect the digit bins with the gate-width theorems.
+
 -/
 
 namespace NField.Alignment.BinDerangementsClosure

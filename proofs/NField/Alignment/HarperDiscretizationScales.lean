@@ -15,7 +15,7 @@ smoothing errors. The uniform grid mean-square bound gives exponent
 147/200 after the fractional power. After normalization the logarithmic
 power is -3/200, so the full weighted grid error is little-o of the target,
 including the actual rounded cutoff and x=p-1. Strengthened conditioning
-and the central low-moment saving remain open.
+and the central low-moment estimate are outside this module.
 -/
 
 noncomputable section

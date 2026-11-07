@@ -112,7 +112,7 @@ void  field_free(Field *f);
 
 /* ── Invariants ──────────────────────────────────────────── */
 /*
- * Primitive invariants (pre-alignment program):
+ * Primitive invariants:
  *   C(n)  curvature     mean adjacent-digit variation in the base repetend
  *   R(n)  coherence     dominance of the most common rotation index
  *   H3(n) harmonicity   1 if cycle length divisible by 3, else 0

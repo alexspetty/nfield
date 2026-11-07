@@ -3,7 +3,7 @@
 
 #include "weighted_remainder_amplitude.h"
 
-/* Literal display-079 examples. N,K=1..240 independently bound the
+/* Small-modulus character examples. N,K=1..240 independently bound the
  * signed reciprocal-square and cubic-zeta series. The discriminant -3,
  * discriminant -4 (Catalan), and induced modulus-six character use their
  * actual residue tables. All finite prefixes are exact rational values.

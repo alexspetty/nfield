@@ -1,7 +1,7 @@
 /*
  * invariants.c: Structural invariants of a fractional field.
  *
- * Primitive invariants (pre-alignment program, exploratory):
+ * Primitive digit invariants:
  *   C(n)  curvature:   mean adjacent-digit variation in the base repetend
  *   R(n)  coherence:   dominance of the most common rotation index
  *   H3(n) harmonicity: whether the cycle length is divisible by 3

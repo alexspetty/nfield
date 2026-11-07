@@ -26,9 +26,7 @@ arithmetic-function logarithms.
 
 `PNTAP.lean` adapts William J. Blair's ordinary prime-count consequence from
 https://github.com/williamjblair/lean-proofs/blob/f297d710018270c66b296082766334974260bcbc/ErdosProblems/Erdos730/PNTAP.lean.
-The selected source was fetched at that exact commit and compared byte for
-byte with the archived input. Repository-specific density predicates are
-omitted. Its weighted input is the unconditional local progression theorem.
+Repository-specific density predicates are omitted. Its weighted input is the unconditional local progression theorem.
 This file is distributed under the following MIT license.
 
 MIT License

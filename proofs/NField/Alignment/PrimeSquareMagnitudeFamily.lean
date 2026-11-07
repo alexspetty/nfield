@@ -18,7 +18,7 @@ The primitive kernel and Bernoulli-to-L relation reuse existing proofs.
 The concrete short-sum second moment is assembled in
 PrimeSquareMagnitudeShortMoment. The Bernoulli and L-value marginal is
 assembled in PrimeSquareMagnitudeBernoulliMoment. The twisted and mixed
-moments and analytic estimates still require the ledgered formalization.
+moments and analytic estimates are outside this module.
 -/
 
 namespace NField.Alignment.PrimeSquareMagnitudeFamily

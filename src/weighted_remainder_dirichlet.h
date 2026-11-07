@@ -29,7 +29,7 @@ void weighted_remainder_dirichlet_clear(WeightedRemainderDirichlet *out);
 int weighted_remainder_dirichlet_compute(WeightedRemainderDirichlet *out,
                                          const mpq_t s, unsigned N);
 
-/* Display 100: both actual series intervals and their literal weighted
+/* Combined intervals for the two series and their weighted
  * bound. The strict infinite margin is a Lean theorem. A finite prefix
  * is not its proof. The same N=1..240 is used in both positive sums. */
 typedef struct {

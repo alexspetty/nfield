@@ -166,12 +166,9 @@ static void verification_map_help(void)
 {
     printf(
         "nfield reading map\n\n"
-        "The mathematical objects below are native nfield work surfaces. Published\n"
-        "works draw paths through them. Use this optional index to enter the terrain\n"
-        "from a title. Commands stay parameterized and independent of the title, and\n"
-        "one object may support several works. Each object's help gives its inputs,\n"
-        "exact identities, finite range, and analytic boundary.\n\n"
-        "Paths from published work\n"
+        "Paper titles and their corresponding commands.\n"
+        "Use each command's help for its inputs, limits and numerical conventions.\n\n"
+        "Papers and commands\n"
         "  integer-modulus one-digit blocks, rational rigidity, and real branches\n"
         "    Repetend Rigidity at the Golden Scale\n"
         "    nfield help weighted-reference-profile\n\n"
@@ -324,9 +321,6 @@ static void verification_map_help(void)
         "    nfield help field-observation\n"
         "    nfield help collision-sampling\n"
         "    nfield help native-refinement\n\n"
-        "Each object has focused help, exploratory inputs, an exact verifier, CLI\n"
-        "regression tests, and JSON/TCP API tests. Fixed tables are fixtures inside\n"
-        "the larger mathematical surface.\n"
     );
 }
 
@@ -783,7 +777,7 @@ static double compute_global_mean(int base)
     return cnt > 0 ? sum / cnt : 0;
 }
 
-/* ── Blog command implementations ──────────────────────── */
+/* Collision command implementations. */
 
 /* fluctuation_sum / mertens_growth: Φ_x(1,1) and ratio to log log p */
 static void fluctuation_sum_print(int base, int lag, int max_p)
@@ -873,10 +867,9 @@ static void spectrum_print(int p, int base)
         }
         free(R);
     } else {
-        /* General case: diagonalize the exact synchronized matrix.  The old
-           shortcut treated every two-coset case as a two-level spectrum and
-           used an autocorrelation approximation for more cosets; neither is
-           valid in general. */
+        /* General case: diagonalize the synchronized matrix. A two-coset
+           decomposition need not have a two-level spectrum; an
+           autocorrelation approximation does not cover general cosets. */
         int exact_count = 0, exact_order = 0, exact_cosets = 0;
         if (!cross_alignment_eigenvalues(p, base, eigenvals, n,
                                          &exact_count, &exact_order,
@@ -1195,7 +1188,7 @@ static void class_means_print(int base)
     free(S_tab); free(seen_tab);
 }
 
-/* silent_primes: proper implementation with recipe */
+/* silent_primes: factors of the finite lag recipe */
 static void silent_primes_full_print(int base, int lag)
 {
     int m = 1;
@@ -2022,7 +2015,7 @@ int main(int argc, char **argv)
         "A. S. Petty, 2020-2026\n"
         );
 
-    /* ── Blog command aliases ───────────────────────────── */
+    /* Collision command aliases. */
 
     } else if (strcmp(cmd, "collision_table") == 0) {
         int base = parse_positional_base(argc, argv, 2);

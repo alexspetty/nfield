@@ -195,7 +195,7 @@ void scale_print(int chromatic_flag, int alpha_form, int csv) {
     show_scale(major_scale, 8, 24, p, "Just Major Scale (8 tones)", alpha_form, csv);
 
     if (chromatic_flag) {
-        /* Chromatic: need m0 divisible by lcm(1..32) = 480 */
+        /* Chromatic: m0 = 480 is the LCM of the table denominators. */
         show_scale(chromatic, 13, 480, p, "Just Chromatic Scale (12 tones)", alpha_form, csv);
     }
 

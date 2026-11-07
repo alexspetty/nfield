@@ -544,8 +544,8 @@ theorem selected_carrier_switching_ledger
   NField.Alignment.CarrierStateSwitching.exact_carrier_switching_ledger
     hp hN carriers hcarriers
 
-/-- Manuscript Proposition `Exact switching ledger`, including the previously
-missing first equality with the actual smaller-modulus Rademacher reservoir. -/
+/-- Manuscript Proposition `Exact switching ledger`, including its equality
+with the smaller-modulus Rademacher reservoir. -/
 theorem exact_switching_ledger
     {p : ℕ} (hp : p.Prime) (hp5 : 5 ≤ p) :
     let carriers := fullCarrierSet p
@@ -739,7 +739,7 @@ theorem completed_prefix_scale_small_power (ε : ℝ) (hε : 0 < ε) :
       completedInversePrefixScale q ≤ C * (q : ℝ) ^ (1 / 2 + ε) :=
   NField.Alignment.CompletedPrefixDivisorGrowth.completed_prefix_scale_small_power ε hε
 
-/-- SEC-04, with no divisor-growth assumption. -/
+/-- Subpower divisor growth, without a divisor-growth hypothesis. -/
 theorem standard_completed_prefix_divisor_growth :
     StandardCompletedPrefixDivisorGrowth :=
   NField.Alignment.CompletedPrefixDivisorGrowth.standard_completed_prefix_divisor_growth
@@ -754,21 +754,21 @@ theorem completed_inverse_prefixes_small_power
   NField.Alignment.CompletedPrefixDivisorGrowth.completed_inverse_prefix_small_power
     (completed_inverse_prefixes hcompletion) ε hε
 
-/-- `lem:inverse-harmonic` after discharging SEC-04; SEC-02 and SEC-03 remain. -/
+/-- `lem:inverse-harmonic` under the Korolev and Weil--Estermann bounds. -/
 theorem inverse_residue_harmonic_bound_from_two_inputs
     (hKorolev : KorolevInverseFractionRangeEstimate)
     (hcompletion : WeilEstermannCompletionInputs) :
     InverseResidueHarmonicEstimate :=
   inverse_residue_harmonic_bound hKorolev hcompletion standard_completed_prefix_divisor_growth
 
-/-- `prop:uniform-transform` after discharging SEC-04. -/
+/-- `prop:uniform-transform` using the proved divisor-growth bound. -/
 theorem uniform_additive_transform_bound_from_two_inputs
     (hKorolev : KorolevInverseFractionRangeEstimate)
     (hcompletion : WeilEstermannCompletionInputs) :
     UniformAdditiveTransformEstimate :=
   uniform_additive_transform_bound hKorolev hcompletion standard_completed_prefix_divisor_growth
 
-/-- `thm:all-prime-damping` after discharging SEC-04. -/
+/-- `thm:all-prime-damping` using the proved divisor-growth bound. -/
 theorem all_prime_carrier_damping_from_two_inputs
     (hKorolev : KorolevInverseFractionRangeEstimate)
     (hcompletion : WeilEstermannCompletionInputs) :
@@ -777,8 +777,8 @@ theorem all_prime_carrier_damping_from_two_inputs
         |primeSamplingDefect p| ≤ C * (1 + logarithmicCarrierSamplingScale p) :=
   all_prime_carrier_damping hKorolev hcompletion standard_completed_prefix_divisor_growth
 
-/-- `prop:live-sector-damping` after discharging SEC-04. The separate
-square-lock counting hypothesis SEC-05 is still required. -/
+/-- `prop:live-sector-damping` using subpower divisor growth and the
+explicit square-lock counting hypothesis. -/
 theorem live_sector_damping_without_divisor_input
     (hKorolev : KorolevInverseFractionRangeEstimate)
     (hcompletion : WeilEstermannCompletionInputs)
@@ -786,8 +786,8 @@ theorem live_sector_damping_without_divisor_input
     CarrierFamilyPrimeEventualBound liveCarrierSet logarithmicCarrierReservoirScale :=
   live_sector_damping hKorolev hcompletion standard_completed_prefix_divisor_growth hcount
 
-/-- `cor:inherit` with SEC-04 proved. The exact printed conclusion is
-unchanged; only Saffari--Vaughan, Korolev and Weil--Estermann remain inputs. -/
+/-- `cor:inherit` under the Saffari--Vaughan, Korolev and Weil--Estermann
+bounds, with subpower divisor growth proved. -/
 theorem finite_secondary_coefficient_from_three_inputs
     (hSaffariVaughan : SaffariVaughanDistributionEstimate)
     (hKorolev : KorolevInverseFractionRangeEstimate)
@@ -831,15 +831,15 @@ theorem inverse_additive_completion_bound {q : ℕ} [NeZero q]
   NField.Alignment.InverseAdditiveCompletion.inverse_additive_prefix_norm_of_complete
     hq r X j hU hcomplete
 
-/-- SEC-03's incomplete estimate follows from its genuine complete-sum
-source bound. The source bound is not proved by this reduction. -/
+/-- The incomplete inverse-sum estimate follows from a complete-sum bound.
+That complete-sum bound is an explicit hypothesis of this reduction. -/
 theorem weil_estermann_prefix_from_complete_sums
     (hcomplete : NField.Alignment.InverseAdditiveCompletion.CompleteInverseSumEstimate) :
     WeilEstermannInversePrefixEstimate :=
   NField.Alignment.InverseAdditiveCompletion.weil_estermann_prefix_of_complete hcomplete
 
-/-- Same printed `cor:inherit` conclusion, now starting the completion
-chain at complete Kloosterman sums. All three source inputs remain explicit. -/
+/-- `cor:inherit` from complete Kloosterman sums, with all three analytic
+input bounds explicit. -/
 theorem finite_secondary_coefficient_from_complete_sums
     (hSaffariVaughan : SaffariVaughanDistributionEstimate)
     (hKorolev : KorolevInverseFractionRangeEstimate)
@@ -849,7 +849,7 @@ theorem finite_secondary_coefficient_from_complete_sums
   finite_secondary_coefficient_from_three_inputs hSaffariVaughan hKorolev
     (weil_estermann_prefix_from_complete_sums hcomplete)
 
-/-- Linear Hasse quotient and degree bound for positive-degree f; Harcos Lemma 10 supporting SEC-03. -/
+/-- Linear Hasse quotient and degree bound for positive-degree f, as in Harcos Lemma 10. -/
 theorem stepanov_hasse_factor {R : Type*} [CommRing R] [IsDomain R]
     (f : Polynomial R) (hdeg : 1 ≤ f.natDegree) {n k : ℕ} (hk : k ≤ n) :
     ∃ Q : Polynomial R →ₗ[R] Polynomial R, ∀ g : Polynomial R,
@@ -2154,16 +2154,16 @@ theorem complete_inverse_sum_full_modulus_bound (q : ℕ) [NeZero q] (r : ℕ) (
       4*Real.sqrt (q:ℝ)*q.divisors.card*Real.sqrt (Nat.gcd j.val q:ℝ) :=
   NField.Alignment.KloostermanGlobalBound.complete_inverse_sum_bound q r j t hr
 
-/-- The previously open full complete Kloosterman estimate is proved with constant four. -/
+/-- The complete Kloosterman estimate holds with constant four. -/
 theorem complete_inverse_sum_estimate_proved : NField.Alignment.InverseAdditiveCompletion.CompleteInverseSumEstimate :=
   NField.Alignment.KloostermanGlobalBound.complete_inverse_sum_estimate
 
-/-- SEC-03 is proved via exact finite completion, retaining the printed logarithm, gcd factor and all range conditions. -/
+/-- Finite completion gives the incomplete-sum bound with its logarithm, gcd factor and range conditions. -/
 theorem weil_estermann_completion_inputs_proved :
     NField.Alignment.InverseResiduePrefixCompletion.WeilEstermannInversePrefixEstimate :=
   NField.Alignment.KloostermanGlobalBound.weil_estermann_inverse_prefix_estimate
 
-/-- Manuscript `lem:completed-inverse-prefix` and its displayed envelope, with SEC-03 discharged. -/
+/-- Manuscript `lem:completed-inverse-prefix` and its displayed envelope. -/
 theorem completed_inverse_prefixes_unconditional : CompletedInversePrefixEstimate :=
   completed_inverse_prefixes weil_estermann_completion_inputs_proved
 
@@ -2174,17 +2174,17 @@ theorem completed_inverse_prefixes_small_power_unconditional (ε : ℝ) (hε : 0
       |inverseResiduePrefix q r X| ≤ C * (q : ℝ) ^ (1 / 2 + ε) :=
   completed_inverse_prefixes_small_power weil_estermann_completion_inputs_proved ε hε
 
-/-- The inverse harmonic estimate now requires only SEC-02 Korolev. -/
+/-- The inverse harmonic estimate under the Korolev bound. -/
 theorem inverse_residue_harmonic_bound_from_korolev
     (hKorolev : KorolevInverseFractionRangeEstimate) : InverseResidueHarmonicEstimate :=
   inverse_residue_harmonic_bound_from_two_inputs hKorolev weil_estermann_completion_inputs_proved
 
-/-- The full additive transform now requires only SEC-02 Korolev. -/
+/-- The full additive transform under the Korolev bound. -/
 theorem uniform_additive_transform_bound_from_korolev
     (hKorolev : KorolevInverseFractionRangeEstimate) : UniformAdditiveTransformEstimate :=
   uniform_additive_transform_bound_from_two_inputs hKorolev weil_estermann_completion_inputs_proved
 
-/-- The carrier and sampling conclusions now require only SEC-02 Korolev. -/
+/-- The carrier and sampling conclusions under the Korolev bound. -/
 theorem all_prime_carrier_damping_from_korolev
     (hKorolev : KorolevInverseFractionRangeEstimate) :
     PrimeUniformBound lowerModulusReservoir logarithmicCarrierReservoirScale ∧
@@ -2192,13 +2192,13 @@ theorem all_prime_carrier_damping_from_korolev
         |primeSamplingDefect p| ≤ C * (1 + logarithmicCarrierSamplingScale p) :=
   all_prime_carrier_damping_from_two_inputs hKorolev weil_estermann_completion_inputs_proved
 
-/-- The separate live-sector conclusion retains Korolev and the explicit SEC-05 count only. -/
+/-- The live-sector conclusion under Korolev and the explicit square-lock count. -/
 theorem live_sector_damping_from_korolev_and_count
     (hKorolev : KorolevInverseFractionRangeEstimate) (hcount : SquareLockCountEstimate) :
     CarrierFamilyPrimeEventualBound liveCarrierSet logarithmicCarrierReservoirScale :=
   live_sector_damping_without_divisor_input hKorolev weil_estermann_completion_inputs_proved hcount
 
-/-- The exact printed secondary expansion now has only SEC-01 and SEC-02 as main analytic inputs. -/
+/-- The secondary expansion under the Saffari--Vaughan and Korolev bounds. -/
 theorem finite_secondary_coefficient_from_two_inputs
     (hSaffariVaughan : SaffariVaughanDistributionEstimate)
     (hKorolev : KorolevInverseFractionRangeEstimate) :

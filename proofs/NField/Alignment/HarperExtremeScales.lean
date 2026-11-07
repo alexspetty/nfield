@@ -15,7 +15,7 @@ box functional. The uniform extreme-grid expectation bound gives exponent
 the normalized exponent is -3/400. Thus the complete extreme contribution
 is little-o of the manuscript target, including the actual rounded cutoff
 and x=p-1. The actual random-conditioning consumer retains all four errors.
-The moderate sharp-conditioning passage and central low-moment saving remain open.
+Moderate sharp conditioning and central low-moment bounds are outside this module.
 -/
 
 noncomputable section

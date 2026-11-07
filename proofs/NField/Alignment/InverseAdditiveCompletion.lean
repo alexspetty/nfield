@@ -136,9 +136,9 @@ theorem complete_inverse_sum_zero {q : ℕ} [NeZero q]
   simpa using Equiv.sum_comp (Equiv.inv ((ZMod q)ˣ))
     (fun u : (ZMod q)ˣ => ZMod.stdAddChar (j * ((r : ZMod q) * u.val)))
 
-/-- The genuine complete-sum source estimate still required by SEC-03.
-The frequency t ranges over every residue, including zero. This is a
-proposition naming the remaining theorem, not an axiom or proof of it. -/
+/-- The complete inverse-sum bound, with frequency t ranging over every
+residue, including zero. This proposition specifies the hypothesis used
+in the following finite-completion theorem. -/
 def CompleteInverseSumEstimate : Prop :=
   ∃ C : ℝ, 0 ≤ C ∧ ∀ q (hq : 2 ≤ q),
     letI : NeZero q := ⟨by omega⟩

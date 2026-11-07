@@ -120,7 +120,7 @@ open NField.Alignment.SubgroupOrbitJacobiExpansion
 #check booleanDynamicalBoundary_eq
 #check dynamicalBoundary_sum_zero
 
--- November source-correspondence completion.
+-- Finite examples and conductor identities.
 #check NField.Alignment.PushdownParity.exactConductorEnergy_zero_of_even_pushdown
 #check NField.Alignment.PushdownParity.exactConductorEnergy_zero_of_zero_pushdown
 #check NField.Alignment.PushdownParity.exactConductorEnergy_zero_iff_primitive_odd_flux_zero
