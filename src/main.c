@@ -14,12 +14,17 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include <errno.h>
+#include <limits.h>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 #include "build_info.h"
 #include "completion.h"
+#include "command_guide.h"
+#include "verification_routes.h"
 #include "nfield.h"
+#include "reset_forest.h"
 
 /* daemon entry */
 extern int daemon_main(int port, int num_threads);
@@ -31,7 +36,7 @@ static void print_banner(void)
            nfield_build_version());
 }
 
-static void print_elapsed_time(const struct timespec *start,
+static void print_elapsed_time(FILE *stream, const struct timespec *start,
                                const struct timespec *end)
 {
     long long nanoseconds =
@@ -39,13 +44,13 @@ static void print_elapsed_time(const struct timespec *start,
         + (long long)(end->tv_nsec - start->tv_nsec);
 
     if (nanoseconds >= 1000000000LL)
-        printf("\n%.6f s\n", (double)nanoseconds / 1e9);
+        fprintf(stream, "\n%.6f s\n", (double)nanoseconds / 1e9);
     else if (nanoseconds >= 1000000LL)
-        printf("\n%.3f ms\n", (double)nanoseconds / 1e6);
+        fprintf(stream, "\n%.3f ms\n", (double)nanoseconds / 1e6);
     else if (nanoseconds >= 1000LL)
-        printf("\n%.3f us\n", (double)nanoseconds / 1e3);
+        fprintf(stream, "\n%.3f us\n", (double)nanoseconds / 1e3);
     else
-        printf("\n%lld ns\n", nanoseconds);
+        fprintf(stream, "\n%lld ns\n", nanoseconds);
 }
 
 static void usage(void)
@@ -64,7 +69,9 @@ static void usage(void)
         "  align <n>                              Compute synchronized alignment\n"
         "  spectral <p>                           Inspect additive spectral power\n"
         "  survey <max>                           Survey a denominator range\n"
-        "  verify [name|all]                      List or run exact verifiers\n"
+        "  reset-forest <p>                       Compute selected and complementary reset work\n"
+        "\nVerification\n"
+        "  verify [name]                          Run a named implementation check\n"
         "\nFind more\n"
         "  nfield commands                        List every command family\n"
         "  nfield help <command>                  Explain one command\n"
@@ -326,6 +333,8 @@ static void verification_map_help(void)
 
 static int print_help_topic(const char *topic)
 {
+    int guided = nfield_command_guide(topic);
+    nfield_verify_routes_help(topic);
     if (strcmp(topic, "explore") == 0 || strcmp(topic, "analyze") == 0 ||
         strcmp(topic, "field") == 0 || strcmp(topic, "align") == 0 ||
         strcmp(topic, "div") == 0 || strcmp(topic, "decompose") == 0 ||
@@ -334,6 +343,7 @@ static int print_help_topic(const char *topic)
         strcmp(topic, "spectral") == 0 || strcmp(topic, "equations") == 0)
         explore_help();
     else if (strcmp(topic, "commands") == 0) nfield_commands_help();
+    else if (strcmp(topic, "reset-forest") == 0) reset_forest_help();
     else if (strcmp(topic, "native-refinement") == 0) native_refinement_help();
     else if (strcmp(topic, "field-observation") == 0) field_observation_help();
     else if (strcmp(topic, "completion") == 0) nfield_completion_help();
@@ -417,26 +427,74 @@ static int print_help_topic(const char *topic)
     else if (strcmp(topic, "verify") == 0) verify_help();
     else if (strcmp(topic, "legacy") == 0) legacy_help();
     else if (strcmp(topic, "daemon") == 0) daemon_help();
-    else return 0;
+    else return guided;
     return 1;
+}
+
+static long long parse_long_integer(const char *text)
+{
+    char *end = NULL;
+    errno = 0;
+    long long value = strtoll(text, &end, 10);
+    if (!text[0] || end == text || *end || errno == ERANGE) {
+        fprintf(stderr, "Expected an integer in [%lld, %lld], got: %s\n",
+                LLONG_MIN, LLONG_MAX, text);
+        exit(2);
+    }
+    return value;
+}
+
+static int parse_integer(const char *text)
+{
+    char *end = NULL;
+    errno = 0;
+    long value = strtol(text, &end, 10);
+    if (!text[0] || end == text || *end || errno == ERANGE ||
+        value < INT_MIN || value > INT_MAX) {
+        fprintf(stderr, "Expected an integer in [%d, %d], got: %s\n",
+                INT_MIN, INT_MAX, text);
+        exit(2);
+    }
+    return (int)value;
+}
+
+static const char *option_value(int argc, char **argv, const char *option)
+{
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], option) != 0) continue;
+        if (i + 1 >= argc || strncmp(argv[i + 1], "--", 2) == 0) {
+            fprintf(stderr, "Missing value for %s\n", option);
+            exit(2);
+        }
+        return argv[i + 1];
+    }
+    return NULL;
 }
 
 static int parse_base(int argc, char **argv, int start)
 {
-    for (int i = start; i < argc - 1; i++) {
-        if (strcmp(argv[i], "--base") == 0)
-            return atoi(argv[i + 1]);
+    (void)start;
+    const char *value = option_value(argc, argv, "--base");
+    int base = value ? parse_integer(value) : 10;
+    if (base < 2) {
+        fprintf(stderr, "base must be >= 2\n");
+        exit(2);
     }
-    return 10;
+    return base;
 }
 
 static int parse_positional_base(int argc, char **argv, int start)
 {
     int base = parse_base(argc, argv, start);
-    if (base != 10) return base;
-    if (argc > start && argv[start][0] >= '0' && argv[start][0] <= '9')
-        return atoi(argv[start]);
-    return 10;
+    if (option_value(argc, argv, "--base")) return base;
+    if (argc > start && argv[start][0] != '-') {
+        base = parse_integer(argv[start]);
+        if (base < 2) {
+            fprintf(stderr, "base must be >= 2\n");
+            exit(2);
+        }
+    }
+    return base;
 }
 
 static int has_flag(int argc, char **argv, const char *flag)
@@ -450,29 +508,30 @@ static int has_flag(int argc, char **argv, const char *flag)
 static int parse_int_option(int argc, char **argv, const char *option,
                             int fallback)
 {
-    for (int i = 1; i < argc - 1; i++)
-        if (strcmp(argv[i], option) == 0)
-            return atoi(argv[i + 1]);
-    return fallback;
+    const char *value = option_value(argc, argv, option);
+    return value ? parse_integer(value) : fallback;
 }
 
 static const char *parse_string_option(int argc, char **argv,
                                        const char *option)
 {
-    for (int i = 1; i < argc - 1; i++)
-        if (strcmp(argv[i], option) == 0)
-            return argv[i + 1];
-    return NULL;
+    return option_value(argc, argv, option);
 }
 
 static long double parse_long_double_option(int argc, char **argv,
                                             const char *option,
                                             long double fallback)
 {
-    for (int i = 1; i < argc - 1; i++)
-        if (strcmp(argv[i], option) == 0)
-            return strtold(argv[i + 1], NULL);
-    return fallback;
+    const char *value = option_value(argc, argv, option);
+    if (!value) return fallback;
+    char *end = NULL;
+    errno = 0;
+    long double result = strtold(value, &end);
+    if (end == value || *end || errno == ERANGE || !isfinite(result)) {
+        fprintf(stderr, "%s requires a finite number, got: %s\n", option, value);
+        exit(2);
+    }
+    return result;
 }
 
 /* ── Shared arithmetic helpers ──────────────────────────── */
@@ -505,11 +564,11 @@ static int power_mod_local(int base, int exp, int mod) {
     return (int)r;
 }
 
-static void collision_table_print(int base, int show_pairs)
+static int collision_table_print(int base, int show_pairs)
 {
-    if (base > 100) {
-        printf("Base limited to 100 (b^2 = %d cells).\n", base * base);
-        return;
+    if (base < 2 || base > 100) {
+        fprintf(stderr, "table requires a base from 2 through 100.\n");
+        return 2;
     }
 
     int m = base * base;
@@ -518,15 +577,18 @@ static void collision_table_print(int base, int show_pairs)
     if (!S || !seen) {
         free(S);
         free(seen);
-        printf("Out of memory\n");
-        return;
+        fprintf(stderr, "Out of memory\n");
+        return 1;
     }
 
-    for (int p = m + 1; p <= 5000; p++) {
-        if (!is_prime_local(p) || p % base == 0) continue;
-        int cls = p % m;
-        if (seen[cls]) continue;
-        S[cls] = collision_count_local(p, base) - (p - 1) / base;
+    for (int cls = 1; cls < m; cls++) {
+        if (gcd_local(cls, m) != 1) continue;
+        if (!collision_table_value(base, 1, cls, &S[cls])) {
+            free(S);
+            free(seen);
+            fprintf(stderr, "Cannot compute collision table cell %d.\n", cls);
+            return 1;
+        }
         seen[cls] = 1;
     }
 
@@ -561,6 +623,7 @@ static void collision_table_print(int base, int show_pairs)
 
     free(S);
     free(seen);
+    return 0;
 }
 
 static void character_components_print(int base)
@@ -1483,6 +1546,28 @@ static void neutrality_sweep_print(void)
     }
 }
 
+static int print_help_path(int count, char **path)
+{
+    if (!count || path[0][0] == '-') { usage(); return 1; }
+    const char *family = path[0];
+    const char *action = count > 1 ? path[1] : NULL;
+    if (!strcmp(family, "verify") && count > 1 && path[1][0] != '-') {
+        if (count > 2 && nfield_verify_action_guide_lookup(path[1], path[2])) {
+            nfield_command_guide("verify");
+            return nfield_verify_action_guide(path[1], path[2]);
+        }
+        if (nfield_command_guide_lookup(path[1])) {
+            nfield_command_guide("verify");
+            return print_help_topic(path[1]);
+        }
+    }
+    if (action && nfield_action_guide_lookup(family, action)) {
+        nfield_command_guide(family);
+        return nfield_action_guide(family, action);
+    }
+    return print_help_topic(family);
+}
+
 int main(int argc, char **argv)
 {
     dispatch_init(argv[0]);
@@ -1503,38 +1588,51 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    if (argc >= 3 &&
-        (strcmp(argv[2], "--help") == 0 || strcmp(argv[2], "-h") == 0)) {
-        if (strcmp(argv[1], "help") == 0) {
-            usage();
-            return 0;
-        }
-        if (print_help_topic(argv[1])) return 0;
-        fprintf(stderr, "No focused help is available for command: %s\n", argv[1]);
-        return 1;
-    }
-
+    /* Completion words are data, including any prior --help token. */
     if (strcmp(argv[1], "__complete") == 0)
         return nfield_completion_candidates(argc - 2, argv + 2);
 
+    int verify_start = strcmp(argv[1], "help") == 0 ? 2 : 1;
+    if (verify_start < argc && !strcmp(argv[verify_start], "verify")) {
+        int status = nfield_verify_retired_request(argc - verify_start - 1,
+                                                  argv + verify_start + 1);
+        if (status) return status;
+    }
+
+    int help_requested = 0;
+    for (int i = 2; i < argc; ++i) {
+        if (strcmp(argv[i], "--") == 0) break;
+        if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0)
+            help_requested = 1;
+    }
+    if (help_requested) {
+        int help_start = strcmp(argv[1], "help") == 0 ? 2 : 1;
+        if (print_help_path(argc - help_start, argv + help_start)) return 0;
+        fprintf(stderr, "No focused help is available for command: %s\n", argv[help_start]);
+        return 1;
+    }
+
     if (strcmp(argv[1], "commands") == 0) {
-        if (argc != 2) {
-            fprintf(stderr, "Usage: nfield commands\n");
-            return 1;
-        }
-        nfield_commands_help();
-        return 0;
+        return nfield_commands_command(argc - 2, argv + 2);
     }
 
     if (strcmp(argv[1], "completion") == 0)
         return nfield_completion_command(argc - 2, argv + 2);
 
+    if (nfield_command_format_guard(argc, argv))
+        return !strcmp(argv[1], "verify") ? 2 : 1;
+
     /* Daemon mode */
     if (strcmp(argv[1], "daemon") == 0) {
-        int port = 9090, threads = 4;
-        for (int i = 2; i < argc - 1; i++) {
-            if (strcmp(argv[i], "--port") == 0) port = atoi(argv[i+1]);
-            if (strcmp(argv[i], "--threads") == 0) threads = atoi(argv[i+1]);
+        int port = parse_int_option(argc, argv, "--port", 9090);
+        int threads = parse_int_option(argc, argv, "--threads", 4);
+        for (int i = 2; i < argc; i++) {
+            if (!strcmp(argv[i], "--port") || !strcmp(argv[i], "--threads")) {
+                i++;
+            } else {
+                fprintf(stderr, "Unknown daemon option: %s\n", argv[i]);
+                return 2;
+            }
         }
         if (port < 1 || port > 65535 || threads < 1 || threads > 64) {
             fprintf(stderr,
@@ -1551,9 +1649,43 @@ int main(int argc, char **argv)
 
     const char *cmd = argv[1];
 
+    /* The short field commands share the same input contract. */
+    int short_field = !strcmp(cmd, "analyze") || !strcmp(cmd, "field") ||
+        !strcmp(cmd, "align") || !strcmp(cmd, "polar") ||
+        !strcmp(cmd, "decompose") || !strcmp(cmd, "div") ||
+        !strcmp(cmd, "survey") || !strcmp(cmd, "range");
+    if (short_field) {
+        int positions = !strcmp(cmd, "range") ? 2 : 1;
+        if (argc < positions + 2) {
+            print_help_topic(cmd);
+            return argc == 2 ? 0 : 2;
+        }
+        for (int i = 2; i < positions + 2; i++) {
+            if (parse_integer(argv[i]) < 2) {
+                fprintf(stderr, "Denominators must be >= 2.\n");
+                return 2;
+            }
+        }
+        if (positions == 2 && parse_integer(argv[2]) > parse_integer(argv[3])) {
+            fprintf(stderr, "range requires minimum <= maximum.\n");
+            return 2;
+        }
+        for (int i = positions + 2; i < argc; i++) {
+            if (!strcmp(argv[i], "--base")) {
+                (void)option_value(argc, argv, "--base");
+                i++;
+            } else if (strcmp(argv[i], "--time") &&
+                       !((!strcmp(cmd, "survey") || !strcmp(cmd, "range")) &&
+                         !strcmp(argv[i], "--csv"))) {
+                fprintf(stderr, "Unknown option for %s: %s\n", cmd, argv[i]);
+                return 2;
+            }
+        }
+    }
+
     /* bare number: default to analyze */
     if (cmd[0] >= '0' && cmd[0] <= '9') {
-        int n    = atoi(cmd);
+        int n    = parse_integer(cmd);
         if (n < 2) {
             fprintf(stderr, "n must be >= 2\n");
             return 1;
@@ -1564,21 +1696,24 @@ int main(int argc, char **argv)
         goto done;
     }
 
-    if (strcmp(cmd, "native-refinement") == 0) {
+    if (strcmp(cmd, "reset-forest") == 0) {
+        return reset_forest_command(argc - 2, argv + 2);
+
+    } else if (strcmp(cmd, "native-refinement") == 0) {
         return native_refinement_command(argc - 2, argv + 2);
 
     } else if (strcmp(cmd, "field-observation") == 0) {
         return field_observation_command(argc - 2, argv + 2);
 
     } else if (strcmp(cmd, "analyze") == 0 && argc >= 3) {
-        int n    = atoi(argv[2]);
+        int n    = parse_integer(argv[2]);
         int base = parse_base(argc, argv, 3);
 
         Invariants inv = invariants_compute(n, base);
         invariants_print(&inv);
 
     } else if (strcmp(cmd, "field") == 0 && argc >= 3) {
-        int n    = atoi(argv[2]);
+        int n    = parse_integer(argv[2]);
         int base = parse_base(argc, argv, 3);
 
         Field f = field_build(n, base);
@@ -1586,20 +1721,20 @@ int main(int argc, char **argv)
         field_free(&f);
 
     } else if (strcmp(cmd, "polar") == 0 && argc >= 3) {
-        int n    = atoi(argv[2]);
+        int n    = parse_integer(argv[2]);
         int base = parse_base(argc, argv, 3);
         polar_print(n, base);
 
     } else if (strcmp(cmd, "survey") == 0 && argc >= 3) {
-        int max  = atoi(argv[2]);
+        int max  = parse_integer(argv[2]);
         int base = parse_base(argc, argv, 3);
         int csv  = has_flag(argc, argv, "--csv");
 
         survey(max, base, csv);
 
     } else if (strcmp(cmd, "range") == 0 && argc >= 4) {
-        int min  = atoi(argv[2]);
-        int max  = atoi(argv[3]);
+        int min  = parse_integer(argv[2]);
+        int max  = parse_integer(argv[3]);
         int base = parse_base(argc, argv, 4);
         int csv  = has_flag(argc, argv, "--csv");
 
@@ -1609,24 +1744,24 @@ int main(int argc, char **argv)
         if (reciprocal_square_selection_table() != 0) return 1;
 
     } else if (strcmp(cmd, "align") == 0 && argc >= 3) {
-        int n    = atoi(argv[2]);
+        int n    = parse_integer(argv[2]);
         int base = parse_base(argc, argv, 3);
 
         double a = alignment_exact(n, base);
         printf("alignment(%d, base=%d) = %.6f\n", n, base, a);
 
     } else if (strcmp(cmd, "spectral") == 0 && argc >= 3) {
-        int p    = atoi(argv[2]);
+        int p    = parse_integer(argv[2]);
         int base = parse_base(argc, argv, 3);
         if (spectral_power_inspect(p, base) != 0) return 1;
 
     } else if (strcmp(cmd, "decompose") == 0 && argc >= 3) {
-        int n    = atoi(argv[2]);
+        int n    = parse_integer(argv[2]);
         int base = parse_base(argc, argv, 3);
         if (decompose_print(n, base) != 0) return 1;
 
     } else if (strcmp(cmd, "div") == 0 && argc >= 3) {
-        int n    = atoi(argv[2]);
+        int n    = parse_integer(argv[2]);
         int base = parse_base(argc, argv, 3);
         if (n < 2) {
             fprintf(stderr, "n must be >= 2\n");
@@ -1684,14 +1819,14 @@ int main(int argc, char **argv)
 
     } else if (strcmp(cmd, "table") == 0) {
         int base = parse_positional_base(argc, argv, 2);
-        collision_table_print(base, has_flag(argc, argv, "--pairs"));
+        if (collision_table_print(base, has_flag(argc, argv, "--pairs")) != 0) return 1;
 
     } else if (strcmp(cmd, "analytic") == 0) {
         int base = parse_base(argc, argv, 2);
         int lag = 1;
         for (int i = 2; i < argc; i++)
             if (argv[i][0] >= '0' && argv[i][0] <= '9' && strcmp(argv[i-1], "--base") != 0)
-                lag = atoi(argv[i]);
+                lag = parse_integer(argv[i]);
         analytic_print(base, lag);
 
     } else if (strcmp(cmd, "scale") == 0) {
@@ -1704,9 +1839,15 @@ int main(int argc, char **argv)
     } else if (strcmp(cmd, "coherence") == 0) {
         int base = parse_base(argc, argv, 2);
         int N = 300;
-        for (int i = 2; i < argc; i++)
-            if (argv[i][0] >= '0' && argv[i][0] <= '9' && strcmp(argv[i-1], "--base") != 0)
-                N = atoi(argv[i]);
+        for (int i = 2; i < argc; i++) {
+            if (!strcmp(argv[i], "--base")) i++;
+            else if (strcmp(argv[i], "--time"))
+                N = parse_integer(argv[i]);
+        }
+        if (base > 14 || N < 1 || N > 500) {
+            fprintf(stderr, "coherence requires base 2..14 and 1..500 primes.\n");
+            return 2;
+        }
         coherence_print(base, N);
 
     } else if (strcmp(cmd, "tables") == 0) {
@@ -1714,34 +1855,43 @@ int main(int argc, char **argv)
         if (object_tables_dispatch(object) != 0) return 1;
 
     } else if (strcmp(cmd, "verify") == 0) {
+        int route_status = nfield_verify_route(argc - 2, argv + 2);
+        if (route_status >= 0) {
+            if (route_status != 0) return route_status;
+            goto done;
+        }
         if (argc < 3) {
             verify_help();
             goto done;
         }
-        const char *theorem = NULL;
+        const char *family = NULL;
         for (int i = 2; i < argc; i++) {
-            if (argv[i][0] != '-') {
-                theorem = argv[i];
-                break;
+            if (strcmp(argv[i], "--time") == 0) continue;
+            if (!family && argv[i][0] != '-') {
+                family = argv[i];
+            } else {
+                fprintf(stderr, "Unexpected verification argument: %s\n"
+                        "Use nfield help verify for supported checks and options.\n", argv[i]);
+                return 2;
             }
         }
-        if (!theorem) {
+        if (!family) {
             verify_help();
             goto done;
         }
-        int verify_status = verify_dispatch(theorem);
+        int verify_status = verify_dispatch(family);
         if (verify_status != 0) return verify_status;
 
     } else if (strcmp(cmd, "digit-partition") == 0) {
         if (argc < 3) {
             digit_partition_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (digit_partition_inspect(n, base, depth) != 0) return 1;
         } else if (argv[2][0] >= '0' && argv[2][0] <= '9') {
-            int n = atoi(argv[2]);
+            int n = parse_integer(argv[2]);
             int base = parse_base(argc, argv, 3);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (digit_partition_inspect(n, base, depth) != 0) return 1;
@@ -1762,13 +1912,13 @@ int main(int argc, char **argv)
         if (argc < 3) {
             alignment_limit_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
-            int p = atoi(argv[3]);
-            int m = atoi(argv[4]);
+            int p = parse_integer(argv[3]);
+            int m = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (alignment_limit_inspect(p, m, base, depth) != 0) return 1;
         } else if (strcmp(argv[2], "cosets") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (alignment_limit_cosets(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "table") == 0) {
@@ -1790,16 +1940,16 @@ int main(int argc, char **argv)
         if (argc < 3) {
             three_tier_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (three_tier_inspect(n, base, depth) != 0) return 1;
         } else if (strcmp(argv[2], "classify") == 0 && argc >= 4) {
-            int maximum = atoi(argv[3]);
+            int maximum = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (three_tier_classify(maximum, base) != 0) return 1;
         } else if (strcmp(argv[2], "scan") == 0 && argc >= 4) {
-            int maximum = atoi(argv[3]);
+            int maximum = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (three_tier_scan(maximum, base) != 0) return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
@@ -1814,14 +1964,14 @@ int main(int argc, char **argv)
         if (argc < 3) {
             deficit_lattice_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
-            int p = atoi(argv[3]);
-            long long m = atoll(argv[4]);
+            int p = parse_integer(argv[3]);
+            long long m = parse_long_integer(argv[4]);
             int base = parse_int_option(argc, argv, "--base", 30);
             if (deficit_lattice_inspect(p, m, base) != 0) return 1;
         } else if (strcmp(argv[2], "ratio") == 0 && argc >= 6) {
-            int p = atoi(argv[3]);
-            long long u = atoll(argv[4]);
-            long long v = atoll(argv[5]);
+            int p = parse_integer(argv[3]);
+            long long u = parse_long_integer(argv[4]);
+            long long v = parse_long_integer(argv[5]);
             int base = parse_int_option(argc, argv, "--base", 30);
             long long factor = parse_int_option(argc, argv, "--factor", 1);
             if (deficit_lattice_ratio(p, u, v, base, factor) != 0) return 1;
@@ -1846,24 +1996,24 @@ int main(int argc, char **argv)
         if (argc < 3) {
             coherence_decomposition_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (coherence_decomposition_inspect(n, base, depth) != 0) return 1;
         } else if (strcmp(argv[2], "prime-core") == 0 && argc >= 5) {
-            int p = atoi(argv[3]);
-            int supported = atoi(argv[4]);
+            int p = parse_integer(argv[3]);
+            int supported = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (coherence_decomposition_prime_core(p, supported, base, depth) != 0)
                 return 1;
         } else if (strcmp(argv[2], "pairs") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (coherence_decomposition_pairs(n, base, depth) != 0) return 1;
         } else if (strcmp(argv[2], "sigma-zero") == 0 && argc >= 4) {
-            int maximum_prime = atoi(argv[3]);
+            int maximum_prime = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (coherence_decomposition_sigma_zero(maximum_prime, base) != 0)
                 return 1;
@@ -1883,21 +2033,21 @@ int main(int argc, char **argv)
         if (argc < 3) {
             cross_alignment_help();
         } else if (strcmp(argv[2], "matrix") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (cross_alignment_matrix_print(n, base, depth) != 0) return 1;
         } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (cross_alignment_prime_print(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "fourier") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (cross_alignment_fourier_print(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "block") == 0 && argc >= 5) {
-            int p = atoi(argv[3]);
-            int supported = atoi(argv[4]);
+            int p = parse_integer(argv[3]);
+            int supported = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             int depth = parse_int_option(argc, argv, "--depth", -1);
             if (cross_alignment_block_print(p, supported, base, depth) != 0)
@@ -1916,15 +2066,15 @@ int main(int argc, char **argv)
         if (argc < 3) {
             spectral_structure_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (spectral_structure_inspect(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "two-coset") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (spectral_structure_two_coset(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "character") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (spectral_structure_character_energy(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "examples") == 0) {
@@ -1941,11 +2091,11 @@ int main(int argc, char **argv)
         if (argc < 3) {
             spectral_power_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (spectral_power_inspect(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "overlap") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (spectral_power_overlap(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "examples") == 0) {
@@ -2019,16 +2169,16 @@ int main(int argc, char **argv)
 
     } else if (strcmp(cmd, "collision_table") == 0) {
         int base = parse_positional_base(argc, argv, 2);
-        collision_table_print(base, has_flag(argc, argv, "--pairs"));
+        if (collision_table_print(base, has_flag(argc, argv, "--pairs")) != 0) return 1;
 
     } else if (strcmp(cmd, "silent_primes") == 0) {
         int base = 10;
         if (argc >= 3 && argv[2][0] >= '0' && argv[2][0] <= '9')
-            base = atoi(argv[2]);
+            base = parse_integer(argv[2]);
         base = parse_base(argc, argv, 2) != 10 ? parse_base(argc, argv, 2) : base;
         int lag = 1;
         for (int i = 2; i < argc - 1; i++)
-            if (strcmp(argv[i], "--lag") == 0) lag = atoi(argv[i+1]);
+            if (strcmp(argv[i], "--lag") == 0) lag = parse_integer(argv[i+1]);
         silent_primes_full_print(base, lag);
 
     } else if (strcmp(cmd, "gate_width") == 0) {
@@ -2041,32 +2191,32 @@ int main(int argc, char **argv)
         if (argc < 3) {
             autocorrelation_formula_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (autocorrelation_inspect(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "slice") == 0 && argc >= 5) {
-            int p = atoi(argv[3]);
-            int multiplier = atoi(argv[4]);
+            int p = parse_integer(argv[3]);
+            int multiplier = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             if (autocorrelation_slice(p, multiplier, base) != 0) return 1;
         } else if (strcmp(argv[2], "orbit") == 0 && argc >= 5) {
-            int p = atoi(argv[3]);
-            int coset = atoi(argv[4]);
+            int p = parse_integer(argv[3]);
+            int coset = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             if (autocorrelation_orbit(p, coset, base) != 0) return 1;
         } else if (strcmp(argv[2], "harmonics") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int coset = 1;
             for (int i = 4; i < argc - 1; i++)
-                if (strcmp(argv[i], "--coset") == 0) coset = atoi(argv[i + 1]);
+                if (strcmp(argv[i], "--coset") == 0) coset = parse_integer(argv[i + 1]);
             if (autocorrelation_harmonics(p, coset, base) != 0) return 1;
         } else if (strcmp(argv[2], "examples") == 0) {
             if (autocorrelation_examples() != 0) return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!autocorrelation_formula_verify()) return 1;
         } else if (argv[2][0] >= '0' && argv[2][0] <= '9') {
-            int p = atoi(argv[2]);
+            int p = parse_integer(argv[2]);
             int base = parse_base(argc, argv, 3);
             if (autocorrelation_inspect(p, base) != 0) return 1;
         } else {
@@ -2079,30 +2229,30 @@ int main(int argc, char **argv)
         if (argc < 3) {
             phase_gate_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
-            int p = atoi(argv[3]);
-            int multiplier = atoi(argv[4]);
+            int p = parse_integer(argv[3]);
+            int multiplier = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             if (phase_gate_inspect(p, multiplier, base) != 0) return 1;
         } else if (strcmp(argv[2], "multipliers") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (phase_gate_multipliers(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "bin-word") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (phase_gate_bin_word(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "density") == 0 && argc >= 4) {
-            int multiplier = atoi(argv[3]);
+            int multiplier = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int max_prime = parse_int_option(argc, argv, "--max-prime", 997);
             if (phase_gate_density(multiplier, base, max_prime) != 0) return 1;
         } else if (strcmp(argv[2], "power-lag") == 0 && argc >= 4) {
-            int lag = atoi(argv[3]);
+            int lag = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int max_prime = parse_int_option(argc, argv, "--max-prime", 997);
             if (phase_gate_power_lag(lag, base, max_prime) != 0) return 1;
         } else if (strcmp(argv[2], "prime-sum") == 0 && argc >= 4) {
-            int lag = atoi(argv[3]);
+            int lag = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int max_prime = parse_int_option(argc, argv, "--max-prime", 997);
             if (phase_gate_prime_sum(lag, base, max_prime) != 0) return 1;
@@ -2120,19 +2270,19 @@ int main(int argc, char **argv)
         if (argc < 3) {
             bin_derangements_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (bin_derangements_inspect(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "family") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (bin_derangements_family(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "mean") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (bin_derangements_mean(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "lags") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (bin_derangements_lags(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "examples") == 0) {
@@ -2149,12 +2299,12 @@ int main(int argc, char **argv)
         if (argc < 3) {
             collision_characters_help();
         } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (collision_characters_prime(p, base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int cutoff = atoi(argv[3]);
+            int cutoff = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             long double sigma = parse_long_double_option(
@@ -2183,12 +2333,12 @@ int main(int argc, char **argv)
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (silent_primes_recipe(base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (silent_primes_prime(p, base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "variance") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (silent_primes_variance(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "snapshot") == 0) {
@@ -2208,7 +2358,7 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             collision_fluctuation_help();
         } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
-            int p = atoi(argv[3]);
+            int p = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (collision_fluctuation_prime(p, base) != 0) return 1;
         } else if (strcmp(argv[2], "table") == 0) {
@@ -2218,7 +2368,7 @@ int main(int argc, char **argv)
             int base = parse_base(argc, argv, 3);
             if (collision_fluctuation_classes(base) != 0) return 1;
         } else if (strcmp(argv[2], "sum") == 0 && argc >= 4) {
-            int cutoff = atoi(argv[3]);
+            int cutoff = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (collision_fluctuation_sum(cutoff, base) != 0) return 1;
         } else if (strcmp(argv[2], "snapshot") == 0) {
@@ -2239,7 +2389,7 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             centered_collision_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (centered_collision_inspect(n, base, lag) != 0) return 1;
@@ -2256,7 +2406,7 @@ int main(int argc, char **argv)
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (centered_collision_gate(base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "sum") == 0 && argc >= 4) {
-            int cutoff = atoi(argv[3]);
+            int cutoff = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (centered_collision_sum(cutoff, base, lag) != 0) return 1;
@@ -2278,12 +2428,12 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             collision_periodic_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             if (collision_periodic_inspect(n, base) != 0) return 1;
         } else if (strcmp(argv[2], "compare") == 0 && argc >= 5) {
-            int first = atoi(argv[3]);
-            int second = atoi(argv[4]);
+            int first = parse_integer(argv[3]);
+            int second = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             if (collision_periodic_compare(first, second, base) != 0) return 1;
         } else if (strcmp(argv[2], "table") == 0) {
@@ -2307,7 +2457,7 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             collision_transform_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (collision_transform_inspect(n, base, lag) != 0) return 1;
@@ -2324,8 +2474,8 @@ int main(int argc, char **argv)
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (collision_transform_spectrum(base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "window") == 0 && argc >= 5) {
-            int lower = atoi(argv[3]);
-            int upper = atoi(argv[4]);
+            int lower = parse_integer(argv[3]);
+            int upper = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             long double sigma = parse_long_double_option(
@@ -2350,7 +2500,7 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             residue_three_neutrality_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            int n = atoi(argv[3]);
+            int n = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (residue_three_neutrality_inspect(n, base, lag) != 0) return 1;
@@ -2363,8 +2513,8 @@ int main(int argc, char **argv)
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (residue_three_neutrality_channels(base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "split") == 0 && argc >= 5) {
-            int lower = atoi(argv[3]);
-            int upper = atoi(argv[4]);
+            int lower = parse_integer(argv[3]);
+            int upper = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             long double sigma = parse_long_double_option(
@@ -2390,24 +2540,24 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             compatible_residue_channels_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
-            int integer = atoi(argv[3]);
-            int prime = atoi(argv[4]);
+            int integer = parse_integer(argv[3]);
+            int prime = parse_integer(argv[4]);
             int base = parse_base(argc, argv, 5);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (compatible_residue_channels_inspect(
                     integer, prime, base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "internal") == 0 && argc >= 4) {
-            int prime = atoi(argv[3]);
+            int prime = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (compatible_residue_channels_internal(prime, base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "channels") == 0 && argc >= 4) {
-            int prime = atoi(argv[3]);
+            int prime = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (compatible_residue_channels_prime(prime, base, lag) != 0) return 1;
         } else if (strcmp(argv[2], "simultaneous") == 0 && argc >= 4) {
-            int squarefree = atoi(argv[3]);
+            int squarefree = parse_integer(argv[3]);
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (compatible_residue_channels_squarefree(
@@ -2438,11 +2588,11 @@ int main(int argc, char **argv)
             centered_collision_table_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
             if (centered_collision_table_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "complete") == 0 && argc >= 5) {
             if (centered_collision_table_complete(
-                    atoi(argv[3]), atoi(argv[4])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!centered_collision_table_verify()) return 1;
@@ -2460,7 +2610,7 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[2], "one") == 0 && argc >= 5) {
             int cutoff = parse_int_option(argc, argv, "--cutoff", 2000000);
             if (finite_character_pairing_one(
-                    atoi(argv[3]), atoi(argv[4]), cutoff) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), cutoff) != 0)
                 return 1;
         } else if (strcmp(argv[2], "declared-rows") == 0) {
             int cutoff = parse_int_option(argc, argv, "--cutoff", 2000000);
@@ -2483,13 +2633,13 @@ int main(int argc, char **argv)
             coprime_base_orthogonality_help();
         } else if (strcmp(argv[2], "pair") == 0 && argc >= 7) {
             if (coprime_base_orthogonality_pair(
-                    atoi(argv[3]), atoi(argv[4]),
-                    atoi(argv[5]), atoi(argv[6])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]),
+                    parse_integer(argv[5]), parse_integer(argv[6])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "common-quotient") == 0 && argc >= 7) {
             if (coprime_base_common_quotient(
-                    atoi(argv[3]), atoi(argv[4]),
-                    atoi(argv[5]), atoi(argv[6])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]),
+                    parse_integer(argv[5]), parse_integer(argv[6])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "audit") == 0) {
             if (coprime_base_orthogonality_audit() != 0) return 1;
@@ -2530,7 +2680,7 @@ int main(int argc, char **argv)
             primitive_odd_sector_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
             int cutoff = parse_int_option(argc, argv, "--cutoff", 2000000);
-            if (primitive_odd_sector_inspect(atoi(argv[3]), cutoff) != 0)
+            if (primitive_odd_sector_inspect(parse_integer(argv[3]), cutoff) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!primitive_odd_sector_verify()) return 1;
@@ -2565,7 +2715,7 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             additive_reflection_well_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            if (additive_reflection_well_inspect(atoi(argv[3])) != 0)
+            if (additive_reflection_well_inspect(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!additive_reflection_well_verify()) return 1;
@@ -2585,7 +2735,7 @@ int main(int argc, char **argv)
             int maximum_even = parse_int_option(
                 argc, argv, "--max-even", 100000);
             if (reflected_prime_pair_sign_sweep(
-                    atoi(argv[3]), maximum_even) != 0)
+                    parse_integer(argv[3]), maximum_even) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!reflected_prime_pair_sign_verify()) return 1;
@@ -2602,11 +2752,11 @@ int main(int argc, char **argv)
             collision_spectrum_factorization_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
             if (collision_spectrum_factorization_inspect(
-                    atoi(argv[3]), atoi(argv[4])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "transform") == 0 && argc >= 6) {
             if (collision_spectrum_factorization_transform(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!collision_spectrum_factorization_verify()) return 1;
@@ -2806,7 +2956,7 @@ int main(int argc, char **argv)
             primitive_character_cancellation_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
             if (primitive_character_cancellation_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!primitive_character_cancellation_verify()) return 1;
@@ -2828,7 +2978,7 @@ int main(int argc, char **argv)
             long double tau = parse_long_double_option(
                 argc, argv, "--tau", 0.0L);
             if (periodic_zeta_factorization_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5]),
                     sigma, tau) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
@@ -2847,7 +2997,7 @@ int main(int argc, char **argv)
             collision_boundary_recovery_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
             if (collision_boundary_recovery_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!collision_boundary_recovery_verify()) return 1;
@@ -2865,11 +3015,11 @@ int main(int argc, char **argv)
             active_collision_channel_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
             if (active_collision_channel_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "census") == 0 && argc >= 5) {
             if (active_collision_channel_census(
-                    atoi(argv[3]), atoi(argv[4])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!active_collision_channel_verify()) return 1;
@@ -2887,16 +3037,16 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[2], "conjugation") == 0 && argc >= 5) {
             int base = parse_base(argc, argv, 5);
             if (collision_coordinate_conjugation(
-                    atoi(argv[3]), atoi(argv[4]), base) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), base) != 0)
                 return 1;
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
             int base = parse_base(argc, argv, 5);
             if (collision_coordinate_inspect(
-                    atoi(argv[3]), atoi(argv[4]), base) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), base) != 0)
                 return 1;
         } else if (strcmp(argv[2], "gate") == 0 && argc >= 4) {
             int base = parse_base(argc, argv, 4);
-            if (collision_coordinate_gate(atoi(argv[3]), base) != 0)
+            if (collision_coordinate_gate(parse_integer(argv[3]), base) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!collision_coordinate_verify()) return 1;
@@ -2914,7 +3064,7 @@ int main(int argc, char **argv)
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (finite_determination_inspect(
-                    atoi(argv[3]), base, lag) != 0)
+                    parse_integer(argv[3]), base, lag) != 0)
                 return 1;
         } else if (strcmp(argv[2], "optimal") == 0) {
             int base = parse_base(argc, argv, 3);
@@ -2937,7 +3087,7 @@ int main(int argc, char **argv)
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (all_prime_collision_label_inspect(
-                    atoi(argv[3]), base, lag) != 0)
+                    parse_integer(argv[3]), base, lag) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!all_prime_collision_label_verify()) return 1;
@@ -2959,7 +3109,7 @@ int main(int argc, char **argv)
             long double tau = parse_long_double_option(
                 argc, argv, "--tau", 1.0L);
             if (finite_spectral_quotient_inspect(
-                    atoi(argv[3]), lag, prime_count, (double)tau) != 0)
+                    parse_integer(argv[3]), lag, prime_count, (double)tau) != 0)
                 return 1;
         } else if (strcmp(argv[2], "declared") == 0) {
             if (finite_spectral_quotient_declared() != 0) return 1;
@@ -2982,7 +3132,7 @@ int main(int argc, char **argv)
             const char *support = parse_string_option(
                 argc, argv, "--support");
             if (finite_prefix_slice_inspect(
-                    atoi(argv[3]), base, depth, support) != 0)
+                    parse_integer(argv[3]), base, depth, support) != 0)
                 return 1;
         } else if (strcmp(argv[2], "all") == 0 && argc >= 4) {
             int base = parse_base(argc, argv, 4);
@@ -2990,18 +3140,18 @@ int main(int argc, char **argv)
             const char *support = parse_string_option(
                 argc, argv, "--support");
             if (finite_prefix_slice_inspect_all_denominators(
-                    atoi(argv[3]), base, depth, support) != 0)
+                    parse_integer(argv[3]), base, depth, support) != 0)
                 return 1;
         } else if (strcmp(argv[2], "collapse") == 0 && argc >= 4) {
             int base = parse_base(argc, argv, 4);
             if (positional_transport_collapse_inspect(
-                    atoi(argv[3]), base) != 0)
+                    parse_integer(argv[3]), base) != 0)
                 return 1;
         } else if (strcmp(argv[2], "collision") == 0 && argc >= 4) {
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (finite_prefix_slice_collision(
-                    atoi(argv[3]), base, lag) != 0)
+                    parse_integer(argv[3]), base, lag) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!finite_prefix_slice_verify()) return 1;
@@ -3018,15 +3168,15 @@ int main(int argc, char **argv)
             oriented_digit_comparison_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
             if (oriented_digit_comparison_inspect(
-                    atoi(argv[3]), atoi(argv[4])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "prime") == 0 && argc >= 4) {
-            if (oriented_digit_comparison_prime(atoi(argv[3])) != 0)
+            if (oriented_digit_comparison_prime(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "trichotomy") == 0 && argc >= 5) {
             int height = parse_int_option(argc, argv, "--height", 0);
             if (oriented_digit_comparison_trichotomy(
-                    atoi(argv[3]), atoi(argv[4]), height) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), height) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!oriented_digit_comparison_verify()) return 1;
@@ -3046,23 +3196,23 @@ int main(int argc, char **argv)
             const char *support = parse_string_option(
                 argc, argv, "--support");
             if (boundary_bernoulli_factorization_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5]),
                     support) != 0)
                 return 1;
         } else if (strcmp(argv[2], "terminal") == 0 && argc >= 6) {
             if (boundary_bernoulli_factorization_terminal(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "spectrum") == 0 && argc >= 5) {
             const char *support = parse_string_option(
                 argc, argv, "--support");
             if (boundary_bernoulli_factorization_spectrum(
-                    atoi(argv[3]), atoi(argv[4]), support) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), support) != 0)
                 return 1;
         } else if (strcmp(argv[2], "correlation") == 0 && argc >= 7) {
             if (boundary_sawtooth_correlation_inspect(
-                    atoi(argv[3]), atoi(argv[4]),
-                    atoi(argv[5]), atoi(argv[6])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]),
+                    parse_integer(argv[5]), parse_integer(argv[6])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!boundary_bernoulli_factorization_verify()) return 1;
@@ -3080,7 +3230,7 @@ int main(int argc, char **argv)
             finite_state_orbit_boundary_help();
         } else if (strcmp(argv[2], "parity") == 0 && argc >= 6) {
             if (finite_state_orbit_boundary_parity(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 8) {
             const char *transition = parse_string_option(
@@ -3090,8 +3240,8 @@ int main(int argc, char **argv)
             const char *state_weights = parse_string_option(
                 argc, argv, "--state-weights");
             if (finite_state_orbit_boundary_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5]),
-                    atoi(argv[6]), atoi(argv[7]), transition,
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5]),
+                    parse_integer(argv[6]), parse_integer(argv[7]), transition,
                     accepting, state_weights) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
@@ -3110,7 +3260,7 @@ int main(int argc, char **argv)
             full_orbit_energy_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
             if (full_orbit_energy_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!full_orbit_energy_verify()) return 1;
@@ -3126,7 +3276,7 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             quadratic_orbit_energy_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            if (quadratic_orbit_energy_inspect(atoi(argv[3])) != 0)
+            if (quadratic_orbit_energy_inspect(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!quadratic_orbit_energy_verify()) return 1;
@@ -3143,7 +3293,7 @@ int main(int argc, char **argv)
             subgroup_jacobi_expansion_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
             if (subgroup_jacobi_expansion_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!subgroup_jacobi_expansion_verify()) return 1;
@@ -3161,31 +3311,31 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 7) {
             int base = parse_base(argc, argv, 7);
             if (!weighted_reference_profile_inspect(
-                    atoi(argv[3]), atoi(argv[4]), base,
-                    atoll(argv[5]), atoll(argv[6])))
+                    parse_integer(argv[3]), parse_integer(argv[4]), base,
+                    parse_long_integer(argv[5]), parse_long_integer(argv[6])))
                 return 1;
         } else if (strcmp(argv[2], "branch") == 0 && argc >= 5) {
             if (!weighted_reference_profile_branch(
-                    atoi(argv[3]), atoi(argv[4])))
+                    parse_integer(argv[3]), parse_integer(argv[4])))
                 return 1;
         } else if (strcmp(argv[2], "torsion") == 0) {
             if (!weighted_reference_profile_torsion()) return 1;
         } else if (strcmp(argv[2], "reflection-product") == 0
                    && argc >= 4) {
             if (!weighted_reference_profile_reflection_product(
-                    atoi(argv[3])))
+                    parse_integer(argv[3])))
                 return 1;
         } else if (strcmp(argv[2], "oriented-words") == 0
                    && argc >= 4) {
             if (!weighted_reference_profile_oriented_words(
-                    atoi(argv[3])))
+                    parse_integer(argv[3])))
                 return 1;
         } else if (strcmp(argv[2], "transport") == 0) {
             if (!weighted_reference_profile_transport()) return 1;
         } else if (strcmp(argv[2], "finite-orbit") == 0 && argc >= 5) {
             int base = parse_int_option(argc, argv, "--base", 7);
             if (!weighted_reference_profile_finite_orbit(
-                    atoi(argv[3]), atoi(argv[4]), base))
+                    parse_integer(argv[3]), parse_integer(argv[4]), base))
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!weighted_reference_profile_verify()) return 1;
@@ -3204,15 +3354,15 @@ int main(int argc, char **argv)
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
             int base = parse_base(argc, argv, 5);
             if (reciprocal_square_selection_inspect(
-                    atoi(argv[3]), atoi(argv[4]), base) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), base) != 0)
                 return 1;
         } else if (strcmp(argv[2], "cubic") == 0 && argc >= 4) {
-            if (reciprocal_square_selection_cubic(atoi(argv[3])) != 0)
+            if (reciprocal_square_selection_cubic(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "table") == 0) {
             if (reciprocal_square_selection_table() != 0) return 1;
         } else if (strcmp(argv[2], "scan") == 0 && argc >= 4) {
-            if (reciprocal_square_selection_scan(atoi(argv[3])) != 0)
+            if (reciprocal_square_selection_scan(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!reciprocal_square_selection_verify()) return 1;
@@ -3229,10 +3379,10 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             prime_base_collision_energy_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            if (prime_base_collision_energy_inspect(atoi(argv[3])) != 0)
+            if (prime_base_collision_energy_inspect(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "poles") == 0 && argc >= 4) {
-            if (prime_base_collision_energy_poles(atoi(argv[3])) != 0)
+            if (prime_base_collision_energy_poles(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!prime_base_collision_energy_verify()) return 1;
@@ -3259,10 +3409,10 @@ int main(int argc, char **argv)
             strcmp(argv[2], "help") == 0) {
             arithmetic_boundary_defect_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 4) {
-            if (arithmetic_boundary_defect_inspect(atoi(argv[3])) != 0)
+            if (arithmetic_boundary_defect_inspect(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "scan") == 0 && argc >= 4) {
-            if (arithmetic_boundary_defect_scan(atoi(argv[3])) != 0)
+            if (arithmetic_boundary_defect_scan(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!arithmetic_boundary_defect_verify()) return 1;
@@ -3280,15 +3430,15 @@ int main(int argc, char **argv)
             carry_completed_carrier_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 6) {
             if (carry_completed_carrier_inspect(
-                    atoi(argv[3]), atoi(argv[4]), atoi(argv[5])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]), parse_integer(argv[5])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "seam") == 0 && argc >= 4) {
-            if (carry_completed_carrier_seam(atoi(argv[3])) != 0)
+            if (carry_completed_carrier_seam(parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "product") == 0 && argc >= 7) {
             if (carry_completed_carrier_product(
-                    atoi(argv[3]), atoi(argv[4]),
-                    atoi(argv[5]), atoi(argv[6])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4]),
+                    parse_integer(argv[5]), parse_integer(argv[6])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!carry_completed_carrier_verify()) return 1;
@@ -3307,7 +3457,7 @@ int main(int argc, char **argv)
             int base = parse_base(argc, argv, 4);
             int lag = parse_int_option(argc, argv, "--lag", 1);
             if (reflection_identity_inspect(
-                    base, lag, atoi(argv[3])) != 0)
+                    base, lag, parse_integer(argv[3])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "table") == 0) {
             int base = parse_base(argc, argv, 3);
@@ -3326,7 +3476,7 @@ int main(int argc, char **argv)
         if (argc < 3) {
             half_group_help();
         } else if (strcmp(argv[2], "inspect") == 0 && argc >= 5) {
-            if (half_group_inspect(atoi(argv[3]), atoi(argv[4])) != 0)
+            if (half_group_inspect(parse_integer(argv[3]), parse_integer(argv[4])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!half_group_verify()) return 1;
@@ -3344,11 +3494,11 @@ int main(int argc, char **argv)
             const char *support = parse_string_option(
                 argc, argv, "--support");
             if (boundary_conductor_ledger_inspect(
-                    atoi(argv[3]), support) != 0)
+                    parse_integer(argv[3]), support) != 0)
                 return 1;
         } else if (strcmp(argv[2], "terminal") == 0 && argc >= 5) {
             if (boundary_conductor_ledger_terminal(
-                    atoi(argv[3]), atoi(argv[4])) != 0)
+                    parse_integer(argv[3]), parse_integer(argv[4])) != 0)
                 return 1;
         } else if (strcmp(argv[2], "verify") == 0) {
             if (!boundary_conductor_ledger_verify()) return 1;
@@ -3377,17 +3527,17 @@ int main(int argc, char **argv)
         }
 
     } else if (strcmp(cmd, "spectrum") == 0) {
-        int p = (argc >= 3) ? atoi(argv[2]) : 7;
+        int p = (argc >= 3) ? parse_integer(argv[2]) : 7;
         int base = parse_base(argc, argv, 3);
         spectrum_print(p, base);
 
     } else if (strcmp(cmd, "gate") == 0) {
-        int p = (argc >= 3) ? atoi(argv[2]) : 7;
+        int p = (argc >= 3) ? parse_integer(argv[2]) : 7;
         int base = parse_base(argc, argv, 3);
         gate_print(p, base);
 
     } else if (strcmp(cmd, "derangements") == 0) {
-        int p = (argc >= 3) ? atoi(argv[2]) : 13;
+        int p = (argc >= 3) ? parse_integer(argv[2]) : 13;
         int base = parse_base(argc, argv, 3);
         derangements_print(p, base);
 
@@ -3397,8 +3547,8 @@ int main(int argc, char **argv)
         int lag = 1;
         int maxp = 0;
         for (int i = 2; i < argc - 1; i++) {
-            if (strcmp(argv[i], "--lag") == 0) lag = atoi(argv[i+1]);
-            if (strcmp(argv[i], "--primes") == 0) maxp = atoi(argv[i+1]);
+            if (strcmp(argv[i], "--lag") == 0) lag = parse_integer(argv[i+1]);
+            if (strcmp(argv[i], "--primes") == 0) maxp = parse_integer(argv[i+1]);
         }
         fluctuation_sum_print(base, lag, maxp);
 
@@ -3406,13 +3556,13 @@ int main(int argc, char **argv)
         int base = parse_base(argc, argv, 2);
         int maxp = 0;
         for (int i = 2; i < argc - 1; i++)
-            if (strcmp(argv[i], "--primes") == 0) maxp = atoi(argv[i+1]);
+            if (strcmp(argv[i], "--primes") == 0) maxp = parse_integer(argv[i+1]);
         class_bias_print(base, maxp);
 
     } else if (strcmp(cmd, "character_components") == 0) {
         /* Show character magnitudes using CRT */
         int base_arg = 10;
-        if (argc >= 3 && argv[2][0] >= '0' && argv[2][0] <= '9') base_arg = atoi(argv[2]);
+        if (argc >= 3 && argv[2][0] >= '0' && argv[2][0] <= '9') base_arg = parse_integer(argv[2]);
         base_arg = parse_base(argc, argv, 2) != 10 ? parse_base(argc, argv, 2) : base_arg;
         character_components_print(base_arg);
 
@@ -3424,18 +3574,18 @@ int main(int argc, char **argv)
         int base = parse_base(argc, argv, 2);
         int maxp = 0;
         for (int i = 2; i < argc - 1; i++)
-            if (strcmp(argv[i], "--primes") == 0) maxp = atoi(argv[i+1]);
+            if (strcmp(argv[i], "--primes") == 0) maxp = parse_integer(argv[i+1]);
         centered_sum_print(base, maxp);
 
     } else if (strcmp(cmd, "neutrality") == 0) {
         int base = 10;
         if (argc >= 3 && argv[2][0] >= '0' && argv[2][0] <= '9')
-            base = atoi(argv[2]);
+            base = parse_integer(argv[2]);
         base = parse_base(argc, argv, 2) != 10 ? parse_base(argc, argv, 2) : base;
         int maxp = 0;
         for (int i = 2; i < argc - 1; i++)
             if (strcmp(argv[i], "-N") == 0 || strcmp(argv[i], "--primes") == 0)
-                maxp = atoi(argv[i+1]);
+                maxp = parse_integer(argv[i+1]);
         neutrality_print(base, maxp);
 
     } else if (strcmp(cmd, "neutrality_sweep") == 0) {
@@ -3447,20 +3597,20 @@ int main(int argc, char **argv)
     } else if (strcmp(cmd, "mod3_means") == 0) {
         int base = 10;
         if (argc >= 3 && argv[2][0] >= '0' && argv[2][0] <= '9')
-            base = atoi(argv[2]);
+            base = parse_integer(argv[2]);
         base = parse_base(argc, argv, 2) != 10 ? parse_base(argc, argv, 2) : base;
         mod3_means_print(base);
 
     } else if (strcmp(cmd, "polarity_field") == 0) {
-        int base = 10;
-        if (argc >= 3 && argv[2][0] >= '0' && argv[2][0] <= '9') base = atoi(argv[2]);
-        base = parse_base(argc, argv, 2) != 10 ? parse_base(argc, argv, 2) : base;
+        int base = parse_positional_base(argc, argv, 2);
+        if (base > 20) {
+            fprintf(stderr, "polarity_field requires base 2..20.\n");
+            return 2;
+        }
         polarity_field_print(base);
 
     } else if (strcmp(cmd, "help") == 0) {
-        if (argc < 3) {
-            usage();
-        } else if (!print_help_topic(argv[2])) {
+        if (!print_help_path(argc - 2, argv + 2)) {
             fprintf(stderr, "Unknown help topic: %s\n", argv[2]);
             fprintf(stderr, "Use `nfield --help` to list available topics.\n");
             return 1;
@@ -3475,7 +3625,9 @@ done:
     if (show_time) {
         clock_gettime(CLOCK_MONOTONIC, &t1);
         fflush(stdout);
-        print_elapsed_time(&t0, &t1);
+        print_elapsed_time(has_flag(argc, argv, "--json") ||
+                           has_flag(argc, argv, "--csv") ? stderr : stdout,
+                           &t0, &t1);
     }
 
     return 0;

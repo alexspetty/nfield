@@ -7,8 +7,9 @@ The `nfield` software is licensed under the PolyForm Noncommercial License
 
 https://polyformproject.org/licenses/noncommercial/1.0.0
 
-This license applies to the software in `src/`, `verify/`, and `test/`, and to
-the software build files at the repository root.
+This license applies to the software in `src/`, `verify/`, `test/`, `include/`,
+`examples/`, and `packaging/`, the accompanying software documentation in
+`docs/`, and the software build files at the repository root.
 
 The Lean source in `proofs/` is separately licensed under the Apache License
 2.0. See `proofs/LICENSE`.

@@ -1,13 +1,17 @@
 #include <stddef.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "completion.h"
+#include "command_guide.h"
+#include "verification_routes.h"
 
 enum {
     COMMAND_HELP_TOPIC = 1,
     COMMAND_VERIFIER = 2,
-    COMMAND_COMPATIBILITY = 4
+    COMMAND_COMPATIBILITY = 4,
+    COMMAND_VERIFICATION_ONLY = 8
 };
 
 typedef struct {
@@ -25,6 +29,8 @@ typedef struct {
 static const CommandSpec command_specs[] = {
     {"analyze", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
     {"field", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
+    {"reset-forest", "source project", "--returns --divisor --modulus --mask --weights --grid --json --csv --help",
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"native-refinement", "detector transport probe-transport packet copy-cost kernel mask-capture trace collision4 collision-families carry detail polarity stable-correction divisor-family divisor-work parent-credit verify", "--json --output --help",
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"align", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
@@ -38,11 +44,11 @@ static const CommandSpec command_specs[] = {
     {"spectral", NULL, "--base --time --help", COMMAND_HELP_TOPIC},
     {"equations", NULL, "--time --help", COMMAND_HELP_TOPIC},
     {"tables", "reciprocal-square-selection", "--time --help", 0},
-    {"verify", NULL, "--time --help", COMMAND_HELP_TOPIC},
+    {"verify", "families", "--time --help", COMMAND_HELP_TOPIC},
     {"daemon", NULL, "--port --threads --help", COMMAND_HELP_TOPIC},
     {"completion", "bash zsh fish", "--help", COMMAND_HELP_TOPIC},
     {"version", NULL, "--help", COMMAND_HELP_TOPIC},
-    {"commands", NULL, "--help", 0},
+    {"commands", NULL, "--json --examples --help", 0},
     {"help", NULL, NULL, 0},
 
     {"reciprocal-square-selection", "inspect cubic table scan verify",
@@ -106,7 +112,7 @@ static const CommandSpec command_specs[] = {
     {"primitive-odd-sector", "inspect verify", "--cutoff --time --help",
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"conjugate-pair-relabeling", "exact-law ledger cutoffs verify",
-     "--time --help", COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+     "--time --help", COMMAND_HELP_TOPIC | COMMAND_VERIFIER | COMMAND_VERIFICATION_ONLY},
     {"additive-reflection-well", "inspect verify", "--time --help",
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"reflected-prime-pair-sign", "sweep verify", "--max-even --time --help",
@@ -114,9 +120,9 @@ static const CommandSpec command_specs[] = {
     {"collision-spectrum-factorization", "inspect transform verify",
      "--time --help", COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"special-value-moment", "ledger verify", "--time --help",
-     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER | COMMAND_VERIFICATION_ONLY},
     {"base-five-cyclotomic-identity", "audit verify", "--time --help",
-     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER | COMMAND_VERIFICATION_ONLY},
     {"weighted-remainder-state", "inspect conductor boundary ramp floor straighten clock clock-law age-budget finite-weights variance rows increment-covariance increment-recurrence fourier amplitude-refinement expansion-constants harmonic-expansion amplitude-expansion deficit-series deficit-diagnostic spectral-product spectral-mean spectral-energy spectral-tail character-phase character-table character-l mixed-moment cotangent-sums harmonic-polylog harmonic-root harmonic-root-average sine-transform small-amplitudes alignment alignment-local harmonic-local alignment-lcm alignment-growth law-moment law-cdf law-window law-concentration law-characteristic law-recurrence law-tail-bound law-activation clock-difference mass-inverse mass-recovery perturbation cycle cycle-tv covariance amplitude tree tree-node weight budget mass sawtooth dedekind gram sawtooth-mean reset pairing forcing block crt moment haar-moment cylinder position position-weight conductor-full conductor-beta conductor-prime conductor-extrema conductor-minimizers activation verify", "--time --help",
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"capacity-resolution", "constants inspect window sample unit spectrum progression verify", "--time --help",
@@ -161,7 +167,7 @@ static const CommandSpec command_specs[] = {
     {"boundary-conductor-ledger", "inspect terminal verify",
      "--support --time --help", COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
     {"terminal-collision-conductor-ledger", "audit verify", "--time --help",
-     COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
+     COMMAND_HELP_TOPIC | COMMAND_VERIFIER | COMMAND_VERIFICATION_ONLY},
     {"finite-state-orbit-boundary", "parity inspect verify",
      "--transition --accepting --state-weights --time --help",
      COMMAND_HELP_TOPIC | COMMAND_VERIFIER},
@@ -235,6 +241,277 @@ static void print_word_list(const char *words)
     }
 }
 
+static void print_utility_actions(const CommandSpec *spec)
+{
+    const char *cursor = spec->actions;
+    if (cursor == NULL) return;
+    while (*cursor != '\0') {
+        char action[128];
+        while (*cursor == ' ') ++cursor;
+        const char *start = cursor;
+        while (*cursor != '\0' && *cursor != ' ') ++cursor;
+        size_t length = (size_t)(cursor - start);
+        if (length == 0) break;
+        if (length >= sizeof(action)) continue;
+        memcpy(action, start, length);
+        action[length] = '\0';
+        if (strcmp(action, "verify") &&
+            !nfield_verify_action_is_fixed(spec->name, action)) puts(action);
+    }
+}
+
+void nfield_command_names(int include_compatibility)
+{
+    for (size_t i = 0; i < command_spec_count; ++i)
+        if (include_compatibility ||
+            !(command_specs[i].flags & (COMMAND_COMPATIBILITY | COMMAND_VERIFICATION_ONLY)))
+            puts(command_specs[i].name);
+}
+
+static void json_string(const char *value)
+{
+    const unsigned char *p = (const unsigned char *)(value ? value : "");
+    putchar('"');
+    for (; *p; ++p) {
+        if (*p == '"' || *p == '\\') { putchar('\\'); putchar(*p); }
+        else if (*p < 32) printf("\\u%04x", (unsigned)*p);
+        else putchar(*p);
+    }
+    putchar('"');
+}
+
+static void json_words(const CommandSpec *spec, const char *words, int utility)
+{
+    int first = 1;
+    const char *cursor = words ? words : "";
+    putchar('[');
+    while (*cursor) {
+        char word[128];
+        while (*cursor == ' ') ++cursor;
+        const char *start = cursor;
+        while (*cursor && *cursor != ' ') ++cursor;
+        size_t length = (size_t)(cursor - start);
+        if (!length) break;
+        if (length >= sizeof(word)) continue;
+        memcpy(word, start, length);
+        word[length] = '\0';
+        if (utility && (!strcmp(word, "verify") ||
+                        nfield_verify_action_is_fixed(spec->name, word))) continue;
+        if (!first) putchar(',');
+        json_string(word);
+        first = 0;
+    }
+    putchar(']');
+}
+
+static void json_action(const NfieldActionGuide *action, const char *name)
+{
+    if (!action) { fputs("null", stdout); return; }
+    printf("{\"name\":"); json_string(name ? name : action->name);
+    printf(",\"kind\":"); json_string(action->kind);
+    printf(",\"purpose\":"); json_string(action->purpose);
+    printf(",\"syntax\":"); json_string(action->syntax);
+    printf(",\"inputs\":"); json_string(action->inputs);
+    printf(",\"outputs\":"); json_string(action->outputs);
+    printf(",\"example\":"); json_string(action->example);
+    printf(",\"limits\":"); json_string(action->limits);
+    printf(",\"formatOptions\":[");
+    int separator = 0;
+    const char *formats[] = {"--json", "--csv"};
+    for (size_t i = 0; i < 2; ++i)
+        if (nfield_command_format_supported(action->family, action->name, formats[i])) {
+            if (separator++) putchar(',');
+            json_string(formats[i]);
+        }
+    putchar(']');
+    putchar('}');
+}
+
+static void json_action_details(const CommandSpec *spec)
+{
+    int first = 1;
+    const char *cursor = spec->actions ? spec->actions : "";
+    putchar('[');
+    while (*cursor) {
+        char word[128];
+        while (*cursor == ' ') ++cursor;
+        const char *start = cursor;
+        while (*cursor && *cursor != ' ') ++cursor;
+        size_t length = (size_t)(cursor - start);
+        if (!length) break;
+        if (length >= sizeof(word)) continue;
+        memcpy(word, start, length); word[length] = '\0';
+        if ((spec->flags & COMMAND_VERIFICATION_ONLY) || !strcmp(word, "verify") ||
+            nfield_verify_action_is_fixed(spec->name, word)) continue;
+        if (!first) putchar(',');
+        json_action(nfield_action_guide_lookup(spec->name, word), word);
+        first = 0;
+    }
+    putchar(']');
+}
+
+static int contains_casefold(const char *text, const char *query)
+{
+    if (!text || !query) return 0;
+    if (!*query) return 1;
+    for (; *text; ++text) {
+        size_t n = 0;
+        while (text[n] && query[n] &&
+               tolower((unsigned char)text[n]) == tolower((unsigned char)query[n])) ++n;
+        if (!query[n]) return 1;
+    }
+    return 0;
+}
+
+static int action_matches(const NfieldActionGuide *action, int argc, char **argv)
+{
+    if (!action) return 0;
+    for (int i = 0; i < argc; ++i) {
+        if (argv[i][0] == '-') continue;
+        if (!contains_casefold(action->family, argv[i]) &&
+            !contains_casefold(action->name, argv[i]) &&
+            !contains_casefold(action->purpose, argv[i]) &&
+            !contains_casefold(action->inputs, argv[i]) &&
+            !contains_casefold(action->outputs, argv[i])) return 0;
+    }
+    return 1;
+}
+
+static int command_matches(const CommandSpec *spec, int argc, char **argv)
+{
+    const NfieldCommandGuide *guide = nfield_command_guide_lookup(spec->name);
+    if (!guide) return 0;
+    for (int i = 0; i < argc; ++i) {
+        if (argv[i][0] == '-') continue;
+        int found = contains_casefold(spec->name, argv[i]) ||
+                    contains_casefold(guide->purpose, argv[i]) ||
+                    contains_casefold(guide->inputs, argv[i]) ||
+                    contains_casefold(guide->outputs, argv[i]);
+        for (size_t a = 0; !found; ++a) {
+            const NfieldActionGuide *action = nfield_action_guide_at(spec->name, a);
+            if (!action) break;
+            found = contains_casefold(action->name, argv[i]) ||
+                    contains_casefold(action->purpose, argv[i]) ||
+                    contains_casefold(action->inputs, argv[i]) ||
+                    contains_casefold(action->outputs, argv[i]);
+        }
+        if (!found) return 0;
+    }
+    return 1;
+}
+
+static int selected_command(const CommandSpec *spec, int argc, char **argv, int terms)
+{
+    if (!terms) return 1;
+    const char *canonical = nfield_command_canonical_name(spec->name);
+    if (canonical && strcmp(canonical, spec->name)) {
+        int named = 0;
+        for (int i = 0; i < argc; ++i)
+            if (argv[i][0] != '-' && contains_casefold(spec->name, argv[i])) named = 1;
+        if (!named) return 0;
+    }
+    return command_matches(spec, argc, argv);
+}
+
+static void commands_json_filtered(int argc, char **argv, int terms)
+{
+    puts("{\"schema\":\"nfield.commands.v1\",\"commands\":[");
+    int emitted = 0;
+    for (size_t i = 0; i < command_spec_count; ++i) {
+        const CommandSpec *spec = &command_specs[i];
+        if (!selected_command(spec, argc, argv, terms)) continue;
+        const NfieldCommandGuide *guide = nfield_command_guide_lookup(spec->name);
+        const char *kind = (spec->flags & COMMAND_COMPATIBILITY) ? "compatibility" :
+            (spec->flags & COMMAND_VERIFICATION_ONLY) || !strcmp(spec->name, "verify") ? "verification" :
+            guide && (!strcmp(guide->kind, "service") || !strcmp(guide->kind, "navigation")) ? "service" :
+            guide ? "utility" : "unknown";
+        if (emitted++) puts(",");
+        printf("{\"name\":"); json_string(spec->name);
+        printf(",\"canonical\":"); json_string(nfield_command_canonical_name(spec->name));
+        printf(",\"kind\":"); json_string(kind);
+        printf(",\"purpose\":"); json_string(guide ? guide->purpose : "");
+        printf(",\"inputs\":"); json_string(guide ? guide->inputs : "");
+        printf(",\"outputs\":"); json_string(guide ? guide->outputs : "");
+        printf(",\"example\":"); json_string(guide ? guide->example : "");
+        printf(",\"workflow\":"); json_string(guide ? guide->workflow : "");
+        printf(",\"limits\":"); json_string(guide ? guide->limits : "");
+        printf(",\"actions\":");
+        json_words(spec, (spec->flags & COMMAND_VERIFICATION_ONLY) ? NULL : spec->actions, 1);
+        printf(",\"options\":"); json_words(spec, spec->options, 0);
+        printf(",\"hasFamilyVerifier\":%s,\"verificationActions\":[",
+               spec->flags & COMMAND_VERIFIER ? "true" : "false");
+        for (size_t a = 0; ; ++a) {
+            const char *name = nfield_verify_action_name(spec->name, a);
+            if (!name) break;
+            if (a) putchar(',');
+            json_string(name);
+        }
+        printf("],\"defaultAction\":");
+        json_action(nfield_action_guide_lookup(spec->name, "(default)"), NULL);
+        printf(",\"actionDetails\":"); json_action_details(spec);
+        printf(",\"verificationDetails\":[");
+        for (size_t a = 0; ; ++a) {
+            const char *name = nfield_verify_action_name(spec->name, a);
+            if (!name) break;
+            if (a) putchar(',');
+            json_action(nfield_verify_action_guide_lookup(spec->name, name), name);
+        }
+        printf("]}");
+    }
+    puts("\n]}");
+}
+
+void nfield_commands_json(void)
+{
+    commands_json_filtered(0, NULL, 0);
+}
+
+int nfield_commands_command(int argc, char **argv)
+{
+    int json = 0, examples = 0, terms = 0;
+    for (int i = 0; i < argc; ++i) {
+        if (!strcmp(argv[i], "--json") && !json) json = 1;
+        else if (!strcmp(argv[i], "--examples") && !examples) examples = 1;
+        else if (argv[i][0] == '-') {
+            fprintf(stderr, "Usage: nfield commands [terms ...] [--examples] [--json]\n");
+            return 1;
+        } else if (*argv[i]) ++terms;
+    }
+    if (json) { commands_json_filtered(argc, argv, terms); return 0; }
+    if (!terms && !examples) { nfield_commands_help(); return 0; }
+    size_t matches = 0;
+    for (size_t i = 0; i < command_spec_count; ++i) {
+        const CommandSpec *spec = &command_specs[i];
+        const NfieldCommandGuide *guide = nfield_command_guide_lookup(spec->name);
+        const char *canonical = nfield_command_canonical_name(spec->name);
+        if (!guide || !selected_command(spec, argc, argv, terms)) continue;
+        if (!terms && ((canonical && strcmp(canonical, spec->name)) ||
+                       !strcmp(guide->kind, "verification"))) continue;
+        printf("%s%s\n  %s\n", spec->name,
+               !strcmp(guide->kind, "verification") ? " (implementation checks)" : "",
+               guide->purpose);
+        if (examples) {
+            size_t shown = 0, total = 0;
+            for (size_t a = 0; terms; ++a) {
+                const NfieldActionGuide *action = nfield_action_guide_at(spec->name, a);
+                if (!action) break;
+                if (!action_matches(action, argc, argv) ||
+                    !strcmp(action->kind, "verification") ||
+                    !action->example || !*action->example) continue;
+                if (shown < 3) { printf("  %s\n", action->example); ++shown; }
+                ++total;
+            }
+            if (!shown && guide->example && *guide->example) printf("  %s\n", guide->example);
+            if (total > shown) printf("  More matching actions: nfield help %s\n", spec->name);
+        }
+        putchar('\n');
+        ++matches;
+    }
+    if (!matches) puts("No matching commands. Try a shorter term, such as digits, spectrum or covariance.");
+    else puts("Use nfield help <command> <action> for inputs, outputs and limits.");
+    return 0;
+}
+
 static const CommandSpec *find_command_spec(const char *name)
 {
     for (size_t index = 0; index < command_spec_count; index++)
@@ -257,7 +534,8 @@ static int option_takes_value(const char *option)
         "--cutoff", "--block-length", "--depth", "--factor", "--height", "--lag", "--lower",
         "--max-even", "--max-prime", "--port", "--prime-count", "--primes", "--radial",
         "--sigma", "--state-weights", "--steps", "--support", "--tau",
-        "--threads", "--transition", "--output", "-N"
+        "--threads", "--transition", "--output", "--divisor", "--returns",
+        "--modulus", "--mask", "--weights", "--grid", "-N"
     };
     const size_t count = sizeof(value_options) / sizeof(value_options[0]);
     for (size_t index = 0; index < count; index++)
@@ -268,10 +546,7 @@ static int option_takes_value(const char *option)
 int nfield_completion_candidates(int argc, char **argv)
 {
     if (argc == 0) {
-        for (size_t index = 0; index < command_spec_count; index++) {
-            if ((command_specs[index].flags & COMMAND_COMPATIBILITY) == 0)
-                puts(command_specs[index].name);
-        }
+        nfield_command_names(0);
         puts("--help");
         puts("--version");
         return 0;
@@ -279,7 +554,7 @@ int nfield_completion_candidates(int argc, char **argv)
 
     const char *command = argv[0];
     if (strcmp(command, "--legacy") == 0) {
-        if (argc == 1) print_commands_with_flag(COMMAND_COMPATIBILITY);
+        if (argc == 1) print_commands_with_flag(COMMAND_COMPATIBILITY | COMMAND_VERIFICATION_ONLY);
         return 0;
     }
     if (strcmp(command, "help") == 0) {
@@ -287,14 +562,25 @@ int nfield_completion_candidates(int argc, char **argv)
             print_word_list(
                 "explore commands legacy reading-map verification-map tables");
             print_commands_with_flag(COMMAND_HELP_TOPIC);
+        } else if (argc == 2) {
+            const CommandSpec *spec = find_command_spec(argv[1]);
+            if (spec) print_utility_actions(spec);
         }
         return 0;
     }
     if (strcmp(command, "verify") == 0) {
         if (argc == 1) {
-            puts("all");
+            puts("families");
             print_commands_with_flag(COMMAND_VERIFIER);
             print_word_list(legacy_verifiers);
+        } else if (option_takes_value(argv[argc - 1])) {
+            return 0;
+        } else if (argc == 2 && !strcmp(argv[1], "families")) {
+            puts("--time");
+        } else if (argc == 2) {
+            nfield_verify_actions(argv[1]);
+        } else if (argc >= 3) {
+            print_word_list(nfield_verify_action_options(argv[1], argv[2]));
         }
         return 0;
     }
@@ -306,7 +592,7 @@ int nfield_completion_candidates(int argc, char **argv)
     const CommandSpec *spec = find_command_spec(command);
     if (spec == NULL) return 0;
     if (argc > 1 && option_takes_value(argv[argc - 1])) return 0;
-    if (argc == 1) print_word_list(spec->actions);
+    if (argc == 1) print_utility_actions(spec);
     print_word_list(spec->options);
     return 0;
 }
@@ -396,48 +682,25 @@ int nfield_completion_command(int argc, char **argv)
 
 void nfield_commands_help(void)
 {
-    printf(
-        "nfield command catalog\n\n"
-        "Field exploration\n"
-        "  analyze  field  align  div  decompose  polar  survey  range\n"
-        "  table  spectral  equations\n"
-        "\n"
-        "Digit structure and alignment\n"
-        "  reciprocal-square-selection  weighted-reference-profile\n"
-        "  digit-partition  alignment-limit  three-tier  deficit-lattice\n"
-        "  coherence-decomposition  cross-alignment\n\n"
-        "Spectra and collision structure\n"
-        "  spectral-structure  spectral-power  autocorrelation  phase-gate\n"
-        "  bin-derangements  collision-characters  silent-primes\n"
-        "  collision-fluctuation  collision-centering  collision-table\n"
-        "  collision-transform  centered-collision-table\n\n"
-        "Residue and character channels\n"
-        "  residue-three-neutrality  compatible-residue-channels\n"
-        "  finite-character-pairing  coprime-base-orthogonality\n"
-        "  natural-prime-sum-window  primitive-odd-sector\n"
-        "  conjugate-pair-relabeling  additive-reflection-well\n"
-        "  reflected-prime-pair-sign\n\n"
-        "Transforms and analytic interfaces\n"
-        "  collision-spectrum-factorization  special-value-moment\n"
-        "  base-five-cyclotomic-identity  short-sum-bernoulli-correlation\n"
-        "  primitive-character-cancellation  periodic-zeta-factorization\n"
-        "  collision-boundary-recovery  active-collision-channel\n\n"
-        "Finite geometry, boundaries, and energy\n"
-        "  collision-coordinate  finite-determination  reflection-identity\n"
-        "  half-group  all-prime-collision-label  finite-spectral-quotient\n"
-        "  finite-prefix-slice  oriented-digit-comparison\n"
-        "  boundary-bernoulli-factorization  boundary-conductor-ledger\n"
-        "  terminal-collision-conductor-ledger  finite-state-orbit-boundary\n"
-        "  full-orbit-energy  quadratic-orbit-energy\n"
-        "  subgroup-jacobi-expansion  prime-base-collision-energy\n"
-        "  arithmetic-boundary-defect  carry-completed-carrier\n"
-        "  capacity-resolution  capacity-generation\n\n"
-        "Clocks, sampling, and native energy\n"
-        "  weighted-remainder-state  collision-sampling  boundary-spectrum\n"
-        "  field-observation  native-refinement\n\n"
-        "Operations\n"
-        "  commands  verify  tables  daemon  completion  version  help\n\n"
-        "Use `nfield help <tool>` for actions and scope.\n"
-        "Use `nfield help legacy` for compatibility spellings.\n"
-    );
+    puts("nfield command catalog\n");
+    puts("Research operations and services");
+    for (size_t i = 0; i < command_spec_count; ++i) {
+        const CommandSpec *spec = &command_specs[i];
+        if (spec->flags & (COMMAND_COMPATIBILITY | COMMAND_VERIFICATION_ONLY)) continue;
+        if (!strcmp(spec->name, "verify")) continue;
+        const char *purpose = nfield_command_purpose(spec->name);
+        printf("  %s\n", spec->name);
+        if (purpose && *purpose) printf("    %s\n", purpose);
+    }
+    puts("\nVerification");
+    puts("  verify <family> [check]    Run an implementation check or fixed fixture.");
+    puts("  verify families            List named C checks without running them.");
+    puts("  verify reset-forest contracts [--json]  Run finite source and forest checks.");
+    puts("\nFixed verification families");
+    for (size_t i = 0; i < command_spec_count; ++i)
+        if (command_specs[i].flags & COMMAND_VERIFICATION_ONLY)
+            printf("  nfield verify %s\n", command_specs[i].name);
+    puts("\nUse nfield help <command> for the research purpose, inputs, results and examples.");
+    puts("Use nfield help <command> <action> for one operation's inputs and returned quantities.");
+    puts("Legacy spellings remain executable; use nfield help legacy to find them.");
 }

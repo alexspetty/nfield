@@ -42,7 +42,9 @@ run_capture() {
         | special-value-moment* \
         | verify\ special-value-moment \
         | short-sum-bernoulli-correlation* \
-        | verify\ short-sum-bernoulli-correlation)
+        | verify\ short-sum-bernoulli-correlation \
+        | periodic-zeta-factorization* \
+        | verify\ periodic-zeta-factorization)
             timeout_seconds=60
             ;;
     esac
@@ -221,17 +223,32 @@ printf '\n'
 
 printf 'named command output contracts:\n'
 assert_command_contains "--help" "Command-line tools" "Common commands" "Find more" "nfield commands" "nfield completion" "Examples" "Default base: 10"
-assert_command_contains "-h" "field <n>" "verify [name|all]" "nfield help <command>"
+assert_command_contains "-h" "field <n>" "verify [name]" "nfield help <command>"
 assert_command_contains "help" "Command-line tools" "nfield help <command>" "Find more"
 assert_command_excludes "--help" "manuscript"
 assert_command_excludes "--help" "Named verification objects"
 assert_command_contains "help explore" "nfield field exploration" "nfield analyze <n>" "nfield spectral <p>" "Common options"
-assert_command_contains "help commands" "nfield command catalog" "Field exploration" "Digit structure and alignment" "Spectra and collision structure" "Finite geometry, boundaries, and energy" "completion"
-assert_command_contains "commands" "nfield command catalog" "Field exploration" "Finite geometry, boundaries, and energy" "commands" "completion"
-assert_command_contains "verify" "nfield verifier index" "List verifiers without running them" "nfield verify all" "Tool verifiers" "Legacy research verifiers"
+assert_command_contains "help commands" "nfield command catalog" "Research operations and services" "Verification" "Fixed verification families" "completion"
+assert_command_contains "commands" "nfield command catalog" "Research operations and services" "Measure how a chosen reset family" "commands" "completion"
+assert_command_contains "verify" "nfield verifier index" "List verifiers without running them" "nfield verify <name>" "Tool verifiers" "Legacy research verifiers"
 assert_command_excludes "verify" "Synchronized digit-partition verification"
 assert_command_excludes "verify" "manuscript"
-assert_command_contains "help verify" "nfield verify <name>" "this is the long path" "A passing finite sweep certifies only its stated" "does not establish a universal or analytic theorem"
+assert_command_excludes "verify" "nfield verify all"
+assert_command_excludes "verify" "Optional theorem correspondence registry"
+for retired in "all" "all --time" "all --require-complete --json" "coverage --json" "list" "theorem unused" "work reset-forests" "gate-width --require-complete" "gate-width --source-root /missing"; do
+    out="$(mktemp)"
+    err="$(mktemp)"
+    status=0
+    timeout 3 "$BIN" verify $retired >"$out" 2>"$err" || status=$?
+    tests_run=$((tests_run + 1))
+    if [ "$status" -eq 2 ] && [ ! -s "$out" ] && grep -Eqi 'retired|removed' "$err"; then
+        pass
+    else
+        fail "retired verifier must reject promptly without calculation: $retired (exit $status)"
+    fi
+    rm -f "$out" "$err"
+done
+assert_command_contains "help verify" "nfield verify <name>" "contracts" "A passing finite sweep certifies only its stated" "does not establish a universal or analytic theorem"
 assert_command_contains "help completion" "nfield shell completion" "source <(nfield completion bash)" "source <(nfield completion zsh)" "nfield completion fish | source" "nfield fi" "Candidates come from the current" "nfield executable"
 assert_command_contains "completion" "nfield shell completion" "Enable Tab completion" "Save the generated script"
 assert_command_contains "version --help" "nfield build identity" "YYYY.MMDD.HHMMSS" "BUILD_VERSION" "no-op make"
@@ -725,7 +742,7 @@ assert_command_excludes "help terminal-collision-conductor-ledger" "Carry Bounda
 assert_command_fails_with "terminal-collision-conductor-ledger unknown" "Unknown terminal-collision-conductor-ledger action"
 assert_command_fails_with "collision-spectrum-factorization inspect 9 1" "base must be an odd prime"
 assert_command_fails_with "collision-spectrum-factorization inspect 5 5" "character index must be odd, primitive"
-assert_command_contains "primitive-character-cancellation inspect 5 1 1" "Primitive-character fiber cancellation" "primitive odd characters checked = 1" "congruence fibers checked = 4" "conductor witnesses and exact fiber sizes  PASS" "Result  PASS"
+assert_command_contains "primitive-character-cancellation inspect 5 1 1" "Primitive-character fiber cancellation" "character depth modulus residue count witness sum_real sum_imag" "primitive odd characters checked = 1" "congruence fibers checked = 4" "conductor, fiber-size and cancellation discrepancies = 0"
 assert_command_contains "verify primitive-character-cancellation" "noncyclic unit groups at powers of two" "3/3 verification groups passed" "1/1 verifications passed"
 assert_command_contains "help primitive-character-cancellation" "conductor witness" "powers of two" "exact computation" "numerical check"
 assert_command_excludes "help primitive-character-cancellation" "The Analytic Collision Transform" "10.5281/zenodo"

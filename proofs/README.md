@@ -33,6 +33,19 @@ lake build
 `lean-toolchain`, `lakefile.toml`, and `lake-manifest.json` pin the Lean and
 Mathlib revisions used for the build.
 
+The reset-forest companion can also be built and checked on its own:
+
+```sh
+./check-reset-forests.sh
+```
+
+This command builds `NField.Papers.SamplingDefectAndResetForests` and checks
+an explicit list of principal theorem declarations in `Checks/ResetForests.lean`.
+The axiom check permits only `propext`, `Classical.choice` and `Quot.sound`.
+It fails for a missing theorem, `sorryAx` or an additional axiom. The companion
+states the forest bounds and the hypotheses retained in the sufficient
+half-power criteria; the full complementary estimate remains open.
+
 ## Layout
 
 ```text
@@ -40,6 +53,7 @@ NField.lean          public library root
 NField/Papers/       paper-facing theorem maps
 NField/Alignment/    reusable alignment and collision proofs
 NField/Golden/       reusable threshold and finite-orbit proofs
+NField/ResetForests/ reset coordinates, forest bounds and readout costs
 NField/External/     attributed upstream proof inputs
 ```
 

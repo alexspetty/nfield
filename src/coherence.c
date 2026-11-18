@@ -125,6 +125,10 @@ static void build_and_solve(int N, double *S_val, double delta_0,
 }
 
 void coherence_print(int base, int N) {
+    if (base < 2 || base > 14 || N < 1) {
+        fprintf(stderr, "coherence requires base 2..14 and at least one prime.\n");
+        return;
+    }
     int mod = base * base;
     if (N > MAX_PRIMES) N = MAX_PRIMES;
 

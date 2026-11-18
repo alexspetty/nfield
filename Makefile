@@ -1,5 +1,7 @@
 CC      = gcc
 CFLAGS  = -O2 -Wall -Wextra -std=c99
+CPPFLAGS ?=
+AR ?= ar
 LDFLAGS ?=
 LAPACK_LIBS ?= $(shell \
 	lapack=$$($(CC) -print-file-name=liblapack.so); \
@@ -18,8 +20,10 @@ LAPACK_LIBS ?= $(shell \
 LDLIBS  ?= -lm -lpthread $(LAPACK_LIBS) -lmpfr -lgmp
 BUILD_VERSION ?= $(shell date -u '+%Y.%m%d.%H%M%S')
 
-# Library foundations and stable mathematical verification objects.
+# Mathematical operations and their separately invoked verification routines.
 FOUNDATION_SRC = src/native_arithmetic.c src/native_directional.c src/field_observation.c \
+	src/collision_sampling_kernel.c \
+	src/reset_forest.c src/reset_forest_command.c src/reset_source.c src/reset_source_command.c \
 	src/repetend.c \
 	src/native_refinement.c \
 	src/field.c \
@@ -37,6 +41,7 @@ FOUNDATION_SRC = src/native_arithmetic.c src/native_directional.c src/field_obse
 	src/orbit_boundary_core.c
 
 VERIFICATION_OBJECT_SRC = \
+	verify/reset_forest_verify.c \
 	src/collision_sampling.c \
 	src/collision_kernel_readout.c \
 	verify/collision_sampling_verify.c \
@@ -140,7 +145,28 @@ VERIFICATION_OBJECT_SRC = \
 LIB_SRC = $(FOUNDATION_SRC) $(VERIFICATION_OBJECT_SRC)
 REFERENCE_AUDIT_OBJ = src/terminal_collision_conductor_ledger_reference.o
 LIB_OBJ = $(LIB_SRC:.c=.o) $(REFERENCE_AUDIT_OBJ)
-LIB     = libnfield.a
+LIB     = libnfield_internal.a
+
+# Installed archive: core calculations plus the optional research interfaces.
+PUBLIC_LIB = libnfield.a
+PUBLIC_LIB_OBJ = src/library.o src/reset_source.o src/reset_forest.o \
+	src/collision_sampling_kernel.o
+PUBLIC_HEADERS = include/nfield/core.h include/nfield/collision.h include/nfield/nfield.h
+include packaging/research.mk
+PUBLIC_LIB_OBJ += $(RESEARCH_LIBRARY_OBJ)
+LIBRARY_VERSION = $(shell sed -n 's/^\#define NFIELD_VERSION "\([^"]*\)"/\1/p' include/nfield/core.h)
+LIBRARY_LDLIBS = -lgmp
+PREFIX ?= /usr/local
+DESTDIR ?=
+LIBDIR ?= $(PREFIX)/lib
+INCLUDEDIR ?= $(PREFIX)/include
+DOCDIR ?= $(PREFIX)/share/doc/nfield
+EXAMPLEDIR ?= $(DOCDIR)/examples
+PKGCONFIGDIR ?= $(LIBDIR)/pkgconfig
+INSTALL ?= install
+INSTALL_DATA ?= $(INSTALL) -m 644
+LIBRARY_EXAMPLES = examples/forest_readings.c examples/source_projection.c \
+	examples/source_divisor.c examples/Makefile
 
 COLLISION_SPECTRUM_OBJ = \
 	src/collision_spectrum_core.o \
@@ -160,13 +186,17 @@ PERIODIC_ZETA_OBJ = \
 # Main binary
 BIN     = nfield
 
-all: $(BIN)
+all: $(BIN) library
 
 src/native_refinement.o: src/native_refinement.h
+src/reset_forest.o src/reset_forest_command.o verify/reset_forest_verify.o: src/reset_forest.h
+src/reset_forest.o: src/collision_sampling.h
+src/reset_source.o src/reset_source_command.o src/reset_forest_command.o: src/reset_source.h
+src/main.o verify/verify.o: src/reset_forest.h
 
 src/weighted_remainder_state.o: src/weighted_remainder_state.h
 
-src/collision_sampling.o verify/collision_sampling_verify.o: src/collision_sampling.h
+src/collision_sampling.o src/collision_sampling_kernel.o verify/collision_sampling_verify.o: src/collision_sampling.h
 src/collision_sampling.o: src/collision_capacity_transition.h
 src/collision_kernel_readout.o src/collision_capacity_generation.o: src/collision_kernel_readout.h src/weighted_remainder_exact.h
 src/boundary_spectrum.o verify/boundary_spectrum_verify.o: src/boundary_spectrum.h src/finite_character_core.h
@@ -187,9 +217,51 @@ src/weighted_remainder_cylinder.o: src/weighted_remainder_cylinder.h src/weighte
 src/weighted_remainder_conductor.o: src/weighted_remainder_conductor.h src/weighted_remainder_exact.h
 src/weighted_remainder_activation.o: src/weighted_remainder_activation.h
 
-# Build static library from core sources
+# Internal archive retains the complete CLI and verification implementation.
 $(LIB): $(LIB_OBJ)
-	ar rcs $@ $^
+	$(AR) rcs $@ $^
+
+# Always construct the installed archive afresh so obsolete members cannot
+# survive an earlier build with a different object selection.
+$(PUBLIC_LIB): $(PUBLIC_LIB_OBJ) Makefile packaging/research.mk
+	$(RM) "$@.tmp"
+	$(AR) rcs "$@.tmp" $(PUBLIC_LIB_OBJ)
+	mv -f "$@.tmp" "$@"
+
+src/library.o: src/library.c $(PUBLIC_HEADERS) src/reset_source.h src/reset_forest.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -Iinclude -Isrc -c -o $@ $<
+
+src/reset_source.o src/reset_forest.o src/collision_sampling_kernel.o: %.o: %.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+
+library: $(PUBLIC_LIB)
+
+install-lib: library $(PUBLIC_HEADERS) include/nfield/research.h $(RESEARCH_HEADERS) docs/LIBRARY.md docs/RESEARCH_LIBRARY.md $(LIBRARY_EXAMPLES) packaging/install-pc.sh packaging/install-research-pc.sh
+	$(INSTALL) -d "$(DESTDIR)$(LIBDIR)" "$(DESTDIR)$(INCLUDEDIR)/nfield" \
+		"$(DESTDIR)$(PKGCONFIGDIR)" "$(DESTDIR)$(DOCDIR)" "$(DESTDIR)$(EXAMPLEDIR)" "$(DESTDIR)$(INCLUDEDIR)/nfield/research"
+	$(INSTALL_DATA) $(PUBLIC_LIB) "$(DESTDIR)$(LIBDIR)/libnfield.a"
+	$(INSTALL_DATA) $(PUBLIC_HEADERS) "$(DESTDIR)$(INCLUDEDIR)/nfield/"
+	$(INSTALL_DATA) include/nfield/research.h "$(DESTDIR)$(INCLUDEDIR)/nfield/research.h"
+	$(INSTALL_DATA) $(RESEARCH_HEADERS) "$(DESTDIR)$(INCLUDEDIR)/nfield/research/"
+	$(INSTALL_DATA) docs/LIBRARY.md docs/RESEARCH_LIBRARY.md "$(DESTDIR)$(DOCDIR)/"
+	$(INSTALL_DATA) $(LIBRARY_EXAMPLES) "$(DESTDIR)$(EXAMPLEDIR)/"
+	sh packaging/install-pc.sh "$(DESTDIR)$(PKGCONFIGDIR)/nfield.pc" \
+		"$(PREFIX)" "$(LIBDIR)" "$(INCLUDEDIR)" "$(LIBRARY_VERSION)"
+	sh packaging/install-research-pc.sh "$(DESTDIR)$(PKGCONFIGDIR)/nfield-research.pc" \
+		"$(PREFIX)" "$(LIBDIR)" "$(INCLUDEDIR)" "$(LIBRARY_VERSION)" "$(LDLIBS)"
+
+test/test_library: test/test_library.c $(PUBLIC_LIB) $(PUBLIC_HEADERS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -Iinclude $(LDFLAGS) -o $@ $< $(PUBLIC_LIB) $(LIBRARY_LDLIBS)
+
+test-library: test/test_library
+	./test/test_library
+
+test-library-install: library test/test_library_install.sh
+	sh test/test_library_install.sh "$(CURDIR)"
+
+test: test-library test-library-install
+
+.PHONY: library install-lib test-library test-library-install
 
 src/%.o: src/%.c src/nfield.h
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -204,19 +276,32 @@ src/terminal_collision_conductor_ledger_reference.o: \
 		src/terminal_collision_conductor_ledger_reference.c
 	$(CC) $(CFLAGS) -DNFIELD_CLI_EMBEDDED -c -o $@ $<
 
+# CLI descriptions and named finite implementation checks.
+CLI_SUPPORT_OBJ = src/completion.o src/command_guide.o \
+	src/verification_routes.o verify/reset_forest_contracts.o
+
 # Main binary links against library + verify + daemon
-$(BIN): src/main.o src/completion.o src/daemon.o src/dispatch.o \
+$(BIN): src/main.o $(CLI_SUPPORT_OBJ) src/daemon.o src/dispatch.o \
 		verify/verify.o $(LIB) src/build_info.c src/build_info.h
 	$(CC) $(CFLAGS) -DNFIELD_BUILD_VERSION='"$(BUILD_VERSION)"' \
 		-c -o src/build_info.o src/build_info.c
-	$(CC) $(CFLAGS) -o $@ src/main.o src/completion.o src/daemon.o \
+	$(CC) $(CFLAGS) -o $@ src/main.o $(CLI_SUPPORT_OBJ) src/daemon.o \
 		src/dispatch.o verify/verify.o $(LIB) src/build_info.o \
 		$(LDFLAGS) $(LDLIBS)
 
-src/main.o: src/main.c src/nfield.h src/completion.h src/build_info.h
+src/main.o: src/main.c src/nfield.h src/completion.h src/build_info.h \
+	src/command_guide.h src/verification_routes.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-src/completion.o: src/completion.c src/completion.h
+src/completion.o: src/completion.c src/completion.h src/command_guide.h
+
+src/command_guide.o: src/command_guide.c src/command_guide.h src/command_actions.inc
+src/verification_routes.o: src/verification_routes.c src/verification_routes.h \
+	verify/reset_forest_contracts.h
+verify/reset_forest_contracts.o: verify/reset_forest_contracts.c \
+	verify/reset_forest_contracts.h src/reset_forest.h src/reset_source.h \
+	verify/reset_forest_contracts_source.inc verify/reset_forest_contracts_source_ids.inc \
+	verify/reset_forest_contracts_source_kinds.inc verify/reset_forest_contracts_source_rows.inc
 
 src/daemon.o: src/daemon.c
 	$(CC) $(CFLAGS) -c -o $@ $<
@@ -224,12 +309,12 @@ src/daemon.o: src/daemon.c
 src/dispatch.o: src/dispatch.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-verify/verify.o: verify/verify.c src/nfield.h
+verify/verify.o: verify/verify.c src/nfield.h verify/reset_forest_contracts.h
 	$(CC) $(CFLAGS) -Isrc -c -o $@ $<
 
-# Run every named verification through the supported CLI surface.
+# List named checks without starting an aggregate run.
 verify: $(BIN)
-	./$(BIN) verify all
+	./$(BIN) verify
 
 # Convenience targets
 parallel: CFLAGS += -fopenmp -DNFIELD_PARALLEL
@@ -434,7 +519,7 @@ test-cli: $(BIN) test/test_cli_commands.sh
 test-completion: $(BIN) test/test_completion.sh
 	bash test/test_completion.sh
 
-test-api: $(BIN) test/test_daemon_api.sh
+test-api: $(BIN) test/test_daemon_api.sh test/test_json_contracts
 	bash test/test_daemon_api.sh
 
 
@@ -445,6 +530,7 @@ test-sanitize:
 	$(MAKE) all
 
 clean:
+	$(RM) $(PUBLIC_LIB) $(PUBLIC_LIB).tmp test/test_library test/test_research_library test/test_reset_source_api test/test_dispatch_status test/test_daemon_encoding test/test_json_contracts
 	rm -f test/test_weighted_remainder_transcendental
 	rm -f test/test_native_api
 	rm -f test/test_weighted_remainder_alignment_growth test/test_weighted_remainder_law
@@ -461,7 +547,7 @@ clean:
 	rm -f test/test_sampling_spectrum_api
 	rm -f $(BIN) $(LIB) src/*.o verify/*.o test/test_nfield test/test_weighted_remainder_exact test/test_weighted_remainder_primitive test/test_weighted_remainder_sawtooth test/test_weighted_remainder_pairing test/test_weighted_remainder_joint test/test_weighted_remainder_cylinder test/test_weighted_remainder_conductor test/test_weighted_remainder_activation
 
-.PHONY: all parallel gmp verify test test-unit test-cli test-rotation test-completion test-api test-weighted-remainder-exact test-weighted-remainder-primitive test-weighted-remainder-sawtooth test-weighted-remainder-pairing test-weighted-remainder-joint test-weighted-remainder-cylinder test-weighted-remainder-conductor test-weighted-remainder-activation test-sanitize clean
+.PHONY: all parallel gmp verify test test-unit test-cli test-completion test-api test-weighted-remainder-exact test-weighted-remainder-primitive test-weighted-remainder-sawtooth test-weighted-remainder-pairing test-weighted-remainder-joint test-weighted-remainder-cylinder test-weighted-remainder-conductor test-weighted-remainder-activation test-sanitize clean
 
 
 
@@ -530,3 +616,29 @@ test-weighted-remainder-transcendental: test/test_weighted_remainder_transcenden
 
 test: test-weighted-remainder-transcendental
 .PHONY: test-weighted-remainder-transcendental
+
+# Exact source/forest API and command contracts.
+test: test-reset-forest test-reset-source test-dispatch-status test-daemon-encoding test-research-library test-command-contracts
+test-reset-forest: $(BIN) test/test_reset_forest.sh
+	bash test/test_reset_forest.sh
+test/test_reset_source_api: test/test_reset_source_api.c $(LIB) src/reset_source.h
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< $(LIB) $(LDLIBS)
+test-reset-source: test/test_reset_source_api
+	./test/test_reset_source_api
+test/test_dispatch_status: test/test_dispatch_status.c src/dispatch.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< src/dispatch.o
+test-dispatch-status: test/test_dispatch_status
+	./test/test_dispatch_status
+test/test_daemon_encoding: test/test_daemon_encoding.c src/daemon.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $< -lpthread
+test-daemon-encoding: test/test_daemon_encoding
+	./test/test_daemon_encoding
+test/test_research_library: test/test_research_library.c $(PUBLIC_LIB) $(RESEARCH_HEADERS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -Iinclude $(LDFLAGS) -o $@ $< $(PUBLIC_LIB) $(LDLIBS)
+test-research-library: test/test_research_library
+	./test/test_research_library
+test/test_json_contracts: test/test_json_contracts.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $< -lgmp -lm
+test-command-contracts: $(BIN) test/test_json_contracts test/test_command_contracts.sh
+	bash test/test_command_contracts.sh
+.PHONY: test-reset-forest test-reset-source test-dispatch-status test-daemon-encoding test-research-library test-command-contracts

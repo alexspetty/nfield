@@ -25,12 +25,48 @@ are installed elsewhere. `make parallel` builds with OpenMP support.
 
 ```sh
 ./nfield commands
+./nfield commands spectrum --examples
+./nfield help reset-forest project
 ./nfield help collision-table
 ./nfield help reading-map
 ```
 
-Most command families offer `inspect` and `verify`. Each command's help lists
-its operations, inputs and limits.
+Ordinary commands return usable mathematical values. Named implementation checks
+are selected with `nfield verify <family> [check]`. Each action's help describes
+its inputs, result, example and limits. The [command guide](docs/COMMAND_GUIDE.md)
+lists the same contracts, and `nfield commands --json` returns them as data.
+
+## Sources and reset forests
+
+Select the reset masses of your own signed rational source, then retain its
+complement and the complete signed mixed work:
+
+```sh
+./nfield reset-forest 31 --returns 3 --json
+./nfield reset-forest source 31 --divisor 3 --csv
+./nfield reset-forest project 4 --modulus 6 --weights 1,-2,3/2,1 --json
+```
+
+The prime-square operations accept odd primes 3 through 251. General projection
+accepts cutoffs 0 through 64, arbitrary rational coefficients and a modulus,
+divisor or mask. Exact fractions are JSON strings. `--grid 0` returns coordinates
+only; `--modulus 0` selects the identity. Finite calculations do not prove a
+uniform bound for the complementary reset family.
+
+## Use the C library
+
+```sh
+make library
+make install-lib PREFIX="$HOME/.local"
+export PKG_CONFIG_PATH="$HOME/.local/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+make -C examples run
+```
+
+The [core C API](docs/LIBRARY.md) provides owned source/forest handles and exact
+GMP results. The [research profile](docs/RESEARCH_LIBRARY.md) exposes existing
+field, collision, spectral and weighted-remainder interfaces. Numerical result
+functions and text renderers retain their distinct contracts. Static clients
+link through `pkg-config --libs --static nfield` or `nfield-research`.
 
 ## Grids, readings and energy
 
@@ -146,17 +182,22 @@ To run the local JSON/TCP daemon:
 ./nfield daemon --port 9090 --threads 1
 ```
 
-Send one JSON object per line, such as `{"cmd":"field 7"}`. The response
-contains the command output. See `nfield help daemon` for the protocol.
+Send one newline-terminated JSON object per connection, such as
+`{"cmd":"field 7"}`. The response contains `output`, `exit_code` and `truncated`.
+The service listens on loopback and uses TCP, not HTTP. It runs the same
+calculation paths as the CLI. See `nfield help daemon` for limits and protocol.
 
 ## Tests
 
 ```sh
 make test
 make verify
+./nfield verify reset-forest contracts --json
 ```
 
-Daemon tests need local loopback sockets.
+`make verify` lists the available named checks. There is no aggregate
+`verify all` route. These finite C checks run without Lean or proof files.
+Daemon tests need local loopback sockets; installed-library checks use pkg-config.
 
 The [Lean proof library](proofs/README.md) contains the formal statements and
 instructions for checking them.

@@ -480,8 +480,7 @@ theorem sevenLimit_hypotheses :
   · exact ⟨1, by norm_num⟩
   · exact ⟨3, by norm_num⟩
 
-/-- The worst chromatic endpoint error is the exact value and strict bound
-quoted in the round-two manuscript. -/
+/-- The worst chromatic endpoint error equals `1/27838` and is less than `9/250000`. -/
 theorem chromaticEndpoint_relative_error :
     scaledRelativeError 29 480 960 1 = (1 : ℚ) / 27838 ∧
       |scaledRelativeError 29 480 960 1| < (9 : ℚ) / 250000 := by
@@ -504,8 +503,7 @@ theorem chromaticScale_supported :
   repeat' apply And.intro
   all_goals exact ⟨9, by norm_num⟩
 
-/-- The common-denominator chromatic points have exactly the thirteen ratios
-listed in the round-two manuscript. -/
+/-- The common-denominator chromatic points give the thirteen five-limit ratios. -/
 theorem chromaticScale_exact_ratios :
     (480 : ℚ) / 480 = 1 ∧
     (512 : ℚ) / 480 = 16 / 15 ∧

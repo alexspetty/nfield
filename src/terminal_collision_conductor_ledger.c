@@ -699,7 +699,9 @@ void terminal_collision_conductor_ledger_help(void)
 {
     printf(
         "Terminal collision conductor ledger\n\n"
-        "Commands\n"
+        "Verification\n"
+        "  nfield verify terminal-collision-conductor-ledger\n\n"
+        "Compatibility commands\n"
         "  nfield terminal-collision-conductor-ledger audit\n"
         "      Reproduce the eight prime-power rows and the base-15 ledger.\n"
         "  nfield terminal-collision-conductor-ledger verify\n"

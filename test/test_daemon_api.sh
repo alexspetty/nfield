@@ -26,7 +26,11 @@ api_request() {
     for _ in $(seq 1 50); do
         if exec 3<>"/dev/tcp/127.0.0.1/$PORT" 2>/dev/null; then
             printf '{"cmd":"%s"}\n' "$command" >&3
-            IFS= read -r response <&3
+            if [ "$#" -gt 1 ]; then
+                IFS= read -r -t "$2" response <&3 || return 1
+            else
+                IFS= read -r response <&3
+            fi
             exec 3<&-
             exec 3>&-
             printf '%s' "$response"
@@ -41,10 +45,69 @@ api_request() {
 printf 'nfield daemon API regression tests\n'
 printf '==================================================\n\n'
 
+command_catalog="$(api_request 'commands --json')"
+./test/test_json_contracts catalog <<<"$command_catalog"
+printf '  structured command discovery through JSON/TCP: PASS\n'
+
+forest_contracts="$(api_request 'verify reset-forest contracts --json' 10)"
+./test/test_json_contracts contracts <<<"$forest_contracts"
+printf '  finite forest implementation contracts through JSON/TCP: PASS\n'
+
+for retired in 'verify all' 'verify all --require-complete --json' 'verify coverage --json' 'verify list' 'verify theorem unused' 'verify work reset-forests' 'verify gate-width --require-complete' 'verify gate-width --source-root /missing'; do
+    retired_result="$(api_request "$retired" 3)"
+    ./test/test_json_contracts retired <<<"$retired_result"
+done
+printf '  retired verification routes reject promptly through JSON/TCP: PASS\n'
+
+invalid_forest="$(api_request 'reset-forest 4 --json')"
+./test/test_json_contracts invalid <<<"$invalid_forest"
+printf '  invalid research input retains nonzero exit through JSON/TCP: PASS\n'
+
+reset_forest="$(api_request 'reset-forest 31 --json')"
+./test/test_json_contracts forest <<<"$reset_forest"
+printf '  reset forest results through JSON/TCP: PASS\n'
+
+reset_source="$(api_request 'reset-forest source 31 --json')"
+./test/test_json_contracts source <<<"$reset_source"
+printf '  reset source coefficients through JSON/TCP: PASS\n'
+
+weighted_source="$(api_request 'reset-forest project 4 --modulus 6 --weights 1,-2,3/2,1 --json')"
+./test/test_json_contracts weighted <<<"$weighted_source"
+printf '  arbitrary weighted source and full mixed work through JSON/TCP: PASS\n'
+
+project_help="$(api_request 'help reset-forest project')"
+./test/test_json_contracts help <<<"$project_help"
+printf '  focused action help through JSON/TCP: PASS\n'
+
+if [ "${NFIELD_DISCOVERY_ONLY:-0}" = 1 ]; then
+    printf '\nDiscovery and forest API checks passed.\n'
+    exit 0
+fi
+
 native_refinement="$(api_request 'native-refinement trace 4 8')"
 grep -Fq 'full infinite norm; period=840' <<<"$native_refinement"
 grep -Fq 'uniform lower bound OPEN' <<<"$native_refinement"
 printf '  native refinement through JSON/TCP: PASS\n'
+
+native_refinement_json="$(api_request 'native-refinement trace 4 6 --json')"
+./test/test_json_contracts trace <<<"$native_refinement_json"
+printf '  native refinement interval JSON through JSON/TCP: PASS\n'
+
+native_collision4_json="$(api_request 'native-refinement collision4 --json')"
+./test/test_json_contracts collision4 <<<"$native_collision4_json"
+printf '  native collision4 calibration through JSON/TCP: PASS\n'
+
+native_collision_families_json="$(api_request 'native-refinement collision-families --json')"
+./test/test_json_contracts families8 <<<"$native_collision_families_json"
+printf '  native translated collision families through JSON/TCP: PASS\n'
+
+native_collision_families_16_json="$(api_request 'native-refinement collision-families 8 16 --json')"
+./test/test_json_contracts families16 <<<"$native_collision_families_16_json"
+printf '  native q25 rank-budget exhaustion through JSON/TCP: PASS\n'
+
+native_collision_tower_49_json="$(api_request 'native-refinement collision-families 4 16 --json')"
+./test/test_json_contracts tower49 <<<"$native_collision_tower_49_json"
+printf '  native CRT rank exhaustion and q49 recovery through JSON/TCP: PASS\n'
 
 reciprocal_selection="$(api_request 'reciprocal-square-selection inspect 3 4 --base 10')"
 grep -Fq 'exact alignment alpha_b(pm)=7/11' <<<"$reciprocal_selection"
@@ -863,8 +926,7 @@ grep -Fq '1/1 verifications passed.' <<<"$remainder_verification"
 printf '  weighted remainder verifier through JSON/TCP: PASS\n'
 
 fiber_cancellation="$(api_request 'primitive-character-cancellation inspect 5 1 1')"
-grep -Fq 'conductor witnesses and exact fiber sizes  PASS' <<<"$fiber_cancellation"
-grep -Fq 'Result  PASS' <<<"$fiber_cancellation"
+./test/test_json_contracts fiber <<<"$fiber_cancellation"
 printf '  primitive-character cancellation through JSON/TCP: PASS\n'
 
 fiber_cancellation_verification="$(api_request 'verify primitive-character-cancellation')"

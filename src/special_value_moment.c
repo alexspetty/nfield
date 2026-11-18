@@ -99,7 +99,9 @@ void special_value_moment_help(void)
 {
     printf(
         "Exact special-value moment\n\n"
-        "Commands\n"
+        "Verification\n"
+        "  nfield verify special-value-moment\n\n"
+        "Compatibility commands\n"
         "  nfield special-value-moment ledger\n"
         "      Show collision energy, the diagonal second moment, and the\n"
         "      weighted L(1) Parseval error for 18 prime bases.\n"

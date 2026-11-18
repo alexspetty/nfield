@@ -2,10 +2,10 @@
  * verify.c: Exact and finite verifier dispatch for nfield tools.
  *
  * Usage:
- *   nfield verify <theorem>
- *   nfield verify all
+ *   nfield verify <name>
+ *   nfield verify reset-forest contracts [--json]
  *
- * Theorem names:
+ * Check families:
  *   digit-partition    Exact finite checks for synchronized alignment
  *   alignment-limit    Coset correction, limits, and sharp bound
  *   three-tier        Composite rough parts and forbidden interval
@@ -33,7 +33,6 @@
  *   full-range         f_full(a) = 1 for all coprime a
  *   middle-balance     f^{B_1}(a) = 0
  *   inversion          f_j(a) = f_j(a^{-1})
- *   all                Run all verifications
  *
  * 2026 Alexander S. Petty
  */
@@ -43,6 +42,8 @@
 #include <string.h>
 #include <math.h>
 #include "../src/nfield.h"
+#include "../src/reset_forest.h"
+#include "reset_forest_contracts.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -791,51 +792,11 @@ static int verify_even_killed(void)
 
 static int verify_decomposition(void)
 {
-    printf("Decomposition Theorem\n");
-    printf("  Claim: S_hat(chi) = -B_1(chi_bar) * D(chi) for primitive odd chi\n");
-    printf("  (Verified as |S_hat|^2 = |B_1|^2 * |D|^2)\n\n");
-
-    /* At base 10, m=100: compute S_hat for each odd primitive chi,
-       check factorization into Bernoulli and diagonal sum */
-    int b = 10, m = 100;
-
-    int s_val[256], s_known[256];
-    memset(s_known, 0, sizeof(s_known));
-    for (int p = m + 1; p <= 5000; p++) {
-        if (!is_prime(p) || p % b == 0) continue;
-        int cls = p % m;
-        if (s_known[cls]) continue;
-        int C = collision_count(power_mod(b, 1, p), p, b);
-        s_val[cls] = C - (p - 1) / b;
-        s_known[cls] = 1;
-    }
-    double mean = -0.5;
-
-    /* generator mod 100: need primitive root mod 100...
-       (Z/100Z)* is not cyclic. Skip full decomposition,
-       just verify the Parseval moment identity instead. */
-    printf("  (Full decomposition requires non-cyclic group handling.\n");
-    printf("   Verifying Parseval moment identity instead.)\n");
-
-    /* Parseval: sum |S_c(a)|^2 = (1/phi) sum |S_hat(chi)|^2 */
-    double sum_sq = 0; int count = 0;
-    for (int a = 1; a < m; a++) {
-        if (!s_known[a]) continue;
-        int ga = a, ha = m;
-        while (ha) { int t = ha; ha = ga % ha; ga = t; }
-        if (ga != 1) continue;
-        double sc = s_val[a] - mean;
-        sum_sq += sc * sc;
-        count++;
-    }
-    printf("  base 10: sum |S_c|^2 = %.4f over %d classes\n",
-           sum_sq, count);
-    printf("  base 10: mean |S_c|^2 = %.4f\n", sum_sq / count);
-
-    /* The Parseval identity is structural, always holds.
-       Verify it's consistent: sum should equal phi * (mean |S_hat|^2) */
-    printf("  Parseval identity holds by construction  PASS\n");
-    return 1;
+    printf("Decomposition compatibility check\n");
+    printf("  Runs the direct and Bernoulli-factored coefficient comparisons\n");
+    printf("  for every primitive odd character at the 18 prime bases 5--71,\n");
+    printf("  with additional unit-multiplier transforms at base 73.\n\n");
+    return collision_spectrum_factorization_verify();
 }
 
 /* ── General Lag Finite Determination ──────── */
@@ -886,10 +847,13 @@ void verify_help(void)
 {
     printf(
         "nfield verifier index\n\n"
+        "Executable C checks of the calculations, identities and finite panels.\n"
+        "Running these checks does not require Lean or a proof-source checkout.\n\n"
         "Usage:\n"
         "  nfield verify                 List verifiers without running them\n"
         "  nfield verify <name>          Run one named verifier\n"
-        "  nfield verify all             Run every verifier; this is the long path\n"
+        "  nfield verify <name> <check>  Run a fixed fixture or subcheck\n"
+        "  nfield verify families        List executable check families\n"
         "  nfield help verify\n\n"
         "Tool verifiers:\n"
         "  native-refinement                Complete native norm and signed origin trace\n"
@@ -931,6 +895,7 @@ void verify_help(void)
         "  short-sum-bernoulli-correlation   Exhaustive finite correlation ledger\n"
         "  weighted-remainder-state          Conserved clocks and finite conductor rows\n\n"
         "  capacity-resolution     Diagonal, prime phases and finite cutoffs\n"
+        "  capacity-generation     Independent cutoffs and coherent generation work\n"
         "  terminal-collision-conductor-ledger Exact prime-power and base-15 ledger\n\n"
         "  primitive-character-cancellation  Prime-power congruence-fiber sums\n"
         "  periodic-zeta-factorization       Model sum and centered transform\n"
@@ -953,6 +918,7 @@ void verify_help(void)
         "  prime-base-collision-energy       Carry, Dedekind, and pole dictionary\n"
         "  arithmetic-boundary-defect        Exact finite secondary residual\n"
         "  collision-sampling               Exact sampling, carrier and switching ledgers\n"
+        "  reset-forest                     Reset work, source collapse and restoration\n"
         "  boundary-spectrum                General finite unit-group boundary transforms\n"
         "  carry-completed-carrier           Cyclic tower, seam, and product Gram\n\n"
         "Legacy research verifiers retained for compatibility:\n"
@@ -962,13 +928,36 @@ void verify_help(void)
         "  general-lag-det\n\n"
         "Each verifier reports its finite range and whether it uses exact integer\n"
         "or numerical arithmetic. A passing finite sweep certifies only its stated\n"
-        "range; it does not establish a universal or analytic theorem.\n"
+        "range; it does not establish a universal or analytic theorem.\n\n"
+        "Fixed fixture examples:\n"
+        "  nfield verify collision-characters snapshot\n"
+        "  nfield verify conjugate-pair-relabeling exact-law\n"
+        "  nfield verify weighted-reference-profile torsion\n"
+        "  nfield verify short-sum-bernoulli-correlation ledger\n"
+        "  nfield verify reset-forest contracts [--json] [--time]\n"
+        "Use ordinary commands for calculated values on your own inputs.\n\n"
+        "The reset-forest family includes its finite implementation contracts.\n"
+        "The contracts subcheck also offers JSON with individual test domains,\n"
+        "case counts and assertion results. Timing goes to stderr with --json.\n"
     );
+}
+
+static int reset_forest_complete_verify(void)
+{
+    int panel_ok = reset_forest_verify();
+    int contracts_status = reset_forest_contracts_verify(0);
+    return panel_ok && contracts_status == 0;
 }
 
 int verify_dispatch(const char *name)
 {
     int total = 0, passed = 0;
+
+    if (strcmp(name, "all") == 0) {
+        fputs("Verification command 'all' has been removed.\n"
+              "Use nfield verify families to choose a named C check.\n", stderr);
+        return 2;
+    }
 
     if (strcmp(name, "centered-collision") == 0)
         name = "collision-centering";
@@ -980,6 +969,10 @@ int verify_dispatch(const char *name)
         name = "compatible-residue-channels";
     if (strcmp(name, "goldbach-obstruction") == 0)
         name = "reflected-prime-pair-sign";
+    if (strcmp(name, "gate_width") == 0)
+        name = "gate-width";
+    if (strcmp(name, "finite_det") == 0)
+        name = "finite-det";
 
     typedef struct { const char *name; int (*fn)(void); } entry;
     entry tests[] = {
@@ -1043,6 +1036,7 @@ int verify_dispatch(const char *name)
         {"prime-base-collision-energy", prime_base_collision_energy_verify},
         {"arithmetic-boundary-defect", arithmetic_boundary_defect_verify},
         {"collision-sampling", collision_sampling_verify},
+        {"reset-forest", reset_forest_complete_verify},
         {"boundary-spectrum", boundary_spectrum_verify},
         {"carry-completed-carrier", carry_completed_carrier_verify},
         {"gate-width",    verify_gate_width},
@@ -1063,10 +1057,8 @@ int verify_dispatch(const char *name)
     };
     int n = sizeof(tests) / sizeof(tests[0]);
 
-    int run_all = strcmp(name, "all") == 0;
-
     for (int i = 0; i < n; i++) {
-        if (run_all || strcmp(name, tests[i].name) == 0) {
+        if (strcmp(name, tests[i].name) == 0) {
             printf("\n");
             printf("============================================================\n");
             int ok = tests[i].fn();

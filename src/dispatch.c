@@ -170,13 +170,15 @@ static void dispatch_append(
     output[*used] = '\0';
 }
 
-int nfield_dispatch(const char *command, char *output, size_t output_size)
+int nfield_dispatch_status(const char *command, char *output, size_t output_size,
+                           int *truncated)
 {
+    if (truncated) *truncated = 0;
     if (!output || output_size == 0) return -1;
     output[0] = '\0';
     if (!command || command[0] == '\0') {
         (void)snprintf(output, output_size, "Empty command\n");
-        return 0;
+        return 2;
     }
 
     char storage[DISPATCH_COMMAND_CAPACITY];
@@ -187,7 +189,7 @@ int nfield_dispatch(const char *command, char *output, size_t output_size)
         (void)snprintf(
             output, output_size,
             "Invalid command syntax: use plain arguments without shell operators\n");
-        return 0;
+        return 2;
     }
     (void)argument_count;
 
@@ -238,6 +240,8 @@ int nfield_dispatch(const char *command, char *output, size_t output_size)
     int child_reaped = 0;
     int status = 0;
     int timed_out = 0;
+    int output_truncated = 0;
+    int io_error = 0;
 
     while (pipe_open || !child_reaped) {
         int wait_milliseconds = 100;
@@ -262,13 +266,15 @@ int nfield_dispatch(const char *command, char *output, size_t output_size)
             do {
                 poll_result = poll(&descriptor, 1, wait_milliseconds);
             } while (poll_result < 0 && errno == EINTR);
-            if (poll_result < 0) break;
+            if (poll_result < 0) { io_error = 1; break; }
             if (poll_result > 0 &&
                 (descriptor.revents & (POLLIN | POLLHUP | POLLERR))) {
                 for (;;) {
                     char chunk[4096];
                     ssize_t received = read(descriptors[0], chunk, sizeof(chunk));
                     if (received > 0) {
+                        if ((size_t)received > output_size - 1 - used)
+                            output_truncated = 1;
                         dispatch_append(
                             output, output_size, &used,
                             chunk, (size_t)received);
@@ -279,6 +285,8 @@ int nfield_dispatch(const char *command, char *output, size_t output_size)
                         pipe_open = 0;
                     }
                     if (received < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
+                        if (errno == EINTR) continue;
+                        io_error = 1;
                         close(descriptors[0]);
                         pipe_open = 0;
                     }
@@ -290,21 +298,38 @@ int nfield_dispatch(const char *command, char *output, size_t output_size)
         if (!child_reaped) {
             pid_t waited = waitpid(child, &status, WNOHANG);
             if (waited == child) child_reaped = 1;
-            else if (waited < 0 && errno != EINTR) child_reaped = 1;
+            else if (waited < 0 && errno != EINTR) {
+                child_reaped = 1;
+                io_error = 1;
+            }
         }
     }
 
-    if (timed_out) {
-        (void)kill(child, SIGKILL);
-        while (waitpid(child, &status, 0) < 0 && errno == EINTR) { }
-        static const char timeout_message[] = "Command timed out\n";
+    if (timed_out || io_error) {
+        if (!child_reaped) {
+            (void)kill(child, SIGKILL);
+            while (waitpid(child, &status, 0) < 0 && errno == EINTR) { }
+        }
+        const char *timeout_message = timed_out ? "Command timed out\n"
+                                               : "Command output could not be read\n";
         dispatch_append(
             output, output_size, &used,
-            timeout_message, sizeof(timeout_message) - 1);
+            timeout_message, strlen(timeout_message));
     } else if (!child_reaped) {
         while (waitpid(child, &status, 0) < 0 && errno == EINTR) { }
     }
     if (pipe_open) close(descriptors[0]);
     output[used] = '\0';
-    return 0;
+    if (truncated) *truncated = output_truncated;
+    if (io_error) return -1;
+    if (timed_out) return 124;
+    if (output_truncated) return 125;
+    if (WIFEXITED(status)) return WEXITSTATUS(status);
+    if (WIFSIGNALED(status)) return 128 + WTERMSIG(status);
+    return -1;
+}
+
+int nfield_dispatch(const char *command, char *output, size_t output_size)
+{
+    return nfield_dispatch_status(command, output, output_size, NULL);
 }

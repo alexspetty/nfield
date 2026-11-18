@@ -1,7 +1,7 @@
 # Build artifacts
 *.o
 *.a
-nfield
+/nfield
 libnfield.a
 test/test_nfield
 test/test_sampling_spectrum_api
@@ -61,3 +61,13 @@ core
 /test/test_weighted_remainder_joint
 /test/test_weighted_remainder_pairing
 /test/test_weighted_remainder_transcendental
+
+/test/test_library
+/test/test_research_library
+/test/test_reset_source_api
+/test/test_dispatch_status
+/test/test_daemon_encoding
+/test/test_json_contracts
+/examples/forest_readings
+/examples/source_projection
+/examples/source_divisor

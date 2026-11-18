@@ -34,12 +34,33 @@ require_line() {
     fi
 }
 
+require_absent() {
+    local file="$1" expected="$2" label="$3"
+    if grep -Fxq -- "$expected" "$file"; then
+        printf '    unexpected candidate: %s\n' "$expected" >&2
+        fail "$label"
+    else
+        pass "$label"
+    fi
+}
+
 printf 'nfield completion and build-identity tests\n'
 printf '==================================================\n\n'
 
 top_level="$TEMP_ROOT/top-level"
 "$BIN" __complete >"$top_level"
 require_line "$top_level" "field" "core command candidate"
+require_line "$top_level" "reset-forest" "reset forest operation"
+for check_only in special-value-moment base-five-cyclotomic-identity terminal-collision-conductor-ledger conjugate-pair-relabeling; do
+    if grep -Fxq "$check_only" "$top_level"; then
+        fail "fixed verification is not a top-level operation: $check_only"
+    fi
+    "$BIN" __complete "$check_only" >"$TEMP_ROOT/check-only"
+    if grep -Ev '^--' "$TEMP_ROOT/check-only" | grep -q .; then
+        fail "fixed family has no ordinary actions: $check_only"
+    fi
+    pass "fixed family has no ordinary actions: $check_only"
+done
 require_line "$top_level" "weighted-reference-profile" "tool-family candidate"
 require_line "$top_level" "completion" "completion command candidate"
 require_line "$top_level" "version" "version command candidate"
@@ -49,11 +70,54 @@ require_line "$top_level" "--version" "top-level version option"
 
 tool_candidates="$TEMP_ROOT/tool-candidates"
 "$BIN" __complete weighted-reference-profile >"$tool_candidates"
-for candidate in inspect branch torsion reflection-product oriented-words transport finite-orbit verify \
+for candidate in inspect branch reflection-product oriented-words finite-orbit \
         --base --time --help; do
     require_line "$tool_candidates" "$candidate" \
         "weighted-reference-profile candidate $candidate"
 done
+for candidate in torsion transport verify; do
+    require_absent "$tool_candidates" "$candidate" "profile checking stays under verify: $candidate"
+done
+"$BIN" __complete verify weighted-reference-profile >"$tool_candidates"
+require_line "$tool_candidates" "torsion" "profile torsion verification route"
+require_line "$tool_candidates" "transport" "profile transport verification route"
+
+for family in cross-alignment spectral-structure spectral-power autocorrelation phase-gate \
+        bin-derangements collision-characters silent-primes collision-fluctuation \
+        collision-centering collision-table collision-transform residue-three-neutrality; do
+    "$BIN" __complete "$family" >"$tool_candidates"
+    require_absent "$tool_candidates" "examples" "$family assertion panel is not an ordinary action"
+    "$BIN" __complete verify "$family" >"$tool_candidates"
+    require_line "$tool_candidates" "examples" "$family examples have a canonical verifier"
+done
+for family in collision-centering collision-transform; do
+    "$BIN" __complete "$family" >"$tool_candidates"
+    require_absent "$tool_candidates" "gate" "$family assertion gate stays under verify"
+    "$BIN" __complete verify "$family" >"$tool_candidates"
+    require_line "$tool_candidates" "gate" "$family parameterized gate is discoverable"
+    "$BIN" __complete verify "$family" gate >"$tool_candidates"
+    require_line "$tool_candidates" "--base" "$family verifier accepts base"
+    require_line "$tool_candidates" "--lag" "$family verifier accepts lag"
+    "$BIN" __complete verify "$family" gate --base >"$tool_candidates"
+    [ ! -s "$tool_candidates" ] || fail "$family base expects a value"
+    pass "$family base value completion"
+done
+"$BIN" __complete centered-collision-table >"$tool_candidates"
+require_line "$tool_candidates" "inspect" "centered table still exposes actual entries"
+require_absent "$tool_candidates" "complete" "complete table assertions are separate"
+"$BIN" __complete verify centered-collision-table >"$tool_candidates"
+require_line "$tool_candidates" "complete" "complete table verifier is discoverable"
+"$BIN" __complete reset-forest >"$tool_candidates"
+require_line "$tool_candidates" "project" "weighted reset projection is discoverable"
+for option in --modulus --mask --weights --grid; do
+    require_line "$tool_candidates" "$option" "reset projection option $option"
+    "$BIN" __complete reset-forest project 6 "$option" >"$TEMP_ROOT/project-values"
+    [ ! -s "$TEMP_ROOT/project-values" ] || fail "projection $option expects a value"
+    pass "projection $option value completion"
+done
+"$BIN" __complete help native-refinement >"$tool_candidates"
+require_line "$tool_candidates" "kernel" "action help completes useful operations"
+require_absent "$tool_candidates" "verify" "action help separates verification"
 
 help_candidates="$TEMP_ROOT/help-candidates"
 "$BIN" __complete help >"$help_candidates"
@@ -67,10 +131,53 @@ else
     fail "help candidates are unique"
 fi
 
+# Prior completion words are data, even when one is a help option.
+prior_help_candidates="$TEMP_ROOT/prior-help-candidates"
+prior_help_errors="$TEMP_ROOT/prior-help-errors"
+if "$BIN" __complete field --help >"$prior_help_candidates" 2>"$prior_help_errors"; then
+    require_line "$prior_help_candidates" "--base" "completion after a field help option"
+else
+    fail "completion after a field help option"
+fi
+if [ ! -s "$prior_help_errors" ]; then
+    pass "field help completion does not route to focused help"
+else
+    fail "field help completion does not route to focused help"
+fi
+if "$BIN" __complete verify coverage --help >"$prior_help_candidates" 2>"$prior_help_errors" &&
+        [ ! -s "$prior_help_candidates" ] && [ ! -s "$prior_help_errors" ]; then
+    pass "completion after coverage help remains an internal query"
+else
+    fail "completion after coverage help remains an internal query"
+fi
+
 verify_candidates="$TEMP_ROOT/verify-candidates"
 "$BIN" __complete verify >"$verify_candidates"
-for candidate in all digit-partition weighted-reference-profile antisymmetry; do
+for candidate in families digit-partition weighted-reference-profile antisymmetry; do
     require_line "$verify_candidates" "$candidate" "verifier candidate $candidate"
+done
+for candidate in reset-forest special-value-moment base-five-cyclotomic-identity terminal-collision-conductor-ledger conjugate-pair-relabeling; do
+    require_line "$verify_candidates" "$candidate" "separate verifier $candidate"
+done
+
+for retired in all list coverage theorem work --source-root --require-complete; do
+    require_absent "$verify_candidates" "$retired" "retired verifier is not advertised: $retired"
+    "$BIN" __complete verify "$retired" >"$tool_candidates"
+    if [ -s "$tool_candidates" ]; then
+        fail "retired verifier has no follow-up completion: $retired"
+    fi
+    pass "retired verifier has no follow-up completion: $retired"
+done
+"$BIN" __complete reset-forest >"$tool_candidates"
+require_absent "$tool_candidates" "contracts" "finite contracts stay outside ordinary forest actions"
+"$BIN" __complete verify reset-forest >"$tool_candidates"
+require_line "$tool_candidates" "contracts" "forest finite contracts are discoverable"
+"$BIN" __complete verify reset-forest contracts >"$tool_candidates"
+for option in --json --time; do
+    require_line "$tool_candidates" "$option" "forest contract option $option"
+done
+for option in --csv --source-root --require-complete; do
+    require_absent "$tool_candidates" "$option" "forest contract rejects unrelated option $option"
 done
 
 value_candidates="$TEMP_ROOT/value-candidates"
@@ -101,8 +208,10 @@ pass "dispatch registry coverage"
 moment_candidates="$TEMP_ROOT/moment-candidates"
 "$BIN" __complete short-sum-bernoulli-correlation >"$moment_candidates"
 require_line "$moment_candidates" "moments" "magnitude moment action candidate"
-require_line "$moment_candidates" "ledger" "magnitude ledger action candidate"
-require_line "$moment_candidates" "verify" "magnitude verifier action candidate"
+require_absent "$moment_candidates" "ledger" "fixed magnitude ledger is separate"
+require_absent "$moment_candidates" "verify" "magnitude verifier is separate"
+"$BIN" __complete verify short-sum-bernoulli-correlation >"$moment_candidates"
+require_line "$moment_candidates" "ledger" "fixed magnitude ledger verification route"
 
 remainder_candidates="$TEMP_ROOT/remainder-candidates"
 "$BIN" __complete weighted-remainder-state >"$remainder_candidates"
@@ -173,7 +282,8 @@ require_line "$remainder_candidates" "conductor-prime" "exact CRT prime candidat
 require_line "$remainder_candidates" "conductor-extrema" "restricted gap enclosure action"
 require_line "$remainder_candidates" "conductor-minimizers" "possible minimizer enumeration action"
 require_line "$remainder_candidates" "activation" "exact Bernoulli cube action"
-require_line "$remainder_candidates" "verify" "remainder verifier action"
+require_absent "$remainder_candidates" "verify" "remainder verifier is separate"
+require_line "$verify_candidates" "weighted-remainder-state" "remainder verifier route"
 
 bash_completion="$TEMP_ROOT/nfield.bash"
 "$BIN" completion bash >"$bash_completion"

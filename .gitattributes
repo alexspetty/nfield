@@ -1,1 +1,2 @@
 src/*.inc linguist-language=C
+verify/*.inc linguist-language=C

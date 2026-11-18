@@ -52,6 +52,13 @@ static int audit_context(int base, int lag, int requested_character,
     else if (context.exponent == 2) limit = 2;
     else limit = context.cyclic_order;
 
+    if (report) {
+        printf("Primitive-character fiber cancellation\n\n");
+        printf("  base=%d lag=%d modulus=%d phi=%d\n\n",
+               context.base, context.lag, context.modulus, context.phi);
+        printf("  character depth modulus residue count witness sum_real sum_imag\n");
+    }
+
     for (int character = 1; character < limit; character++) {
         if (!periodic_zeta_character_valid(&context, character)) continue;
         if (requested_character > 0 && character != requested_character)
@@ -97,6 +104,10 @@ static int audit_context(int base, int lag, int requested_character,
                     summary->maximum_sum = cabsl(sum);
                 if (count != expected_count || cabsl(sum) > 2.0e-12L)
                     summary->failures++;
+                if (report)
+                    printf("  %9d %5d %7d %7d %5d %7d %+.18Le %+.18Le\n",
+                           character, depth, modulus, residue, count,
+                           conductor_witness, creall(sum), cimagl(sum));
             }
         }
     }
@@ -108,9 +119,7 @@ static int audit_context(int base, int lag, int requested_character,
         return 0;
     }
     if (report) {
-        printf("Primitive-character fiber cancellation\n\n");
-        printf("  base=%d lag=%d modulus=%d phi=%d\n",
-               context.base, context.lag, context.modulus, context.phi);
+        printf("\n");
         printf("  primitive odd characters checked = %d\n",
                summary->characters);
         printf("  congruence fibers checked = %d\n", summary->fibers);
@@ -118,11 +127,11 @@ static int audit_context(int base, int lag, int requested_character,
                summary->maximum_sum);
         printf("  maximum odd-character error = %.3Le\n",
                summary->maximum_odd_error);
-        printf("  conductor witnesses and exact fiber sizes  %s\n",
-               summary->failures == 0 ? "PASS" : "FAIL");
+        printf("  conductor, fiber-size and cancellation discrepancies = %d\n",
+               summary->failures);
         printf("\nClassification  exact residue enumeration with long-double\n");
         printf("roots-of-unity evaluation of the character sums.\n");
-        printf("Result  %s\n", summary->failures == 0 ? "PASS" : "FAIL");
+        printf("Run nfield verify primitive-character-cancellation for the fixed check suite.\n");
     }
     periodic_zeta_context_free(&context);
     return 1;
@@ -186,7 +195,8 @@ void primitive_character_cancellation_help(void)
         "Commands\n"
         "  nfield primitive-character-cancellation inspect <base> <lag> <character-index>\n"
         "      Enumerate every base^j congruence fiber for one primitive odd\n"
-        "      character and check its conductor witness and zero sum.\n"
+        "      character. Return residue, size, conductor witness and complex sum\n"
+        "      for each fiber, followed by numerical residuals.\n"
         "  nfield primitive-character-cancellation verify\n"
         "  nfield verify primitive-character-cancellation\n\n"
         "Character indices\n"

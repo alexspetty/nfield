@@ -25,6 +25,8 @@
 
 /* Forward declaration: dispatch a command string and capture output */
 extern int nfield_dispatch(const char *cmdline, char *outbuf, size_t outbuf_size);
+extern int nfield_dispatch_status(const char *cmdline, char *outbuf,
+                                 size_t outbuf_size, int *truncated);
 
 #define MAX_CMD_LEN 4096
 #define MAX_OUTPUT  (1024 * 1024)
@@ -131,17 +133,24 @@ static const char *json_extract_cmd(const char *json, char *cmd, size_t cmd_size
     return cmd;
 }
 
-static void json_escape(const char *src, char *dst, size_t dst_size) {
+static int json_escape(const char *src, char *dst, size_t dst_size) {
+    static const char hex[] = "0123456789abcdef";
     size_t j = 0;
-    for (size_t i = 0; src[i] && j < dst_size - 2; i++) {
-        char c = src[i];
-        if (c == '"' || c == '\\') { dst[j++] = '\\'; }
-        else if (c == '\n') { dst[j++] = '\\'; c = 'n'; }
-        else if (c == '\r') { dst[j++] = '\\'; c = 'r'; }
-        else if (c == '\t') { dst[j++] = '\\'; c = 't'; }
-        if (j < dst_size - 1) dst[j++] = c;
+    if (!dst_size) return 0;
+    for (size_t i = 0; src[i]; i++) {
+        unsigned char c = (unsigned char)src[i];
+        size_t needed = c == '"' || c == '\\' || c == '\n' || c == '\r' || c == '\t' ? 2 : c < 32 ? 6 : 1;
+        if (needed >= dst_size - j) { dst[j] = '\0'; return 0; }
+        if (c == '"' || c == '\\') { dst[j++] = '\\'; dst[j++] = (char)c; }
+        else if (c == '\n' || c == '\r' || c == '\t') {
+            dst[j++] = '\\'; dst[j++] = c == '\n' ? 'n' : c == '\r' ? 'r' : 't';
+        } else if (c < 32) {
+            dst[j++] = '\\'; dst[j++] = 'u'; dst[j++] = '0'; dst[j++] = '0';
+            dst[j++] = hex[c >> 4]; dst[j++] = hex[c & 15];
+        } else dst[j++] = (char)c;
     }
     dst[j] = '\0';
+    return 1;
 }
 
 /* ── Worker thread ───────────────────────────────────── */
@@ -187,10 +196,12 @@ static void *worker_thread(void *arg) {
             continue;
         }
 
-        nfield_dispatch(cmd, outbuf, MAX_OUTPUT);
+        int truncated = 0;
+        int exit_code = nfield_dispatch_status(cmd, outbuf, MAX_OUTPUT, &truncated);
 
         /* JSON-escape the output */
-        char *escaped = malloc(MAX_OUTPUT * 2);
+        size_t escaped_size = 6 * strlen(outbuf) + 1;
+        char *escaped = malloc(escaped_size);
         if (!escaped) {
             free(outbuf);
             const char *err = "{\"error\":\"out of memory\"}\n";
@@ -198,16 +209,24 @@ static void *worker_thread(void *arg) {
             close(fd);
             continue;
         }
-        json_escape(outbuf, escaped, MAX_OUTPUT * 2);
+        if (!json_escape(outbuf, escaped, escaped_size)) {
+            truncated = 1;
+            exit_code = 125;
+        }
 
         /* Send response */
-        char *response = malloc(MAX_OUTPUT * 2 + 64);
+        size_t response_size = strlen(escaped) + 160;
+        char *response = malloc(response_size);
         if (response) {
-            int len = snprintf(response, MAX_OUTPUT * 2 + 64,
-                "{\"output\":\"%s\"}\n", escaped);
-            if (len > 0)
+            int len = snprintf(response, response_size,
+                "{\"output\":\"%s\",\"exit_code\":%d,\"truncated\":%s}\n",
+                escaped, exit_code, truncated ? "true" : "false");
+            if (len > 0 && (size_t)len < response_size)
                 (void)write_all(fd, response, (size_t)len);
             free(response);
+        } else {
+            const char *err = "{\"error\":\"out of memory\"}\n";
+            (void)write_all(fd, err, strlen(err));
         }
 
         free(escaped);

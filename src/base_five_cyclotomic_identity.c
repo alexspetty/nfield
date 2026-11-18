@@ -239,7 +239,9 @@ void base_five_cyclotomic_identity_help(void)
 {
     printf(
         "Base-five cyclotomic identity\n\n"
-        "Commands\n"
+        "Verification\n"
+        "  nfield verify base-five-cyclotomic-identity\n\n"
+        "Compatibility commands\n"
         "  nfield base-five-cyclotomic-identity audit\n"
         "      Check the exact polynomial certificate, Ramanujan moment,\n"
         "      centered energy, and L(1) fourth-moment value.\n"

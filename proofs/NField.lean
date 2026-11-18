@@ -43,3 +43,4 @@ import NField.Papers.UnitSamplingDefect
 import NField.Papers.UnityRefinementAndSignedCapture
 import NField.Papers.StationaryToDiagonalTransition
 import NField.Papers.FiniteGenerationOfCollisionCapacity
+import NField.Papers.SamplingDefectAndResetForests
